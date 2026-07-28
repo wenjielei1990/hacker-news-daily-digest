@@ -68,6 +68,27 @@ def copy_reports(reports: list[Report], site_dir: Path) -> None:
         destination = site_dir / report.timestamp / "hn_news.html"
         destination.parent.mkdir(parents=True, exist_ok=True)
         document = report.source.read_text(encoding="utf-8")
+        legacy_initialization = """      let initialCount = 10;
+      try {
+        initialCount = Number(localStorage.getItem("hnDigestVisibleCount"));
+      } catch (_) {
+        // Keep the compact default.
+      }
+      applyVisibleCount(initialCount);"""
+        default_twenty_initialization = """      let initialCount = 20;
+      try {
+        const storedCount = Number(
+          localStorage.getItem("hnDigestVisibleCountV3")
+        );
+        if ([10, 20].includes(storedCount)) initialCount = storedCount;
+      } catch (_) {
+        // Keep the all-20 default.
+      }
+      applyVisibleCount(initialCount);"""
+        document = document.replace(
+            legacy_initialization,
+            default_twenty_initialization,
+        )
         replacements = {
             'class="archive-link" href="index.html"': (
                 'class="archive-link" href="../index.html"'
@@ -85,8 +106,8 @@ def copy_reports(reports: list[Report], site_dir: Path) -> None:
             '<section class="story-list" data-visible-count="10">': (
                 '<section class="story-list" data-visible-count="20">'
             ),
-            '"hnDigestVisibleCount"': '"hnDigestVisibleCountV2"',
-            "let initialCount = 10;": "let initialCount = 20;",
+            '"hnDigestVisibleCount"': '"hnDigestVisibleCountV3"',
+            '"hnDigestVisibleCountV2"': '"hnDigestVisibleCountV3"',
         }
         for old, new in replacements.items():
             document = document.replace(old, new)
