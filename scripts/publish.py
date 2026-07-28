@@ -67,10 +67,29 @@ def copy_reports(reports: list[Report], site_dir: Path) -> None:
     for report in reports:
         destination = site_dir / report.timestamp / "hn_news.html"
         destination.parent.mkdir(parents=True, exist_ok=True)
-        document = report.source.read_text(encoding="utf-8").replace(
-            'class="archive-link" href="index.html"',
-            'class="archive-link" href="../index.html"',
-        )
+        document = report.source.read_text(encoding="utf-8")
+        replacements = {
+            'class="archive-link" href="index.html"': (
+                'class="archive-link" href="../index.html"'
+            ),
+            "默认先看前 10，想多看时可切换到前 20。": (
+                "默认显示前 20，也可以切换到前 10。"
+            ),
+            'data-count="10" aria-pressed="true"': (
+                'data-count="10" aria-pressed="false"'
+            ),
+            'data-count="20" aria-pressed="false"': (
+                'data-count="20" aria-pressed="true"'
+            ),
+            "当前显示前 10": "当前显示前 20",
+            '<section class="story-list" data-visible-count="10">': (
+                '<section class="story-list" data-visible-count="20">'
+            ),
+            '"hnDigestVisibleCount"': '"hnDigestVisibleCountV2"',
+            "let initialCount = 10;": "let initialCount = 20;",
+        }
+        for old, new in replacements.items():
+            document = document.replace(old, new)
         if destination.exists() and destination.read_text(encoding="utf-8") == document:
             continue
         destination.write_text(document, encoding="utf-8")
