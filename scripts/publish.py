@@ -12,7 +12,6 @@ from __future__ import annotations
 import argparse
 import html
 import re
-import shutil
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
@@ -63,14 +62,18 @@ def discover_reports(source_dir: Path) -> list[Report]:
 
 
 def copy_reports(reports: list[Report], site_dir: Path) -> None:
-    """Copy rendered reports without deleting previously published snapshots."""
+    """Copy reports and normalize links for their public timestamp directory."""
     site_dir.mkdir(parents=True, exist_ok=True)
     for report in reports:
         destination = site_dir / report.timestamp / "hn_news.html"
         destination.parent.mkdir(parents=True, exist_ok=True)
-        if destination.exists() and destination.read_bytes() == report.source.read_bytes():
+        document = report.source.read_text(encoding="utf-8").replace(
+            'class="archive-link" href="index.html"',
+            'class="archive-link" href="../index.html"',
+        )
+        if destination.exists() and destination.read_text(encoding="utf-8") == document:
             continue
-        shutil.copy2(report.source, destination)
+        destination.write_text(document, encoding="utf-8")
 
 
 def render_index(reports: list[Report]) -> str:
