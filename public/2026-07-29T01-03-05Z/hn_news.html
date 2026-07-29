@@ -1,0 +1,2056 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Hacker News 每日精选：通俗摘要、精彩评论与 LLM 锐评">
+  <title>HN 每日精选 · 2026-07-29</title>
+  <script>
+    (() => {
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      let choice = "auto";
+      try {
+        choice = localStorage.getItem("hnDigestThemeChoice") || "auto";
+      } catch (_) {
+        // Storage may be unavailable in a sandboxed report.
+      }
+      if (!["auto", "day", "night"].includes(choice)) {
+        choice = "auto";
+      }
+      const theme = choice === "auto" ? themeForLocalTime() : choice;
+      document.documentElement.dataset.themeChoice = choice;
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d252d;
+      --muted: #6c747c;
+      --paper: #f5f3ed;
+      --card: #fffefa;
+      --line: #d9d6ce;
+      --orange: #e85d2a;
+      --orange-soft: #fff0e8;
+      --blue-soft: #edf3f7;
+      --green: #25644f;
+      --story-open-line: #c7c3b9;
+      --story-shadow: rgba(31, 36, 40, .07);
+      --summary-ink: #47515a;
+      --detail-ink: #37424c;
+      --section-ink: #5f6871;
+      --hint-ink: #8a9095;
+      --comment-meta-ink: #637080;
+      --comment-label-bg: #d7e6ef;
+      --comment-label-ink: #315b73;
+      --comment-text-ink: #2e3944;
+      --comment-reason-ink: #637080;
+      --comment-reason-label: #2e5e78;
+      --comment-empty-ink: #8a9097;
+      --editorial-ink: #333b42;
+      --humor-bg: #f8e8bd;
+      --humor-ink: #795d16;
+      --wisdom-bg: #dcebdc;
+      --wisdom-ink: #315f3a;
+      --counterpoint-bg: #eadff1;
+      --counterpoint-ink: #614273;
+    }
+    html[data-theme="night"] {
+      color-scheme: dark;
+      --ink: #e0e7e1;
+      --muted: #9ba79f;
+      --paper: #111713;
+      --card: #1a221d;
+      --line: #303c34;
+      --orange-soft: #2c211b;
+      --blue-soft: #202c2e;
+      --green: #83c8a2;
+      --story-open-line: #435148;
+      --story-shadow: rgba(0, 0, 0, .28);
+      --summary-ink: #c2ccc5;
+      --detail-ink: #d1d8d3;
+      --section-ink: #aab5ae;
+      --hint-ink: #929e96;
+      --comment-meta-ink: #a8b7b8;
+      --comment-label-bg: #2f474d;
+      --comment-label-ink: #b8dbe2;
+      --comment-text-ink: #d5dcda;
+      --comment-reason-ink: #aebbb8;
+      --comment-reason-label: #92c6cf;
+      --comment-empty-ink: #929e96;
+      --editorial-ink: #d9d5d0;
+      --humor-bg: #403721;
+      --humor-ink: #e3cb87;
+      --wisdom-bg: #293c2c;
+      --wisdom-ink: #a8d3ae;
+      --counterpoint-bg: #382d40;
+      --counterpoint-ink: #d0b4df;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .18s ease, color .18s ease;
+    }
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--orange); }
+    .masthead {
+      border-top: 5px solid var(--orange);
+      border-bottom: 1px solid #343b43;
+      background: #18212a;
+      color: white;
+    }
+    .masthead-inner, main {
+      width: min(860px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+    .masthead-inner { padding: 25px 0 27px; }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      background: var(--orange);
+      color: white;
+      font-family: ui-serif, Georgia, serif;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+    .archive-link { color: #bac2ca; }
+    .theme-switch {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .theme-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 8px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .theme-button:hover { color: white; }
+    .theme-button[aria-pressed="true"] {
+      background: #46515b;
+      color: white;
+    }
+    .theme-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .eyebrow {
+      color: #ff9670;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 7px 0 8px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 6vw, 46px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.03;
+    }
+    .dek {
+      margin: 0;
+      color: #c0c8d0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      margin-top: 17px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .stats strong { color: white; font-size: 13px; margin-right: 3px; }
+    .view-switch {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 13px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .view-switch[hidden] { display: none; }
+    .view-buttons {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .view-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 9px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .view-button:hover { color: white; }
+    .view-button[aria-pressed="true"] {
+      background: var(--orange);
+      color: white;
+    }
+    .view-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .view-status { color: #c0c8d0; }
+    .ranking-rule {
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255, 255, 255, .09);
+      color: #9faab4;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .ranking-rule strong {
+      color: #e7eaed;
+      margin-right: 5px;
+    }
+    main { padding: 20px 0 72px; }
+    .story-list {
+      display: grid;
+      gap: 9px;
+    }
+    .story-list[data-visible-count="10"] .story:nth-child(n+11),
+    .story-list[data-visible-count="20"] .story:nth-child(n+21) {
+      display: none;
+    }
+    .story {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--card);
+      overflow: clip;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .story[open] {
+      border-color: var(--story-open-line);
+      box-shadow: 0 14px 34px var(--story-shadow);
+    }
+    .story-overview {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 13px;
+      padding: 17px 20px 15px 15px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .story-overview::-webkit-details-marker { display: none; }
+    .story-overview:focus-visible {
+      outline: 3px solid rgba(232, 93, 42, .45);
+      outline-offset: -3px;
+    }
+    .rank-number {
+      color: var(--orange);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .story-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 14px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .story-kicker .source {
+      color: var(--green);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h2 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 10px;
+      margin: 5px 0 5px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(17px, 2.3vw, 19px);
+      font-weight: 700;
+      letter-spacing: -.008em;
+      line-height: 1.28;
+    }
+    .title-link { text-decoration: none; }
+    .discussion-link {
+      color: var(--orange);
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .summary {
+      margin: 0;
+      color: var(--summary-ink);
+      font-size: 14.5px;
+      line-height: 1.72;
+      white-space: pre-line;
+    }
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--hint-ink);
+      font-size: 10px;
+      font-weight: 750;
+    }
+    .chevron {
+      display: inline-block;
+      color: var(--orange);
+      transition: transform .18s ease;
+    }
+    .story[open] .chevron { transform: rotate(180deg); }
+    .story[open] .expand-hint > span:first-child { font-size: 0; }
+    .story[open] .expand-hint > span:first-child::after {
+      content: "收起详情";
+      font-size: 10px;
+    }
+    .story-details {
+      margin-left: 80px;
+      padding: 17px 20px 24px 0;
+      border-top: 1px solid var(--line);
+    }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      color: var(--section-ink);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .detail-summary > p {
+      margin: 0;
+      color: var(--detail-ink);
+      font-size: 14px;
+      line-height: 1.78;
+    }
+    .detail-summary > p + p { margin-top: 12px; }
+    .comments-panel {
+      margin-top: 21px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+    .comments-list { display: grid; gap: 9px; }
+    .featured-comment {
+      margin: 0;
+      padding: 14px 16px;
+      border: 0;
+      border-radius: 3px;
+      background: var(--blue-soft);
+    }
+    .comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 7px;
+      font-size: 11px;
+    }
+    .comment-meta a { color: var(--comment-meta-ink); text-decoration: none; }
+    .comment-label {
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--comment-label-bg);
+      color: var(--comment-label-ink);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .05em;
+    }
+    .comment-label-humor {
+      background: var(--humor-bg);
+      color: var(--humor-ink);
+    }
+    .comment-label-wisdom {
+      background: var(--wisdom-bg);
+      color: var(--wisdom-ink);
+    }
+    .comment-label-counterpoint {
+      background: var(--counterpoint-bg);
+      color: var(--counterpoint-ink);
+    }
+    .comment-text {
+      margin: 0;
+      color: var(--comment-text-ink);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 13px;
+      line-height: 1.62;
+      white-space: pre-line;
+    }
+    .comment-reason {
+      margin: 9px 0 0;
+      color: var(--comment-reason-ink);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .comment-reason span {
+      margin-right: 7px;
+      color: var(--comment-reason-label);
+      font-weight: 850;
+    }
+    .comments-empty {
+      margin-top: 19px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      color: var(--comment-empty-ink);
+      font-size: 12px;
+    }
+    .editorial {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      align-items: start;
+      margin-top: 21px;
+      padding: 13px 15px;
+      border-left: 3px solid var(--orange);
+      background: var(--orange-soft);
+    }
+    .editorial-mark {
+      padding-top: 2px;
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+    .editorial p {
+      margin: 0;
+      color: var(--editorial-ink);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.62;
+    }
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 27px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .footer p { margin: 0; max-width: 680px; }
+    .footer a { font-weight: 800; }
+    @media (max-width: 620px) {
+      .masthead-inner, main { width: min(100% - 20px, 860px); }
+      .masthead-inner { padding-top: 18px; }
+      .topline {
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+      .top-actions {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
+      .story-overview {
+        grid-template-columns: 37px minmax(0, 1fr);
+        gap: 9px;
+        padding: 14px 13px 12px 10px;
+      }
+      .rank-number { font-size: 22px; }
+      .story-details { margin-left: 56px; padding-right: 13px; }
+      .editorial { grid-template-columns: 1fr; gap: 4px; }
+      .footer { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .masthead { background: white; color: var(--ink); border-bottom-color: var(--line); }
+      .topline, .archive-link, .expand-hint, .view-switch, .theme-switch { display: none; }
+      main { width: 100%; }
+      .story { display: block !important; break-inside: avoid; }
+      .story-details { display: block; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="topline">
+        <div class="brand"><span class="brand-mark">Y</span> Hacker News</div>
+        <div class="top-actions">
+          <div class="theme-switch" role="group" aria-label="选择页面颜色模式">
+            <button class="theme-button" type="button" data-theme-choice="auto" aria-pressed="true">自动</button>
+            <button class="theme-button" type="button" data-theme-choice="day" aria-pressed="false">日间</button>
+            <button class="theme-button" type="button" data-theme-choice="night" aria-pressed="false">夜间</button>
+          </div>
+          <a class="archive-link" href="../index.html">每日归档 →</a>
+        </div>
+      </div>
+      <div class="eyebrow">2026-07-29 · top feed · 过去 36 小时</div>
+      <h1>今天的 Hacker News</h1>
+      <p class="dek">前 20 篇已经全部准备好；默认显示前 20，也可以切换到前 10。</p>
+      <div class="stats">
+        <span><strong>20</strong>篇已准备</span>
+        <span><strong>19</strong>篇有精彩评论</span>
+        <span>更新于 2026-07-28 18:03 PDT</span>
+      </div>
+      <div class="view-switch" aria-label="选择新闻显示数量">
+        <span>显示</span>
+        <div class="view-buttons">
+          <button class="view-button" type="button" data-count="10" aria-pressed="false">前 10</button>
+          <button class="view-button" type="button" data-count="20" aria-pressed="true">前 20</button>
+        </div>
+        <span class="view-status" aria-live="polite">当前显示前 20</span>
+      </div>
+      <div class="ranking-rule">
+        <strong>排序规则</strong>HN 原始名次 + 低讨论量降权。公式：原始名次 + 0.3 × max(0, 50 − 评论数)；50 条评论以上不降权。
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="story-list" data-visible-count="20">
+      
+    <details class="story" id="story-49089755">
+      <summary class="story-overview">
+        <span class="rank-number">01</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">github.com</span>
+            <span>321 points</span>
+            <span>原始 #1 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://github.com/openai/codex-security" target="_blank"
+              rel="noopener noreferrer">Codex Security</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49089755" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 86</a>
+          </h2>
+          <p class="summary">OpenAI 推出了 Codex Security，这是一个用于发现、验证和修复代码安全漏洞的工具。它提供 CLI 和 TypeScript SDK，支持在本地开发环境或 CI/CD 流水线中扫描代码库。该工具的核心机制是利用大语言模型结合特定的“技能”定义来识别复杂的漏洞模式。虽然它能提供自动化的修复建议，但早期用户反映其扫描速度较慢且会消耗大量 API 额度。此外，将源代码上传至云端进行分析也引发了企业对隐私和合规性的担忧。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>OpenAI 发布的 Codex Security 旨在通过大语言模型（LLM）的力量，将安全审计从单纯的检测扩展到自动修复。该工具以 Node.js CLI 和 TypeScript SDK 的形式提供，要求环境具备 Node.js 22 和 Python 3.10 以上版本。其技术核心在于一套名为“技能”（Skills）的定义，这些本质上是经过精心优化的自然语言提示词，指导模型如何识别特定的安全威胁并验证其有效性。开发者可以通过简单的指令对整个仓库或增量更改进行扫描，并能直接在 CI 环境中集成安全检查。</p><p>然而，在实际应用中，该工具面临着显著的性能和成本权衡。根据早期用户的反馈，即使是小型代码库，扫描过程也可能持续近一小时，并迅速耗尽 ChatGPT Pro 的周使用配额或产生高额 API 费用。此外，由于代码必须上传到 OpenAI 的服务器进行处理，这对于有严格隐私政策或代码不出境要求的企业构成了挑战。目前该项目仍处于早期阶段，OpenAI 团队正在积极寻求社区反馈，并计划在并发处理、扫描进度展示以及认证流程上进行改进。未来值得关注的是，这种基于语义理解的扫描方式是否能比传统的静态分析工具（SAST）提供更低的误报率。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49090872" target="_blank" rel="noopener noreferrer">@gregwebs</a>
+        </div>
+        <p class="comment-text">刚刚在一个小型仓库上运行了它。它运行了将近一个小时，然后中断了。它耗尽了我 Pro 计划一半的周使用额度。
+`npx codex-security scan .` 
+[00:00] 正在准备扫描
+[00:00] 身份验证：已存储 Codex 凭据。
+[00:03] 正在准备扫描
+[01:20] 正在运行扫描
+[01:20] 预检：支持工作节点委派（最多 8 个工作槽）。
+[52:47] 正在运行扫描
+codex-security: 无法保存 Codex Security 扫描结果：扫描运行时仓库 HEAD 发生了变化。请开始新扫描。
+codex-security: 部分输出已保存在...</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于工具运行效率、成本消耗以及在实际使用中遇到的具体报错的真实反馈。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49091188" target="_blank" rel="noopener noreferrer">@varenc</a>
+        </div>
+        <p class="comment-text">有趣的是，这里的核心价值很大程度上在于提供了告诉 LLM 该做什么的英文“技能”（Skill）定义：https://github.com/openai/codex-security/tree/main/sdk/types...
+其中的一些方法在其他场景下也很有用。OpenAI 拥有进行不同提示词实验的算力，我预计这些提示词是经过某种程度优化的。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了该工具的技术核心在于其提示词工程（Skills），这对于理解 LLM 安全工具的原理很有帮助。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49090476" target="_blank" rel="noopener noreferrer">@luciana1u</a>
+        </div>
+        <p class="comment-text">来自 AI 公司的安全工具感觉就像是纵火犯经营的消防局。有用是肯定的，但你忍不住会注意到谁从所有的火灾中获益。</p>
+        <p class="comment-reason"><span>入选理由</span>以幽默且讽刺的视角指出了 AI 公司同时作为代码生成者和安全审计者的微妙关系。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49090531" target="_blank" rel="noopener noreferrer">@petilon</a>
+        </div>
+        <p class="comment-text">它是如何工作的？这个工具会将代码上传到 ChatGPT 进行分析吗？对于某些公司项目来说，这可能是被禁止的。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了关键的隐私和合规性问题，这是企业采用此类工具的主要障碍。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>OpenAI 进军安全领域并不令人意外，毕竟 LLM 在理解代码语义方面比传统的静态分析工具（SAST）更有潜力。Codex Security 的价值不仅在于工具本身，更在于那些被开源出来的“技能”定义——它们展示了如何用自然语言精准描述安全漏洞。不过，正如评论所言，用 AI 来修补 AI 可能引入的代码缺陷，这种“解铃还须系铃人”的逻辑带有一种讽刺意味。对于开发者来说，目前最大的痛点可能还是扫描效率和高昂的 Token 成本，这决定了它目前更像是一个实验性的辅助工具，而非成熟的生产力套件。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49089814">
+      <summary class="story-overview">
+        <span class="rank-number">02</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">mac-classic.com</span>
+            <span>127 points</span>
+            <span>原始 #2 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://mac-classic.com/news/half-life-ported-to-mac-os-9/" target="_blank"
+              rel="noopener noreferrer">Half-Life ported to Mac OS 9</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49089814" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 54</a>
+          </h2>
+          <p class="summary">经典第一人称射击游戏《半条命》（Half-Life）在发布 28 年后，终于被非官方移植到了 Mac OS 9 系统。Valve 最初曾计划在 1999 年推出该系统的版本，但在发布前夕突然取消，直到 2013 年才推出支持 Intel 芯片的 OS X 版本。此次移植由开发者 doctashay 利用开源的 Xash3D FWGS 引擎（GoldSrc 引擎的重新实现）完成。该版本支持搭载 PowerPC G3 和 G4 处理器的老式 Mac，且完整包含单人剧情、多人模式及相关扩展包。虽然游戏可以从头玩到尾，但性能表现高度依赖显存，显存低于 8MB 的机型运行会比较吃力。这一成果填补了 Mac 游戏史上的一个长期遗憾，让复古电脑爱好者能在原生硬件上体验这款神作。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>《半条命》在 1998 年彻底改变了 FPS 游戏的叙事方式，但对于当时的 Mac 玩家来说，这款游戏一直是个可望而不可即的遗憾。Valve 曾在 1999 年几乎完成了 Mac OS 9 版的开发，却在最后关头因商业原因取消，导致 Mac 用户直到 2013 年才在 Intel 架构的 OS X 上玩到官方版本。如今，开发者 doctashay 通过逆向工程和开源技术，终于让这款游戏在 PowerPC 时代的经典硬件上跑了起来。</p><p>该移植版基于 Xash3D FWGS 引擎，这是一个对原版 GoldSrc 引擎的现代重构。它不仅支持《半条命》本体，还兼容《蓝色行动》（Blue Shift）和《针锋相对》（Opposing Force）等扩展包，甚至支持多人联机。硬件要求方面，玩家需要一台运行 Mac OS 9.0 或更高版本的 G3 或 G4 电脑。开发者特别提醒，显卡性能是关键，尤其是早期 iMac 和 iBook 等显存不足 8MB 的机型，在运行复杂场景时可能会遇到明显的掉帧。这不仅是一次技术上的致敬，也为复古计算社区提供了一个极具价值的测试基准，让那些被时代遗忘的硬件重新焕发了生机。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49091133" target="_blank" rel="noopener noreferrer">@amatecha</a>
+        </div>
+        <p class="comment-text">太棒了，我很惊讶竟然花了这么长时间才实现！我第一次在家里玩《雷神之锤 1》（Quake 1）是在 System 7 系统上运行的一个未经授权的源码移植版，我记得叫“HackQuake”，据说是从 CrackDotCom 偷来的源代码移植的。对于当时急于玩到 Quake 的孩子来说，这简直是救命稻草！即便性能惨不忍睹，发射一枚火箭就能让帧率减半。为了挤出那一点点性能，我只能在 320x200 像素翻倍模式下玩。总之，我想说的是，如果当年有人肯花时间移植，《半条命》从第一天起就应该能在 Mac 上运行！</p>
+        <p class="comment-reason"><span>入选理由</span>评论者分享了早期 Mac 平台上非官方游戏移植的珍贵回忆，呼应了本文的主题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49091733" target="_blank" rel="noopener noreferrer">@xp84</a>
+        </div>
+        <p class="comment-text">我越来越在想，这类项目（我推测是因为 AI 编程工具的出现才突然变得可行）是否最终会为几十个早已因维护成本过高而被视为“过时”的平台注入新生命。也许以后我们能用现代浏览器和补丁把 OS 9 当作日常系统来用。或者对于没那么自虐的人来说，用 Windows 2000 或 NextStep 也行！</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个关于 AI 工具如何助力复古平台软件开发的有趣视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49090963" target="_blank" rel="noopener noreferrer">@wk_end</a>
+        </div>
+        <p class="comment-text">对我来说，这个链接最有趣的地方是看到居然有一个开源重制的 GoldSrc 引擎（Xash3D FWGS）？而且显然从 2011 年就存在了？我很震惊自己以前竟然没听说过。非常酷。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了本次移植背后的核心技术支撑，即开源引擎的重制工作。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49091113" target="_blank" rel="noopener noreferrer">@sharkjacobs</a>
+        </div>
+        <p class="comment-text">如果在 1999 年左右看到这个，我会非常兴奋。别误会，我很感激当时有《虚幻竞技场》和《雷神之锤 3》，我也知道很快就能玩到《光环》，但《半条命》确实是我最嫉妒朋友们能玩到的那款游戏。</p>
+        <p class="comment-reason"><span>入选理由</span>真实反映了当年 Mac 玩家对《半条命》缺失的遗憾之情。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>在游戏史上，1999 年《半条命》Mac 版的取消是 Mac 玩家心中永远的痛。当时 Valve 已经完成了大部分开发工作，甚至已经印好了包装盒，却在最后时刻撤回。这次由民间开发者 doctashay 完成的移植，不仅是技术上的胜利，更像是一场迟到了 25 年的“历史修复”。通过使用 Xash3D FWGS 这一开源引擎，开发者证明了即便在被厂商抛弃的旧平台上，社区的力量依然能让经典焕发新生。正如评论区所言，这种对“过时”硬件的执着，不仅填补了游戏史的空白，也让我们重新思考软件的生命周期与硬件的潜力。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49086788">
+      <summary class="story-overview">
+        <span class="rank-number">03</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">elizabethtai.com</span>
+            <span>398 points</span>
+            <span>原始 #4 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://elizabethtai.com/2026/06/10/substack-writers-you-need-a-website/" target="_blank"
+              rel="noopener noreferrer">Substack writers, you need a website</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49086788" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 207</a>
+          </h2>
+          <p class="summary">作者 Elizabeth Tai 呼吁 Substack 作家建立独立网站，避免成为受制于平台的“数字佃农”。她认为 Substack 应仅作为内容分发的工具，而非唯一的栖身之所，因为企业平台的规则和算法随时可能发生不利变化。文章提倡 POSSE 策略，即在自有站点发布内容后再同步到其他平台，以确保创作主权和内容的长期存续。拥有独立域名能提供更好的 SEO 控制和定制化功能，防止心血随平台倒闭或政策调整而消失。然而，独立网站面临的最大挑战是缺乏 Substack 那样的原生发现机制，获取新读者难度较大。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Elizabeth Tai 在文中指出，许多作家正放弃个人网站转而将 Substack 视为数字家园，这是一种危险的短视行为。她将这种依赖平台的方式比作“租房”，指出企业房东随时可能为了利润或投资者利益改变规则，甚至让创作者的作品一夜之间消失。为了应对这种不确定性，她建议作家拥有自己的域名，并采用 POSSE 模式（在自有站点发布，在别处同步），将 Substack 视为分发管道而非终点。这种方式结合了独立站点的稳定性和平台的网络效应，能有效对抗算法偏见和平台衰落。</p><p>文章强调，独立网站不仅是创作者的“官方记录”，还能提供 Substack 无法比拟的定制化自由，如管理 SEO、添加交互功能等。作者引用了科幻作家 John Scalzi 坚持 28 年独立博客的例子，证明了长期经营自有阵地的价值。虽然 Substack 提供了便捷的支付和订阅功能，但过度依赖它意味着将内容主权拱手让人。对于创作者而言，真正的挑战在于如何在保持独立性的同时，利用平台的流量红利。作者认为，只有将读者引流回自己的“房子”，才能在不断更迭的互联网浪潮中立于不败之地。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49087178" target="_blank" rel="noopener noreferrer">@skippyfish</a>
+        </div>
+        <p class="comment-text">来自一个在互联网上发布内容几十年的创作者的反面观点：根本没人会访问你的个人网站。就这么简单。你需要一种“推送”机制来触达读者。RSS 也许可行，但太小众了。社交媒体算是一种，但算法流奖励的是政治标题党，而且仅仅因为有人点击了“关注”或“订阅”，并不保证他们能看到你的帖子。Substack 提供了一种无需中间人决定读者看什么就能将内容推送到订阅者手中的方式。所以，拥有一个网站或在全网同步并没有什么特殊价值。真正有价值的是备份你的 Substack 订阅者邮箱，以便日后迁移，而 Substack 的优点在于它允许你这样做。如果他们停止这项服务，那才是个陷阱。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论直击独立网站的痛点——缺乏流量分发机制，为讨论提供了必要的现实视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49087412" target="_blank" rel="noopener noreferrer">@simonw</a>
+        </div>
+        <p class="comment-text">我对目前的处理方式非常满意。我会先在个人博客上发布所有内容，然后每周一次将它们复制粘贴到 Substack 通讯中。我利用 Substack 进行邮件分发（如果使用其他方案，我这 66,000 名订阅者每月要花掉我几百美元），但我的博客始终是原始的“事实来源”。这是我用来复制粘贴的工具：https://tools.simonwillison.net/blog-to-newsletter。Substack 没有撰写通讯的 API，但他们的富文本编辑器接受复制粘贴的数据——而复制粘贴就是通用的 API。</p>
+        <p class="comment-reason"><span>入选理由</span>Simon Willison 分享了极具参考价值的实际工作流和自制工具，展示了如何兼顾主权与分发。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49089323" target="_blank" rel="noopener noreferrer">@jmmv</a>
+        </div>
+        <p class="comment-text">我已经写了 22 年博客了。刚开始时，我能通过频繁的评论感觉到有一群相对稳定的受众，但这些年评论区已经沉寂了。2020 年，我实现了一套自己的订阅机制和邮件分发系统，结果令人失望：订阅者不到 200 人，转化率极低。三年前我“转向”了 Substack，受众增长是实打实的，现在快有 2000 个订阅者了（有些还是付费的，这总让我感到惊喜）。很难说这没用或不值得。不过，我从未真正“切换”到 Substack，我依然坚持先在自己的网站上写内容，然后再复制粘贴到 Substack。虽然麻烦，但我曾有过从 Medium 迁移出来的惨痛教训，我想确保自己拥有原稿。</p>
+        <p class="comment-reason"><span>入选理由</span>这位资深博主用 22 年的经历证明了平台在增长方面的优势，同时也强调了保留原始备份的必要性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49087463" target="_blank" rel="noopener noreferrer">@CM30</a>
+        </div>
+        <p class="comment-text">是的，即使网站本身的流量比同步内容的平台少，它至少是一个稳定的根据地，如果那些平台崩溃了，它还在那里。你发布的内容是公司或名人不喜欢的吗？在自己的网站上发布意味着责任由你承担，他们必须通过法律手段强迫你删帖，而不能仅仅依靠向平台施压或利用广告商压力。如果你陷入争议，平台想撇清关系或有人想毁掉你的生活，拥有自己的网站意味着你可以让他们滚蛋。而且不用担心强制登录、强制广告、讨厌的 Cookie 横幅、年龄验证限制等。此外，你对设计和功能拥有绝对的控制权。运行一个网站就像拥有自己的房子，而不是租房。你可以决定家具、颜色、公用事业供应商，以及是否养宠物。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论生动地阐述了独立网站在言论自由、设计控制和用户体验方面的核心优势。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49087414" target="_blank" rel="noopener noreferrer">@thataccount</a>
+        </div>
+        <p class="comment-text">作为一个在网上写了很久的作家，我不再为了互联网而写太多东西了。今年我撤下了个人网站，因为我不喜欢 AI 抓取我写的所有内容。我讨厌像 Substack 这样的网站，因为它们是依赖 Stripe 等合作伙伴进行财务关联的单点故障。虽然我不完全是为了钱而写，但我确实需要一定的收入来维持写作。在我看来，互联网已经不再提供这种环境了。我喜欢独立网络（Indie web），对我来说，它更像是互联网本该有的样子。现在缺失的是那种中立的支付层或供应商，他们不会因为你说了某些人不喜欢的话就切断你的资金来源。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了 AI 抓取导致创作者撤离个人网站的新趋势，并指出了支付环节的中心化风险。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>在 Substack 这种“拎包入住”的平台诱惑下，Elizabeth Tai 的呼吁像是一剂清醒药。讨论中呈现出的核心矛盾在于：独立网站代表了“主权”和“自由”，但 Substack 提供了“流量”和“收入”。正如多位资深博主所言，在 Google 搜索式微、社交媒体算法筑墙的今天，个人站点的发现机制几乎瘫痪。然而，Simon Willison 和 jmmv 提供的“先博客、后同步”的折中方案，或许是目前最务实的生存之道。值得注意的是，AI 抓取正成为创作者的新威胁，这让原本作为避风港的个人网站也面临着被“洗稿”的风险。最终，这不仅是关于技术平台的选择，更是关于创作者在便利性与独立性之间如何划定底线。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49086971">
+      <summary class="story-overview">
+        <span class="rank-number">04</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">sbcl.org</span>
+            <span>195 points</span>
+            <span>原始 #6 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://sbcl.org/all-news.html?2.6.7" target="_blank"
+              rel="noopener noreferrer">Steel Bank Common Lisp version 2.6.7</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49086971" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 81</a>
+          </h2>
+          <p class="summary">高性能开源 Common Lisp 实现 Steel Bank Common Lisp (SBCL) 发布了 2.6.7 版本。该版本引入了 SB-MANUAL 模块，支持在开发环境中通过文档字符串交互式查阅手册，并增强了对 Markdown 格式的支持。硬件层面，SB-SIMD 扩展至 ARM64 架构，并为 X86-64 带来了 AVX512 指令集支持。编译器在 UTF-8 转换和复数处理等方面进行了多项性能优化，同时修复了涉及 NaN 处理和误编译的多个漏洞。尽管技术上持续领先，但 Common Lisp 仍面临生态碎片化和工业界采用率受限的现实挑战。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>SBCL 2.6.7 版本的发布进一步强化了其作为高性能 Lisp 编译器的地位。新引入的 SB-MANUAL 贡献模块将官方手册集成到 Lisp 定义的 docstrings 中，开发者可以利用 Slime 等工具实现“所见即所得”的交互式文档查询。此外，文档系统现在支持 Markdown 子集，并为声明（declarations）提供了专门的索引，显著改善了开发体验。</p><p>在底层性能方面，此版本对现代硬件的支持大幅跨进。SB-SIMD 库现在正式支持 ARM64，而 X86-64 平台则获得了 AVX512 指令支持，这为高性能数值计算和多媒体处理提供了更强的动力。编译器优化涵盖了多个细节：针对 UTF-8 字符串转换引入了 SIMD 加速，优化了局部函数中常量复数的传递以减少内存分配（consing），并针对 MIPS 和 LoongArch 架构改进了整数长度计算。同时，该版本修复了 ARM64 上的 SAP-REF-N 误编译以及 LOG 函数处理 NaN 时的稳定性问题。</p><p>尽管 SBCL 在性能上不断逼近底层语言，但社区讨论也揭示了 Common Lisp 的双刃剑特性。其强大的宏系统和 DSL 构建能力虽然赋予了开发者极高的自由度，但也容易导致生态系统碎片化，使得代码在大型团队中的可维护性面临挑战。未来值得关注的是 SBCL 如何在保持高性能优势的同时，通过更好的工具链支持来降低新手的准入门槛。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49089880" target="_blank" rel="noopener noreferrer">@taolson</a>
+        </div>
+        <p class="comment-text">从一个函数式编程播客中听到的趣闻：Steel Bank（钢铁银行）这个名字是为了致敬它的起源——卡内基梅隆大学 Common Lisp（卡内基靠钢铁发家，而梅隆靠银行发家）。</p>
+        <p class="comment-reason"><span>入选理由</span>解释了 SBCL 独特名称的由来，增加了背景趣味性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49088605" target="_blank" rel="noopener noreferrer">@epolanski</a>
+        </div>
+        <p class="comment-text">Lisp 已经存在 70 年了，无数开发者尝试后都说：很棒，但我不会在工作中使用它。我坚信 Lisp 注定（主要）是一种业余爱好语言。Lisp 最强大的力量——宏、动态编程、反射——导致了一个混乱的生态系统，每个开发者都在重新发明轮子，没人能理解隔壁同事发明的又一个 DSL。Racket 的主题“用于构建编程语言的编程语言”正是这种天真的典型：我不需要更多的摩擦。能规模化并奏效的东西通常是简单且无聊的。顺便说一句，这也是 Haskell 一直挣扎的原因。除了糟糕的开发者体验、贫瘠的工具链和无法接受的编译时间，这种语言还充斥着编译器扩展，每个开发者都在重新发明自己的抽象。真的，我热爱 Lisps 和 Haskell，但在工作中，我会毫不犹豫地选择糟糕的 PHP，完全没有竞争压力。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了关于 Lisp 工业化应用困境的深刻反思，引发了广泛讨论。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49089098" target="_blank" rel="noopener noreferrer">@ux266478</a>
+        </div>
+        <p class="comment-text">问题在于，你所说的那种开发者是那种能为任何事情找出一千个借口的人。这不仅仅关乎不同的语言。使用他们最喜欢的语言的一个不同子集？一套不同的工具链？一个完全不同的构建流程？你都会听到大量的抱怨。甚至只是让他们换到一个不同的代码库都会让他们痛苦。如果你把 Lisp 或 Prolog 放在他们面前，他们的注意力就会转移到最泛化的原则上进行抱怨。核心在于，如果你把他们放进一个陌生的环境，他们就会通过理性化来表达他们的不适。我想大多数带过团队的人都会明白我在说什么。并不是说这些人工作能力不行，但他们确实是一种你需要学会识别并妥善管理的性格类型。</p>
+        <p class="comment-reason"><span>入选理由</span>从团队管理角度反驳了对 Lisp 的批评，视角独特。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49087649" target="_blank" rel="noopener noreferrer">@wk_end</a>
+        </div>
+        <p class="comment-text">* SB-SIMD 现在支持 ARM64。（感谢 Sylvia Harrington）
+* X86-64 现在支持 AVX512 指令。（感谢 Robert Smith 和 Arthur Miller）
+* 针对 ARM64 和 X86-64 的 SIMD 指令提供了额外支持。（感谢 Arthur Miller）
+这些看起来是非常棒的补充。有人知道 SBCL 中的 SIMD 是如何工作的吗？是在代码生成层实现的吗？也就是说，它能自动向量化吗？还是说这些是必须显式调用的原语（intrinsics）？</p>
+        <p class="comment-reason"><span>入选理由</span>关注了版本更新中最核心的技术改进，并提出了关键的实现问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49088184" target="_blank" rel="noopener noreferrer">@baq</a>
+        </div>
+        <p class="comment-text">我有时在想，如果 Lisp 赢了，部署单位是 Lisp 机器镜像（如果这说得通的话），世界会是什么样子。针对 Lisp 优化的 Kubernetes 会是什么样？AWS EC2 又会是什么样？等等。</p>
+        <p class="comment-reason"><span>入选理由</span>引发了对 Lisp 原生基础设施的浪漫想象，反映了社区的情怀。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>SBCL 的持续迭代证明了 Common Lisp 这种“古老”语言在现代高性能计算中依然具有极强的生命力。SBCL 几乎是开源界追求极致性能的典范，其名称背后“钢铁”与“银行”的渊源也象征着它的稳固。然而，正如评论区所讨论的，Lisp 始终面临着“自由与秩序”的博弈：它赋予了开发者造物主般的权力，却也因 DSL 的泛滥增加了团队协作的摩擦。SBCL 2.6.7 在 SIMD 和文档交互上的进步，展示了它在硬核性能与开发者体验之间寻找平衡的努力。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49085731">
+      <summary class="story-overview">
+        <span class="rank-number">05</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">slow-journalism.com</span>
+            <span>232 points</span>
+            <span>原始 #12 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.slow-journalism.com/" target="_blank"
+              rel="noopener noreferrer">Delayed Gratification – Proud to Be &#x27;Last to Breaking News&#x27;</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49085731" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 134</a>
+          </h2>
+          <p class="summary">《Delayed Gratification》是一本倡导“慢新闻”理念的季度杂志，其核心口号是“最后报道突发新闻”。与追求速度的传统媒体不同，该杂志在事件发生三个月后才进行深度报道。这种延迟让编辑团队能够避开即时新闻中的噪音和错误，转而关注事件的真实后果和完整背景。它通过精美的排版和信息图表，将碎片化的头条新闻转化为具有洞察力的长篇分析。这种模式旨在对抗现代社会对“第一手消息”的病态痴迷，为读者提供更冷静的思考空间。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>在当今 24 小时不停歇的新闻周期中，媒体往往为了争夺“首发”而牺牲准确性，导致大量未经核实的传闻和官方通稿被直接转发。《Delayed Gratification》杂志则反其道而行之，它坚持在新闻热度退去后的三个月才动笔。这种“延迟满足”的机制允许记者有充足的时间进行事实核查，观察事件的后续演变，并从更宏观的视角分析其对社会的长远影响。杂志不仅提供文字，还利用大量高质量的信息图表来梳理复杂事件的脉络，将混乱的碎片信息整合为结构化的知识。</p><p>这种做法也反映了对现代人“新闻成瘾”心理的干预。许多人感到必须时刻关注社交媒体上的最新动态，以免在社交圈中失去话语权，但这种高频、低质的信息摄入往往会带来严重的心理焦虑。虽然这种慢节奏的报道无法满足人们对即时警示的需求，但它能有效过滤掉那些转瞬即逝的“噪音”。对于那些希望从情绪化的舆论场中抽身、寻求深度理解的读者来说，这是一种极具价值的补充。不过，这种模式也面临挑战：当一个话题已经从公众视野中消失时，如何重新唤起读者的阅读兴趣，是慢新闻必须面对的课题。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49087845" target="_blank" rel="noopener noreferrer">@openasocket</a>
+        </div>
+        <p class="comment-text">过去几年里，主流媒体让我感到非常沮丧的一点是，新闻报道的投入程度似乎在下降。我觉得一半的新闻文章只是在重复官员或政客公开声明中的语录，没有任何额外的努力。离谱的言论被照单全收，或者充其量只是把其他官员/政客相反的语录放在一起。举个例子，美国有多少次宣布霍尔木兹海峡是开放的，而事实证明并非如此？每次这些低水平的文章只是回响那句声明，甚至不去评估其真实性。我是说，船舶的转子数据是公开的，有十几个网站可以用来核实海峡的通行情况。如果你连最基本的后续跟进都不做，那还能叫新闻文章吗？或者这只是一种更复杂的‘转发’形式？</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深刻揭示了现代即时新闻中“核实缺失”的现状，为“慢新闻”的必要性提供了有力论据。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49086356" target="_blank" rel="noopener noreferrer">@bearjaws</a>
+        </div>
+        <p class="comment-text">这确实是很多人需要的：回归到在事情发生 2-3 周、更多细节浮出水面后再去了解。我经常想到我那些“重度网瘾”的朋友，如果他们不再扮演旧时代的“传声筒”，他们会受益匪浅。我的许多朋友讨厌 Twitter，讨厌马斯克，讨厌社交媒体，但因为他们必须成为第一个知道所有最新消息的人，他们整天被锁在 Twitter 上。他们无法退出。他们在社交上被束缚住了，因为成为那个发起话题（比如乌克兰发生了什么，谁被交易到了海豚队等）的人是他们社交生活的一部分。这让我感到困惑，因为我根本看不出成为“第一个”讨论新闻的价值，尤其是当那是假消息的时候。总之，我认为回归到非“实时”新闻是一个伟大的想法，这有助于社会减少对关键词和 Twitter 俏皮话的关注，转而关注重大议题。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者观察到了“首发新闻”作为一种社交货币对个人心理和社交关系的负面影响。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49086731" target="_blank" rel="noopener noreferrer">@parpfish</a>
+        </div>
+        <p class="comment-text">24 小时新闻周期对紧迫内容的无休止需求在心理上摧毁了许多人，我们需要对他们进行“去程序化”。我经常想做一个网站，让你轻松地对不同时间尺度（1 周、1 个月、1 年）的新闻网站进行并排对比，这样你就可以向他们展示：“看，所有这些你觉得必须消费的东西，好像它能让你成为一个消息更灵通的社会成员？其中有多少是真正重要的，又有多少只是为了在那一刻钩住你？”</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个极具启发性的“去程序化”概念，通过时间跨度的对比来消解即时新闻的虚假紧迫感。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49086488" target="_blank" rel="noopener noreferrer">@abound</a>
+        </div>
+        <p class="comment-text">我一直在为自己构建类似的东西。基本上，我使用 Calibre 的“获取新闻”功能来获取我信任的所有新闻源的 epub 文件，然后每月一次（间隔可配置），我在所有内容上运行一个流水线（结合了一些本地和 API 的 LLM 魔法）来进行去重和故事排名，然后将其编译成一份真正的、正儿八经的报纸（使用 Typst 进行排版等），最后在闲暇时阅读。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了一个利用现代技术（LLM 和自动化工具）实践“慢新闻”理念的个人技术方案。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49087004" target="_blank" rel="noopener noreferrer">@petercooper</a>
+        </div>
+        <p class="comment-text">我订阅过这本杂志。它设计精美，文笔优美，纸张质感很好，各方面都很棒。如果这个理念吸引你，值得一试。但最终，它对我来说没起作用，那是我的错。尽管我抱有最好的意图，但事实证明，一旦新闻周期过去，我就对阅读世界事务不再感兴趣了。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个诚实的反对观点，指出了“慢新闻”在维持读者兴趣方面的天然挑战。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>在信息过载的今天，我们似乎都患上了“首发强迫症”，仿佛第一时间转发新闻就能掌握某种社交货币。然而，正如评论区所指出的，现在的许多主流媒体已经沦为了官方通稿的“复读机”，缺乏最基本的核实。这种对速度的病态追求不仅牺牲了真相，更在心理上让大众陷入了永无止境的焦虑。选择《Delayed Gratification》式的“慢新闻”不仅是选择一种阅读方式，更是一种心理上的“去程序化”。它让我们从碎片化的情绪煽动中抽身，重新审视那些真正具有长期影响的事件。虽然这需要克服“过时感”带来的阅读障碍，但这种延迟带来的清醒，正是这个喧嚣时代最稀缺的解药。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49087306">
+      <summary class="story-overview">
+        <span class="rank-number">06</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">apple.com</span>
+            <span>136 points</span>
+            <span>原始 #13 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.apple.com/shop/iphone/iphone-upgrade-program" target="_blank"
+              rel="noopener noreferrer">The iPhone Upgrade Program is being replaced by Apple Upgrade</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49087306" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 232</a>
+          </h2>
+          <p class="summary">苹果正将其“iPhone 升级计划”替换为全新的“Apple Upgrade”计划，将服务范围扩大至 Mac、iPad 和 Apple Watch。与以往 24 个月免息分期并最终拥有设备的融资模式不同，新计划本质上是租赁模式，用户在期满后需选择归还、升级或支付余款买断。该计划改由 Klarna 提供金融支持，且不再默认包含 AppleCare+ 服务。这一转变旨在将一次性硬件购买转化为持续的月度订阅收入，即“硬件即服务”。不过，租赁 iPhone 仍需绑定美国三大主流运营商，这限制了使用廉价虚拟运营商套餐的用户。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>苹果此次推出的 Apple Upgrade 标志着其销售策略从“融资购买”向“硬件租赁”的重大转型。在旧的 iPhone 升级计划（iUP）中，用户通过 Citizens Bank 进行 24 个月免息贷款，付清后自动获得设备所有权。而新计划由 Klarna 运营，采用租赁逻辑：用户支付较低的月费，但在租期结束（通常为 24 或 36 个月）时，设备并不归用户所有。此时，用户可以选择归还设备并升级到新款，或者支付一笔“购买选择费”来买断。这笔买断费用通常是设备原价减去已支付租金后的差额，对于高价值设备（如 MacBook Pro）来说，期末可能需要支付上千美元的尾款。</p><p>这种模式的优势在于降低了月供门槛，让用户能以更低的现金流压力使用最新款设备，且对于企业用户来说，租赁支出在税务处理上可能更具吸引力。然而，对于普通消费者，这意味着如果想保留设备，最终的总支出并不会减少，甚至可能因为失去了旧计划中捆绑的 AppleCare+ 而增加了潜在成本。此外，iPhone 租赁依然强制要求关联 AT&amp;T、T-Mobile 或 Verizon 的服务，这让许多偏好廉价预付费套餐的用户感到失望。观察人士认为，苹果此举是为了在硬件更新周期拉长的背景下，通过“硬件即服务”（HaaS）模式锁定长期现金流，将用户深度绑定在苹果生态的支付体系中。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49087745" target="_blank" rel="noopener noreferrer">@acmnrs</a>
+        </div>
+        <p class="comment-text">iPhone 升级计划曾是一个针对 iPhone 的 24 个月 0% 利率融资计划。替代它的 Apple Upgrade 是一个租赁计划，还涵盖了 iPad、Mac 和 Apple Watch。你不再是在支付完所有款项后自动拥有设备，而是可以在租赁结束时选择归还/升级/购买。新计划由 Klarna 而非 Citizens Bank 支持，使用软信用查询（soft credit check），并且不再默认包含 AppleCare+。网页上对这些变化解释得并不特别清楚，这本身就说明了一切。</p>
+        <p class="comment-reason"><span>入选理由</span>清晰地对比了新旧计划在金融本质、支持银行及捆绑服务上的核心差异。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49087828" target="_blank" rel="noopener noreferrer">@nerdjon</a>
+        </div>
+        <p class="comment-text">新计划的数学计算有点让人困惑，我猜他们是希望大多数人直接寄回设备并升级。根据 FAQ：如果你决定购买设备，购买选项费是标价减去你已支付的租金，再减去任何剩余折扣或折抵款。举个例子：iPhone 17 Pro Max 购买价约 1199 美元，或者每月 34.99 美元租 24 个月（共 839.76 美元），那么租期结束时买断需要 433.33 美元。最坏的情况是，这是一个为期三年半的免息贷款，最后有一笔较高的尾款。只要你把它当作贷款而不是可以随时结束的租赁，看起来还行，并没有什么阴谋。你仍然可以选择以原始成本拥有设备。</p>
+        <p class="comment-reason"><span>入选理由</span>通过具体的数学计算展示了租赁模式下的买断成本，帮助读者理解实际开支。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49088589" target="_blank" rel="noopener noreferrer">@paxys</a>
+        </div>
+        <p class="comment-text">很多人在租赁结束时拿不出那 433 美元来直接买断设备，所以他们不得不将其转入另一个为期两年的月付计划，然后周而复始。所以这个计划的目标和所有类似计划一样——他们想把一次性的设备购买变成永久性的月度收入流，同时在最后保留资产的所有权。</p>
+        <p class="comment-reason"><span>入选理由</span>揭示了租赁模式背后的商业逻辑，即如何通过尾款压力将用户转化为长期订阅者。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49087805" target="_blank" rel="noopener noreferrer">@r0fl</a>
+        </div>
+        <p class="comment-text">租赁并不意味着“我买不起”。这关乎资本配置。既然我可以分摊成本、保持现金流，并且（如果是合法的业务支出）还可以抵扣租赁费用，为什么我要预先投入 1200 美元在一个几年内就会过时的设备上呢？把 1200 美元留在我的业务中赚取回报，通常比预付给一个贬值资产更有价值。人们乐于租赁 8 万美元的汽车正是出于这些原因。将同样的逻辑应用于 1200 美元的手机并非不理性，只是规模更小的财务决策而已。</p>
+        <p class="comment-reason"><span>入选理由</span>从商业和资本效率的角度为租赁模式提供了合理的辩护。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49089231" target="_blank" rel="noopener noreferrer">@_zie</a>
+        </div>
+        <p class="comment-text">“如果你租赁 iPhone，你需要在加入时连接到 AT&amp;T、T-Mobile 或 Verizon。”该死，这对我来说是致命伤。租赁一部无锁版 iPhone 并能使用我目前每月 25 美元的 MVNO（US Mobile）本来可能会吸引我（我现在都是直接购买，然后告诉自己升级时会卖掉旧手机，但实际上家里已经堆成了 iPhone 坟场）。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了该计划对追求灵活运营商选择的用户的主要限制。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>苹果将 iPhone 升级计划更名为 Apple Upgrade，表面上是扩大了产品覆盖范围，实则是销售逻辑的底层重构。从“融资购买”转向“租赁买断”，苹果正试图将昂贵的硬件消费彻底“订阅化”。正如评论指出的，这种模式通过降低月供诱惑用户，但期末的巨额尾款往往会让消费者陷入持续续租的循环，从而实现苹果对长期现金流的锁定。对于精明的商业用户，这可能是优化现金流的工具；但对于普通消费者，失去 0% 利率融资和默认捆绑的 AppleCare+，意味着这更像是一场精心包装的金融游戏。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49085698">
+      <summary class="story-overview">
+        <span class="rank-number">07</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">sebastianraschka.com</span>
+            <span>297 points</span>
+            <span>原始 #10 · 低讨论量降权 +3.3</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://sebastianraschka.com/blog/2026/kimi-k3-architecture-notes.html" target="_blank"
+              rel="noopener noreferrer">Kimi K3 Architecture Overview and Notes</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49085698" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 39</a>
+          </h2>
+          <p class="summary">Kimi K3 是月之暗面（Moonshot AI）最新发布的超大规模开源权重模型，其参数量达到了惊人的 2.8 万亿。该架构在 Kimi Linear 的基础上进行了大幅扩展，核心创新在于引入了 LatentMoE 和 Kimi Delta Attention (KDA) 以显著提升推理效率。最引人注目的技术突破是它彻底舍弃了旋转位置编码（RoPE），转而全面采用无位置编码（NoPE）方案。这种设计之所以可行，是因为其混合架构中的 KDA 层具有类似循环神经网络（RNN）的特性，能隐式捕捉序列位置信息。作为目前最大的开源模型之一，K3 在多模态支持和实际应用表现上已展现出挑战顶级闭源模型的实力。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Kimi K3 代表了开源模型规模的新巅峰，其 2.8T 的参数量远超此前的版本。为了在如此庞大的规模下保持推理效率，架构大量采用了优化组件：LatentMoE 通过下采样压缩大型线性层，而多头潜在注意力（MLA）则进一步降低了显存占用。此外，K3 引入了“注意力残差”机制，通过注意力分数对跨层残差进行加权连接，这种设计虽然让训练和推理成本分别增加了 4% 和 2%，但换来了更优的验证损失和下游任务表现。</p><p>在位置编码方面，K3 采取了激进的 NoPE（无位置编码）策略，这在当前主流模型中非常罕见。通常模型依赖 RoPE 来识别 Token 顺序，但 K3 利用其特有的 Kimi Delta Attention (KDA) 层解决了这一问题。KDA 本质上是一种可并行化的循环神经网络（RNN）变体，其隐藏状态充当了可编辑的记忆单元，天然具备处理序列顺序的能力。这种混合架构使得全局注意力层无需显式位置信息也能理解上下文，从而避免了 RoPE 可能带来的某些负面影响。尽管技术文档详尽，但这种复杂架构在实际部署中也带来了挑战，例如 KV 缓存必须以固定块进行增量更新，可能导致缓存未命中时的额外计算。然而，初步测试显示 K3 的性能已能与 Claude 4.7 等顶级闭源模型并驾齐驱。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49087485" target="_blank" rel="noopener noreferrer">@thunderbird120</a>
+        </div>
+        <p class="comment-text">Kimi Delta Attention (KDA) 虽然名字里有“Attention”，但实际上并不是传统意义上的注意力机制。它更像是一个在训练期间可以高效并行化的 RNN。它是对 Gated DeltaNet 的微小改进，可以被描述为一个隐藏状态类似于小型、可编辑注意力记忆的 RNN。因为它是类 RNN 的，所以它天生就有序列中 X 在 Y 之前、Y 在 Z 之前的概念。而 Transformer 默认情况下并非如此，它们处理的是集合，即无序的唯一项集合，它们不知道这些项之间的相对位置，所以你必须给它们提示。由于每层注意力机制前都有 3 个 KDA 层，而且在第一层注意力之前也有 3 个 KDA 层，因此每个 token 位置在进入第一个实际注意力层之前，都能学习到它在序列中的位置信息。RoPE 实际上具有一定的破坏性，所以能像这样省略它是非常方便的。像 Gemma-4 这样的模型也有类似的结构，每层全局注意力配有 5:1 的滑动窗口注意力（SWA）层。这些是处理局部信息的廉价注意力层，插在强大的全局层之间，KDA 在这个模型中扮演了相同的角色。在 Gemma 中，只有 SWA 层有 RoPE，而全局注意力层省略了它。SWA 是真正的注意力机制，即使它只在小窗口内运行，所以它需要位置嵌入。而 KDA 不是，所以它不需要。</p>
+        <p class="comment-reason"><span>入选理由</span>这篇评论深入浅出地解释了 Kimi K3 舍弃位置编码的技术原理，是理解该架构核心创新的关键。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49091786" target="_blank" rel="noopener noreferrer">@rglover</a>
+        </div>
+        <p class="comment-text">今天第一次尝试了 K3，它是一个实打实的威胁。我暂时（也许是永久地）把它当作主力模型来用了，令人惊讶的是它竟然能与 Opus 4.7/4.8 媲美（那是我最近的首选模型——我今天写了一篇简短的帖子记录了我的发现 [1]）。
+[1] https://graybearding.bearblog.dev/kimi-k3-is-insane/</p>
+        <p class="comment-reason"><span>入选理由</span>提供了来自一线用户的实际性能反馈，证实了该模型在真实场景下的竞争力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49087617" target="_blank" rel="noopener noreferrer">@samuelknight</a>
+        </div>
+        <p class="comment-text">不过它也有一些奇怪的副作用。例如，KV 缓存是以固定的增量 token 块（我使用的供应商是 1024 个）实现的，而不是简单地缓存到最近的输入提示。这导致每次推理可能会产生多达 1023 个额外的输入（缓存未命中）token。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了这种新型架构在实际云端部署和推理效率方面可能存在的权衡与代价。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49090362" target="_blank" rel="noopener noreferrer">@constantlm</a>
+        </div>
+        <p class="comment-text">所以，与西方实验室领导者希望你相信的（即 Kimi 只是蒸馏攻击的结果）不同，他们正在引入全新的、原创的方法。</p>
+        <p class="comment-reason"><span>入选理由</span>强调了该模型在技术原创性上的意义，反驳了“国产模型只会模仿”的刻板印象。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Kimi K3 的发布有力地回击了“国产大模型全靠知识蒸馏”的偏见。通过引入 KDA 这种类 RNN 结构来替代传统的旋转位置编码（RoPE），月之暗面在超大规模参数下实现了一种极具原创性的效率平衡。这种“非共识”的架构探索不仅在技术上令人兴奋，更证明了开源模型正进入一个由复杂混合架构主导的新阶段。正如评论所言，这种架构在实际部署中虽有 KV 缓存对齐等细微代价，但其展现出的性能已足以让闭源巨头感到压力。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49085666">
+      <summary class="story-overview">
+        <span class="rank-number">08</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">mlugg.co.uk</span>
+            <span>188 points</span>
+            <span>原始 #14 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://mlugg.co.uk/posts/incremental-compilation-internals/" target="_blank"
+              rel="noopener noreferrer">Zig&#x27;s Incremental Compilation Internals</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49085666" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 133</a>
+          </h2>
+          <p class="summary">Zig 编译器通过引入增量编译机制，实现了在复杂应用中仅需几十毫秒即可完成代码重建。该系统将编译过程拆分为细粒度的“分析单元”，并利用依赖图追踪源码变动对类型、函数体等具体部分的影响。其核心突破在于深度集成的增量链接器，它能直接在内存映射的二进制文件中“打补丁”，动态调整函数空间而无需重新链接整个程序。为了实现这种极致性能，Zig 在语言设计上做出了多次调整，以确保依赖关系可被静态追踪。目前该功能在开发分支中已趋于成熟，预计将在 0.17.0 版本中正式面向稳定版用户开放。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Zig 核心团队成员详细介绍了该语言实现毫秒级增量编译的内部机制。编译流程首先将源文件转换为中间表示（ZIR），这一步是高度并行的且带有缓存。核心挑战在于语义分析阶段，Zig 将其拆分为布局、类型、值和函数体四种“分析单元”。通过建立这些单元与源码哈希之间的依赖图，编译器能精确识别出哪些函数需要重新分析，从而避免了传统编译器中常见的冗余计算。这种设计甚至反向影响了 Zig 的语言规范，为了便于追踪依赖，语言在设计上做出了一些权衡。</p><p>在后端，Zig 采用了与众不同的集成链接策略。传统的外部链接器通常需要重新读取所有目标文件，而 Zig 的增量链接器通过 `MappedFile` 抽象直接操作输出的二进制文件。它将文件视为一棵可动态调整大小的节点树，当某个函数代码变长时，链接器会自动移动周围的节点并更新重定位信息，实现原地“打补丁”。这种紧密集成规避了传统工具链中跨进程通信和重复解析的开销。虽然目前该功能主要针对调试构建（Debug builds），但它展示了通过协同设计语言与工具链所能达到的性能极限。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49086705" target="_blank" rel="noopener noreferrer">@steveklabnik</a>
+        </div>
+        <p class="comment-text">Zig 在工具链方面的工作始终令人印象深刻。虽然我仍然不打算用它写软件，因为我认为内存安全是基本门槛，但这些成果确实非常出色。在增量编译之前，他们的交叉编译器工作就已经很惊艳了。文中提到 Zig 为了支持快速增量编译而调整了语言设计（有时甚至引起争议），这正是 Rust 当初没能做到的。在软件工程中，你不可能同时完成所有目标，Rust 在 2015 年发布 1.0 版本是正确的时机，但如果能多打磨几年，也许编译速度会快得多。软件工程真的很难。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者是 Rust 社区的核心人物，他从语言设计权衡的角度对比了 Zig 和 Rust 在编译速度上的不同选择。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49090676" target="_blank" rel="noopener noreferrer">@afdbcreid</a>
+        </div>
+        <p class="comment-text">这篇文章非常有趣。作为 rust-analyzer 团队的成员，我不禁将其与 Rust 的情况进行对比。Rust 拥有同样甚至更复杂的增量编译系统，但编译速度却慢得多。我认为主要原因有两点：一是语言设计，Zig 是为快速增量编译而设计的，而 Rust 不是。例如，Zig 只需追踪四种属性的变化，而 Rust 的属性多到无法静态追踪，只能使用带有额外开销的动态查询系统；二是编译器实现，Rust 的编译复杂度更高，且 rustc 的代码量比 Zig 编译器大 10 到 20 倍，修改起来困难得多。</p>
+        <p class="comment-reason"><span>入选理由</span>来自 rust-analyzer 成员的专业视角，解释了为什么 Rust 即使有增量编译也无法达到 Zig 这种速度的技术原因。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49087883" target="_blank" rel="noopener noreferrer">@thefaux</a>
+        </div>
+        <p class="comment-text">我对这个设计有一点不太理解：为什么他们坚持在调试构建中生成一个包含所有代码的巨大二进制文件？在我看来，更简单的方法是生成许多小的共享库（甚至细化到文件级别），然后将它们链接到最终的二进制文件中。这样程序的主体部分会非常小，只需加载共享库列表即可，无需进行复杂的二进制补丁操作。此外，如果用户在补丁过程中强行中断（如 Ctrl+C），可能会导致二进制文件损坏，而每次生成新的主二进制文件（仅包含库列表）会更健壮且速度也很快。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个合理的替代架构方案，即通过共享库而非二进制补丁来实现增量更新，引发了对设计复杂性的思考。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Zig 的增量编译再次证明了“速度是一种特性”。在现代软件开发中，反馈循环的长度直接决定了开发者的心流体验。正如评论中所指出的，Zig 能够实现这种性能，很大程度上是因为它愿意为了工具链的效率去“逆向修改”语言设计，这与 Rust 这种优先考虑类型系统和内存安全、随后再试图优化编译器的路径截然不同。Zig 的做法更像是一种“全栈式”的编译器工程，从语法解析到二进制链接的每一个环节都为了极致的响应速度而协同优化。虽然关于内存安全的争论（如 steveklabnik 所述）仍将持续，但 Zig 在工程效率上的激进探索确实为系统级语言树立了新的标杆。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49091153">
+      <summary class="story-overview">
+        <span class="rank-number">09</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">washingtonpost.com</span>
+            <span>18 points</span>
+            <span>原始 #8 · 低讨论量降权 +6.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.washingtonpost.com/nation/2026/07/28/schools-are-adding-pepper-spraying-drones-help-combat-active-shooters/" target="_blank"
+              rel="noopener noreferrer">Schools are adding pepper-spraying drones to help combat active shooters</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49091153" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 28</a>
+          </h2>
+          <p class="summary">美国佛罗里达、佐治亚和科罗拉多三个州的九所学校计划引入配备胡椒喷雾的无人机，以应对校园枪击威胁。这些由 Mithril Defense 制造的无人机平时存放在专用箱内，可由教师在发现威胁时激活，并在 15 秒内抵达现场。无人机设计用于穿过走廊、击碎窗户并向袭击者喷洒非致命喷雾，旨在警方赶到前干扰其行动。然而，批评者担心这种技术手段无法根治枪支暴力，且存在误伤学生或被袭击者反制的风险。目前该项目仍处于初期阶段，其实际效果和安全性尚待实战检验。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>面对持续不断的校园枪击威胁，美国部分学校开始尝试一种极具争议的高科技防御方案：部署由德克萨斯州 Mithril Defense 公司开发的“校园守护天使”无人机。这些无人机被安置在校园各处的自动化存储箱中，一旦教师通过警报系统激活，它们能在短短 15 秒内飞抵现场。无人机不仅飞行速度极快，还具备击碎玻璃进入封闭空间的能力，其核心武器是高浓度的胡椒喷雾，旨在通过让袭击者暂时丧失行动能力来为师生争取宝贵的逃生或救援时间。</p><p>这种方案反映了美国在枪支管控立法陷入僵局的背景下，基层学校试图通过技术手段自保的无奈现状。支持者认为，在警察抵达前的“真空期”，无人机是目前唯一能迅速介入的干预手段。然而，技术专家和教育界人士提出了诸多质疑：胡椒喷雾在封闭的走廊或教室内可能会无差别地伤害到学生；如果袭击者佩戴面罩或提前破坏无人机，该系统将形同虚设。此外，AI 识别错误或误报导致的意外喷射也是一个不容忽视的安全隐患。这种将校园“堡垒化”的趋势，也引发了关于教育环境是否会因此变得过度军事化的广泛讨论。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49091930" target="_blank" rel="noopener noreferrer">@kazinator</a>
+        </div>
+        <p class="comment-text">这个愚蠢的想法肯定源自某次 Gemini 聊天会话，在实际事件中必然会适得其反。袭击者当然会知道无人机的存在并做好准备，比如戴上面罩。对他们来说更方便的是，胡椒喷雾会使目标（学生和老师）陷入混乱并丧失行动能力，从而导致更多伤亡。如果你打算接受无法从犯罪者手中夺走枪支的现实，那么唯一“有效”的方法就是让目标同样武装起来，并接受近距离及户外战斗训练，以及心理训练以确保在真实情况下不会僵住、颤抖或犹豫。任何被动的小玩意都无法阻止武装犯罪者，除非他不知道这些东西的存在且没有准备，但依赖这种假设是愚蠢的。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从战术角度指出了无人机方案可能存在的致命缺陷，即袭击者的反制措施可能导致更严重的后果。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49091902" target="_blank" rel="noopener noreferrer">@wildzzz</a>
+        </div>
+        <p class="comment-text">这些设备是在县/区一级甚至学校个人层面购买的。而枪支管控是在州或联邦层面立法的。做出购买这些设备决定的人，实际上对枪支法律没有任何控制权。</p>
+        <p class="comment-reason"><span>入选理由</span>评论揭示了美国行政体系的断层，解释了为什么学校会选择购买“技术补丁”而非推动法律变革。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49091918" target="_blank" rel="noopener noreferrer">@neom</a>
+        </div>
+        <p class="comment-text">《AI 误将一袋多力多滋玉米片当成武器后，武装警察包围了学生》—— 693 分，由 antongribok 发表在 9 个月前 - https://news.ycombinator.com/item?id=45684934</p>
+        <p class="comment-reason"><span>入选理由</span>通过引用过往案例，含蓄地表达了对自动化防御系统识别准确性的担忧。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>将校园安全寄托于“胡椒喷雾无人机”，是典型的用技术手段解决深层社会问题的尝试。这种方案虽然在理论上能缩短干预时间，但在复杂的实战环境下，它更像是一种昂贵的心理安慰。正如评论所指出的，学校管理层在无法改变联邦枪支法律的现实下，只能在有限的预算内购买这些看似先进的“补丁”。然而，当校园变成一个布满自动化武器和监控的堡垒时，我们不仅要担心技术故障带来的误伤，更要反思这种“军事化”教育环境对下一代心理健康的长期影响。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49089240">
+      <summary class="story-overview">
+        <span class="rank-number">10</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">pacingthefrontier.com</span>
+            <span>68 points</span>
+            <span>原始 #15 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.pacingthefrontier.com/" target="_blank"
+              rel="noopener noreferrer">Pacing the frontier</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49089240" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 56</a>
+          </h2>
+          <p class="summary">来自 OpenAI、Anthropic 和 Google DeepMind 等领先实验室的 1,178 名员工签署了一份联名信，呼吁美国政府支持国际合作，以“有节奏地”放慢 AI 前沿开发的速度。他们担心 AI 研究的自动化可能导致技术进步过快，超出了人类理解、监管或控制的能力。联名信指出，由于激烈的竞争压力，目前没有任何一家公司或国家能够单方面减速。签署者认为，世界需要开发专门的技术和治理工具，以便在必要时为安全防御和监管争取时间。然而，这一提议在社区中引发了关于国家竞争、博弈论以及监管是否会扼杀创新的激烈争论。其核心局限在于，在缺乏全球互信的情况下，这种“集体减速”在执行层面极具挑战。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这份名为“Pacing the Frontier”的联名信由超过一千名 AI 行业的资深从业者签署，其核心论点是 AI 发展的速度可能很快就会超过人类的应对能力。签署者们特别关注“自动化 AI 研究”的潜力，即 AI 系统开始协助甚至主导下一代 AI 的开发，这可能引发能力的指数级爆炸。他们认为，当前的行业现状是一个典型的“逐底竞争”：尽管许多开发者意识到风险，但由于担心被对手超越，谁也不敢率先放慢脚步。因此，他们请求美国政府介入，推动建立国际协调机制，开发能够监控并调节前沿模型开发进度的技术手段。</p><p>在技术层面，联名信呼吁建立一套超越现有模型发布监测的治理体系，旨在为应对生物安全、网络攻击和地缘政治动荡等潜在风险争取缓冲期。然而，批评者指出，这种提议忽略了国际政治中的零和博弈现实。如果西方国家选择减速，战略对手可能会借机实现技术反超，这使得任何单方面的限制都显得极其危险。此外，讨论还涉及了这种监管是否会演变成对软件分发和计算资源的全面审查。目前，该提议更多处于愿景阶段，缺乏具体的执行细节，如何平衡安全与国家竞争力将是未来政策制定的核心难点。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49091804" target="_blank" rel="noopener noreferrer">@vessenes</a>
+        </div>
+        <p class="comment-text">这。绝。对。行不通。这场研究竞赛是一个零信任的迭代博弈。任何背叛行为都能带来可能具有永久价值的收益。背叛总会发生——OpenAI 在推动减速的同时就背叛了。美国决定减速的代价是如此巨大，以至于在公众舆论中散布这种想法都是错误的；这可能会让美国立法者误以为他们能做到这一点。他们做不到，因为基本的经济规律和潜在结果决定了任何战略对手都必须竭尽全力去背叛。这里的提议设想了一个全球性的全景监控国家，监督所有的研究和芯片，并将其视为“合理”的解决方案。即便在那种（糟糕的）世界状态下，我们依然会看到有效的背叛。不管你喜不喜欢，世界已经登上了这列火车，唯一理智的做法是全力支持高质量的伦理研究团体和公司，让他们在技术学习曲线上不断攀升。2030 年 AI 愿景中的一些变体建议牺牲美国的领先地位来换取一些模糊的安全指标改进——这同样是疯狂的。任何减速都会给战略对手时间，让他们带着完全不同的对齐目标追赶上来。我喜欢这种现状吗？不。但签署这些东西的人是否完全否认了博弈论、利益风险以及战略对手的行为模式？是的，他们确实如此。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从博弈论的角度深刻剖析了“集体减速”在现实政治和竞争环境下的不可行性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49090035" target="_blank" rel="noopener noreferrer">@areoform</a>
+        </div>
+        <p class="comment-text">第一批计算机是用于战争的。哈佛马克一号被冯·诺依曼用来计算内爆物理学。紧接着，ENIAC 被用来计算氢弹的可行性。他们称之为“洛斯阿拉莫斯问题”。第一个计算机网络 SAGE 汇集了全美的雷达数据、空中交通管制数据和军事飞行数据，以探测苏联的飞越，并能指挥战斗机拦截。如果你坐在 1955 年，你会相信计算机及其网络会带来一个非凡的时代吗？想象一下，如果冯·诺依曼那帮人在 1955 年就开始发起运动，限制计算机的开发和使用，因为它们肯定只能被用来制造武器，对吧？对吧？我们很幸运拥有像乔·利克莱德（Joe Licklider）这样有远见的人，他能看透当下，预见未来。1963 年，他写了一份备忘录，呼吁建立“星际计算机网络”（因为他知道工程师总是无法完全交付，所以如果他要求一个银河系，至少能得到一个星球）。他把这些机器交给科学家和像麻省理工学院最初的黑客那样的人去玩。如果利克莱德当年写的是关于我们必须“控制”计算机节奏以确保其他国家无法开发内爆技术或 SAGE 系统的备忘录，那会怎样？你认为你还会有今天的工作和繁荣吗？如果利克莱德没有分享这项技术、传播它并为 ARPA-net 埋下种子，而是写下“忧心忡忡的科学家”的备忘录（我确信他能找到一大堆），谈论计算机如何只能用于武器和战争，所以必须停止计算机扩散，那会怎样？我们无法想象一个计算机小到可以装进任何东西的世界！甚至墙上的插座！如果你的插座能打仗怎么办？！他们没有这样做，因为他们知道，要扼杀全人类更美好的未来，没有比控制它更好的方法了。† 是的，和平。我们比以往任何时候都更和平。人类即使不愿杀戮，也可能是一个暴力的群体。</p>
+        <p class="comment-reason"><span>入选理由</span>通过计算机发展的历史类比，有力地论证了过度控制新技术可能带来的长期损失。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49091017" target="_blank" rel="noopener noreferrer">@alach11</a>
+        </div>
+        <p class="comment-text">Hacker News 上关于这个话题的讨论让我感到非常沮丧。这完全是非建设性的。我非常严肃地对待 AI 发展的速度。我在 AI 实验室工作的所有朋友也都非常严肃地对待它。做出那种懒惰、肤浅的轻蔑评价——说 Dario/Demis/Sam 这样的领导者纯粹是出于自私自利——是非常容易的。如果 AI 确实构成了生物风险，或者可能破坏地缘政治稳定，甚至只是构成经济风险，那么像这样的联合请愿难道不是一件好事吗？我们应该希望 AI 实验室达成具有约束力的协议，以安全且较慢的速度推进，而不是陷入不安全竞争的次优博弈论竞赛。我们应该希望各国能够达成具有约束力的协议。我们在这里的讨论应该围绕这些协议的实质内容以及执行机制的可行性展开。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论代表了联名信支持者的立场，强调了风险的严肃性以及寻求建设性解决方案的必要性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49091461" target="_blank" rel="noopener noreferrer">@fidotron</a>
+        </div>
+        <p class="comment-text">关于最近这波末日论中提到的这个具体例子，我很难理解：LLM 到底通过什么机制来帮助你设计和制造新型生物武器？我们知道它们不具备空间推理能力，如果它们在生物领域真的那么厉害，那么药物研究现在应该已经彻底爆发了。同样，你到底该如何神奇地获得制造相关攻击性生物所需的一切设备？难道我们现在都在厨房里搞 CRISPR 基因编辑吗？如果你真的那么担心这种威胁，那么……去监控生物实验室，而不是 AI。这与现实情况脱节到了离奇的地步。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论对联名信中常提到的“生物风险”提出了具体的技术质疑，认为这种担忧缺乏事实依据。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这份联名信揭示了 AI 行业内部深刻的“幸存者焦虑”：开发者们既是这项技术的创造者，也是最担心其失控的人。这构成了一个经典的囚徒困境——所有人都知道减速对整体安全有益，但在缺乏强制性国际协议的情况下，率先减速就意味着自杀。评论区中 vessenes 的观点直指核心：在零信任的国际博弈中，这种呼吁往往显得过于理想化。更深层的担忧在于，正如 areoform 所言，历史上几乎所有革命性技术（如计算机和互联网）在初期都与军事和风险紧密相连，如果当时选择了“控制节奏”，我们可能永远无法享受到技术普及带来的繁荣。此外，将 AI 风险聚焦在生物武器等极端场景上，可能反而掩盖了失业和经济不平等等更迫切的社会问题。这种“有节奏的开发”究竟是负责任的远见，还是领先者试图通过监管巩固地位的手段，依然是社区争论的焦点。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49087091">
+      <summary class="story-overview">
+        <span class="rank-number">11</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">anthropic.com</span>
+            <span>174 points</span>
+            <span>原始 #16 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.anthropic.com/research/discovering-cryptographic-weaknesses" target="_blank"
+              rel="noopener noreferrer">Discovering Cryptographic Weaknesses with Claude</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49087091" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 118</a>
+          </h2>
+          <p class="summary">Anthropic 披露了使用 Claude Mythos 预览版发现加密算法数学缺陷的研究成果。模型成功将后量子签名方案 HAWK 的有效密钥强度减半，并显著提升了对 7 轮 AES（简化版）的攻击速度。这标志着 AI 从寻找代码实现漏洞进化到能够进行高水平的密码分析数学推理。尽管这些发现目前不威胁实际生产系统，但展示了 AI 在复杂科学研究中的潜力。主要局限在于研究成本极高，且发现结果仍需人类专家耗费大量时间进行事后验证。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Anthropic 的研究展示了 Claude 在密码学领域的自主研究能力。研究人员构建了一个多智能体协作框架，让模型能够调用 Python 和 Sage 等计算工具，并查阅已发表的学术文献。在针对 HAWK 方案的攻击中，Claude 发现了一个此前未被利用的“非平凡自同构”现象，从而将破解难度从指数级的高位降低了一半。对于广泛使用的 AES 算法，Claude 针对 7 轮简化版本（完整版为 10 轮）开发了名为“莫比乌斯桥”的指纹算法，通过减少攻击者所需的猜测次数，将攻击速度提高了 200 到 800 倍。</p><p>研究过程揭示了 AI 驱动科研的独特动态：模型最初认为改进 AES 攻击是不可能的，但在研究人员通过简单的文字鼓励（而非复杂的提示工程）下，模型最终突破了思维定式。这种“自主性”伴随着高昂的代价，每个研究结果的 API 成本约为 10 万美元。此外，虽然模型在几天内就能产出成果，但人类研究员却需要花费数周甚至一个月的时间来验证这些数学推导的正确性。目前这些攻击对现实世界的影响有限，因为 HAWK 尚未标准化部署，而 AES 攻击仅限于轮数缩减的版本。然而，这预示着未来 AI 可能在设计更具韧性的加密标准中发挥关键作用，同时也迫使安全界思考如何应对 AI 发现的即时性漏洞。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49088205" target="_blank" rel="noopener noreferrer">@_dwt</a>
+        </div>
+        <p class="comment-text">我发现我的一些朋友和熟人已经痴迷于提示风格、“提示工程”、该用哪些技巧、该培养哪些技能、“上下文工程”，以及其他无数种关于“如何写出聪明的话让模型表现更好”的变体。朋友们，看看 Anthropic 自己的人是怎么给机器发提示词的：
+&gt; 在第一条消息发出几小时后，我们发现 Claude 仍在寻找简单的攻击方式，于是发送了一条消息：“不，目标是我们要一个像顶尖研究员一样高度智能的模型，我们要寻找新的攻击方式”；
+&gt; 第二天早上，Claude 想尝试更换目标，改用不同的密码；我们提醒模型：“不，我们不想更换目标 [...] 再次强调，我们需要找到值得发表的东西”；
+&gt; 那天晚上，我们发送了最后一条鼓励的话：“再次强调，我们不是在寻找容易实现的目标，我们要进行真正的研究，寻找真正困难的发现。”
+所有的 RLHF 和微调努力，都是为了让这种提示词（甚至更糟的提示词）能毫无障碍地发挥作用。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论揭示了顶级 AI 研究中实际使用的提示词风格，与大众认知的“提示工程”形成了鲜明对比，具有很强的启发性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49087869" target="_blank" rel="noopener noreferrer">@mmaunder</a>
+        </div>
+        <p class="comment-text">“每个结果的开发成本大约为 10 万美元的 API 费用。”
+而且
+“在一周的时间里，一名 Anthropic 研究员与 Claude 合作开发了 HAWK 攻击，另一名研究员构建了一个脚手架，让 Claude 能够完全自主地发现 AES 攻击。”
+即使有大规模并行化，在一周内花掉 10 万美元的代币（tokens）也是一项惊人的壮举。我怀疑他们内部人员访问的 TPS（每秒代币数）远高于他们的公共批量端点。我们的社会正在迅速出现一个技术贵族阶层，这将会把我们撕裂。</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了 AI 研究中极高的资源门槛，以及由此引发的社会不平等担忧。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49088289" target="_blank" rel="noopener noreferrer">@Diogenesian</a>
+        </div>
+        <p class="comment-text">这似乎有点言过其实：
+&gt; 尽管 HAWK 在两年的时间里通过了两轮专家评审，但 Mythos 仅用 60 小时就改进了已知的最佳攻击手段——实际上将其密钥强度削减了一半。
+因为后面提到：
+&gt; Mythos 的攻击通过在 HAWK 使用的格（lattice）中发现一种特定的、此前未被利用的对称性（称为非平凡自同构）来发挥作用。之前的研究证明，高效地找到这种自同构将允许进行攻击，但并未回答 HAWK 使用的格中是否存在这种自同构。
+我不是在贬低 Mythos 的贡献，但第一段强烈暗示此前没有任何已知弱点。“发现一个此前仅存在于理论中的弱点”与“发现一个未知的弱点”是有巨大区别的。再次强调：Mythos 能做到这一点非常酷。这似乎只是“LLM 擅长寻找具体的数学（反）例”的又一个案例——这也很酷！但这里的公关辞令很圆滑。……而且想到他们花了 10 万美元在 3 天内寻找一个自同构，这确实有点不可思议。不是寻找自同构的可能性，那是已知的。天哪。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从专业角度对 Anthropic 的公关措辞提出了质疑，区分了“理论验证”与“全新发现”的差异。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49087236" target="_blank" rel="noopener noreferrer">@a-dub</a>
+        </div>
+        <p class="comment-text">&gt; 多智能体工作流产生了一些有趣的动态。例如，产生这次攻击的关键想法是由一对合作的工人发现的。两人都开始调查这个想法；第一个工人过早地认为该想法不可行而拒绝了它，但第二个工人找到了充分利用它的方法。这对搭档不断交换信息，最终双方都同意他们发现了一次有效的攻击。
+这非常有趣。文中的描述听起来并不像是协作真正导致了发现，而更像是搜索中每个线程的随机性。如果能重放并重复这次搜索（可能带有先验/上下文扰动），看看它找到或错过已知有效路径的频率，那将会很有意思。</p>
+        <p class="comment-reason"><span>入选理由</span>评论敏锐地捕捉到了多智能体协作中的随机性本质，对 AI 研究方法的科学性提出了思考。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49089200" target="_blank" rel="noopener noreferrer">@staticshock</a>
+        </div>
+        <p class="comment-text">当高质量的努力投入到一个工具（如 AES 或 Linux 内核）时，我们直觉上认为它被“硬化”了。也就是说，它变得更正确、更具韧性、更难被攻破。同样，当努力投入到一个未解决的问题（如黎曼猜想或 P v NP）却无进展时，它会“硬化”这个问题：让下一个尝试的人感到更望而生畏。我担心的是，随着 AI 将代币转化为努力，它会将世界一分为二：一些问题会屈服，使人类的努力变得完全多余；而另一些问题会硬化到让人类觉得努力越来越不值得，因为“连 AI 都解决不了”。我不喜欢这样。AI 是有局限的，所以我怀疑它会继续存在重大盲点，但它的存在本身可能会对原本有用的人类努力产生寒蝉效应。</p>
+        <p class="comment-reason"><span>入选理由</span>评论从哲学高度探讨了 AI 对人类科研动力可能产生的负面影响，视角独特且深刻。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>以前我们担心 AI 写出有漏洞的代码，现在 Anthropic 证明了 AI 已经具备挑战加密算法数学根基的能力。最令人印象深刻的细节并非复杂的算法推导，而是研究员与模型之间的互动：当 Claude 产生“畏难情绪”认为 AES 无法攻破时，研究员通过简单的精神鼓励而非复杂的提示工程促成了突破。然而，这种“AI 科学家”目前仍是科技巨头的专属奢侈品——10 万美元一个结论的 API 成本，以及需要人类专家耗费数周验证的现状，说明 AI 尚未真正取代人类研究员，而是成为了一个极其昂贵且需要“心理按摩”的高级实验助手。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49091738">
+      <summary class="story-overview">
+        <span class="rank-number">12</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">unplannedobsolescence.com</span>
+            <span>14 points</span>
+            <span>原始 #5 · 低讨论量降权 +14.1</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://unplannedobsolescence.com/blog/buttons-vs-links/" target="_blank"
+              rel="noopener noreferrer">The Difference Between a Button and a Link</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49091738" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 3</a>
+          </h2>
+          <p class="summary">本文探讨了 HTML 中按钮（Button）与链接（Link）的本质区别：链接代表“目的地”，允许用户在不同上下文中开启（如新标签页、书签）；而按钮代表“动作”，通常在当前上下文中执行。目前 HTML 的局限在于，按钮若不包裹在表单中，就无法原生触发导航或网络请求。为此，作者提出了“Button Actions”提案，建议为按钮标签增加 action 和 method 属性。这一改动能避免开发者为了实现简单跳转而将链接伪装成按钮，从而解决语义混淆和无障碍体验不佳的问题。该提案旨在让 HTML 原生支持更完整的 CRUD 操作，减少对 JavaScript 的依赖。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>作者指出，Web 用户直觉上能区分按钮和链接，但开发者在实现时常感到困惑。链接的核心在于其“可重构性”，浏览器为其提供了右键菜单、中键点击和书签等丰富功能，因为链接指向的是一个独立的资源。相比之下，按钮执行的是特定环境下的动作，如“保存”或“删除”，这些动作不应具备“在新标签页打开”等链接特有的属性。目前的 HTML 标准迫使开发者在处理非表单动作（如“取消”跳转）时，要么使用复杂的 JavaScript，要么使用 CSS 将链接伪装成按钮。</p><p>这种“伪装”被视为一种反模式，因为它向用户提供了错误的交互预期，且在阅读模式或无障碍设备中表现不一。提案建议允许按钮直接定义请求目标和方法（如 GET 或 DELETE），从而在不依赖脚本的情况下实现语义化的状态转换。这一提议属于更广泛的 Triptych 项目，目标是让 HTML 具备类似 HTMX 的能力，原生支持完整的增删改查（CRUD）生命周期。虽然目前仍需解决 XSS 安全性分析等挑战，但该方向得到了 Django 软件基金会等组织的支持。如果被采纳，它将显著降低 Web 开发的复杂度，并提升政府网站等强调“渐进增强”场景的开发效率。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49092106" target="_blank" rel="noopener noreferrer">@TonyAlicea10</a>
+        </div>
+        <p class="comment-text">这似乎混淆了外观与语义。如果一个元素引起了导航，我会把它做成链接。它看起来是否像按钮并不重要，那是 CSS 的事。我总是根据预期行为来选择其中之一，而且效果一直很好。尽管如此，我还是挺喜欢这个想法的。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提出了一个经典的开发视角，即行为决定标签，外观交给 CSS，为讨论增加了语义层面的辩论。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49092011" target="_blank" rel="noopener noreferrer">@singpolyma3</a>
+        </div>
+        <p class="comment-text">你现在就可以通过将按钮包裹在 form 标签中来实现按钮动作。文章中甚至展示了这一点。文中的暗示似乎是这样做不好，因为万一你已经在一个 form 标签里了怎么办？答案是将那两个实际上与该表单无关的动作移出 form 标签，并给它们各自唯一的 form 父级。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者指出了现有的 HTML 替代方案，有助于读者理解当前技术限制下的折中做法。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49092065" target="_blank" rel="noopener noreferrer">@wxw</a>
+        </div>
+        <p class="comment-text">&gt; 提案本身非常直接：我们想给按钮添加 action 和 method 属性。
+太棒了！我们正在一点点向原生 HTMX 迈进。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地捕捉到了该提案与当前流行的 HTMX 理念之间的联系。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Web 开发中“链接伪装成按钮”的现象极其普遍，甚至被美国设计系统（USWDS）等官方规范所采纳。这种做法虽然解决了视觉统一，却牺牲了 Web 的语义完整性，导致“取消”按钮竟然能被加入书签或在新标签页打开。Button Actions 提案本质上是在补全 HTML 缺失的拼图，让声明式开发回归。正如评论 [49092065] 所言，这确实有种“原生 HTMX”的味道，试图通过增强 HTML 标签本身的能力来减少对重型 JavaScript 框架的依赖，让 Web 开发回归其简洁的本质。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49090233">
+      <summary class="story-overview">
+        <span class="rank-number">13</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">github.com</span>
+            <span>88 points</span>
+            <span>原始 #21 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://github.com/gavamedia/deltafin" target="_blank"
+              rel="noopener noreferrer">Running Kimi K3 on a M1 Max</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49090233" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 64</a>
+          </h2>
+          <p class="summary">Deltafin 项目实现了在单台 Apple Silicon Mac（如 M1 Max）上运行拥有 2.8 万亿参数的巨型模型 Kimi K3。它利用混合专家模型（MoE）的特性，每生成一个字只需读取一小部分权重，从而绕开了内存容量的限制。核心机制是将 114GB 的骨干权重存放在 NVMe 硬盘并每步读取，而 1.45TB 的专家权重则根据需要从本地硬盘或网络实时加载。虽然这证明了在消费级硬件上运行顶级模型的可行性，但目前速度极慢，生成一个字大约需要 15 秒。该方案的主要局限在于对硬盘带宽的极高要求，且长期运行可能对 SSD 寿命产生影响。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Deltafin 是一个开源研究项目，旨在挑战在个人电脑上运行前沿规模大模型的极限。它成功让拥有 2.8 万亿参数的 Kimi K3 模型在配备 64GB 内存的 M1 Max Mac 上跑了起来。由于模型总重达 1.56TB，远超内存容量，Deltafin 采用了“硬盘流式推理”策略：将 114GB 的常驻骨干权重（包含注意力机制和共享专家）量化为 int8 并存放在 NVMe 硬盘中，每生成一个 token 都会重新读取；而 1.45TB 的路由专家权重则以 MXFP4 格式存储，仅在推理选中时才从硬盘或通过网络（Hugging Face）加载。</p><p>为了尽可能压榨性能，该项目引入了多项优化技术，包括针对 Apple Silicon 优化的融合 MXFP4 解码内核、Metal GPU 加速、双缓冲层加载以及 n-gram 投机采样。在 M1 Max 上的实测显示，本地模式下生成速度约为每 token 15-16 秒，而网络流式模式则需 3 分钟以上。目前的性能瓶颈完全在于硬盘带宽，因为每一步推理都需要从 SSD 吞吐数十 GB 的数据。这种“以空间换时间”的方案虽然目前还无法用于实时聊天，但为离线知识检索和异步 AI 任务提供了一种可能性。未来随着 M4/M5 Max 等拥有更高内存带宽和更大内存容量的设备普及，这种本地推理的实用性有望大幅提升。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49091748" target="_blank" rel="noopener noreferrer">@mindwok</a>
+        </div>
+        <p class="comment-text">有没有人也觉得，本地模型的未来已经呼之欲出了？到处疯狂建设数据中心、为它们供电、投入惊人的硬件资本、还要费尽心思通过网络可靠地提供推理服务——而现在，一个前沿模型几乎已经可以在笔记本电脑上运行了。对我来说，设备上的本地 AI 似乎比太空中的数据中心更像是一个可能的未来。至少对于推理来说是这样，训练则是另一回事。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论探讨了本地推理相对于数据中心模式的长远战略意义。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49090695" target="_blank" rel="noopener noreferrer">@nlessard</a>
+        </div>
+        <p class="comment-text">有没有比我更了解 NVMe 硬件现状的人知道，这样做是否会彻底毁掉硬盘的寿命？这在我看来是最大的限制（有些人可能觉得让他们的 Mac 忙活一个周末也没关系）。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个非常实际的硬件损耗问题，这是硬盘流式推理方案必须面对的代价。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49090643" target="_blank" rel="noopener noreferrer">@SXX</a>
+        </div>
+        <p class="comment-text">这很有趣。它也回答了一个问题：如果明天数据中心消失了，或者互联网断了，会发生什么。地球上有些国家完全没有互联网。当然，他们中的大多数人也没有 64GB 内存的 MacBook，但这比搞到互联网连接或一架子 GB200 要容易得多。SOTA 级的大语言模型是人类积累的所有知识的高效压缩。无论速度如何，拥有在家里运行它并提取这些知识的能力都是非常重要的。</p>
+        <p class="comment-reason"><span>入选理由</span>从知识保存和极端环境下的可用性角度阐述了该项目的价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49090553" target="_blank" rel="noopener noreferrer">@tito</a>
+        </div>
+        <p class="comment-text">我喜欢看到最先进的模型被塞进新系统里看看表现如何。为了应对这种极慢的速度，Reddit 上有人建议将其用于邮件界面，而不是聊天界面。</p>
+        <p class="comment-reason"><span>入选理由</span>为极慢速的本地推理提供了一个切实可行的应用场景建议。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Deltafin 的出现是一个典型的“存在性证明”：它告诉我们，即便没有昂贵的 H100 集群，个人开发者也能在书桌上触碰 2.8 万亿参数的智慧边界。虽然 15 秒一个字的速度在交互体验上近乎“不可用”，但它将 AI 推理从一种昂贵的云端服务降级为一种类似“离线渲染”的本地计算任务。正如评论所言，这不仅是技术上的极限挑战，更是对 AI 民主化的一种探索——当模型被视为人类知识的压缩包时，能够离线、自主地解压这些知识，本身就具有深远的社会意义。当然，这种对 SSD 的“疯狂蹂躏”也提醒我们，硬件架构的演进（如更大容量的统一内存）才是本地 AI 真正爆发的前提。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49091730">
+      <summary class="story-overview">
+        <span class="rank-number">14</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">hubble.md</span>
+            <span>15 points</span>
+            <span>原始 #7 · 低讨论量降权 +15</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.hubble.md/" target="_blank"
+              rel="noopener noreferrer">Hubbele: Open-source notetaking app for you and your agents</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49091730" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 0</a>
+          </h2>
+          <p class="summary">Hubble 是一款新兴的开源笔记应用，其核心特色是同时面向人类用户和 AI 智能体（Agents）设计。它采用 Markdown 格式，旨在构建一个人类与 AI 可以共同协作、编辑和管理信息的空间。虽然目前官方网站提供的信息非常有限，仅显示了极简的更新记录，但其“人机共用”的定位反映了笔记软件向自动化方向发展的趋势。这款工具的意义在于尝试打破传统笔记的静态属性，让 AI 能更深度地参与知识管理。目前最大的限制是项目尚处于极早期阶段，缺乏具体的功能演示和技术细节。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Hubble 试图在开源笔记领域开辟一条新路径，即打造一个原生支持 AI 智能体操作的环境。传统的笔记软件通常需要通过复杂的插件或 API 才能实现 AI 辅助，而 Hubble 的目标似乎是让 AI 成为笔记空间里的“一等公民”。通过使用通用的 Markdown 格式，它降低了机器解析和生成内容的门槛，使得自动化处理变得更加直接，方便 AI 智能体进行读取、分析和内容创作。</p><p>从目前极简的网页内容来看，Hubble 仍处于开发的萌芽期，甚至没有展示完整的 UI 界面或核心功能列表。这种极简主义可能预示着它将专注于底层架构的灵活性，以便开发者能够轻松地将各种大模型 Agent 接入到笔记流中。对于用户而言，这意味着笔记可能从单纯的备忘录转变为一个可以自动执行任务、整理逻辑的协作平台。然而，这种超前的理念也面临着巨大的挑战，尤其是如何平衡 AI 的自动化操作与用户对内容的掌控感。此外，在缺乏详细文档的情况下，很难判断它在同步、搜索和多端支持等基础功能上的表现。未来，Hubble 需要证明其 Agent 集成能力是否真的优于 Obsidian 等成熟软件的 AI 插件生态，才能在竞争激烈的市场中立足。</p></div>
+        
+        <div class="comments-empty">
+          这条讨论暂未选出真正值得占用你注意力的评论。
+        </div>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>现在的笔记软件都在往 AI 上靠，但 Hubble 提出的“为人与 Agent 共同设计”的概念更进一步，它暗示了未来知识库可能不再是人类的私产，而是人机协作的共享空间。虽然目前项目信息极度匮乏，仅能从标题和极简的网页推测其意图，但这种“机器友好型”笔记的思路值得关注。如果 AI 能真正理解并主动维护我们的笔记，那才是真正的“第二大脑”。由于目前缺乏实际代码和功能演示，该项目目前更像是一个愿景占位符。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49083314">
+      <summary class="story-overview">
+        <span class="rank-number">15</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">lji.org</span>
+            <span>557 points</span>
+            <span>原始 #23 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.lji.org/news-events/news/post/new-hiv-vaccine-shows-unprecedented-success-in-preclinical-study/" target="_blank"
+              rel="noopener noreferrer">New HIV vaccine shows unprecedented success in preclinical study</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49083314" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 238</a>
+          </h2>
+          <p class="summary">拉霍亚免疫学研究所和斯克里普斯研究所的科学家开发出一种新型 HIV 疫苗，在灵长类动物实验中取得了前所未有的成功。该疫苗采用“生殖系靶向”策略，通过一系列针对性注射，像“教学大纲”一样训练免疫系统产生极其罕见的广谱中和抗体。这些抗体能够看穿 HIV 的糖分子伪装并应对其快速变异，这是以往疫苗难以攻克的难题。实验中 44% 的猕猴产生了高水平的此类抗体，是目前在灵长类动物中观察到的最佳效果。尽管成果显著，但目前尚未证实这些抗体能否完全阻断感染，相关人体临床试验已经启动。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这项发表在《自然》杂志上的研究展示了一种名为“生殖系靶向”的创新疫苗接种方法。HIV 病毒极难对付，因为它不仅会利用糖分子（聚糖）包裹自己形成“盾牌”，还能在感染过程中迅速变异并改变形状，导致常规疫苗诱导的抗体失效。研究团队通过分子工程设计了一系列疫苗分子，模拟 HIV 抗原的演变过程。这套方案并非单一注射，而是包含“启动”和“引导”多剂次接种，旨在将免疫系统中极少数能产生广谱中和抗体的 B 细胞从幼稚状态逐步“训练”成熟。这种方式就像是为免疫系统开设了一门进阶课程，引导它精准打击病毒最脆弱且不易变异的部位。</p><p>在针对恒河猴的临床前研究中，约 44% 的实验对象成功产生了大量广谱中和抗体，这在非人类灵长类动物实验中是史无前例的。研究人员指出，这种方法在人类身上可能更有效，因为人类的免疫遗传学特征更适合产生这类抗体。然而，目前的局限性在于并非所有实验动物都产生了反应，且研究尚未直接测试这些抗体在真实感染环境下的保护效力。接下来的重点是优化加强针方案以提高响应率，并推进正在进行的人体一期临床试验，观察这种“免疫教学”模式在人类复杂的免疫系统中的实际表现。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49086153" target="_blank" rel="noopener noreferrer">@dist-epoch</a>
+        </div>
+        <p class="comment-text">HIV 逃避有效抗体的方法是诱导免疫系统针对“诱饵”目标产生抗体，而病毒会立即让这些目标发生变异。在每一轮反应中，B 细胞都会面对最新版本的病毒，产生各种抗体，并根据抗体与病毒结合的紧密程度进行“评分”。问题在于，你可能有 100 万个细胞与伪装的诱饵目标紧密结合，而只有一个细胞能与真正有效的靶点结合（但结合力没那么强）。因此，这唯一的一个细胞永远得不到“晋升”。这种“生殖系靶向”多剂次疫苗试图引入一系列目标，刺激那百万分之一的细胞去攻击 HIV 病毒的正确部位，使其获得“晋升”。更准确地说，我们需要“引导”我们每个人都有的 B1 细胞变异成 B2、B3，最后变成 B4，因为只有 B4 版本才能产生正确的 HIV 抗体。问题是中间状态 B2、B3 在自然状态下不会被促进，所以没有这种干预，你很难达到 B4 状态。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深入浅出地解释了 HIV 免疫逃逸的机制以及“生殖系靶向”疫苗如何通过干预 B 细胞成熟路径来解决问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49083561" target="_blank" rel="noopener noreferrer">@RGS1811</a>
+        </div>
+        <p class="comment-text">虽然 HIV 疫苗研究是一个令人兴奋的领域，但值得指出的是，从实际操作层面来看，通过口服和注射逆转录酶抑制剂，阻断 HIV 传播已经是一个“已解决”的问题。如果我们愿意投入足够的资源进行大规模的 PrEP（暴露前预防）普及和公共卫生教育，HIV 造成的生命和健康损失是可以停止的。等待 HIV 疫苗就像寄希望于核聚变解决能源需求一样。其他解决方案已经存在，我们只需要去使用它们。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个重要的社会和公共卫生视角，即现有药物手段已能有效防控，疫苗并非唯一出路。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49084019" target="_blank" rel="noopener noreferrer">@iandanforth</a>
+        </div>
+        <p class="comment-text">这篇文章对我来说最有趣的一点是，这种疫苗似乎是一系列针对免疫系统的“课程”注射。每一针都略有不同，针对 B 细胞发育的不同阶段。我以前从未想过疫苗系列可以这样运作，这是一个崭新且令人印象深刻的想法。</p>
+        <p class="comment-reason"><span>入选理由</span>敏锐地捕捉到了该研究在疫苗设计理念上的核心突破——将接种视为一种循序渐进的教育过程。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49083657" target="_blank" rel="noopener noreferrer">@nerdjon</a>
+        </div>
+        <p class="comment-text">我不得不承认，鉴于我们已经经历过太多次类似的情况，在看到人体实验结果之前，我很难对任何关于 HIV 疫苗的新闻感到兴奋。希望落空的次数实在太多了。话虽如此，我不够专业，无法解析这个充满术语的新闻稿。这与我们现在每 6 个月注射一次的方案有本质区别吗？它是更传统的疫苗，还是只是延续了那种趋势？</p>
+        <p class="comment-reason"><span>入选理由</span>反映了长期关注该领域的读者的普遍心态：在多次“突破”未果后的审慎与对技术细节的困惑。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>HIV 疫苗研发一直被视为医学界的“登月计划”，其核心难点在于病毒极高的变异率和精巧的伪装。本次研究的突破点不在于发现新药，而在于设计了一套精密的“免疫教学大纲”。正如评论指出，HIV 善于制造“诱饵”让免疫系统在无效的抗体上浪费资源，而“生殖系靶向”技术则是通过多轮精准引导，强行将免疫系统的注意力拉回到那些极罕见但有效的抗体路径上。虽然有观点认为 PrEP 等现有药物已在实践中“解决”了传播问题，但从公共卫生长远来看，疫苗带来的主动免疫保护是药物依从性和资源分配问题无法替代的。这种从“被动防御”向“主动训练”免疫系统的范式转移，或许能为其他高变异病毒的防治提供新思路。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49084813">
+      <summary class="story-overview">
+        <span class="rank-number">16</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">unawatch.com</span>
+            <span>133 points</span>
+            <span>原始 #24 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://unawatch.com/" target="_blank"
+              rel="noopener noreferrer">Una GPS smart watch – Repairable, USB-C charging, developer-friendly</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49084813" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 88</a>
+          </h2>
+          <p class="summary">Una 是一款主打可维修性和模块化设计的 GPS 智能手表，旨在挑战电子产品“用完即弃”的现状。它允许用户自行更换电池和传感器，并采用了通用的 USB-C 接口充电，无需依赖私有充电线。该设备对开发者友好，支持自定义功能，且定价相对亲民。然而，受限于模块化结构，其防水等级仅为 IPX5，无法佩戴游泳，这在运动手表领域是一个显著的短板。目前，其运动追踪算法的准确性和软件生态系统仍有待市场长期检验。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Una 智能手表的核心理念是“可持续性”，它通过模块化设计让用户能够轻松维修或升级硬件，从而延长设备寿命。与 Apple Watch 或 Garmin 等密封式产品不同，Una 的电池、屏幕和内部传感器均可更换，这为解决智能手表电池老化导致的报废问题提供了方案。它最显著的特点之一是弃用了私有充电协议，转而使用标准的 USB-C 接口，这不仅简化了差旅携带，也方便了开发者进行直接的数据访问和固件调试。</p><p>然而，这种开放性也带来了明显的权衡。由于模块化接口难以实现完全密封，Una 仅具备 IPX5 级防水性能，这意味着它只能应对泼溅或淋浴，严禁在游泳或潜水时使用。此外，资深运动用户指出，专业运动手表的价值不仅在于硬件，更在于其背后成熟的生理数据算法（如 HRV 压力监测和恢复建议），而 Una 作为一个新兴平台，在这些专业算法积累上尚无法与 Garmin 等巨头竞争。对于追求极致耐用性和专业运动分析的用户来说，Una 目前更像是一个面向极客和环保主义者的实验性产品。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49087191" target="_blank" rel="noopener noreferrer">@mikestew</a>
+        </div>
+        <p class="comment-text">我很想喜欢这款手表。价格确实合适，它也具备了我对 Garmin 或 Apple Watch Ultra 的大部分需求。但它到底为我解决了什么问题？在 Apple Watch 的使用场景下，可更换电池确实不错。但相比之下，我从未因为电池不耐用而更换过 Garmin。我也从未摔碎过屏幕（如果有人有这个习惯，Garmin 和 Apple 都有凸起表圈的型号）。我通常会把 Garmin 用上六七年，到那时它已经被折腾得不成样子，自然该换新的了。我在想，这个产品的潜台词是不是针对 Apple 而非 Garmin。USB-C 充电很棒，不用再忍受 Garmin 那种像蜘蛛丝一样脆弱的私有插头和线缆。不过，我更倾向于像 Apple 那样的无线充电。我从未在拿开 Apple Watch 充电器时抱怨‘怎么没充上？’，但 Garmin 嘛……另外，虽然我不是铁人三项运动员，但‘不能游泳’这一点确实给我的热情泼了冷水。我祝他们好运，我喜欢这个创意，尽管我可能不会买。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深入对比了主流竞品（Garmin/Apple）的使用痛点，并指出了 USB-C 充电与防水性能之间的权衡。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49087755" target="_blank" rel="noopener noreferrer">@arnejenssen</a>
+        </div>
+        <p class="comment-text">对我来说，Garmin（Forerunner 系列）的价值在于他们利用 HRV 计算压力水平的私有算法。这是‘身体电量’（Body Battery）指标的基础。我发现观察食物和活动如何影响我的压力水平非常有用。我想逆向工程出一套类似的压力水平计算方法应该是可能的，也许可以利用 AI 驱动？</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了智能手表硬件之外的核心竞争力——生理数据算法，这是新兴品牌最难逾越的护城河。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49087022" target="_blank" rel="noopener noreferrer">@pandemicsyn</a>
+        </div>
+        <p class="comment-text">“由于创新的模块化设计，UNA 目前是一款不可浸水的设备。因此，我们不提供游泳活动追踪，也不建议这样做。UNA 的防护等级为 IPX5，这意味着它在很大程度上是防溅和防淋浴的。”
+如果每当有 IPX5 级项目因为淋雨次数过多而报废，我都能拿到一美元的话……我现在的钱都够再买一块 Garmin Fenix 了。</p>
+        <p class="comment-reason"><span>入选理由</span>对 IPX5 防水等级在户外运动场景下的实际可靠性提出了尖锐的质疑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49088168" target="_blank" rel="noopener noreferrer">@Melatonic</a>
+        </div>
+        <p class="comment-text">我非常喜欢这个设计。USB-C 显然不是最耐用的接口，但如果配上合适的盖子（听起来他们用了橡胶塞？），效果会很棒。尤其是它允许直接访问数据。对第二代产品的一些建议：1. 定制硬壳“小门”来覆盖 USB-C 接口，且不能从表上脱落。接口本身可以像手机一样密封，然后再加一层物理保护。2. 某种形式的无线充电（甚至可以加上触点充电）。如果能在不暴露 USB-C 接口的情况下补电就太好了，这也能延长接口寿命。这需要玻璃后盖吗？因为在手表上用玻璃后盖显然不理想。3. 更好的防水性能。我个人不常戴 Garmin 游泳，但如果不用担心进水会更好。有人知道实际使用中的电池寿命吗？</p>
+        <p class="comment-reason"><span>入选理由</span>从硬件设计角度提出了具体的改进建议，平衡了 USB-C 的便利性与耐用性需求。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Una 的出现是“维修权”运动在可穿戴设备领域的一次勇敢尝试。在 Apple 和 Garmin 追求极致密封和私有生态的今天，一款使用 USB-C 接口且允许用户自行拆解的手表确实让人眼前一亮。然而，正如评论区所指出的，智能手表在本质上是“运动工具”而非单纯的“电子玩具”。模块化设计带来的 IPX5 防水等级在户外爱好者眼中几乎是致命伤——一块不能陪你游泳、甚至让人担心淋雨的 GPS 手表，很难在硬核运动市场立足。此外，硬件的开放性无法掩盖软件算法的缺失，Garmin 等巨头积累数十年的生理数据模型才是其真正的护城河。Una 证明了硬件可以更环保、更开放，但要成为一款优秀的运动工具，它还有很长的路要走。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49090867">
+      <summary class="story-overview">
+        <span class="rank-number">17</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">scripps.ucsd.edu</span>
+            <span>108 points</span>
+            <span>原始 #25 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://scripps.ucsd.edu/news/underwater-oxygen-loss-threatens-earths-stability-researchers-warn" target="_blank"
+              rel="noopener noreferrer">Underwater oxygen loss threatens earth&#x27;s stability, researchers warn</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49090867" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 57</a>
+          </h2>
+          <p class="summary">加州大学圣迭戈分校斯克里普斯海洋研究所的研究人员警告称，全球水域含氧量正在迅速流失，这正将地球推向“不安全空间”。这种被称为“水体脱氧”的现象不仅发生在海洋，也影响着河流和湖泊，其后果在人类时间尺度上可能是不可逆的。脱氧的主要驱动因素包括全球变暖、农业径流造成的营养污染以及水体循环的变化。氧气流失会破坏调节气候的生物化学过程，威胁从微生物到鲨鱼的整个水生食物网。研究人员建议将溶解氧指标纳入“地球边界”框架，以更好地评估其对地球稳定性的威胁。目前最大的挑战在于，这种变化一旦跨越阈值，可能需要数个世纪才能恢复。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这项发表在《湖沼学与海洋学》杂志上的研究，详细审视了水体脱氧与现有的九个“地球边界”过程（如气候变化、生物多样性丧失和氮循环）之间的复杂相互作用。研究指出，水体脱氧并非孤立事件，它与全球变暖形成了危险的反馈循环：水温升高会降低氧气的溶解度，同时加剧水层分化，阻碍深海获得氧气。此外，人类活动排放的大量氮、磷等营养物质进入水体，引发藻类过度生长，这些藻类死亡分解时会消耗大量氧气，形成所谓的“死亡地带”。</p><p>科学家们强调，溶解氧的流失会从根本上改变海洋的“内部时钟”，影响营养物质的循环效率。虽然海洋哺乳动物在水面呼吸，但它们依赖的食物链和栖息地正因缺氧而崩溃。研究人员呼吁政策制定者将脱氧视为与气候变化同等重要的全球性威胁，并将其正式纳入地球稳定性监测框架。尽管局部地区可能尝试通过人工曝气等技术缓解压力，但面对全球规模的氧气流失，目前的应对手段仍显乏力。未来的研究将重点关注如何通过减少碳排放和控制农业污染来减缓这一趋势，因为一旦跨越临界点，生态系统的恢复将极其漫长。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49091094" target="_blank" rel="noopener noreferrer">@toddmorey</a>
+        </div>
+        <p class="comment-text">作为一个物种，我们是否曾成功地在大规模范围内改变过自己的行为，以应对像气候变化和水下氧气流失这样的问题？在那些“必须改变否则就会灭亡”的时刻，我们成功度过的最接近的例子是什么？</p>
+        <p class="comment-reason"><span>入选理由</span>提出了关于人类应对大规模生态危机能力的根本性疑问。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49091483" target="_blank" rel="noopener noreferrer">@flockonus</a>
+        </div>
+        <p class="comment-text">氧气也可能在海洋底部大量产生，这是由与海水发生反应的金属块（又称“深海氧气”或 Dark Oxygen）产生的。有趣的是，现在已经出现了针对这些矿石的大规模海洋采矿作业。https://www.smithsonianmag.com/smart-news/scientists-discover-dark-oxygen-on-the-ocean-floor-41614350/</p>
+        <p class="comment-reason"><span>入选理由</span>补充了关于深海产氧机制及潜在人为破坏的新兴科学发现。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49091126" target="_blank" rel="noopener noreferrer">@Avicebron</a>
+        </div>
+        <p class="comment-text">与其立即把这变成一场与理论上的气候否认者的“我们 vs 他们”的争论，不如让我们专注于讨论如何改进科学传播，让文章不再显得既晦涩又模糊，以至于容易被忽视。我就拿美国开刀，因为指责印度和中国会招来他们的辩护者。墨西哥湾目前处于美国农作物产区的下游，那里排放的氮和磷造成了严重问题，正如文章试图说明的那样。</p>
+        <p class="comment-reason"><span>入选理由</span>将宏大的科学议题落地到具体的农业污染和科学传播问题上。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49091120" target="_blank" rel="noopener noreferrer">@fenestella</a>
+        </div>
+        <p class="comment-text">变暖与脱氧之间的反馈循环对于已经稳定了数千年的深水系统来说尤其令人担忧。如果我们达到了文中提到的阈值，即海洋的“内部时钟”被破坏，它可能会永久性地改变营养循环，其程度超出当前大气模型的预测。我很好奇这里的科研人员是否了解局部曝气技术能否在关键的产卵场缓解这一问题，还是说其规模实在太宏大了，根本无法实现。</p>
+        <p class="comment-reason"><span>入选理由</span>深入探讨了脱氧的反馈机制并提出了关于技术干预可行性的思考。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这是一个典型的“温水煮青蛙”式的生态危机。相比于海平面上升或极端天气，水下氧气的流失更难被直观感知，但它对地球生命支持系统的打击是基础性的。正如评论中提到的，农业径流问题在技术上并非不可解决，但在政治和经济利益的博弈下，它变成了一个长期存在的“生态犯罪现场”。将溶解氧纳入“地球边界”框架不仅是科学上的严谨，更是一种政治上的呼吁，试图将这个隐形的威胁摆到决策者的办公桌前。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49091379">
+      <summary class="story-overview">
+        <span class="rank-number">18</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">reframe.camera</span>
+            <span>10 points</span>
+            <span>原始 #11 · 低讨论量降权 +14.1</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://reframe.camera/" target="_blank"
+              rel="noopener noreferrer">ReFrame – The EPaper Camera</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49091379" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 3</a>
+          </h2>
+          <p class="summary">ReFrame 是一款实验性的彩色电子纸（ePaper）相机，旨在通过技术限制让摄影过程变得更具仪式感。它配备了 4 英寸的彩色电子墨水屏，每张照片都会经过特殊的抖动处理，呈现出类似旧报纸或复古游戏的低保真质感。按下快门后，图像需要约 15 秒才能在屏幕上缓慢显现，这种过程模仿了传统拍立得的显影体验。由于电子纸无需电力即可维持图像，相机在关机后能兼作静态桌面相框。目前该项目完全开源，用户可使用树莓派等现成组件自行组装，但其极慢的刷新率决定了它更像是一个艺术创作工具而非实用相机。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>ReFrame 的核心理念是“慢摄影”，它试图在瞬息万变的数字时代找回一种刻意的迟钝感。该相机基于树莓派 Zero 和 Pi Camera 3 构建，最显著的特征是采用了一块 4 英寸的 E Ink Spectra 6 彩色电子纸屏幕。与现代相机追求的高帧率预览不同，ReFrame 每次只能处理并显示一张照片。按下快门后，六种颜料粒子在电荷驱动下物理移动，用户可以观察到色彩逐一浮现，整个渲染过程耗时约 15 秒。这种设计将数字捕获转化为一种类似物理冲印的感官体验，让每一帧画面都显得更加深思熟虑。</p><p>在视觉呈现上，ReFrame 并不追求高保真还原。由于电子纸显示技术的限制，照片会经过抖动算法处理，产生一种介于新闻纸半色调和 8 位复古游戏之间的独特美感。这种“低保真”特质赋予了照片一种永恒的印刷感，且由于电子纸在断电后仍能保留图像，它在闲置时能完美充当一个无需插电的桌面相框。虽然目前该产品尚未量产上市，但开发者已在 GitHub 上公开了所有软硬件方案供爱好者 DIY。对于习惯了手机连拍的用户来说，15 秒的等待和受限的色彩表现是巨大的挑战，但对于追求独特表达的艺术家而言，这种技术上的局限性恰恰是其创作魅力的来源。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49091990" target="_blank" rel="noopener noreferrer">@singpolyma3</a>
+        </div>
+        <p class="comment-text">我不太理解这种执着于制造“功能更弱”的设备，并把“功能更弱”本身当作一种特性来宣传的行为。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个代表性的质疑观点，即对现代产品故意削减功能以换取所谓“特性”的困惑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49092048" target="_blank" rel="noopener noreferrer">@hamdingers</a>
+        </div>
+        <p class="comment-text">相机既是电子产品，也是艺术表达的工具，如果你只用定量指标去衡量它们，就会错过很多东西。这些相机之所以有趣，就像玩具钢琴对钢琴大师来说也很有趣一样。它们代表了一些不同的东西。</p>
+        <p class="comment-reason"><span>入选理由</span>从艺术表达的角度反驳了纯功能论，为这类“低性能”设备的价值提供了深度解释。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49092018" target="_blank" rel="noopener noreferrer">@regenschutz</a>
+        </div>
+        <p class="comment-text">从这些段落来看，它似乎在利用人们的怀旧心理：
+&gt; 抖动处理后的照片看起来介于报纸半色调和旧视频游戏之间。处理过程本身就是乐趣的一部分：你看着颜色一个接一个地显现，就像数字版的拍立得。
+坦白说，这看起来确实像个非常有趣的噱头，但也非常不切实际。不过，我对这个小玩意的喜爱可能仅仅源于对过去那种低科技、简单设备的普遍向往。</p>
+        <p class="comment-reason"><span>入选理由</span>敏锐地捕捉到了产品设计中的情感因素，并承认了实用性与趣味性之间的冲突。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>ReFrame 的出现引发了一个有趣的讨论：在技术过剩的今天，我们是否需要通过“人为制造的限制”来找回创作的乐趣？现代科技一直在追求“更快、更强”，但 ReFrame 却反其道而行之，将 15 秒的渲染延迟和低保真的显示效果作为核心卖点。正如评论区所争议的，有人认为这是在把缺陷包装成情怀，但也有人指出，摄影本质上是一种感官体验而非单纯的像素堆砌。这种相机更像是一封写给数字时代的情书，它提醒我们，有时候限制反而能激发创造力，让摄影回归到观察和等待本身，而不是无止境的连拍。它不是为了取代你的手机，而是为了提供一种完全不同的、带有物理质感的凝视方式。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49088058">
+      <summary class="story-overview">
+        <span class="rank-number">19</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">blog.modelcontextprotocol.io</span>
+            <span>98 points</span>
+            <span>原始 #20 · 低讨论量降权 +5.4</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://blog.modelcontextprotocol.io/posts/2026-07-28/" target="_blank"
+              rel="noopener noreferrer">MCP 2026-07-28 Specification: transport going stateless</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49088058" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 32</a>
+          </h2>
+          <p class="summary">Model Context Protocol (MCP) 发布了 2026-07-28 版本规范，最核心的变化是将协议从双向有状态模式转变为无状态的请求/响应模式。新规范取消了初始化握手和会话 ID，使每个请求都包含完整的元数据，从而支持在普通负载均衡器后进行水平扩展。为了处理需要用户交互的场景，新版引入了多轮请求（MRTR）机制，并增加了缓存提示以优化性能。这一转变解决了开发者在无服务器（Serverless）环境部署 MCP 服务器的痛点，显著提升了系统的可靠性。然而，新版本在传输层与旧版不兼容，现有的服务器和客户端需要进行代码重构，而非简单的 SDK 升级。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>此次 MCP 规范的重大更新标志着该协议从“实验性”向“生产级基础设施”的转型。最显著的变化是核心传输协议的无状态化：每个请求现在都是自描述的，通过新增的 Mcp-Method 和 Mcp-Name 等 HTTP 标头，网关和负载均衡器可以直接进行路由和授权，而无需解析复杂的 JSON 主体或维持持久连接。对于需要服务器主动发起请求的场景（如采样或用户确认），新规范引入了多轮请求（MRTR）机制，通过让客户端携带答案重试原始调用，取代了昂贵的双向流。此外，列表响应现在支持 TTL 缓存提示，有助于稳定上游提示词缓存并减少重复获取。</p><p>在安全性方面，新规范引入了 RFC 9207 颁发者验证，并正式从动态客户端注册（DCR）转向客户端元数据文档（CIMD）。虽然这些改进极大提升了在 AWS Bedrock 或 Cloudflare Workers 等现代云环境中的部署效率，但代价是破坏了向后兼容性。开发者必须面对“电线级”的不兼容问题，这意味着不仅要更新 SDK，还需重构现有的连接逻辑。官方为此提供了为期 12 个月的弃用缓冲期。随着 Google、微软和亚马逊等巨头的同步支持，MCP 正在迅速成为 AI 代理与外部数据交互的标准底座。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49088220" target="_blank" rel="noopener noreferrer">@dend</a>
+        </div>
+        <p class="comment-text">大家好，我是 MCP 的首席维护者之一。很高兴今天能发布这个版本，对于那些希望将远程 MCP 服务器部署到无服务器（serverless）主机的开发者来说，这是一个令人兴奋的变化。当然，这里面还有更多好东西，如果你有任何问题或反馈，我们的团队随时待命！</p>
+        <p class="comment-reason"><span>入选理由</span>来自项目核心维护者的直接说明，强调了无状态化对 Serverless 部署的关键意义。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49089709" target="_blank" rel="noopener noreferrer">@punkpeye</a>
+        </div>
+        <p class="comment-text">终于等到了。我运行着一个 MCP 服务器网关/注册表（有些人可能知道 Glama）。我无法告诉你，我们之前有多少比例的问题和 Bug 是由于需要持久化服务器状态导致的。这一变化将让我们能以更简单的方式提供开源 MCP 服务器。</p>
+        <p class="comment-reason"><span>入选理由</span>来自一线开发者的反馈，证实了旧版有状态设计在实际运维中带来的痛点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49090041" target="_blank" rel="noopener noreferrer">@punkpeye</a>
+        </div>
+        <p class="comment-text">我刚刚统计了一些数据。在我们索引的 62,726 个开源服务器中，约 18,000 个在过去 30 天内有推送更新（约占 30%）。然而，新协议在双向上都是电线级不兼容的。这意味着许多服务器和客户端需要重构（仅仅更新 SDK 是不够的）。这将需要时间且过程会很混乱。坦率地说，这对于 MCP 网关来说是一个合法的机会，可以通过成为协议不兼容的服务器/客户端之间的互操作层来变得更有价值。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于生态系统活跃度的具体数据，并指出了版本更迭带来的兼容性挑战和潜在商业机会。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49091546" target="_blank" rel="noopener noreferrer">@jongjong</a>
+        </div>
+        <p class="comment-text">在目前大多数使用场景中，我看不出使用 MCP 的必要性。通过 SKILL.md 加上链接的 .md 文件，并在其中包含 curl 命令，你可以获得更好的效果……直接用普通的 HTTP(S) 就行。作为一个通常更喜欢用有状态 WebSocket 传输数据的人，我认为 HTTP 的无状态请求-响应模型天生适合 LLM。HTTP 是极佳的协议，curl 是极其流行的命令，所有主流代码模型都对其训练有素。LLM 使用 curl 的能力强得惊人，更不用说所有主流操作系统都预装了它。curl 命令本身已经变成了协议。在用户和 AI 之间塞进一个平台会产生不必要的约束，并降低互操作性和集成机会。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个冷静的反思视角，质疑 MCP 是否过度工程化，并提倡回归更简单的标准工具。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>MCP 此次向无状态架构的转型，本质上是 AI 基础设施在向“Web 的本质”回归。早期的 MCP 带有浓厚的实验色彩，试图通过复杂的双向流来解决交互问题，但这在现代云原生和 Serverless 环境中显得格格不入。正如评论中所指出的，状态管理曾是 Bug 的温床。虽然有观点认为简单的 curl 和 Markdown 就能解决大部分问题，但 MCP 的野心在于建立一套企业级的、可路由且可缓存的标准。这次“断腕式”的不兼容升级虽然会给现有的 30% 活跃开发者带来重构负担，但它是 MCP 从“极客玩具”进化为“互联网织物”的必经之路。未来值得关注的是，这种标准化的努力是否能真正降低 AI 代理集成的门槛，还是会演变成另一个沉重的中间层。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49082022">
+      <summary class="story-overview">
+        <span class="rank-number">20</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">arxiv.org</span>
+            <span>275 points</span>
+            <span>原始 #26 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://arxiv.org/abs/2510.26692" target="_blank"
+              rel="noopener noreferrer">Kimi Linear: An Expressive, Efficient Attention Architecture (2025)</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49082022" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 117</a>
+          </h2>
+          <p class="summary">Kimi Linear 是一种新型混合线性注意力架构，旨在打破传统 Transformer 处理长文本时的效率瓶颈。其核心创新是 Kimi Delta Attention (KDA)，通过更精细的门控机制提升了模型对有限内存的利用率。在同等训练条件下，该架构在短文本、长文本及强化学习等场景下的表现均优于传统的全注意力机制。技术上，它利用优化的硬件算法将 KV 缓存占用降低了 75%，并在百万级上下文中实现了 6 倍的解码吞吐量。团队已开源了相关内核和模型权重，使其成为全注意力架构的一个极具竞争力的替代方案。尽管实验数据亮眼，但其在更广泛、更复杂任务中的泛化能力仍有待社区进一步验证。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Kimi Linear 的设计初衷是解决标准 Transformer 随序列长度增加而产生的计算开销激增问题。它引入了 Kimi Delta Attention (KDA)，这是对 Gated DeltaNet 的重要改进，通过引入细粒度门控，让模型能像 RNN 一样在有限的状态空间内存储更多有效信息。为了让这种架构在现代 GPU 上跑得更快，研究团队开发了一种基于对角加低秩（DPLR）矩阵的块状算法，这在保证数学一致性的同时，大幅优化了计算效率。这种设计使得模型在保持线性复杂度的同时，拥有了媲美甚至超越全注意力机制的表达能力。</p><p>在实际部署中，Kimi Linear 采用了 KDA 与多头潜在注意力（MLA）的层级混合设计。实验模型包含 30 亿激活参数，总参数量达 480 亿。测试结果显示，在处理 100 万 token 的超长文本时，该架构的解码速度是传统模型的 6 倍，且 KV 缓存需求仅为后者的四分之一。这意味着在相同的硬件资源下，Kimi Linear 可以支持更长的对话上下文和更高的并发量。目前，该项目已开源了 vLLM 实现和预训练权重，这不仅展示了线性注意力架构的潜力，也为未来超长上下文 AI 的普及提供了技术路径。未来值得关注的是，这种混合架构在更大规模参数（如千亿级）下的表现是否依然稳健。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49091954" target="_blank" rel="noopener noreferrer">@hodgehog11</a>
+        </div>
+        <p class="comment-text">我的专业领域是深度学习理论。是的，这种“智能”主要源于规模化（scaling）等因素。这背后有充分的理由，但本质上可以归结为利用了一种狭窄的统计技巧：一个精心设计的模型/优化器组合，如果对“简单性”有强烈的隐式偏置，就能随着模型规模的增大表现出持续提升的性能。Marcus Hutter 的实验室已经证明，这可以用所罗门诺夫归纳法（Solomonoff induction）来表述，因此这种偏置确实是普遍有效的。一种有效的偏置可以通过利用维度诅咒，以类似于“更多数据通常能给你更好答案”的方式，在更大的模型规模下持续改进性能（实际上这里存在一种对偶性，但我扯远了）。需要明确的是，只有极少数模型类别能做到这一点；我们只是“运气好”摸索到了它。这就是为什么我们仍然教授通用的统计原则，而这些原则通常将这种行为视为禁忌。</p>
+        <p class="comment-reason"><span>入选理由</span>从深度学习理论角度解释了为什么通过架构优化和规模化能产生所谓的“智能”。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49084403" target="_blank" rel="noopener noreferrer">@senko</a>
+        </div>
+        <p class="comment-text">虽然这篇论文发布有一段时间了，但依然很有参考价值：如果你读过最近发布的 Kimi K3 论文 [0]，你会发现它很大程度上是基于这里讨论的 Kimi Linear 构建的，并对其进行了规模化扩展，还增加了很多其他功能（如原生视觉支持和强化学习改进）。
+[0] https://arxiv.org/abs/2607.24653</p>
+        <p class="comment-reason"><span>入选理由</span>指出了该研究与 Kimi 最新模型 K3 之间的演进关系，提供了重要的背景信息。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49085009" target="_blank" rel="noopener noreferrer">@WhitneyLand</a>
+        </div>
+        <p class="comment-text">这难道不是非黑即白吗？中国的实验室在令人印象深刻地进行创新，这是显而易见的。然而，这并不排除可能通过蒸馏（distillation）获得的收益。我不知道后者的程度如何，但这两者完全可以同时存在。</p>
+        <p class="comment-reason"><span>入选理由</span>针对 Kimi 成功的讨论，提出了创新与知识蒸馏并非互斥的理性观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49084754" target="_blank" rel="noopener noreferrer">@bratao</a>
+        </div>
+        <p class="comment-text">我开始使用它创建内部模型，然后 Gated Deltanet 2 出来了（https://arxiv.org/abs/2605.22791），它在表达能力上似乎是 Kimi Linear 的进化版。在我们的测试中，它的表现确实更好。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了来自实际测试的对比反馈，提到了另一个值得关注的竞争架构。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>线性注意力（Linear Attention）长期以来被视为 Transformer 的“圣杯”，因为它能将计算复杂度从平方级降至线性级，但往往以牺牲模型表达能力为代价。Kimi Linear 的出现标志着这一领域的重要突破，它不仅在效率上占优，更在多个基准测试中正面击败了全注意力架构。这种“既要又要”的进步，配合 Kimi 团队在长文本领域的深耕，预示着大模型推理成本可能迎来新一轮的下降。正如评论中所言，这种进步是架构创新与规模化效应共同作用的结果，而开源这些核心组件将极大推动长上下文应用的发展。</p>
+        </div>
+      </div>
+    </details>
+    </section>
+    <footer class="footer">
+      <p>新闻只按 HN 原始名次和讨论度排序后取前 20，不做主题挑选。评论来自有界采样，
+        只是观点，不作为新闻事实来源。</p>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const themeButtons = [
+        ...document.querySelectorAll(".theme-button[data-theme-choice]")
+      ];
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      const applyThemeChoice = (requestedChoice, persist = true) => {
+        const choice = ["auto", "day", "night"].includes(requestedChoice)
+          ? requestedChoice
+          : "auto";
+        const theme = choice === "auto" ? themeForLocalTime() : choice;
+        document.documentElement.dataset.themeChoice = choice;
+        document.documentElement.dataset.theme = theme;
+        themeButtons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.themeChoice === choice)
+          );
+        });
+        if (persist) {
+          try {
+            localStorage.setItem("hnDigestThemeChoice", choice);
+          } catch (_) {
+            // The switch still works when report sandboxing blocks storage.
+          }
+        }
+      };
+      const refreshAutomaticTheme = () => {
+        if (document.documentElement.dataset.themeChoice === "auto") {
+          applyThemeChoice("auto", false);
+        }
+      };
+      applyThemeChoice(document.documentElement.dataset.themeChoice, false);
+      themeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyThemeChoice(button.dataset.themeChoice);
+        });
+      });
+      window.setInterval(refreshAutomaticTheme, 60 * 1000);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) refreshAutomaticTheme();
+      });
+
+      const list = document.querySelector(".story-list");
+      const controls = document.querySelector(".view-switch");
+      const buttons = [...document.querySelectorAll(".view-button")];
+      const status = document.querySelector(".view-status");
+      const total = list ? list.children.length : 0;
+      if (!list || !controls || total <= 10) {
+        if (controls) controls.hidden = true;
+        return;
+      }
+
+      const visibleCountStorageKey = "hnDigestVisibleCountV3";
+      const applyVisibleCount = (requestedCount, persist = true) => {
+        const count = requestedCount === 20 ? 20 : 10;
+        const shown = Math.min(count, total);
+        list.dataset.visibleCount = String(count);
+        buttons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(Number(button.dataset.count) === count)
+          );
+        });
+        status.textContent = `当前显示前 ${shown}`;
+        if (persist) {
+          try {
+            localStorage.setItem(visibleCountStorageKey, String(count));
+          } catch (_) {
+            // The switch still works when local privacy settings block storage.
+          }
+        }
+      };
+
+      let initialCount = 20;
+      try {
+        const storedCount = Number(localStorage.getItem(visibleCountStorageKey));
+        if ([10, 20].includes(storedCount)) initialCount = storedCount;
+      } catch (_) {
+        // Keep the all-20 default.
+      }
+      applyVisibleCount(initialCount, false);
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyVisibleCount(Number(button.dataset.count));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
