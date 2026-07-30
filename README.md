@@ -1,5 +1,7 @@
 # Hacker News Daily Digest
 
+[在线阅读最新简报与每日归档](https://wenjielei1990.github.io/hacker-news-daily-digest/)
+
 Nanobot 生成的 Hacker News 中文简报公开归档。GitHub Pages 只发布最终渲染的
 HTML，不包含抓取正文、评论原始数据、模型输入或其他中间文件。
 
