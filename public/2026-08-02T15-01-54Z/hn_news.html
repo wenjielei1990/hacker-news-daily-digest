@@ -1,0 +1,2039 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Hacker News 每日精选：通俗摘要、精彩评论与 LLM 锐评">
+  <title>HN 每日精选 · 2026-08-02</title>
+  <script>
+    (() => {
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      let choice = "auto";
+      try {
+        choice = localStorage.getItem("hnDigestThemeChoice") || "auto";
+      } catch (_) {
+        // Storage may be unavailable in a sandboxed report.
+      }
+      if (!["auto", "day", "night"].includes(choice)) {
+        choice = "auto";
+      }
+      const theme = choice === "auto" ? themeForLocalTime() : choice;
+      document.documentElement.dataset.themeChoice = choice;
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d252d;
+      --muted: #6c747c;
+      --paper: #f5f3ed;
+      --card: #fffefa;
+      --line: #d9d6ce;
+      --orange: #e85d2a;
+      --orange-soft: #fff0e8;
+      --blue-soft: #edf3f7;
+      --green: #25644f;
+      --story-open-line: #c7c3b9;
+      --story-shadow: rgba(31, 36, 40, .07);
+      --summary-ink: #47515a;
+      --detail-ink: #37424c;
+      --section-ink: #5f6871;
+      --hint-ink: #8a9095;
+      --comment-meta-ink: #637080;
+      --comment-label-bg: #d7e6ef;
+      --comment-label-ink: #315b73;
+      --comment-text-ink: #2e3944;
+      --comment-reason-ink: #637080;
+      --comment-reason-label: #2e5e78;
+      --comment-empty-ink: #8a9097;
+      --editorial-ink: #333b42;
+      --humor-bg: #f8e8bd;
+      --humor-ink: #795d16;
+      --wisdom-bg: #dcebdc;
+      --wisdom-ink: #315f3a;
+      --counterpoint-bg: #eadff1;
+      --counterpoint-ink: #614273;
+    }
+    html[data-theme="night"] {
+      color-scheme: dark;
+      --ink: #e0e7e1;
+      --muted: #9ba79f;
+      --paper: #111713;
+      --card: #1a221d;
+      --line: #303c34;
+      --orange-soft: #2c211b;
+      --blue-soft: #202c2e;
+      --green: #83c8a2;
+      --story-open-line: #435148;
+      --story-shadow: rgba(0, 0, 0, .28);
+      --summary-ink: #c2ccc5;
+      --detail-ink: #d1d8d3;
+      --section-ink: #aab5ae;
+      --hint-ink: #929e96;
+      --comment-meta-ink: #a8b7b8;
+      --comment-label-bg: #2f474d;
+      --comment-label-ink: #b8dbe2;
+      --comment-text-ink: #d5dcda;
+      --comment-reason-ink: #aebbb8;
+      --comment-reason-label: #92c6cf;
+      --comment-empty-ink: #929e96;
+      --editorial-ink: #d9d5d0;
+      --humor-bg: #403721;
+      --humor-ink: #e3cb87;
+      --wisdom-bg: #293c2c;
+      --wisdom-ink: #a8d3ae;
+      --counterpoint-bg: #382d40;
+      --counterpoint-ink: #d0b4df;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .18s ease, color .18s ease;
+    }
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--orange); }
+    .masthead {
+      border-top: 5px solid var(--orange);
+      border-bottom: 1px solid #343b43;
+      background: #18212a;
+      color: white;
+    }
+    .masthead-inner, main {
+      width: min(860px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+    .masthead-inner { padding: 25px 0 27px; }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      background: var(--orange);
+      color: white;
+      font-family: ui-serif, Georgia, serif;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+    .archive-link { color: #bac2ca; }
+    .theme-switch {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .theme-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 8px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .theme-button:hover { color: white; }
+    .theme-button[aria-pressed="true"] {
+      background: #46515b;
+      color: white;
+    }
+    .theme-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .eyebrow {
+      color: #ff9670;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 7px 0 8px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 6vw, 46px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.03;
+    }
+    .dek {
+      margin: 0;
+      color: #c0c8d0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      margin-top: 17px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .stats strong { color: white; font-size: 13px; margin-right: 3px; }
+    .view-switch {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 13px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .view-switch[hidden] { display: none; }
+    .view-buttons {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .view-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 9px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .view-button:hover { color: white; }
+    .view-button[aria-pressed="true"] {
+      background: var(--orange);
+      color: white;
+    }
+    .view-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .view-status { color: #c0c8d0; }
+    .ranking-rule {
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255, 255, 255, .09);
+      color: #9faab4;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .ranking-rule strong {
+      color: #e7eaed;
+      margin-right: 5px;
+    }
+    main { padding: 20px 0 72px; }
+    .story-list {
+      display: grid;
+      gap: 9px;
+    }
+    .story-list[data-visible-count="10"] .story:nth-child(n+11),
+    .story-list[data-visible-count="20"] .story:nth-child(n+21) {
+      display: none;
+    }
+    .story {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--card);
+      overflow: clip;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .story[open] {
+      border-color: var(--story-open-line);
+      box-shadow: 0 14px 34px var(--story-shadow);
+    }
+    .story-overview {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 13px;
+      padding: 17px 20px 15px 15px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .story-overview::-webkit-details-marker { display: none; }
+    .story-overview:focus-visible {
+      outline: 3px solid rgba(232, 93, 42, .45);
+      outline-offset: -3px;
+    }
+    .rank-number {
+      color: var(--orange);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .story-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 14px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .story-kicker .source {
+      color: var(--green);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h2 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 10px;
+      margin: 5px 0 5px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(17px, 2.3vw, 19px);
+      font-weight: 700;
+      letter-spacing: -.008em;
+      line-height: 1.28;
+    }
+    .title-link { text-decoration: none; }
+    .discussion-link {
+      color: var(--orange);
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .summary {
+      margin: 0;
+      color: var(--summary-ink);
+      font-size: 14.5px;
+      line-height: 1.72;
+      white-space: pre-line;
+    }
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--hint-ink);
+      font-size: 10px;
+      font-weight: 750;
+    }
+    .chevron {
+      display: inline-block;
+      color: var(--orange);
+      transition: transform .18s ease;
+    }
+    .story[open] .chevron { transform: rotate(180deg); }
+    .story[open] .expand-hint > span:first-child { font-size: 0; }
+    .story[open] .expand-hint > span:first-child::after {
+      content: "收起详情";
+      font-size: 10px;
+    }
+    .story-details {
+      margin-left: 80px;
+      padding: 17px 20px 24px 0;
+      border-top: 1px solid var(--line);
+    }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      color: var(--section-ink);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .detail-summary > p {
+      margin: 0;
+      color: var(--detail-ink);
+      font-size: 14px;
+      line-height: 1.78;
+    }
+    .detail-summary > p + p { margin-top: 12px; }
+    .comments-panel {
+      margin-top: 21px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+    .comments-list { display: grid; gap: 9px; }
+    .featured-comment {
+      margin: 0;
+      padding: 14px 16px;
+      border: 0;
+      border-radius: 3px;
+      background: var(--blue-soft);
+    }
+    .comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 7px;
+      font-size: 11px;
+    }
+    .comment-meta a { color: var(--comment-meta-ink); text-decoration: none; }
+    .comment-label {
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--comment-label-bg);
+      color: var(--comment-label-ink);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .05em;
+    }
+    .comment-label-humor {
+      background: var(--humor-bg);
+      color: var(--humor-ink);
+    }
+    .comment-label-wisdom {
+      background: var(--wisdom-bg);
+      color: var(--wisdom-ink);
+    }
+    .comment-label-counterpoint {
+      background: var(--counterpoint-bg);
+      color: var(--counterpoint-ink);
+    }
+    .comment-text {
+      margin: 0;
+      color: var(--comment-text-ink);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 13px;
+      line-height: 1.62;
+      white-space: pre-line;
+    }
+    .comment-reason {
+      margin: 9px 0 0;
+      color: var(--comment-reason-ink);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .comment-reason span {
+      margin-right: 7px;
+      color: var(--comment-reason-label);
+      font-weight: 850;
+    }
+    .comments-empty {
+      margin-top: 19px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      color: var(--comment-empty-ink);
+      font-size: 12px;
+    }
+    .editorial {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      align-items: start;
+      margin-top: 21px;
+      padding: 13px 15px;
+      border-left: 3px solid var(--orange);
+      background: var(--orange-soft);
+    }
+    .editorial-mark {
+      padding-top: 2px;
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+    .editorial p {
+      margin: 0;
+      color: var(--editorial-ink);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.62;
+    }
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 27px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .footer p { margin: 0; max-width: 680px; }
+    .footer a { font-weight: 800; }
+    @media (max-width: 620px) {
+      .masthead-inner, main { width: min(100% - 20px, 860px); }
+      .masthead-inner { padding-top: 18px; }
+      .topline {
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+      .top-actions {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
+      .story-overview {
+        grid-template-columns: 37px minmax(0, 1fr);
+        gap: 9px;
+        padding: 14px 13px 12px 10px;
+      }
+      .rank-number { font-size: 22px; }
+      .story-details { margin-left: 56px; padding-right: 13px; }
+      .editorial { grid-template-columns: 1fr; gap: 4px; }
+      .footer { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .masthead { background: white; color: var(--ink); border-bottom-color: var(--line); }
+      .topline, .archive-link, .expand-hint, .view-switch, .theme-switch { display: none; }
+      main { width: 100%; }
+      .story { display: block !important; break-inside: avoid; }
+      .story-details { display: block; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="topline">
+        <div class="brand"><span class="brand-mark">Y</span> Hacker News</div>
+        <div class="top-actions">
+          <div class="theme-switch" role="group" aria-label="选择页面颜色模式">
+            <button class="theme-button" type="button" data-theme-choice="auto" aria-pressed="true">自动</button>
+            <button class="theme-button" type="button" data-theme-choice="day" aria-pressed="false">日间</button>
+            <button class="theme-button" type="button" data-theme-choice="night" aria-pressed="false">夜间</button>
+          </div>
+          <a class="archive-link" href="../index.html">每日归档 →</a>
+        </div>
+      </div>
+      <div class="eyebrow">2026-08-02 · top feed · 过去 36 小时</div>
+      <h1>今天的 Hacker News</h1>
+      <p class="dek">前 20 篇已经全部准备好；默认显示前 20，也可以切换到前 10。</p>
+      <div class="stats">
+        <span><strong>20</strong>篇已准备</span>
+        <span><strong>19</strong>篇有精彩评论</span>
+        <span>更新于 2026-08-02 08:01 PDT</span>
+        <span>生成模型 <strong>gemini/gemini-3-flash-preview</strong></span>
+      </div>
+      <div class="view-switch" aria-label="选择新闻显示数量">
+        <span>显示</span>
+        <div class="view-buttons">
+          <button class="view-button" type="button" data-count="10" aria-pressed="false">前 10</button>
+          <button class="view-button" type="button" data-count="20" aria-pressed="true">前 20</button>
+        </div>
+        <span class="view-status" aria-live="polite">当前显示前 20</span>
+      </div>
+      <div class="ranking-rule">
+        <strong>排序规则</strong>HN 原始名次 + 低讨论量降权。公式：原始名次 + 0.3 × max(0, 50 − 评论数)；50 条评论以上不降权。
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="story-list" data-visible-count="20">
+      
+    <details class="story" id="story-49140218">
+      <summary class="story-overview">
+        <span class="rank-number">01</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">victoriametrics.com</span>
+            <span>283 points</span>
+            <span>原始 #10 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://victoriametrics.com/blog/go-1-27/index.html" target="_blank"
+              rel="noopener noreferrer">Go 1.27 Interactive Tour</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49140218" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 131</a>
+          </h2>
+          <p class="summary">Go 1.27 版本即将发布，最显著的变化是引入了泛型方法，允许方法声明独立于接收者的类型参数。标准库终于新增了官方的 uuid 软件包，支持 V4 和适用于数据库索引的 V7 版本。性能方面，通过针对小对象的内存分配优化，分配密集型程序的性能预计可提升约 1%。JSON v2 正式转正并成为默认后端，在保持兼容性的同时提升了效率。此外，新版本还引入了后量子加密算法 ML-DSA 和实验性的便携式 SIMD 支持。尽管功能增强，但泛型方法目前仍不能在接口中使用，这限制了其部分应用场景。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Go 1.27 带来了一系列重量级更新，其中“泛型方法”是核心亮点。开发者现在可以为结构体方法定义独立的类型参数，例如在容器类型上直接实现 Map 操作，而不再需要依赖包级别的全局函数。不过，这一特性存在重要限制：接口仍然不能声明泛型方法，且带有泛型方法的方法集无法用于满足接口。在语法糖方面，结构体字面量现在支持直接设置提升字段（promoted fields），无需再嵌套编写嵌入的结构体类型。此外，函数类型推断也得到了泛化，在复合字面量和类型转换中表现得更加智能。</p><p>在底层优化和工具链上，Go 1.27 引入了大小特化的内存分配器，针对 80 字节以下的小对象分配速度最高可提升 30%。调试体验也得到了增强，goroutine 标签现在会显示在崩溃堆栈中，且用于检测永久阻塞的 goroutine 泄漏分析器已正式发布。标准库的更新同样引人注目：`encoding/json` 默认切换到了 v2 实现，虽然行为保持一致，但提供了非强制排序等更高性能的选项。新加入的 `uuid` 包填补了长期以来的官方空白，而 `crypto/mldsa` 则为应对量子计算威胁提供了 FIPS 标准的数字签名支持。最后，实验性的 `simd` 包尝试提供跨平台的向量化指令支持，预示着 Go 在高性能计算领域的进一步探索。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49141859" target="_blank" rel="noopener noreferrer">@baalimago</a>
+        </div>
+        <p class="comment-text">这种写法：`(b Box[T]) Map[U any](f func(T) U) Box[U]` 正是我很高兴看到 Go 曾经避开的那种认知负担。</p>
+        <p class="comment-reason"><span>入选理由</span>反映了老牌 Go 开发者对语言复杂性增加的典型担忧。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49140907" target="_blank" rel="noopener noreferrer">@jerf</a>
+        </div>
+        <p class="comment-text">不。我其实想就此打住，但那样可能会被认为不友好。我见过至少一打尝试（在 Go 中实现 Option/Result）。写出来并不难，问题在于，一旦你手里拿到了 Option，你实际上是在用标准的 `val, err := ...` 模式去交换一种更繁琐的解包方式。虽然你在名义上的安全性上赢了一点，但在便利性上绝对是输了。Go 处理错误的方式如果按 1 到 10 分评价（10 分最好），C 语言是 1 分，标准的 Option 模式可能是 8 或 9 分，而 Go 的方式大约是 6 分。虽然你确实可能忽略错误，但错误的存在感非常强。在 Go 中引入 Option/Result 带来的便利性损失往往会抵消掉从 6 分提升到 8 分的收益。我一直使用 errcheck，即使在以前手写代码的时代，它也很少报错。在 AI 时代，这更不算什么问题了，AI 从不忽略错误，虽然它处理错误的方式是否正确是另一回事。</p>
+        <p class="comment-reason"><span>入选理由</span>深入探讨了泛型引入后，开发者最关心的错误处理模式（Option/Result）在 Go 语境下的实际利弊。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49140501" target="_blank" rel="noopener noreferrer">@stingraycharles</a>
+        </div>
+        <p class="comment-text">难道只有我一个人对 Go 最终拥抱泛型感到震惊吗？有没有人能从内部视角聊聊语言维护者的观点发生了什么变化？我不买账那种“我们花了 20 年才理解如何正确实现它”的说法，因为这是你在设计语言之初就明确考虑或不考虑的事情。泛型最初明确不是语言设计的一部分，而且事后补救（向后兼容）要困难得多。所以，到底是什么改变了？</p>
+        <p class="comment-reason"><span>入选理由</span>提出了关于 Go 语言设计哲学转向的深刻疑问。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49142840" target="_blank" rel="noopener noreferrer">@adrianmsmith</a>
+        </div>
+        <p class="comment-text">我觉得 Go 的泛型还缺少 Java 中 `&lt;?&gt;`（通配符）的概念。如果你接收一个 `List[T]` 且只想调用 `list.size()`，你其实并不关心 T 是什么类型。在 Java 中你可以写 `List&lt;?&gt;`，但在 Go 中你必须写 `List[T]`，那么问题就变成了 T 是什么？你必须让函数（或方法所属的类型）也变成泛型的。如果你让类型变成泛型，那么该类型的每个使用者也需要指定 T。我认为在 Go 中添加这个并不难。允许 `List[?]` 匹配任何类型参数的 List。调用不涉及类型参数的方法（如 size）没问题，调用返回类型参数的方法（如 get）则返回 `any`，而接收类型参数的方法（如 set）则可能无法调用。</p>
+        <p class="comment-reason"><span>入选理由</span>针对 Go 泛型当前在抽象能力上的不足提出了具体的改进建议。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Go 1.27 的发布标志着这门语言在“简单”与“强大”的博弈中又向后者迈进了一大步。泛型方法的引入解决了长期以来容器类库实现的痛点，但也正如评论区所担心的，Go 正在变得越来越像它最初想要替代的 C++，那种一眼望去就能看透代码逻辑的纯粹感正在被复杂的类型签名稀释（如 [49141859] 所述）。不过，官方 uuid 包的加入和 JSON v2 的转正显示了核心团队在完善基础设施方面的务实态度。对于开发者而言，最大的挑战可能不在于新特性本身，而在于如何克制使用泛型的冲动，避免陷入过度设计的泥潭 [49140907]。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49143967">
+      <summary class="story-overview">
+        <span class="rank-number">02</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">riscosopen.org</span>
+            <span>57 points</span>
+            <span>原始 #1 · 低讨论量降权 +12.3</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.riscosopen.org/news/articles/2026/06/20/twenty-years-of-risc-os-open" target="_blank"
+              rel="noopener noreferrer">Twenty Years of RISC OS Open</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49143967" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 9</a>
+          </h2>
+          <p class="summary">RISC OS Open (ROOL) 近日庆祝了其成立 20 周年，回顾了将这一老牌专有操作系统转变为开源项目的历程。自 2006 年成立以来，该项目实现了多项里程碑，包括 2012 年成功移植到树莓派（Raspberry Pi）以及 2018 年正式采用 Apache 2.0 开源协议。通过社区资助的“赏金计划”，系统增加了对 EDID 显示器识别和 NVMe 存储等现代硬件的支持。目前，该项目正致力于名为“Moonshots”的宏大计划，旨在将系统迁移至 64 位 ARM 架构。这一转型至关重要，因为 32 位 ARM 硬件正逐渐退出市场，决定了 RISC OS 能否在未来继续生存。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>RISC OS Open Ltd (ROOL) 的二十年历程始于 2006 年一个“略显疯狂”的愿景：将原本封闭的 RISC OS 源代码向公众开放。2012 年是该项目的一个转折点，当时 RISC OS 被移植到树莓派上，不仅让 BBC BASIC 重新回到了新一代用户手中，还导致官方网站流量激增。2018 年，随着 Castle 公司被收购，RISC OS 终于获得了 Apache 2.0 许可，彻底消除了商业使用的法律障碍。随后，项目将包含 10.6 万次提交的完整代码库迁移到了 GitLab，极大地提高了社区协作的效率。</p><p>在技术演进方面，ROOL 引入了“赏金计划”，允许用户通过捐款投票决定优先开发的功能，如原生 Git 客户端和 8GB 内存支持。然而，RISC OS 面临着严峻的硬件代差挑战：它深度依赖 32 位 ARM 指令集，而现代芯片正全面转向 64 位。为此，ROOL 启动了“Moonshots”倡议，计划进行为期数年的全职工程开发，以确保在 32 位芯片枯竭前完成 64 位架构的重写。未来的观察重点在于该社区能否筹集足够资金完成这一庞大的底层重构，以及在失去 32 位兼容性后，如何保留其标志性的极速响应体验。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49144884" target="_blank" rel="noopener noreferrer">@nickcw</a>
+        </div>
+        <p class="comment-text">我使用并开发 RISC OS 软件很多年了，在那里我磨练成了开源开发者。我编写了非常流行的 !Director 应用程序，它可以让你自定义桌面并添加许多巧妙的快捷方式。它可以通过 BASIC 插件进行扩展，几乎可以做任何事情！最初由 Arcade BBS 分发，后来《Acorn User》杂志把它放在了随刊附带的软盘里。令人惊讶的是，Director 完全是用 ARM 汇编语言编写的（借助了大量的宏）。我过去非常享受编写 ARM 汇编，每当我不得不阅读 C 编译器的汇编输出时，我都会咬牙切齿！我记得作为其中的一部分，我还用 ARM 汇编写过快速排序（用于对菜单项排序），那真的很有趣。我桌子下面现在还放着一台 RiscPC，但我大概有快 15 年没开过机了 :-(</p>
+        <p class="comment-reason"><span>入选理由</span>作者分享了早期 RISC OS 开发者的真实体验，特别是对 ARM 汇编语言的热爱，体现了该平台的独特技术文化。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49144285" target="_blank" rel="noopener noreferrer">@fidotron</a>
+        </div>
+        <p class="comment-text">作为一个看着 Acorn Archimedes 长大的人，很难向那些从未参与过的人表达这项工作的艰巨程度，或者他们能坚持下去是多么令人惊讶。我们绝大多数人早在 2000 年之前（甚至 1995 年之前）就离开了，而且这个圈子的规模从来没有像 Amiga 或 ST 宇宙那样庞大过。</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了 RISC OS 社区在极小众且长期衰落的背景下坚持 20 年的难能可贵。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49144969" target="_blank" rel="noopener noreferrer">@MomsAVoxell</a>
+        </div>
+        <p class="comment-text">我认为我们正接近这样一个时间点：硬件制造商可以为这些操作系统（我把 ReactOS 和 Haiku 也归入此类）找到利基用途，并专门为它们构建定制硬件。我的意思是，我非常确信，对于那些尚未被 AI、广告、间谍软件等拖累的操作系统，是存在市场需求的。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个关于利基操作系统在现代“臃肿”软件环境下的潜在市场价值，具有前瞻性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49145213" target="_blank" rel="noopener noreferrer">@Lio</a>
+        </div>
+        <p class="comment-text">我想也许最著名的幸存至今的 RISC OS 应用程序是 Sibelius 乐谱编写程序。它现在归 Avid 所有，但最初是两兄弟在 RISC OS 系统下的 Acorn Archimedes 上开发的。https://www.avid.com/sibelius</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个有趣的背景知识，说明了 RISC OS 对现代主流软件行业的历史贡献。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>RISC OS 的二十年是一场关于“数字考古”与“现代生存”的奇特实验。正如评论所言，在 Amiga 等更著名的平台都已式微的今天，RISC OS 社区的韧性令人惊叹。它不仅保留了 ARM 汇编时代的极简美学，还试图在 AI 和广告泛滥的现代操作系统之外，为用户提供一片“清净之地”。然而，ROOL 面前的“Moonshots”计划不仅是技术上的跨越，更是对这个微型社区资源极限的考验：当 32 位硬件彻底消失，这种纯粹由爱好者驱动的开发模式能否支撑起底层架构的推倒重来？这不仅关乎一个老牌系统的存亡，也关乎我们是否还能在主流生态之外拥有一种不同的计算选择。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49143479">
+      <summary class="story-overview">
+        <span class="rank-number">03</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">meshdiff.com</span>
+            <span>96 points</span>
+            <span>原始 #3 · 低讨论量降权 +11.7</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://meshdiff.com/" target="_blank"
+              rel="noopener noreferrer">Meshdiff – visually compare two STL versions in the browser, client-side</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49143479" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 11</a>
+          </h2>
+          <p class="summary">Meshdiff 是一款在浏览器中运行的 3D 模型对比工具，支持 STL、3MF 和 OBJ 格式。它通过自定义的体素差异引擎，以绿色表示新增部分、红色表示删除部分，直观展示两个版本间的几何变化。该工具完全在客户端运行，无需上传文件，有效保障了设计数据的隐私。它解决了 3D 打印和建模中频繁出现的版本管理难题，尤其擅长处理结构不规范的“乱麻式”网格模型。目前的局限在于它主要针对形状增减，对于单纯的平移或缩放尚无专门的自动对齐优化。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Meshdiff 的核心价值在于简化了 3D 文件的版本校验流程。在 3D 打印和工业设计领域，设计师经常需要处理命名混乱的文件（如“最终版_v3”），很难快速识别微小的几何改动。该工具允许用户直接在浏览器中拖入两个模型，利用 Web Worker 在本地完成计算，并提供 0.05mm 到 1mm 的可调容差以及体积变化指标。技术上，它采用了 React Three Fiber 和自定义体素引擎，而非依赖 Manifold 或 CGAL 等对拓扑结构要求极高的库，这使其能够处理现实中常见的、带有拓扑缺陷的“三角形汤”模型。</p><p>在实际应用中，Meshdiff 的纯客户端特性意味着敏感的设计文件永远不会离开用户的计算机。尽管目前功能直观，但社区反馈也指出了一些待改进之处，例如目前三个视口的旋转尚未同步，且对包含多个组的 OBJ 文件仅能识别第一组。此外，如果两个模型之间存在整体位移或缩放，目前的差异对比会将其视为完全不同的形状。未来，该工具可能向自动化方向发展，例如推出 CLI 版本以集成到 CI/CD 流程中，实现 3D 模型生成器的自动化回归测试。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49143480" target="_blank" rel="noopener noreferrer">@projscope</a>
+        </div>
+        <p class="comment-text">我开发 Meshdiff 是因为客户总是发给我类似 part_v3_FINAL.stl 这样的文件，而我没有快速的方法查看改动了哪里。只需拖入两个 STL/3MF/OBJ 文件，浏览器就会渲染出体素差异。绿色代表增加的材料，红色代表删除的部分。容差可调（0.05–1mm），并提供体积变化指标。隐私至上：零上传，所有操作都在客户端的 Web Worker 中运行。技术栈：React + TypeScript, React Three Fiber，以及自定义的体素差异引擎。没有使用 Manifold 或 CGAL —— 那些库假设模型具有干净的 CSG 拓扑，而现实世界中的 STL 往往是“三角形汤”。如果你从事 3D 打印工作，请尝试用你最古怪的文件来测试它。现实中的网格模型非常混乱，我需要这种压力测试。</p>
+        <p class="comment-reason"><span>入选理由</span>作者亲自解释了开发动机、核心技术选型（体素引擎而非 CSG）以及对现实中“不规范模型”的处理能力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49144323" target="_blank" rel="noopener noreferrer">@progbits</a>
+        </div>
+        <p class="comment-text">看起来很方便。功能建议：锁定视图，让所有三个视口同步旋转。</p>
+        <p class="comment-reason"><span>入选理由</span>这是一个非常实际的用户体验反馈，指出了当前多窗口对比时操作不便的问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49144150" target="_blank" rel="noopener noreferrer">@embedding-shape</a>
+        </div>
+        <p class="comment-text">这非常酷，对于比较目前市面上各种“3D 模型”生成器似乎很有用，能让对比变得更容易。既然它是在客户端运行的，你是否考虑提供一个 CLI 版本，或者我们可以集成到其他工具/CI 流程中的东西？这将是生成差异报告以供后续检查的一种非常巧妙的方式。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了将该工具从单一网页应用扩展到自动化工作流和 AI 模型评估的潜在用途。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49144818" target="_blank" rel="noopener noreferrer">@dvh</a>
+        </div>
+        <p class="comment-text">- 多组（multi group）的 obj 文件被忽略了，我只能看到第一组。
+- 当上传两个相同的文件时，你应该像 meld 那样发出警告（meld 会提示：文件 D_LED_3mm.obj 正在与自身进行比较）。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了具体的 Bug 反馈和功能改进建议，有助于完善工具的健壮性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>在 3D 建模和打印领域，版本控制一直是个痛点，因为传统的 Git 差异对比对二进制或复杂的网格文件几乎无效。Meshdiff 的聪明之处在于它避开了复杂的拓扑重建（即作者提到的“三角形汤”问题），转而采用体素化方案来处理那些不完美的现实模型。这种“所见即所得”的红绿对比方式非常符合直觉。更重要的是，它坚持 100% 客户端运行，这对于视设计稿为生命线的工业用户来说，是建立信任的关键。虽然目前在多组模型支持和视图同步上还有些青涩，但它确实填补了轻量级 3D 校验工具的空白。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49143925">
+      <summary class="story-overview">
+        <span class="rank-number">04</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">fstar-lang.org</span>
+            <span>33 points</span>
+            <span>原始 #2 · 低讨论量降权 +12.9</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://fstar-lang.org/" target="_blank"
+              rel="noopener noreferrer">F*: A general-purpose proof-oriented programming language</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49143925" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 7</a>
+          </h2>
+          <p class="summary">F* 是一种由微软研究院和 Inria 开发的通用证明导向编程语言，旨在通过形式化验证确保程序的绝对正确。它结合了依赖类型系统的强大表达能力与 SMT 求解器的自动化证明能力，支持函数式和命令式编程。该语言已在 Firefox、Linux 内核和 Azure 等重大项目中用于构建经过验证的加密库和协议解析器。F* 可以编译为 OCaml、C、WebAssembly 甚至汇编代码，具有极强的跨平台验证能力。然而，其极高的学习门槛和复杂的逻辑体系是主要挑战，常被开发者戏称为编程界的“矮人要塞”。它的核心价值在于为加密算法和网络协议等关键基础设施提供数学级别的安全保障。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>F* 的核心设计理念是将程序编写与数学证明融为一体，利用依赖类型（Dependent Types）来描述极其精确的代码规范。它采用了一种“混合证明”模式：大部分常规证明通过集成 Z3 SMT 求解器实现自动化，而对于极其复杂的逻辑，开发者可以使用交互式策略（Tactics）进行手动干预。这种机制使得 F* 既能处理纯函数逻辑，也能安全地应对带有副作用（如状态修改、异常）的命令式代码。目前，F* 最著名的应用是 Project Everest，该项目产出的 HACL* 加密库已被集成到 Firefox 浏览器、Linux 内核和 Wireguard VPN 中，证明了其在工业级安全软件中的实用性。</p><p>在工程实践中，F* 展现了出色的灵活性，例如其 Low* 子集可以提取为高效且无内存错误的 C 代码，而 EverParse 工具则能生成经过验证的二进制解析器，用于处理 Azure 云平台的网络流量。然而，这种严谨性也带来了显著的代价：开发者需要具备深厚的类型论背景，且编写证明代码的工作量往往远超业务逻辑本身。社区讨论指出，尽管 F* 在学术和高安全领域表现卓越，但其官方文档对初学者不够友好，代码示例隐藏较深。未来，随着 AI 辅助证明技术和 Pulse 等并发分离逻辑框架的成熟，F* 有望在高性能安全系统开发领域进一步降低准入门槛，让形式化验证走向更广泛的开发者群体。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49145034" target="_blank" rel="noopener noreferrer">@cyanregiment</a>
+        </div>
+        <p class="comment-text">我点了大概 5 个页面，居然没找到一个代码示例。我不明白为什么新语言不在首页最显眼的地方放一个语法沙盒。这就像一个游戏网站一张截图或一段视频都没有（这种情况也挺普遍的）。对于新编程语言，我只想知道两件事：1. 语法长什么样；2. 我为什么要用它。请谈谈证明逻辑，展示一下语法，谢谢。</p>
+        <p class="comment-reason"><span>入选理由</span>反映了开发者在接触这种高度学术化语言时最直观的挫败感：缺乏直观的代码示例。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49145229" target="_blank" rel="noopener noreferrer">@Verdex</a>
+        </div>
+        <p class="comment-text">借用你的游戏类比：F* 是编程语言里的《矮人要塞》（Dwarf Fortress）。对于那些还没准备好开启一段漫长心智旅程的人来说，代码截图只会让他们感到困惑。</p>
+        <p class="comment-reason"><span>入选理由</span>这个类比非常精辟地描述了 F* 极高的学习门槛和深奥的内在逻辑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49144797" target="_blank" rel="noopener noreferrer">@pvsnp</a>
+        </div>
+        <p class="comment-text">我很喜欢在将现有的 C 代码库逐步迁移到 F* 的过程中，能够表达对外部库调用的能力。这是一种非常扎实的语言。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了来自实际工程迁移经验的正反馈，证明了 F* 在处理遗留代码时的实用性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49145250" target="_blank" rel="noopener noreferrer">@aleph_minus_one</a>
+        </div>
+        <p class="comment-text">顺便说一下：F* 网站上的教程链接确实藏得有点深。你需要去 https://fstar-lang.org/index.html#learn，然后点击“你可能想在浏览器中尝试示例和练习……”这段文字下方的图片。在那个部分还链接了 PDF 版本：https://fstar-lang.org/tutorial/proof-oriented-programming-i...</p>
+        <p class="comment-reason"><span>入选理由</span>为想要深入了解该语言的读者提供了实用的导航建议。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>在软件安全领域，F* 就像是一把手术刀，精准但极难掌握。它不仅仅是一种编程语言，更是一套严谨的数学验证框架。虽然评论区吐槽它像《矮人要塞》一样难以上手，甚至连代码示例都藏在图片链接后面，但它在 Firefox 和 Linux 内核中的成功应用证明了其不可替代的价值。对于大多数开发者来说，F* 可能永远不会成为日常工具，但对于那些构建加密协议或云基础设施的人来说，这种“数学级别的正确性”是应对现代网络攻击的终极防线。正如评论所言，它支持从 C 代码库增量迁移，这为形式化验证从学术殿堂走向工业实战铺平了道路。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49138302">
+      <summary class="story-overview">
+        <span class="rank-number">05</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">seed.bytedance.com</span>
+            <span>395 points</span>
+            <span>原始 #15 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://seed.bytedance.com/en/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5" target="_blank"
+              rel="noopener noreferrer">Seedance 2.5</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49138302" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 210</a>
+          </h2>
+          <p class="summary">字节跳动发布了 Seedance 2.5 视频生成模型，主打“一气呵成”的创作能力。该模型能单次生成 30 秒的高质量音视频，并支持多轮扩展以制作长达数分钟的连贯故事。它引入了强大的多模态参考功能，允许用户同时输入数十个图像、视频和音频素材来精确控制角色和风格。此外，模型还提供了时间戳级别的编辑功能，支持绿幕替换和镜头视角调整。尽管视觉效果逼真，但在处理复杂物理运动和多主体交互的稳定性上仍有局限。这一更新标志着 AI 视频从生成短片段向完整创意工作流的转变。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Seedance 2.5 的核心突破在于长视频的叙事能力。它将单次生成时长从 15 秒翻倍至 30 秒，并能通过多轮扩展维持角色、环境和叙事节奏的一致性，从而实现分钟级内容的端到端创作。与以往单纯延长镜头不同，该模型能理解“起承转合”的逻辑，例如在一段视频中完整展现歌手从化妆间经过走廊、与舞者互动并最终登台表演的全过程，而非仅仅是一个行走的片段。</p><p>在可控性方面，模型支持极其丰富的参考输入，包括最多 30 张图片和各 10 组音视频片段。通过“白模参考”（Clay Render），创作者可以利用 3D 建模来规定空间结构、动作路径和光影效果，确保生成内容符合专业构图要求。这种多模态对齐能力使得多角色、复杂场景的稳定生成成为可能，模型能同时保留多个角色的外貌和声音特征。针对专业领域，它还引入了时间戳级别的精确编辑和绿幕替换功能，能根据新环境自动调整主体的光影和物理细节。</p><p>除了影视广告，字节跳动还将其推向教育演示和工业仿真，例如为机器人训练或自动驾驶提供合成视频数据。尽管如此，官方也承认模型在处理极端复杂的物理规律和多主体互动时仍存在瑕疵。此外，虽然模型优化了皮肤纹理和光影，但生成的画面在某些动态细节上仍可能带有微妙的“AI 感”，这是未来需要持续攻克的方向。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49139765" target="_blank" rel="noopener noreferrer">@jjcm</a>
+        </div>
+        <p class="comment-text">生成的质量相当高，但一个观察结果是，这些模型的发展方向与中国和西方的使用需求密切相关。具体来说，他们非常专注于动作/高特效镜头的文生视频（t2v）。在整个发布页面中只有一个人类参考镜头，而且那个镜头完全没有关注对话。我交流过的美国电影制作人最大的需求之一是视频生视频（v2v），这样他们可以保留演员的表演并将其插入到任何他们想要的场景中。但中国的电影市场有些不同——它严重倾向于高动作/高特效电影。想想那些在美国票房惨淡但在中国大获成功的电影：如《魔兽》、《生化危机》、《极限特工3》和《环太平洋2》。一种解读是动作片/视觉奇观比基于对话的电影更具有普适性；另一种解读是文化上中国更偏好这类内容。我怀疑对于字节跳动来说，他们专注于动作/特效是因为他们看到了那里的需求。</p>
+        <p class="comment-reason"><span>入选理由</span>从市场需求角度分析了 Seedance 2.5 偏重动作特效而非对话表演的深层原因。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49139511" target="_blank" rel="noopener noreferrer">@Keyframe</a>
+        </div>
+        <p class="comment-text">你知道吗，在我以前作为电影制作人的职业生涯中，我只能梦想有这样的东西。电影制作是一门你无法独自完成的艺术。除了大量的时间和金钱，你还需要许多人的协作，而且在制作的每一天，你最终都会为了实现愿景而积累一系列的妥协。你的品味决定了你是否能忍受这些，这让人精疲力竭。如果你是作者，这很重要，因为归根结底作品上署的是你的名字，而不是剧组的（至少没那么多）。现在我们有了这些工具，但我不知道为什么，我完全提不起兴趣。并不是说感觉不对，而是我没有足够的兴奋感去尝试物化我那些“宏大”的想法。我能想到最接近的类比就是当你盗版了一堆游戏，结果因为资源过剩反而一个都不玩。真是个古怪的时代。</p>
+        <p class="comment-reason"><span>入选理由</span>一位前电影制作人分享了在技术极大丰富后反而丧失创作冲动的心理困境。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49140456" target="_blank" rel="noopener noreferrer">@noduerme</a>
+        </div>
+        <p class="comment-text">我曾就读于艺术中心设计学院的电影专业。我热爱它。但最终我选择了写软件而不是拍电影（虽然仍处理大量的视觉艺术指导、图形工作、UI、3D 动画等）。现在我觉得我们在使用提示词（prompts）方面大致处于同一条船上了。令我困扰的是，以这种方式生成的每一件内容都在帮助淹没一个已经饱和的内容市场，同时慢慢降低人们对所见事物的期望，以至于没有人会再费心去拍摄或制作动画了。即使它差 50%，但只要便宜 90%，经济规律就会反对生产任何物理制作的新内容。同时，它正在蚕食所有现有的内容。这指向了一个反馈回路，就像一条吞噬自己尾巴的蛇。尽管好莱坞大片已经遵循这种模式几十年了，但看到它被奉为电影的未来（或者听到电影制作人说这是一种首选的创作模式），我感到很沮丧。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了 AI 视频生成可能导致内容市场“劣币驱逐良币”以及行业自我蚕食的经济学担忧。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49139802" target="_blank" rel="noopener noreferrer">@ronsor</a>
+        </div>
+        <p class="comment-text">Seedance 2.5 看起来很棒，但 MiniMax H3 将在 24 小时内开放权重：https://fal.ai/minimax-h3。根据 ComfyUI 团队的说法，它甚至可以在 3080 这种中端消费级 GPU 上运行得相当不错。老实说，为了更多的控制权和更低的成本，我愿意接受质量上的轻微下降。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了开源模型在控制权和成本方面的竞争优势。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49140053" target="_blank" rel="noopener noreferrer">@sickcodebruh</a>
+        </div>
+        <p class="comment-text">示例视频看起来不可思议，长时间保持细节一致的能力令人印象深刻，但每一个镜头仍然散发着强烈的 AI 味。我无法准确指出原因，可能是房间布置的方式、脸上的表情、动作……这让人感觉非常不安（谷崎润一郎式的诡异感）。</p>
+        <p class="comment-reason"><span>入选理由</span>表达了许多用户对 AI 生成视频中“恐怖谷”效应的直观感受。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>字节跳动这次更新显然是在向专业生产力工具靠拢。从 15 秒到 30 秒的跨越，以及对海量参考素材的支持，意味着 AI 视频正在脱离“抽卡”式的随机生成，转向可预测的导演模式。有趣的是，评论区指出该模型对动作戏和特效的偏重，可能反映了中国电影市场对视觉奇观的偏好，而非西方市场更看重的对话性能。然而，正如资深电影人所担心的，当“足够好”的 AI 内容以极低成本淹没市场时，传统影视制作的艺术价值和经济基础将面临前所未有的冲击。这种“丰饶的贫瘠”不仅是创作者的心理挑战，更是整个内容产业需要面对的结构性危机。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49138188">
+      <summary class="story-overview">
+        <span class="rank-number">06</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">diataxis.fr</span>
+            <span>422 points</span>
+            <span>原始 #16 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://diataxis.fr/" target="_blank"
+              rel="noopener noreferrer">Diátaxis</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49138188" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 50</a>
+          </h2>
+          <p class="summary">Diátaxis 是一种系统化的技术文档架构，将文档分为教程、操作指南、参考资料和解释说明四类。这种分类旨在解决文档职责不清的问题，帮助作者根据读者的具体需求（如学习或查阅）组织内容。通过明确每种文档的“语调”和目标，它能显著提升文档的可读性和维护效率。许多开发者在重构大型项目文档或进行代码移交时，发现该框架能提供极大的指导价值。然而，由于原网站访问受限，本文主要基于社区讨论和框架公开原则进行总结。其主要局限在于，如果机械套用，可能会增加用户的点击次数，甚至将核心 API 文档埋得太深。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Diátaxis 框架的核心逻辑是将文档需求划分为两个维度：学习与行动，以及信息与理解。这产生了四个象限：教程侧重于引导初学者完成任务，强调实践而非理论；操作指南则是为有经验的用户准备的，旨在解决特定的现实问题；参考资料提供技术细节的客观描述，如 API 规范或配置参数；解释说明则深入探讨背景、架构和设计决策，帮助读者建立深度理解。这种结构化方式能有效避免在同一页面中混杂教学和参考信息，从而降低读者的认知负荷。</p><p>在实际应用中，开发者发现 Diátaxis 能帮助团队在处理复杂代码库移交时统一写作“口吻”，使文档更具连贯性。一些开发者甚至开始将其作为 LLM 的提示词，以生成结构更合理的文档初稿。然而，批评者指出，Diátaxis 的抽象分类有时会牺牲易用性，例如将高频使用的 API 文档隐藏在多层菜单之下。另一个挑战是文档的长期维护，分类框架本身无法自动解决内容与代码实现脱节的问题。专家建议在实施时不要将其视为教条，而应根据产品的具体用户路径进行灵活调整，确保文档在分类清晰的同时保持高度的可访问性。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49139014" target="_blank" rel="noopener noreferrer">@rkangel</a>
+        </div>
+        <p class="comment-text">我和我的团队在向客户移交代码库时，为一整套文档应用了 Diataxis。那是一个庞大且复杂的代码库，积累了大量的历史背景和某些做法背后的微妙原因。Diataxis 的表现非常出色。虽然确定页面标题以覆盖所有内容花了一些精力，但一旦开始写具体的页面，感觉就太棒了。你会非常清楚自己在说什么，以及该用什么样的“口吻”来写。如果是参考页面，你就全是描述性的，配上图表和要点；如果是指南，你会更具论述性，但你知道自己只是在传递信息而不是在教学。它让保持内容的一致性和清晰度变得容易得多。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了在复杂项目移交中应用该框架的成功实战经验。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49141184" target="_blank" rel="noopener noreferrer">@rjmill</a>
+        </div>
+        <p class="comment-text">请不要让我为了找“API 文档”而去点击“参考资料（reference）”。我热爱 Diataxis，但老天爷啊，别为了让我找到 95% 的时间里真正需要的东西而让我多点一次鼠标。总的来说，这个运动是好的，除了它倾向于把“一键直达”的文档变成“两键点击”（对于那些不知道 API 文档可能藏在参考资料下的人来说甚至更多）。你完全可以在顶层菜单保留一个指向 API 文档的标签或链接。请不要在“改进”文档的过程中把它们藏起来。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个非常务实的 UX 警告，防止教条化应用框架导致用户体验下降。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49139411" target="_blank" rel="noopener noreferrer">@wonger_</a>
+        </div>
+        <p class="comment-text">另一种文档模型：Fabrizio 的“七项行动”。人们阅读文档是为了评估、理解、探索、练习、记忆、开发和排障，通常按此顺序。相比于 Diataxis 那些略显生硬的抽象概念（我至今还在纠结“教程”和“操作指南”到底有什么区别），这个模型感觉更自然、更直观。不过，我还是很高兴看到任何能帮助人们组织和维护文档的工具。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了另一种思考文档分类的视角，有助于读者对比理解。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49138357" target="_blank" rel="noopener noreferrer">@conradludgate</a>
+        </div>
+        <p class="comment-text">我以前从未觉得 Diataxis 有什么意义，但老实说，在进行“氛围编程（vibe coding）”时，告诉 LLM “按照 Diataxis 风格来做”，然后得到一份相当不错的初版文档，确实非常方便。</p>
+        <p class="comment-reason"><span>入选理由</span>揭示了传统文档框架在 AI 辅助编程时代的新用途。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Diátaxis 的魅力在于它为往往处于无序状态的技术文档创作引入了一种“秩序感”。正如评论所言，一旦你接受了这种分类逻辑，就很难再直视那些将 API 参考、架构设计和入门教程混为一谈的混乱文档。然而，我们也应警惕“框架至上”的陷阱：文档的终极目标是服务于用户解决问题的效率，而非为了符合某种分类美学。如果为了追求结构严谨而将高频使用的 API 文档深埋在“参考资料”层级之下，导致用户需要多点几次鼠标，那就属于本末倒置了。最好的文档实践应当是在 Diátaxis 提供的清晰思路与直观的用户路径之间找到平衡。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49143188">
+      <summary class="story-overview">
+        <span class="rank-number">07</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">ft.com</span>
+            <span>102 points</span>
+            <span>原始 #18 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.ft.com/content/0f9b2fe7-bde4-4f5f-b49e-93ccb5da9ea8" target="_blank"
+              rel="noopener noreferrer">US Treasury undertakes historic intervention in yen market</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49143188" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 59</a>
+          </h2>
+          <p class="summary">美国财政部近期对日元市场进行了历史性的干预，这是自1998年以来首次为支撑日元而采取的行动。此次干预旨在缓解日元的贬值压力，防止日本政府为保卫汇率而被迫大规模抛售美国国债。作为美国国债最大的海外持有国，日本的抛售行为可能导致美债收益率飙升，进而推高美国的借贷成本。此举反映了美日两国在金融稳定方面的深度捆绑，也是为了防止全球金融市场出现连锁反应。然而，这种干预能否长期对抗市场趋势并解决根本的债务问题仍存在不确定性。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>根据《金融时报》的报道及市场讨论，美国财政部采取了罕见的行动干预外汇市场以提振日元。由于原文章受访问限制，目前的分析主要基于公开的政策动向和金融社区的深度讨论。这种干预通常只在极端波动时出现，上一次美国为加强日元而出手还要追溯到1998年的亚洲金融危机。目前的干预机制似乎涉及美国通过卖出欧元、买入日元等手段来缓解日元的贬值压力，而非直接动用美元储备。这一决策的核心动机在于保护美国自身的债券市场：日本持有超过1.1万亿美元的美国国债，如果日元汇率失控，日本银行可能不得不通过抛售美债来获取流动性。</p><p>这种大规模抛售将对已经处于高位的美国国债收益率产生巨大的上行压力，增加美国政府的债务利息负担。此外，日元长期以来是全球“套利交易”的核心，许多投资者借入低息日元投资于人工智能等高增长领域，日元的剧烈波动可能导致这些投资头寸被迫平仓，引发股市动荡。尽管此次干预展示了美日之间的政策协调，但也有观点认为这只是在“踢皮球”，并未解决美国债务增长和日本通胀压力等根本性问题。观察家们正密切关注这一举措是否能有效稳定市场情绪，还是会引发投机者对日元发起更大规模的攻击，甚至演变成类似当年索罗斯挑战英镑的局面。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49143529" target="_blank" rel="noopener noreferrer">@eigenspace</a>
+        </div>
+        <p class="comment-text">日本持有大量的美国国债，我猜他们当时正在考虑大规模抛售以筹集现金来保卫日元。美国国债收益率对美国来说已经高得危险了，日本抛售国债会进一步推高收益率，并可能引发其他人的恐慌性抛售。我猜这是贝森特（Bessent）试图推迟问题爆发的方案。</p>
+        <p class="comment-reason"><span>入选理由</span>清晰地解释了美国干预日元市场与保护自身国债市场之间的直接利益联系。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49144112" target="_blank" rel="noopener noreferrer">@sph</a>
+        </div>
+        <p class="comment-text">这里有一个来自《金融时报》评论区的合理解释：‘看起来日本经济正处于日本央行的呼吸机上。日本央行是日本股票、政府债券（JGB）和日元（JPY）最大的单一持有者。日本央行很可能正在印更多的日元来资助日本企业，而这反过来可能是通胀的驱动力。……日本央行是持有美国国债最多的外国银行，约1.14万亿美元，他们很可能不得不卖出一些国债来资助日元买入操作。在我看来，这种情况对美国财政部来说并不理想——特别是在目前美债收益率曲线变陡的情况下——因此他们不得不通过卖出欧元兑日元（EURJPY）来“还人情”。’
+简而言之，我作为一个外行的理解是：美国通过在一个债务交换三角中卖出（做空）欧元来帮助日本。美国别无选择，因为日本本会卖出他们大量持有的美元资产来资助其支出。他们只能寄希望于日元兑欧元的赌注在长期内能有回报。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了具体的金融操作机制解释，即通过欧元/日元交叉盘进行干预的逻辑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49144982" target="_blank" rel="noopener noreferrer">@jmyeet</a>
+        </div>
+        <p class="comment-text">值得一提的是日元套利交易。这实际上非常重要，因为据称它支撑了人工智能投资热潮，日元升值对于借入日元进行投资的人来说是一个真正的难题，特别是如果投资的是一个很可能破裂的泡沫。这是双重打击。我在想这是否会成为另一个乔治·索罗斯时刻。索罗斯曾著名的击溃了试图维持英镑汇率的英格兰银行。如果大规模的 AI 投资是靠日元支撑的，那么投资者就有很大的动力去击溃日元。本届政府通常会支持这类事情（并从中获利），所以目前我还不清楚到底发生了什么。</p>
+        <p class="comment-reason"><span>入选理由</span>将日元汇率与当前的 AI 投资热潮及历史上的金融投机事件联系起来，提供了更广阔的视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49144116" target="_blank" rel="noopener noreferrer">@eigenspace</a>
+        </div>
+        <p class="comment-text">这一具体事件本身并不是什么惊天动地的大事。这只是美国在做一些帮助日本稳定货币的事情，同时也帮助美国避免美国国债抛售潮（这会提高美国的借贷成本）。这很不寻常，但并非翻天覆地。
+然而，大背景看起来相当令人担忧。日本几十年来积累了大量美国国债作为对抗通缩的手段。现在，他们面临通胀和货币贬值，因此日本出售积累的资产来保卫货币并抑制通胀是非常自然的事情。另一方面，美国一直在胡搞，赢得了极其反复无常且不关注稳定性的名声。美国也完全没有计划或意图来控制其债务负担。这让持有美国国债的投资者感到紧张。他们看到地缘政治不稳定性增加，美国政治功能失调加剧，以及美国债务危机可能导致违约的早期阶段。这种情况导致美国的借贷成本上升，而日本从国债净买家转变为净卖家，将使美国在不提供更高利率的情况下更难卖出更多债券，这只会让当前的债务问题恶化。</p>
+        <p class="comment-reason"><span>入选理由</span>深入分析了美日债务关系的长期风险，指出了干预背后的结构性危机。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49144989" target="_blank" rel="noopener noreferrer">@dredmorbius</a>
+        </div>
+        <p class="comment-text">具有历史意义，是的。但并非史无前例。财政部支撑日元的干预是自1998年以来的首次，当时买入日元是为了在日元跌至八年低点后加强日本经济。2011年，美国也曾干预日本货币以使其走弱，这是在东日本大地震和海啸后，为防止危险的货币升值而进行的国际协调努力的一部分。（摘自原文）</p>
+        <p class="comment-reason"><span>入选理由</span>提供了必要的历史背景，帮助读者理解此类干预在金融史上的位置。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这次干预本质上是美国在进行一场“金融自救”。虽然表面上是在帮日本稳住日元，但核心逻辑是为了防止日本这个最大的债主因为本币危机而被迫砸盘美债。如果日本开始大规模抛售美债，美国那本就沉重的债务压力可能会瞬间失控。正如评论所指出的，这更像是一种战术性的“踢皮球”，通过复杂的货币操作来延缓危机的爆发。然而，在全球套利交易和 AI 泡沫的背景下，这种人为干预能否对抗市场大势，依然要打个巨大的问号。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49143001">
+      <summary class="story-overview">
+        <span class="rank-number">08</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">publicdomainreview.org</span>
+            <span>69 points</span>
+            <span>原始 #6 · 低讨论量降权 +12.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://publicdomainreview.org/essay/ars-notoria/" target="_blank"
+              rel="noopener noreferrer">Artificial Intelligence: Ars Notoria and the Promise of Instant Knowledge</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49143001" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 8</a>
+          </h2>
+          <p class="summary">《Ars Notoria》是中世纪流传的一本奇书，声称能通过仪式和祷告让使用者瞬间掌握复杂的学术知识。它利用复杂的几何图形和月相周期，承诺跳过艰苦的学习过程，直接获得记忆力和智慧。这种对“知识捷径”的渴望在当时吸引了许多买不起书或听不起课的贫穷学者。然而，像莫里尼的约翰这样的实践者最终发现，这种方法不仅具有欺骗性，还可能导致精神幻觉。文章通过这一历史案例，隐喻了现代人对人工智能（AI）作为知识捷径的类似期待与潜在幻灭。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这篇文章探讨了13世纪出现的《Ars Notoria》，这是一部被归于所罗门名下的魔法书，旨在通过超自然手段获取知识。它的核心机制是让使用者凝视被称为“notae”的复杂图表，并配合特定的祷告词，在特定的月相周期内进行仪式。它承诺能让学生迅速精通文法、修辞和逻辑等基础学科，甚至包括医学和神学。对于当时资源匮乏的学者来说，这种“即时知识”的承诺具有巨大的诱惑力，因为它似乎能弥补昂贵书籍和讲座的缺失。</p><p>然而，这种“走捷径”的代价在历史上引发了激烈争论。14世纪的僧侣莫里尼的约翰曾沉迷于此，但后来他声称这些仪式带来了恐怖的幻觉，并最终谴责其为魔鬼的诱惑。这种冲突反映了当时社会对“自然学习”与“超自然获取”之间界限的焦虑。文章将这一古老魔法与现代AI进行了类比：两者都承诺了某种形式的“外挂式”智慧。这种类比揭示了一个深刻的局限性：无论是中世纪的符咒还是现代的大语言模型，都无法替代真正的理解过程。观察者们现在正关注，当人们过度依赖这些工具来显得博学时，是否会像古代学者一样，在追求效率的过程中迷失了思考的本质。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49144414" target="_blank" rel="noopener noreferrer">@themgt</a>
+        </div>
+        <p class="comment-text">这是一篇很有趣的文章。对于约翰来说，《Ars Notoria》最大的吸引力在于它承诺能快速获得高深的学术知识。他记录了自己对学习的持续渴望，以及一位“某位神职人员”如何借给他一本通灵书。他抄录了大部分内容并想要更多……对约翰而言，《Ars Notoria》的危险并非抽象的，而是非常直接的。他承认起初觉得它美丽而神圣，似乎提供的是奇迹般的礼物而非恶魔的诱惑。然而，事实证明这本书完全是骗人的，是魔鬼的作品，是一种实际上对灵魂（不仅是肉体）具有致命毒性的“病态快感”。
+
+约翰记录道，《Ars Notoria》特别有吸引力，是因为他负担不起学习所需的所有书籍，也听不起那么多讲座。他似乎放弃了正式课程，希望利用掌握所有科学知识的承诺，全身心地投入到《Ars Notoria》的研究中。……随后出现了更多令人不安的幻象，其中傲慢的人物要求崇拜——这显然违背了真正的宗教。约翰逐渐明白，这本书在看似优美的祷告词中隐藏了对恶魔的召唤。然而，就像任何成瘾者一样，约翰发现几乎不可能完全放弃《Ars Notoria》；直到幻象直接威胁到生命时，圣母玛利亚才通过圣徒约翰作为中介出现，并明确告诉他，正如约翰所说，“《Ars Notoria》是极度邪恶的”。
+
+除了标题之外，文章从未明确给出类比，但其潜台词是否在于：AI“是徒劳的，因为它无法兑现承诺……它的‘符号’既不被人类理解（不像普通的文字和字母），也不是上帝发送的（如圣礼），因此正是那种诱使人类与恶魔接触并达成契约的东西”？或者说，对AI的谴责正来自于现代版的“中世纪神职人员”？还是两者兼而有之？</p>
+        <p class="comment-reason"><span>入选理由</span>该评论详细梳理了文中提到的关键历史人物约翰的心理转变过程，并对AI与魔法书的类比给出了深刻的哲学解读。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49143800" target="_blank" rel="noopener noreferrer">@dimbletimbers</a>
+        </div>
+        <p class="comment-text">我认为这种联系非常清晰：人类总是希望在不需要学习的情况下就能掌握知识。</p>
+        <p class="comment-reason"><span>入选理由</span>简洁地指出了文章将古代魔法与现代AI联系在一起的核心人性动机。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49144683" target="_blank" rel="noopener noreferrer">@malfist</a>
+        </div>
+        <p class="comment-text">我认为这是一种委婉的评论。在过去的几年里，我多次发现自己在告诉初级工程师：AI不能替你理解。理解是没有捷径可走的。</p>
+        <p class="comment-reason"><span>入选理由</span>将文章的历史探讨与现代工程实践相结合，强调了“理解”不可外包的本质。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49143164" target="_blank" rel="noopener noreferrer">@dcminter</a>
+        </div>
+        <p class="comment-text">标题里带上AI显得非常牵强且有标题党之嫌，但这篇文章读起来确实很有趣。已点赞。</p>
+        <p class="comment-reason"><span>入选理由</span>反映了读者对文章将历史话题强行关联现代热点（AI）的批判性看法。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>将中世纪魔法书《Ars Notoria》与人工智能联系起来，初看像是标题党，实则精准地捕捉到了人类的一种永恒冲动：对“知识捷径”的渴望。正如评论所指出的，人类历史上从未停止过寻找“不学而知”的方法，无论是通过月相仪式还是大语言模型。然而，历史的教训和现代工程师的经验都指向同一个事实：理解是无法外包的。这种对即时智慧的追求，在古代被视为与魔鬼做交易，在现代则表现为对算法的盲目依赖。我们应当警惕，当知识变得唾手可得时，它是否还具备改变思想的力量，抑或仅仅成了一种装饰性的幻象。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49144946">
+      <summary class="story-overview">
+        <span class="rank-number">09</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">seinfeld.visualisingdata.com</span>
+            <span>11 points</span>
+            <span>原始 #4 · 低讨论量降权 +14.7</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://seinfeld.visualisingdata.com/" target="_blank"
+              rel="noopener noreferrer">The Seinfeld Chronicles: Digital Edition</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49144946" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 1</a>
+          </h2>
+          <p class="summary">《宋飞正传》数字版是一个通过数据可视化深入剖析这部经典情景喜剧的创意项目。该项目探讨了剧集如何打破传统的三段式叙事，转而采用快节奏的多线索结构。它强调了该剧核心的“不拥抱、不学习”原则，即角色从不因挫折而成长，也拒绝煽情。作者将剧集的节奏和结构比作音乐，通过分析场景结构和角色互动来展示其独特的喜剧美学。这个数字化作品旨在揭示这部“无事生非”的剧集背后复杂的创作逻辑，但也受限于其作为粉丝向分析工具的定位。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>《宋飞正传》数字版（The Seinfeld Chronicles）并非简单的剧迷回顾，而是一个将数据可视化与剧集结构分析相结合的深度探索。该项目指出，这部剧之所以在情景喜剧史上独树一帜，是因为它彻底背离了当时主流的创作规则。它摒弃了传统的三幕式结构，引入了更复杂、节奏更快的并行故事线，将日常生活的琐碎细节放大到了极致。这种“无事生非”的叙事风格，实际上是对生活细微之处的精准捕捉和艺术化处理。</p><p>在核心理念上，该项目重点解读了著名的“不拥抱、不学习”原则。这意味着剧中的主角们始终保持着自私、神经质且拒绝成长的特质，无论遇到多大的尴尬或困境，他们都不会像传统剧集那样在结尾达成情感升华或道德感悟。作者进一步将这种喜剧结构类比为音乐：场景的切换和节奏构成了旋律，而角色与场景的互动则形成了独特的纹理。通过这种数字化的视角，观众可以更清晰地看到杰瑞·宋飞和拉里·大卫是如何像指挥家一样，将这些荒诞的巧合与琐碎的执念编织成一部经典的喜剧交响乐。这种分析方法为理解长篇叙事作品的内在逻辑提供了一个有趣的数字化范本。</p></div>
+        
+        <div class="comments-empty">
+          这条讨论暂未选出真正值得占用你注意力的评论。
+        </div>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>《宋飞正传》常被称为“关于虚无的剧集”，但这个可视化项目证明了，要让“虚无”变得有趣，背后需要极其严密的结构支撑。它打破了情景喜剧必须提供“情感慰藉”的潜规则，用一种近乎冷酷的观察者视角审视人性中的小瑕疵。这种将剧集结构比作音乐节奏的视角非常新颖，它解释了为什么即便在几十年后，那些关于排队买汤或丢车位的琐事依然能让现代观众产生共鸣——因为生活本身的节奏从未改变，而《宋飞正传》精准地抓住了那种荒诞的律动。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49141073">
+      <summary class="story-overview">
+        <span class="rank-number">10</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">wafer.ai</span>
+            <span>170 points</span>
+            <span>原始 #22 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.wafer.ai/blog/kimi-k3-mi355x" target="_blank"
+              rel="noopener noreferrer">Running Kimi K3 on MI355X at Better Performance per Dollar Than B300</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49141073" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 88</a>
+          </h2>
+          <p class="summary">Wafer.ai 报告称，在 AMD MI355X GPU 上运行 Kimi K3 模型，其性价比优于 NVIDIA 的 B300。Kimi K3 拥有 2.8 万亿参数，对显存要求极高，单台 NVIDIA B200 节点因显存不足必须跨节点运行，导致性能受损。AMD MI355X 凭借 288GB 的大显存，能在单节点内完成部署，避免了跨节点通信延迟。尽管 B300 的绝对推理速度更快，但由于 MI355X 的租赁成本显著更低，其每美元性能表现更佳。不过，这一结论高度依赖于特定的云端租赁价格，且 AMD 的软件生态仍需大量手动调优。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Kimi K3 作为超大规模模型，其 2.8T 的参数量对硬件显存提出了严峻挑战，仅模型权重就需占用超过 1.5TB 空间。在 NVIDIA B200 节点上，由于单卡显存仅 192GB，必须使用 16 张卡跨双节点部署，这使得推理过程在跨节点通信（RoCE v2）上产生了巨大开销。相比之下，AMD MI355X 和 NVIDIA B300 均配备 288GB 显存，允许在单节点 8 卡内完成部署。测试显示，虽然 B300 在绝对吞吐量上领先 MI355X 约 1.65 倍，但基于当前云服务市场 MI355X 约 2.5 美元/小时、B300 约 6 美元/小时的定价，AMD 平台的性价比优势凸显。</p><p>在技术实现层面，Wafer.ai 团队针对 ROCm 软件栈进行了多项优化。他们修复了投机采样（Speculative Decoding）中因内核定义缺失导致的崩溃，并针对 Kimi K3 特有的 12 个注意力头数优化了预填充内核。通过将头数补齐至 16 以适配 AITER 快速内核，预填充速度提升了 2 到 3 倍，显著改善了首字延迟（TTFT）。然而，这种对比也存在局限性：AMD 在预填充等计算密集型任务上的绝对性能仍落后于 NVIDIA，且其软件支持的稳定性仍不及 CUDA。未来值得关注的是，随着 AI 辅助优化工具的普及，AMD 软件生态的劣势是否能被快速抹平。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49141870" target="_blank" rel="noopener noreferrer">@kelnos</a>
+        </div>
+        <p class="comment-text">我希望他们不要再称这些为“开源模型”了。它们不是开源的。他们没有发布训练数据，也没有发布用于训练模型的工具。他们发布的是权重。这是一个“开放权重模型（open weight model）”，这个术语似乎几乎所有人都同意是合适的。为什么这家公司不使用它呢？</p>
+        <p class="comment-reason"><span>入选理由</span>指出了 AI 行业中关于“开源”定义的常见误区，强调了开放权重与真正开源的区别。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49141794" target="_blank" rel="noopener noreferrer">@villgax</a>
+        </div>
+        <p class="comment-text">哈哈，Wafer.ai 写这篇文章真是偷懒。在每一行数据中，B300 都击败了 MI355X。B200 被强行拿来对比，是因为它的显存在单节点内放不下模型，而且文章也没提供关于多节点互联、解耦等方面的细节。正如预料中的劣质内容。它唯一胜出的一点是某家租赁网站上的每小时成本，而 B300 溢价很高，那个 3 美元/小时的 AMD 芯片也没有哪个供应商有充足的供应。他们甚至懒得去计算拥有硬件的总拥有成本（TCO）。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了重要的反面观点，质疑了文章中性价比对比的公平性和市场真实性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49141638" target="_blank" rel="noopener noreferrer">@logicallee</a>
+        </div>
+        <p class="comment-text">这一部分听起来像是用 AI 辅助设置和基准测试的：
+&gt; 修复方法非常简单：将头数从 12 零填充（zero-pad）到 16，运行快速内核，然后从输出中提取真实的 12 个头。
+我最近尝试用前沿 AI（ChatGPT 5.6 Sol ultra）来设置一个更小的本地模型，它引入的性能优化导致模型完全语无伦次（模型只是重复单个字符等）。当我看到我引用的那行文字时，我不禁怀疑这种设置是否还能像在受支持硬件上安装的 Kimi K3 原版那样保持连贯性。他们有没有运行任何基准测试来检查结果是否仍然正确？</p>
+        <p class="comment-reason"><span>入选理由</span>从技术实现角度提出了对“零填充”优化可能影响模型输出正确性的担忧。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49143783" target="_blank" rel="noopener noreferrer">@anon373839</a>
+        </div>
+        <p class="comment-text">事实并非完全如此。模型确实有定义其架构的源代码，而且那是开源的。人们总是试图把开源软件（OSS）的概念强加到模型权重上，但这些概念并不适用，因为权重不是软件。它们不是编译后的代码，而是与函数（函数本身由代码表达）一起使用的学习参数。所以它们是补充代码的非常有价值的资产，但它们不是代码。你可以使用随机初始化的权重，软件依然可以运行——它会输出 token，只是没有有用的模式。我不认为 OSS 的定义曾要求资产必须包含其来源。例如，美术资源对游戏非常重要，但如果游戏没有附带草图和用于从头重建美术资源的 Adobe Illustrator 副本，没人会认为这个游戏不是开源的。</p>
+        <p class="comment-reason"><span>入选理由</span>深入探讨了模型权重与传统软件代码在开源定义上的本质区别，提供了更宏观的视角。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Wafer.ai 的这篇文章揭示了超大模型时代的一个核心矛盾：显存容量（VRAM）正在成为比算力更关键的“物理护城河”。当模型大到单节点无法容纳时，NVIDIA 昂贵的互联技术（如 NVLink）就成了刚需，而 AMD 则试图通过堆叠单卡显存来提供一种更廉价的替代方案。正如评论 [49141794] 所指出的，这种性价比优势很大程度上建立在特定的云端租赁价格差之上，而非硬件架构的全面超越。此外，关于“开源”定义的争论 [49141870, 49143783] 再次提醒我们，在 AI 领域，权重的开放虽然降低了使用门槛，但距离真正的“透明”仍有很长的路要走。尽管 AMD 在软件适配上仍需“零填充”这类手动补丁 [49141638]，但这种“能跑通且便宜”的现状，确实在松动 CUDA 长期以来的统治地位。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49143414">
+      <summary class="story-overview">
+        <span class="rank-number">11</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">en.wikipedia.org</span>
+            <span>206 points</span>
+            <span>原始 #25 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://en.wikipedia.org/wiki/Wikipedia:Wikipedia_Signpost/2026-08-02/News_and_notes" target="_blank"
+              rel="noopener noreferrer">Wikimedia Foundation refuses union recognition, hires union-busting law firm</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49143414" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 183</a>
+          </h2>
+          <p class="summary">维基媒体基金会（WMF）拒绝了其员工组织 Wiki Workers United 提出的自愿承认工会的要求。基金会坚持要求通过美国国家劳工关系委员会进行无记名投票选举，称这能保护员工免受组织者压力并确保个人选择权。然而，工会和部分社区成员对此表示强烈不满，认为这是典型的拖延战术，旨在利用选举前的窗口期进行反工会宣传。争议的焦点还在于 WMF 聘请了以“破坏工会”著称的 Littler Mendelson 律师事务所，这被视为与其宣称的开放价值观相悖。目前已有超过 1200 名社区成员签署请愿书支持工会，反映出管理层与志愿者社区之间日益加深的裂痕。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>2026年7月，代表维基媒体基金会员工的 Wiki Workers United (WWU) 正式要求基金会自愿承认其工会地位，并称已获得超半数员工支持。WMF 随后发表声明拒绝了这一请求，理由是现有的“签卡确认”过程缺乏私密性，可能导致员工在签署时面临组织者的压力。创始人吉米·威尔士公开支持这一立场，强调只有通过官方监管的无记名投票才能确保真正的集体意志，并认为这种程序是保护员工免受任何一方压力的最佳方式。</p><p>工会方面则指责 WMF 的立场极其虚伪，认为拒绝自愿承认是科技和非营利行业中常见的“破坏工会”手段。他们特别指出，WMF 聘请了专门处理此类事务的 Littler Mendelson 律师事务所，而非仅仅沿用其长期的商标法律顾问 Jones Day。批评者担心，在等待投票的数周或数月内，管理层会利用资源进行反工会游说。此外，社区对 WMF 近年来的高管薪酬增长和机构官僚化趋势本已存在不满，此次劳资冲突进一步加剧了志愿者与基金会之间的信任危机。目前，工会已决定向劳工委员会提起选举申请，而社区的抗议活动仍在持续。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49144065" target="_blank" rel="noopener noreferrer">@armchairhacker</a>
+        </div>
+        <p class="comment-text">维基百科方面的观点：
+&gt; 我们相信由国家劳工关系委员会（NLRB）进行的无记名投票选举是正确的推进路径。这一过程保护了个人选择，并确保任何结果都能反映符合条件的参与者的集体意愿。
+&gt; [吉米·威尔士：] 到目前为止，这个过程的问题之一是它不是秘密的，我们从一些员工那里听说他们感到压力，因为组织者会知道他们的决定。这不是一个好的过程，让人们处于被迫做出某种决定的境地，严重违背了我们运动的价值观。
+
+反方观点：
+&gt; 社区对 WMF 声明的回应大多是失望，担心基金会将利用现在到无记名投票之间的间隙，使用《约翰·奥利弗上周今夜秀》中幽默描述的那种破坏工会的方法来阻碍员工参与工会。
+
+老实说，我站在维基百科这一边：应该进行真正的无记名投票。投票应该尽快举行，如果工会获胜我也没意见。当然，维基百科在此期间可能会使用威胁和宣传手段（Wiki Workers United 也可以），但这比公开投票的强制性要小。</p>
+        <p class="comment-reason"><span>入选理由</span>清晰地呈现了资方（吉米·威尔士）与劳方/社区之间的核心矛盾点，即“无记名投票”与“自愿承认”的博弈。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49144375" target="_blank" rel="noopener noreferrer">@decimalenough</a>
+        </div>
+        <p class="comment-text">我算不上 WMF 的粉丝，但这个标题有点标题党。WMF 使用一家名为 Jones Day 的律师事务所进行品牌和商标管理已经超过十年了。该事务所是美国最大的律师事务所之一，确实也做破坏工会的业务，但是：a) WMF 似乎并没有雇佣他们来处理工会事务；b) 这种合作关系远早于目前的纠纷。</p>
+        <p class="comment-reason"><span>入选理由</span>对文章中关于律师事务所的指控提供了重要的事实澄清和背景补充。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49144492" target="_blank" rel="noopener noreferrer">@neilk</a>
+        </div>
+        <p class="comment-text">我不知道你是不是在开玩笑，但威尔士当然不会直接从中获利。而且作为非营利组织，高管的薪酬是公开的。我相信董事会成员除了差旅费报销外，没有任何报酬。（吉米·威尔士确实通过为奢侈手表等做广告来变现他的名声）。WMF 的工资水平确实出现了爆炸式增长，尽管考虑到地理位置和他们竞争的人才基础，起薪非常低。你可能希望 WMF 成为一个有竞争力的雇主，而硅谷的工资全线飙升。所以那些 40 万美元的高管薪酬（我咬着牙说）勉强还算合理。一个志愿者维护的页面总结了关键职位的薪资进展（截至 2024 年）：https://meta.wikimedia.org/wiki/Wikimedia_Foundation_salaries...。所以你可以放心，你的钱没有直接进入高管的银行账户。然而，这正是非营利组织往往变得臃肿的原因。高管们不能拿百万年薪或其他福利（如股票期权），但你可以通过增加人员编制来证明自己的价值，这有利于高管的职业生涯。</p>
+        <p class="comment-reason"><span>入选理由</span>深入分析了维基媒体基金会作为非营利组织的财务结构和官僚化倾向，解释了为何社区对资金用途感到敏感。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49144252" target="_blank" rel="noopener noreferrer">@nekusar</a>
+        </div>
+        <p class="comment-text">根据联邦法律，如果一家公司有工会，工会必须代表所有非管理层工人，即使是那些不缴纳会费的人。这显然很糟糕，但这一直是 NLRB 长期以来的工会法。公平的回应应该是：工会只应在法律上负责代表其成员。但这类糟糕的工会法是自工会创建以来试图摧毁它们的结果。对于那些认为工会很糟糕的人（资本家及同类），我们要知道在工会出现之前，情况是“炸掉公司或老板的房子”，基本上是资本与劳工之间的战争。工会和法律代表正是这种冲突的妥协产物。劳工史一直是一场血腥而残酷的事务。去查查平克顿侦探社的历史吧。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了美国工会法律背景和历史视角，帮助理解为何劳资双方在程序问题上如此针锋相对。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>维基百科一直以“共识”和“社区驱动”为核心价值观，但当这些价值观应用到其自身的劳动力管理时，基金会却选择了最传统的企业对抗模式。吉米·威尔士口中的“保护个人选择”听起来很体面，但在劳资博弈的语境下，这往往被视为消耗工会动力的标准剧本。最讽刺的是，一个依靠全球志愿者无偿贡献建立的非营利组织，现在却要花着捐款人的钱聘请顶尖律师事务所来对付自己的带薪员工。这种从“社会运动”向“官僚机构”的转变，或许才是让社区感到最失望的地方。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49140599">
+      <summary class="story-overview">
+        <span class="rank-number">12</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">science.org</span>
+            <span>85 points</span>
+            <span>原始 #24 · 低讨论量降权 +2.7</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.science.org/content/article/deep-sea-vehicles-spot-alien-sharks-deep-beneath-waves-pacific#" target="_blank"
+              rel="noopener noreferrer">Deep-sea vehicles spot &#x27;alien&#x27; sharks deep beneath the waves in the Pacific</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49140599" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 41</a>
+          </h2>
+          <p class="summary">科学家利用深海探测器在太平洋深处拍摄到了被形容为“外星生物”的罕见鲨鱼，其中包括首次在自然栖息地记录到的欧氏尖吻鲛（哥布林鲨）。这些深海物种展现了极端的进化特征，以适应高压和完全黑暗的环境。这次发现凸显了深海生物多样性的丰富程度，也证明了深海仍是地球上最不为人知的领域之一。由于原始文章访问受限，目前仅能通过已知信息确认观测涉及了先进的遥控潜水器技术。这一发现的重要意义在于，它为保护这些脆弱的深海生态系统提供了直接证据。目前，深海采矿和底拖网捕捞等人类活动正威胁着这些尚未被充分研究的栖息地。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>在最近的一次太平洋深海考察中，研究人员利用先进的深海探测设备捕捉到了多种罕见鲨鱼的珍贵影像。其中最引人注目的是欧氏尖吻鲛（Goblin Shark），这种长相奇特的生物此前从未在自然栖息地被成功拍摄过。这些鲨鱼通常生活在数百甚至数千米深的“午夜区”，那里压力巨大且完全没有阳光，导致它们进化出了半透明的皮肤或极度灵敏的感官。由于原始文章来源存在访问限制，我们目前无法获知具体的观测坐标或参与研究的确切机构，但社交讨论显示这些影像是由遥控潜水器（ROV）或自主水下航行器（AUV）拍摄的。</p><p>这次科学发现不仅填补了生物学上的空白，也引发了关于深海保护的紧迫讨论。深海环境虽然看似遥远，但正面临着工业活动的直接威胁。例如，底拖网捕捞在获取深海鱼类的同时，往往会摧毁数百年才能形成的珊瑚礁和栖息地。此外，随着全球对稀有金属需求的增加，针对深海锰结核的采矿计划也日益提上日程。科学家们担心，在人类还没来得及命名这些“外星”物种之前，它们的生存环境可能就已经遭到了不可逆的破坏。未来的研究重点将是如何在不干扰这些敏感生物的情况下，利用更先进的无光成像技术进行长期观测。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49141209" target="_blank" rel="noopener noreferrer">@doodlebugging</a>
+        </div>
+        <p class="comment-text">有时候，你第一次有机会看到某种生物，恰恰是在你积极破坏它栖息地的时候。听起来你朋友的工作利用了深海拖网渔船接触科学界未知物种的机会，让他们对这些物种的分布有了大致了解。从某种意义上说，这对研究人员非常有用，他们可以以此为据，论证由于存在科学新物种，该地区的拖网捕捞破坏性太大。拖网捕捞和采矿（文中提到的两项活动）对栖息地的破坏性都极大。随着全球竞相锁定稀有元素和冲突地区国家常见元素的来源，海底被视为其中一些元素的最佳来源。我几十年前在地球科学课上学到的锰结核，如今正成为矿商的目标，他们会毫不犹豫地像捕鱼船队掠夺野生鱼类一样，把海底刮得干干净净。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深刻揭示了深海科学发现与环境破坏之间矛盾的共生关系。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49141106" target="_blank" rel="noopener noreferrer">@everyone</a>
+        </div>
+        <p class="comment-text">灯光会不会让所有的动物都失明？我推测它们的眼睛应该已经进化到对光线极其敏感的程度了。</p>
+        <p class="comment-reason"><span>入选理由</span>评论提出了一个关于深海观测对生物影响的重要科学假设。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49142573" target="_blank" rel="noopener noreferrer">@rf15</a>
+        </div>
+        <p class="comment-text">我打开之前的想法：这会不会又是关于欧氏尖吻鲛（goblin sharks）的内容？
+文章内容：欧氏尖吻鲛此前从未在自然栖息地被拍摄过。
+令人惊讶的糟糕标题。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了文章标题可能存在的误导性，并确认了文中关于欧氏尖吻鲛的关键事实。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49141017" target="_blank" rel="noopener noreferrer">@MostlyStable</a>
+        </div>
+        <p class="comment-text">深海中有很多科学界未知的鲨鱼，其中大多数体型很小。我读研时的一个朋友曾在马达加斯加附近的一艘深海拖网渔船上待过几次，他描述了多个新物种。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了深海新物种发现的真实背景，补充了文章在物种多样性方面的描述。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这种“边发现边毁灭”的现状确实令人唏嘘。深海探测技术让我们第一次看清了这些像外星生物一样的鲨鱼，但讽刺的是，正如评论所言，往往是那些破坏性极强的深海拖网渔船最先接触到这些新物种。我们正处于一场竞赛中：是在这些奇特生物因资源开采而灭绝前了解它们，还是眼睁睁看着它们的家园被夷为平地。这种对未知的探索不仅是科学的好奇，更是对地球最后净土的紧急记录。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49140702">
+      <summary class="story-overview">
+        <span class="rank-number">13</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">oldvcr.blogspot.com</span>
+            <span>76 points</span>
+            <span>原始 #17 · 低讨论量降权 +13.2</span>
+          </div>
+          <h2>
+            <a class="title-link" href="http://oldvcr.blogspot.com/2026/08/mklinux-and-pimped-out-apple-workgroup.html" target="_blank"
+              rel="noopener noreferrer">MkLinux and the pimped-out Apple Workgroup Server 9150</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49140702" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 6</a>
+          </h2>
+          <p class="summary">20世纪90年代中期，苹果通过Workgroup Server (WGS) 系列尝试进军服务器市场，其中WGS 9150（代号“绿巨人”）是该系列的独特型号。它基于PowerPC 601处理器，采用了修改后的机箱设计，是唯一没有直接对应桌面型号的WGS机器。由于苹果自家的A/UX系统未能成功过渡到PowerPC架构，MkLinux（基于Mach微内核的Linux）成为了让这些硬件发挥潜力的关键。MkLinux为老旧Mac提供了真正的多任务处理能力，解决了System 7系统频繁死机的痛点。然而，受限于NuBus总线架构和当时不成熟的驱动支持，这些机器在性能和易用性上仍存在明显局限。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>本文回顾了苹果Workgroup Server 9150及其与MkLinux的历史渊源。WGS 9150诞生于苹果从68K芯片向PowerPC转型的动荡时期，其代号为“绿巨人”，采用了独特的机箱布局，将软驱移至底部以容纳磁带备份驱动器。在软件层面，由于苹果原有的Unix系统A/UX开发停滞，且与诺维尔（Novell）合作的NetWare移植项目“虫洞”反响平平，苹果最终转向支持基于Mach微内核的MkLinux。MkLinux允许用户在NuBus架构的Power Mac上运行Linux，这在当时极大地提升了系统的稳定性，使其能够胜任文件服务和防火墙等任务。</p><p>尽管WGS 9150在硬件上极具诚意，配备了512K二级缓存和多达五个硬盘位，但它本质上仍是“加强版”的桌面电脑。用户在实际使用中面临诸多挑战，例如MkLinux早期缺乏对多键鼠标的支持，而苹果默认只提供单键鼠标，导致X11界面操作极其不便。此外，从经典的MacOS切换到命令行驱动的Linux，对当时的普通用户来说有着极高的学习门槛。随着乔布斯回归以及基于Unix的Mac OS X问世，MkLinux最终完成了它的历史使命，成为了连接苹果旧时代硬件与现代Unix系统的技术桥梁。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49143198" target="_blank" rel="noopener noreferrer">@rwmj</a>
+        </div>
+        <p class="comment-text">在我工作过的一家早期初创公司里，我们有一堆运行 System 7 的 PowerPC Mac 披萨盒机型。那体验简直糟糕透了，它们经常崩溃或死机。后来我拿了几台安装了 MkLinux，在那之后的几年里，它们成了坚如磐石的劳模，承担了轻量级文件服务、Usenet 代理和防火墙等工作。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提供了MkLinux在实际生产环境中显著提升系统稳定性的有力证据。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49140815" target="_blank" rel="noopener noreferrer">@zdw</a>
+        </div>
+        <p class="comment-text">我的第一台 Linux 桌面机是一台运行 MkLinux 的 PowerMac 8100/80，大概是在 1996 年。刚发布时它不支持多键鼠标，这让 X11 变得很难用（那时中键是很多情况下粘贴文本的唯一方式），而苹果默认只发售单键鼠标，所以当时只支持那一种。作为一个傲慢的高中生，我给罗技发了邮件，想要一个他们的 3 键 ADB 轨迹球，并声称我要为 MkLinux 添加 3 键支持。他们居然回复了并寄给我一个。我设法写出了一些勉强能用的代码并发送了补丁，但我想在那之前已经有人修复了多键鼠标的问题。那时候真是段美好的时光。就多任务处理而言，它是一个巨大的进步，但就 UI 一致性而言，它比经典的 MacOS 倒退了一步。</p>
+        <p class="comment-reason"><span>入选理由</span>评论生动地描述了早期Linux在苹果硬件上的适配困境，以及当时极客社区的互动氛围。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49141801" target="_blank" rel="noopener noreferrer">@Lammy</a>
+        </div>
+        <p class="comment-text">“我们听到了那段开机音乐！&lt;https://www.youtube.com/watch?v=Ui1ygMZWdKE&gt;（这些 Power Mac 发出的不是 Mac 典型的‘当’的一声。）”我非常喜欢这段音乐（我当年的 PowerMac 7100 也是这段），因为它听起来“完全不像《A Hard Day&#x27;s Night》”https://www.youtube.com/watch?v=5b-awuNzko4。文中提到的那台代号为“Zephyr”的机器，其醒目的深红色原型板上印有完整的调试插座、额外的测试点和一个丝印的火车标志。那不仅仅是随便一列火车，那是“加州微风号”（California Zephyr）！</p>
+        <p class="comment-reason"><span>入选理由</span>这位用户补充了关于硬件代号和开机音效的有趣文化背景，增加了内容的丰富度。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49144265" target="_blank" rel="noopener noreferrer">@alsetmusic</a>
+        </div>
+        <p class="comment-text">MkLinux 是我启动过的第一个非 MacOS 系统，是在一台 PowerPC 9500 上。我劝说我妈开车带我去 Borders 书店买一本相关的书。那个年代那家店里根本没有关于 Linux 的书。系统启动到了命令行界面（CLI），我完全不知道该怎么办。我没有第二台电脑来查命令（即便有，在那个拨号上网的年代，我也没有足够的词汇量在一天内查到足够的信息来恢复可用性）。我想我在那天晚上就重新装回了 MacOS 8 或 9。我需要我的电脑能干活！现在的技术真是丰富得让人汗颜，我可以像撒糖果一样到处扔虚拟机。顺便说一句：我还记得第一次让两台电脑互相通信时是多么兴奋。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论真实地反映了早期Linux用户面临的极高技术门槛和信息匮乏的困境。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>回顾苹果90年代的服务器尝试，就像在看一家处于身份危机中的公司。WGS 9150 这种“绿巨人”硬件虽然堆料十足，却被极其不稳定的 System 7 拖了后腿。正如评论区所言，MkLinux 的出现更像是一种“救赎”，它让这些昂贵的硬件摆脱了频繁死机的窘境，变身为真正的生产力工具。这种从图形界面向命令行的“倒退”，反而换来了服务器最核心的价值：稳定性。这段历史也预示了苹果未来的走向——最终他们意识到，只有拥抱 Unix 内核（即后来的 OS X），才能彻底解决软件架构的顽疾。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49140213">
+      <summary class="story-overview">
+        <span class="rank-number">14</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">plug-world.com</span>
+            <span>93 points</span>
+            <span>原始 #26 · 低讨论量降权 +4.2</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://plug-world.com/posts/2026/asrock-bc250-the-budget-steam-machine/" target="_blank"
+              rel="noopener noreferrer">ASRock BC-250: Building the Budget Steam Machine</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49140213" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 36</a>
+          </h2>
+          <p class="summary">ASRock BC-250 是一款基于 AMD 4700S（硬件规格接近 PS5）的廉价挖矿主板，目前正成为 DIY 玩家打造高性价比“Steam 游戏机”的热门选择。通过特定的 Linux 工具和 BIOS 设置，玩家可以解锁被屏蔽的 GPU 计算单元，将性能从默认水平提升至接近 GTX 1660 Ti。该方案仅需约 150 美元即可流畅运行《赛博朋克 2077》和《霍格沃茨之遗》等 3A 大作。然而，这种“矿渣”改造存在明显的局限性，例如硬件层面不支持休眠和挂起功能。此外，由于需要大量手动调试和脚本配置，它更适合热爱折腾的硬核玩家而非普通用户。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这篇文章是一份详尽的 ASRock BC-250 改造指南，旨在将这款原本用于加密货币开采的废弃主板转变为高性能的游戏主机。BC-250 的核心是与 PS5 类似的 AMD APU，作者建议在 BIOS 中手动分配 6GB 显存，以解决 512MB 默认设置下某些游戏贴图模糊的问题。性能压榨的关键在于软件层面：使用 cyan-skillfish-smu 治理器实现 GPU 频率动态调节，并通过脚本尝试“开核”，将 GPU 计算单元（CU）从 24 个解锁至最高 40 个。这种“抽奖”式的解锁能显著提升帧率，但也考验芯片的体质稳定性。</p><p>在硬件配套上，作者分享了 3D 打印机箱方案和散热优化经验，指出单风扇配合合理风道往往比双风扇更高效。虽然性能足以比肩主流中端显卡，但 BC-250 并非完美的家用机替代品。由于其硬件底层缺乏对现代电源管理状态的支持，Linux 下的休眠和待机功能完全失效，用户只能选择关机。此外，随着此类教程的普及，该主板在二手市场的价格已从最初的几十美元飙升至 150 美元左右。玩家在享受极致性价比的同时，必须接受繁琐的命令行调试和潜在的系统崩溃风险。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49141392" target="_blank" rel="noopener noreferrer">@saidinesh5</a>
+        </div>
+        <p class="comment-text">这是一张非常棒的卡，而且表现越来越好。在我的 Steam Deck 电池鼓包、RX580 又太老带不动现代游戏后，我有三个选择：1. 升级新显卡，一张三年前的卡起码要 300 美元；2. 期待买台 Steam Machine，但漫长的排队和 1000 美元的价格让我望而却步；3. 花 150 美元买个 BC-250 先凑合用一两年。我很庆幸选了第三种。我用了旧的 ATX 电源和旧机箱，几乎一切都能正常工作。它的功耗比我之前的游戏电脑低得多，也更安静。虽然偶尔会崩溃一两次，但我正准备升级电源接口来解锁它的全部潜力（40 个计算单元和额外的两个核心）。到目前为止，我已经玩通了《蜘蛛侠 2》和《霍格沃茨之遗》，现在正在玩《007：第一道光》。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了真实的玩家使用体验和性价比对比，证明了该方案在运行 3A 大作时的可行性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49142225" target="_blank" rel="noopener noreferrer">@mk_stjames</a>
+        </div>
+        <p class="comment-text">看来随着如何启动和有效利用这些板子的知识普及开来，它们的价格也水涨船高了。在矿工抛售它们之后（大概是两年前？），我曾在 eBay 上看到过整套机架系统——我记得一个机架里装了 12 块这种板子，共用一个背板——只要 800 美元（甚至更低）。算下来每块 BC-250 只要 66 美元。</p>
+        <p class="comment-reason"><span>入选理由</span>揭示了该硬件的市场价格演变，反映出 DIY 社区的关注度如何推高了二手硬件成本。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49142686" target="_blank" rel="noopener noreferrer">@ThePowerOfFuet</a>
+        </div>
+        <p class="comment-text">这是我见过的为购买正版 Steam Machine 做的最好的广告。</p>
+        <p class="comment-reason"><span>入选理由</span>以幽默的方式指出了 DIY 方案的复杂程度可能会让普通用户望而生畏，从而转向成品机。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49140894" target="_blank" rel="noopener noreferrer">@plug_world</a>
+        </div>
+        <p class="comment-text">如果你买对了适配器，我见过有人成功搞定了 HDMI CEC。然而，像睡眠/休眠这类提升生活质量的功能在这个系统上完全无法工作。我还见过有人用 ESP32 通过蓝牙控制器来开启系统，这主意挺酷的，尤其是如果你能把它和 CEC 结合起来的话。</p>
+        <p class="comment-reason"><span>入选理由</span>作者亲自补充了硬件功能的缺失细节（如休眠功能）以及社区的奇思妙想补救方案。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>将“矿渣”硬件通过黑客手段改造为高性能游戏机，体现了 DIY 社区最纯粹的浪漫：变废为宝与性能压榨。BC-250 的魅力在于它让普通人能以极低成本接触到类似次世代主机的硬件底层，但正如评论所言，这种折腾过程本身就是一种“门槛”。对于追求开箱即用的用户，这繁琐的脚本调试简直是正版产品的“反向广告”；但对于享受从命令行中“偷”出性能的玩家来说，这种成就感是任何成品机都无法提供的。需要注意的是，随着价格上涨和休眠功能的缺失，它的实用性正面临挑战。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49137060">
+      <summary class="story-overview">
+        <span class="rank-number">15</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">leodemoura.github.io</span>
+            <span>158 points</span>
+            <span>原始 #32 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://leodemoura.github.io/blog/2026-8-1-postmortem-for-kernel-soundness-bug-14576/" target="_blank"
+              rel="noopener noreferrer">Postmortem for Kernel Soundness Bug #14576</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49137060" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 59</a>
+          </h2>
+          <p class="summary">Lean 4 形式化证明系统的核心（Kernel）近期修复了一个严重的可靠性漏洞，该漏洞曾允许用户构造出错误的证明，甚至能“证明”错误的命题。漏洞源于内核在处理嵌套归纳类型时，未能对某些不直接出现在构造函数中的参数进行类型检查。一名研究员利用 AI 辅助构造了一个伪造的“考拉兹猜想”反证，成功绕过了 Lean 内核的验证。令人惊讶的是，另一个独立的第三方校验器 nanoda 当时也存在一个不相关的漏洞，导致两者同时失效。目前开发团队已快速修复漏洞，并开始利用 AI 安全模型对内核进行更全面的审计。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这次 Lean 4 暴露的可靠性（Soundness）漏洞编号为 #14576，本质上是一个实现层面的疏忽。当内核处理嵌套归纳类型时，如果某些参数是“幻影参数”（即未在构造函数字段中提及），内核在生成辅助类型时会丢失这些参数，从而逃避了类型检查。研究员 Ramana Kumar 利用 AI 辅助编写了一个看似无误的证明，实际上却利用了这个漏洞来证明“False”，甚至声称推翻了考拉兹猜想。虽然 Lean 的前端（Elaborator）通常会拦截此类错误，但攻击者可以通过元编程或直接修改二进制文件绕过前端，直接将恶意代码交给内核。</p><p>更有趣的是，这次攻击形成了一次“完美风暴”。原本为了双重保险，社区通常会使用 Rust 编写的独立校验器 nanoda 进行二次检查，但 nanoda 当时恰好也存在一个关于投影节点类型名校验的漏洞。这两个互不相关的 Bug 叠加，使得伪造证明在短时间内通过了双重验证。Lean 团队在收到报告后一小时内就发布了补丁，并随后与 OpenAI 合作，利用专门针对网络安全的 AI 模型对内核代码进行了深度扫描，发现了并修复了另外几个潜在的编程错误。这次事件证明了即使是严谨的数学证明系统，其实现代码也需要不断的审计和多重独立实现的交叉验证。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49137446" target="_blank" rel="noopener noreferrer">@gr_norm</a>
+        </div>
+        <p class="comment-text">&gt; 实际后果：使用独立内核进行检查仍然有效，因为这需要两个不同实现中同时存在两个不同的漏洞，但依赖它的用户需要保持两者的版本都是最新的。
+
+这种事情并不太令人惊讶，毕竟像 Rust 这样简单得多的类型检查器偶尔也会出现可靠性问题。我认为非常重要的一点是，不要把“经过验证的结果”看作是绝对且不可逾越的保证，而应看作是一种极其强大的保证，其中：(1) 可靠性问题的暴露面已被刻意最小化；(2) 任何发现的可靠性问题都会被极其严肃地对待并迅速修复。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论理性地评价了形式化验证系统的安全性边界，指出“验证”并非绝对真理，而是风险最小化的过程。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49140177" target="_blank" rel="noopener noreferrer">@twotwotwo</a>
+        </div>
+        <p class="comment-text">这个帖子提供了一些背景。一位证明系统研究员发现了一些漏洞，并以一种有趣的方式展示了它们：https://leanprover.zulipchat.com/#narrow/channel/270676-lean...
+一个有数学倾向的评审员（或 LLM）可以很快识别出这是一个漏洞利用（实际上是两个利用；它的构造方式也触发了另一个证明检查器的 Bug）。
+这篇文章提到了这一点，但一个自然的后续行动——除了修复特定的 Bug 之外——应该是让一些面向安全的模型去尝试在 Lean 中证明“False”，或者审查代码中潜在的不安全步骤、缺失的检查，甚至是进行有用的“加固”。这正在发生，并且已经因此产生了一些 Bug 修复。</p>
+        <p class="comment-reason"><span>入选理由</span>评论揭示了 AI 在发现和修复此类深层逻辑漏洞中的双重作用，与文章内容高度互补。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49137726" target="_blank" rel="noopener noreferrer">@michaelfm1211</a>
+        </div>
+        <p class="comment-text">这让我想起了这个讨论：https://mathoverflow.net/questions/513742/are-we-stuck-with-...
+我知道这是一个实现 Bug 而非元理论 Bug，但我几乎认为“可靠性 Bug 有可能存在”这一事实本身就是这种意识形态的一个缺陷，或者至少是一个严重的缺点。像这样的事情在 Metamath 中根本不会发生。在 AI 自动生成形式化证明的未来，为什么不让 AI 使用像 Metamath 这样更难使用但天衣无缝的系统呢？</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个有力的竞争方案对比，质疑了 Lean 这种复杂系统在面对 AI 自动生成证明时的底层安全性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49137685" target="_blank" rel="noopener noreferrer">@aseipp</a>
+        </div>
+        <p class="comment-text">相关的内核代码并不是由 Claude（AI）编写的。根据 git blame 的记录，inductive.cpp 中 95% 的代码都有 5 年以上的历史，在过去 12 个月中只有大约 3 个片段（总计不到 30 行）有变动，其中就包括这次修复。Lean 内核总体上变化不大，例如过去两年的活动非常稀疏，变动相对克制（尤其是与项目其他部分的进度相比）。
+除此之外，这看起来就是一个相当简单的疏忽。Coq 和 Isabelle 也曾出现过“证明 False”的 Bug，这并不是世界末日。这种事情总会发生的。</p>
+        <p class="comment-reason"><span>入选理由</span>通过技术细节澄清了漏洞并非由现代 AI 引入，而是长期存在的代码疏忽，提供了重要的历史视角。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这次 Lean 4 内核漏洞事件是一场关于“谁来监督监督者”的精彩博弈。最令人着迷的细节在于，AI 在这场戏中扮演了双面间谍：它既是辅助研究员构造复杂漏洞利用的“帮凶”，又是帮助开发团队快速审计内核、找出更多潜在隐患的“安全专家”。正如评论 [49140177] 所言，利用 AI 进行安全加固已成为必然。此外，Lean 内核与第三方校验器 nanoda 同时失效的巧合提醒我们，独立验证的价值在于实现的差异性，而当 AI 能够同时理解并针对多种实现寻找漏洞时，传统的“多重校验”防线也面临着新的挑战。这并非形式化验证的失败，而是其走向成熟必经的“压力测试”。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49140405">
+      <summary class="story-overview">
+        <span class="rank-number">16</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">insider.btcpp.dev</span>
+            <span>73 points</span>
+            <span>原始 #28 · 低讨论量降权 +4.2</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://insider.btcpp.dev/p/when-randombytes-runs-but-doesnt" target="_blank"
+              rel="noopener noreferrer">When random.bytes() runs but doesn&#x27;t work</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49140405" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 36</a>
+          </h2>
+          <p class="summary">Coldcard 硬件钱包最近被曝出一个严重的随机数生成漏洞，导致大量比特币面临被盗风险。漏洞源于一次包含 1500 多行代码但注释仅为 “runs” 的提交，开发者在处理编译器错误时错误地禁用了硬件随机数生成器（TRNG）。由于配置错误，系统在生成钱包私钥时没有使用安全的硬件熵源，而是退回到了一个极易被预测的软件伪随机数生成器。这种失效在表面上难以察觉，因为生成的随机数看起来是正常的，但其安全性在密码学上几乎为零。这一事件凸显了在安全敏感项目中，缺乏代码审查和对底层架构理解不足可能导致的灾难性后果。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>该漏洞的技术核心在于开发者试图在 MicroPython 框架下替换硬件随机数生成器的实现，但遇到了 C 语言中的符号重复定义错误。为了让代码能编译通过，开发者将 MICROPY_HW_ENABLE_RNG 设为 0，这虽然消除了报错，却在全局范围内关闭了硬件 TRNG。结果，Python 层调用的 random.bytes() 函数在底层静默退回到了名为 Yasmarang 的弱软件 PRNG。这种“只要能跑就行”的心态导致了严重的逻辑漏洞，且由于随机数看起来是“随机”的，常规测试极难发现此类故障。</p><p>文章严厉批评了 Coldcard 极差的工程实践：关键的安全修改被埋没在数千行的巨型提交中，且提交说明极其敷衍（如 “runs” 或 “x”）。MicroPython 的抽象层可能让开发者误以为不需要深入理解底层硬件，从而在处理复杂的熵源逻辑时产生了致命误判。专家指出，加密软件绝不应在安全熵源失效时自动退回到不安全的备选方案。目前受影响的资金估计已达数千万甚至上亿美元，这再次提醒开发者在处理金融资产时必须保持极高的敬畏心和严谨的规范。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49141886" target="_blank" rel="noopener noreferrer">@nullc</a>
+        </div>
+        <p class="comment-text">这篇文章写得不是很好，遗漏或误解了导致缺陷的编程错误。我发表评论是因为我认为理解这个问题很重要。文章让你觉得这只是为了编译而对标志位做的一个微小改动，但实际上相关的提交是对整个 RNG 基础设施进行的 1533 行代码添加。根本原因是混淆了“值测试”和“定义测试”。Coldcard 试图替换硬件 TRNG 上的 MicroPython 包装器，显然是为了提供更激进的故障/错误处理。MicroPython 的硬件随机数生成器（HWRNG）代码受 #if 检查控制，而替换的 HWRNG 代码受 ifndef 控制。因此，“#define MICROPY_HW_ENABLE_RNG (0)”停用了 MicroPython 的实现，但未能激活内部实现（因为内部实现是 #ifndef MICROPY_HW_ENABLE_RNG ... 由于该宏已被定义，所以不会触发）。这很容易被忽略，因为相关用法不仅在不同的文件中，甚至在不同的仓库里。还有一个更抽象的观点：在加密软件中，缺乏安全随机源（STM32 TRNG）绝不应该退回到不安全的源（一个输入可能只有 20 位不确定性的平凡 PRNG）。但包含退回逻辑的代码是 MicroPython，它不是 Coldcard 创作者编写的，推测也不是为了加密应用设计的……在后来的代码中（针对 MK4+ 设备），该问题在未被纠正的情况下被进一步掩盖了，方法是异或了另一个由另一个 TRNG 的 32 位种子驱动的不安全 PRNG……它本身就像是另一个不安全的退路。RNG 故障很难检测，因为真实的随机性和 PRNG 通过任何简单的输出测试都无法区分。据我了解，Coldcard 开发者对这些设备生成的随机性进行了广泛测试——他们很可能只是在测试那个 PRNG。这有点像“比特的颜色”问题。如果没这些退路，TRNG 使用失败会立即被开发者发现（例如每次尝试都生成相同的种子），并且可以通过故障注入（将 hwrng 设为 NOP 并验证测试是否失败）来验证审查结果。</p>
+        <p class="comment-reason"><span>入选理由</span>前比特币核心开发者 Gregory Maxwell (nullc) 提供了极其深入的技术分析，指出了文章中未提及的宏定义逻辑错误及更深层的架构问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49142449" target="_blank" rel="noopener noreferrer">@nonfamous</a>
+        </div>
+        <p class="comment-text">引用关于此问题的 Twitter 公告：
+&gt;&gt;&gt; 对每一位开发者：我们相信这是 AI 新范式下的残酷现实。AI 辅助的代码审查现在发现潜在漏洞的速度已经超过了行业内最资深的专家。如果你的固件是开源的或曾经公开过，请假设攻击者和防御者都已经读过它了。
+这有点把开源软件的“群众之眼”原则给颠覆了，不是吗？</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个引人深思的观点：AI 时代改变了漏洞挖掘的博弈规则，开源代码的安全性面临新挑战。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49143727" target="_blank" rel="noopener noreferrer">@koolba</a>
+        </div>
+        <p class="comment-text">“作为开发者，一个好的目标是提高提交信息与代码变动的比例。更改的代码行数越多，解释原因的注释就应该越多。”
+不！这种笼统的说法正是导致 PRN 中出现 40 页没人看的 AI 废话注释的原因。注释应该是简洁且有意义的。它们应该记录令人惊讶的行为或选择。注释越少，每一条就越有意义，因为你的时间和精力也是有限的。</p>
+        <p class="comment-reason"><span>入选理由</span>针对文章中关于“提交信息比例”的观点提出了合理的反驳，强调了注释质量而非数量的重要性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这起 Coldcard 漏洞事件是典型的“静默失效”灾难。在安全工程中，最危险的不是程序崩溃，而是程序在完全丧失安全性的情况下依然“跑得通”（runs）。正如评论区指出的，加密软件在安全熵源失效时应当直接“报错停机”，而不是自作聪明地退回到一个不安全的随机数生成器。开发者在面对编译器报错时，为了“让它跑起来”而随意修改宏定义的行为，在金融级安全产品中是不可原谅的。此外，这也给所有依赖抽象层（如 MicroPython）的嵌入式开发者敲响了警钟：抽象层可以简化开发，但不能免除你理解底层硬件逻辑的责任。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49142130">
+      <summary class="story-overview">
+        <span class="rank-number">17</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">cyberscript.dev</span>
+            <span>40 points</span>
+            <span>原始 #30 · 低讨论量降权 +2.7</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://cyberscript.dev" target="_blank"
+              rel="noopener noreferrer">Cyberscript</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49142130" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 41</a>
+          </h2>
+          <p class="summary">Cyber 是一种旨在提供高性能和并发能力的脚本语言，支持动态与静态混合类型。它通过纤程（Fibers）实现轻量级并发，并配备了快速的虚拟机和 JIT 编译器。该语言设计为可嵌入式，适用于游戏引擎和桌面应用，并提供 FFI 接口与 C 库交互。目前该项目提供了 CLI 工具和基础库，但在生态系统建设和更新频率上仍面临挑战。其核心目标是在保持脚本编写愉悦感的同时，解决传统脚本语言的性能瓶颈。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Cyber 定位为一种兼顾开发效率与运行性能的现代脚本语言。它融合了动态类型的灵活性和可选静态类型的严谨性，语法风格简洁，易于从 Python 或 JavaScript 迁移。其技术核心在于利用纤程（Fibers）实现的并发机制，以及针对性能深度优化的 VM 和 JIT 编译器，在递归计算等基准测试中表现优异。Cyber 旨在成为 Lua 或 Python 在嵌入式场景下的高性能替代方案，特别强调了内存安全和跨平台支持。</p><p>在集成与扩展方面，Cyber 提供了 libcyber 库，允许开发者将其轻松嵌入到 C/C++ 编写的应用程序或游戏引擎中。它还拥有强大的 FFI（外部函数接口）API，能够直接调用符合 C ABI 的库，并附带了能从 C 头文件自动生成绑定的工具。然而，社区讨论指出该项目目前似乎处于维护停滞状态，且默认使用 UTF-8 字符串在处理特定网络协议（如 HTTP 头部）时可能存在安全隐患。此外，缺乏成熟的包管理系统和标准库生态，也是此类新兴语言在工业界落地的主要障碍。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49143308" target="_blank" rel="noopener noreferrer">@SchizoDuckie</a>
+        </div>
+        <p class="comment-text">这是我能想象到的新语言中最愚蠢的名字了。在落地页上还把它缩写为“cyber”……开发者什么时候才能明白，能够在公开互联网上搜索一个术语而不被普通语言污染是非常重要的。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了新兴编程语言在命名和 SEO 方面经常被忽视但至关重要的实际问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49144019" target="_blank" rel="noopener noreferrer">@ericpauley</a>
+        </div>
+        <p class="comment-text">我认为（除了业余爱好）新编程语言的开发目前基本上已经枯竭了。主要的用例已经被填补，而且现在的趋势比以往任何时候都更倾向于使用拥有庞大生态系统的、经过实战检验的语言。此外，人类编写或阅读的代码越来越少，因此对于那些资助新语言开发的人来说，语言本身的工程学设计（ergonomics）变得不再那么重要。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个关于编程语言发展现状的宏观且具有争议性的观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49144298" target="_blank" rel="noopener noreferrer">@ModernMech</a>
+        </div>
+        <p class="comment-text">主要的用例并没有被填补，填补的只是大型企业的用例。这并不意味着现在没有主要的空白需要填补，也不意味着当前的用例在未来不会演变。……我不认为因为智能体（AI agents）将阅读/编写代码，语言的工程学设计就不重要了。智能体也有资源限制，比如 Token 预算，它们也是利用人类知识和惯例训练出来的。工程学设计对智能体和对人类同样适用：冗长的语言需要更多的 Token 来编写，可验证的语言在智能体循环中更有用，具有实时编译器内省和解释器的语言可以给智能体提供快速反馈。我不明白为什么 30 年前在一个互联网几乎不存在的世界里构建的语言，会意外地成为 2026 年 AI 智能体的理想选择。</p>
+        <p class="comment-reason"><span>入选理由</span>针对“编程语言已死”论调提供了深刻的反驳，特别是在 AI 时代背景下的新需求。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49143291" target="_blank" rel="noopener noreferrer">@tosti</a>
+        </div>
+        <p class="comment-text">我对这类新语言的不满在于，字符串总是 UTF-8 编码，这使得正确解析 HTTP 头部变得不必要地困难。这在过去曾导致过安全漏洞。</p>
+        <p class="comment-reason"><span>入选理由</span>从底层实现和安全性的角度提出了一个非常具体的技术痛点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49143790" target="_blank" rel="noopener noreferrer">@philipwhiuk</a>
+        </div>
+        <p class="comment-text">太棒了，你发明了一个编译器和一些语法。但现有的库有哪些？包管理系统是什么？它如何与现有代码互操作？是否有 JSON 解析器、XML 解析器？加密算法？数据库驱动？从头开始发明语言的人继承了重建整个软件生态系统的技术债。看起来他们只是在源文件顶部从互联网抓取：`use rl &#x27;https://mycdn.com/raylib&#x27;`。祝这种方式的安全性好运吧。至少 JavaScript 还懂得把这些都放在一个配置文件里。</p>
+        <p class="comment-reason"><span>入选理由</span>直击新兴语言在生态系统、安全性和实用性方面的软肋。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Cyber 展现了一个高性能嵌入式脚本语言的理想蓝图，但在编程语言高度饱和的今天，仅有速度是不够的。正如评论区所激辩的，我们正处于一个转折点：一方面，传统语言生态极其稳固，使得新语言难以突围；另一方面，AI 智能体的兴起可能对语言的“工程学设计”提出截然不同的要求，比如 Token 效率和更强的可验证性。Cyber 尝试在 Lua 的生态位上进行现代化改良，但其面临的真正挑战并非 VM 的执行速度，而是如何在一个“人类编写代码比例下降”的时代，证明自己比那些拥有数百万库支持的老牌语言更有存在价值。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49143096">
+      <summary class="story-overview">
+        <span class="rank-number">18</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">blog.rust-lang.org</span>
+            <span>17 points</span>
+            <span>原始 #20 · 低讨论量降权 +13.8</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://blog.rust-lang.org/inside-rust/2026/07/31/all-hands-2026-retrospective/" target="_blank"
+              rel="noopener noreferrer">Rust All Hands 2026 Retrospective</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49143096" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 4</a>
+          </h2>
+          <p class="summary">2026年5月，166名Rust开发者在荷兰乌得勒支举行了Rust All Hands会议，共同探讨该语言的未来走向。会议通过73场分论坛解决了多项技术阻塞，包括联合体（union）的操作语义和跨crate分析的路径。重点议题涵盖了const generics、SIMD以及与C++、Linux内核和CPython的互操作性。除了技术演进，会议还深入讨论了项目治理、资金分配及RFC流程的改进。尽管会议不直接做出最终决策，但面对面的交流极大地促进了社区共识。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>2026年的Rust All Hands会议在荷兰乌得勒支成功举办，共有166位项目成员和嘉宾参与。这次会议是Rust社区在中断六年后的第二次线下大聚会，旨在通过高强度的面对面协作，解决那些在远程沟通中难以推进的复杂问题。会议期间，开发者们针对编译器内部机制、内存分配器以及安全关键型Rust等领域进行了深入探讨。特别是在互操作性方面，团队研究了如何通过结合LLVM IR和Rust MIR来实现更安全的Rust与C++交互，并致力于扫清Rust进入Linux内核和CPython的最后障碍。</p><p>在治理层面，会议讨论了如何改进RFC流程，甚至考虑借鉴TC39的某些经验。与会者对会议的反馈极佳，平均评分高达9.5分，许多人强调了“走廊交流”带来的意外收获，例如在非正式聊天中解决了cargo-semver-checks的边缘案例。此外，会议还明确了2027年将继续在乌得勒支举办。这种线下聚会不仅加速了技术决策，更重要的是增强了贡献者之间的情感纽带，为Rust的长期健康发展奠定了基础。通过这种方式，Rust项目在保持严谨性的同时，也在不断优化其开发流程和生态协作模式。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49145223" target="_blank" rel="noopener noreferrer">@apitman</a>
+        </div>
+        <p class="comment-text">我能预见到 Rust 成为编写代码智能体（coding agents）的语言，因为它内置了如此稳固的安全护栏。但我也能预见到，随着大语言模型（LLM）变得越来越快，编译时间会成为迭代速度上越来越明显的瓶颈，从而导致 Rust 逐渐淡出大众视野。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论将 Rust 的未来与 AI 智能体趋势联系起来，提出了安全护栏与编译速度之间的权衡。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49145245" target="_blank" rel="noopener noreferrer">@Aurornis</a>
+        </div>
+        <p class="comment-text">&gt; 我也能预见到，随着大语言模型（LLM）变得越来越快，编译时间会成为迭代速度上越来越明显的瓶颈，从而导致 Rust 逐渐淡出大众视野。
+我参与过一些非常大的 Rust 项目。增量编译时间带来的瓶颈，与 LLM 的一次交互（turn）相比，根本不在同一个数量级上。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从实际工程经验出发，反驳了编译时间是主要瓶颈的观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49145274" target="_blank" rel="noopener noreferrer">@apitman</a>
+        </div>
+        <p class="comment-text">目前完全同意。
+但你试过 Cerebras、Groq、Taalas 之类的硬件吗？那是一个完全不同的范式。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了专用 AI 硬件可能带来的开发范式变革，进一步深化了关于迭代速度的讨论。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>2026 年的这场回顾展示了 Rust 社区在处理底层复杂性（如 C++ 互操作性和内核集成）上的深厚功底。虽然有人担心在 AI 辅助开发的时代，Rust 较慢的编译速度会拖累迭代效率，但社区内部对此有不同看法。事实上，Rust 严苛的编译器检查在自动化编程中可能是一道至关重要的“安全防线”，而增量编译的优化也让实际开发体验并未如外界传闻般糟糕。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49139383">
+      <summary class="story-overview">
+        <span class="rank-number">19</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">kyoto-u.ac.jp</span>
+            <span>96 points</span>
+            <span>原始 #31 · 低讨论量降权 +3.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.kyoto-u.ac.jp/en/research-news/2026-07-28" target="_blank"
+              rel="noopener noreferrer">Unraveling the mysteries of habit formation</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49139383" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 38</a>
+          </h2>
+          <p class="summary">京都大学的研究人员揭示了习惯形成的神经机制，发现这并非简单的行为重复，而是涉及两个不同的脑回路。研究团队通过一种新型的小鼠训练法，成功观察到决策从“目标导向”向“自动化习惯”转变的过程。第一个回路负责判定行为是否演变成习惯，其神经连接在转变过程中会逐渐减弱。第二个回路则控制习惯执行的频率和强度，这解释了为什么不同个体在坚持同一习惯时存在毅力差异。这项发现挑战了“习惯只是原样复制行为”的传统观点，强调了执行强度的个体差异。该研究为治疗强迫症等疾病以及帮助人们建立良好习惯提供了新的科学依据。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>习惯形成通常被视为从刻意决策到自动反应的转变，但其背后的神经细节一直难以捉摸。京都大学的研究人员通过一种创新的小鼠“两阶段训练法”，解决了习惯形成周期长、难以追踪神经变化的难题。他们发现，习惯的“养成”与“执行强度”实际上是由两套完全独立的神经回路控制的。第一条回路连接前扣带皮层（ACC）和后扣带皮层（RSC），它像是一个开关，负责判定某种行为是否进入“习惯模式”。在习惯形成的过程中，这条路径的连接强度会显著下降。</p><p>更有趣的是第二条回路，它连接外侧眶额皮层（lOFC）和中央纹状体（CS）。这条回路解释了为什么在习惯养成后，有些个体能高频坚持，而有些则表现平平。研究显示，即便习惯已经形成，执行频率也会因个体神经反应的强弱而异。通过人工干预这些路径，研究者甚至能有选择地促进习惯养成或改变其执行水平。这一发现意味着，我们未来或许能针对性地增强有益习惯的执行力，或削弱强迫症等病理性习惯的控制力。接下来，研究团队计划深入探讨驱动这些个体差异的具体因素。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49139521" target="_blank" rel="noopener noreferrer">@davidmyr</a>
+        </div>
+        <p class="comment-text">关于习惯，还有一个让我感到困惑的事实：一旦我形成了一套常规（比如早上6点去健身房），它就会变得非常容易。但只要我一旦中断了它，想要再找回那个状态就会变得极其困难。</p>
+        <p class="comment-reason"><span>入选理由</span>这条评论反映了习惯在维持和重启阶段的巨大体感差异，是许多人的共同痛点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49140295" target="_blank" rel="noopener noreferrer">@justonenote</a>
+        </div>
+        <p class="comment-text">我同意大部分观点，但最后一句（关于坏习惯和好习惯一样容易打破）显然是不正确的。吸食海洛因是一种习惯，去健身房也是一种习惯，显然无论是有意还是无意，其中一个都要比另一个更容易停止。我认为养成或改掉习惯的难易程度，因具体的习惯和个人而异，差异极大。我最喜欢的一句话是：“起初人造就习惯，后来习惯造就人”，这句话在好坏两方面都适用。我真心认为学校应该更明确地教授这些内容，而不是只在体育和军事领域提及。</p>
+        <p class="comment-reason"><span>入选理由</span>评论深入探讨了习惯与成瘾的区别，以及习惯对人格塑造的长期影响。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49142065" target="_blank" rel="noopener noreferrer">@teiferer</a>
+        </div>
+        <p class="comment-text">难道非得这样吗？难道“观测到新黑洞”必须强制加上“（通过射电望远镜）”？“智能体AI很棒”必须加上“（根据我的观点）”？我们对人类生理学的许多了解都来自对动物的研究。小鼠不仅仅是某种随机的动物物种，它们是人类的模式生物，这意味着它们在许多方面与人类足够接近，从而使研究见解具有可迁移性。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论有力地回应了对动物实验有效性的质疑，解释了模式生物在科学研究中的重要性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49140245" target="_blank" rel="noopener noreferrer">@thephyber</a>
+        </div>
+        <p class="comment-text">你所描述的情况与“毒性积极”之间只有一线之隔。不沉溺于负面想法固然重要（你建议的替代行为很好），但同样重要的是，不要把人类自然的情感当作是不合理或虚假的东西而压抑起来。做一个思想实验：如果让你感到绝望的不是你自己的行为，而是你配偶的行为让你感到恼火或悲伤。你认为强颜欢笑并忽视潜在问题更好，还是花几分钟感受自己的情绪，向伴侣描述原因，然后礼貌地建议一个替代行为更好？前者会积累怨恨，并为日后不可避免的爆发埋下伏笔；后者则能化解情绪，潜在地减轻冒犯行为，且不背叛你真实的情感表达。</p>
+        <p class="comment-reason"><span>入选理由</span>评论提醒人们在培养“积极心态”这一心理习惯时，要注意避免压抑真实情感的副作用。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>京都大学的这项研究最扎心的地方在于，它用神经科学证明了：养成习惯和能坚持下去真的是两码事。很多人苦恼于“道理都懂，习惯也养成了，但就是没法像别人那样天天坚持”，这可能不是意志力的问题，而是大脑中负责“执行强度”的那个回路（lOFC-CS）天生或后天调校得不够敏感。正如评论区讨论的，习惯一旦中断就极难重启，这或许是因为重启不仅需要再次触发“养成开关”，还得重新调高那个“执行音量”。此外，我们也应警惕将所有重复行为简单归类为习惯，正如网友所言，生理性成瘾与行为习惯在脑科学层面有着本质的复杂性差异。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49143304">
+      <summary class="story-overview">
+        <span class="rank-number">20</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">github.com</span>
+            <span>9 points</span>
+            <span>原始 #21 · 低讨论量降权 +13.8</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://github.com/nyvexis1/temporize" target="_blank"
+              rel="noopener noreferrer">I made a Promise-aware debounce and throttle library for TypeScript</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49143304" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 4</a>
+          </h2>
+          <p class="summary">Temporize 是一个专为 TypeScript 开发的轻量级定时与并发控制库，旨在解决传统工具在异步环境下的局限。与 Lodash 等库不同，它的防抖（debounce）和节流（throttle）函数会为每次调用返回一个真实的 Promise，从而直接获取异步执行结果。该库支持多种高级功能，包括请求批处理、带指数退避的重试机制、并发频率限制以及针对 React 和 Vue 的原生适配器。它特别强化了对异步重叠的处理，允许开发者在多个异步任务冲突时选择排队、丢弃或取消。库本身无运行时依赖，且每个核心模块体积均控制在 1kB 以内，非常适合追求极致性能的现代 Web 应用。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Temporize 填补了 JavaScript 异步编程中的一个常见痛点：传统的防抖和节流工具（如 Lodash）通常只返回上一次的同步结果或 undefined，这使得在现代 async/await 流程中集成它们变得非常别扭。Temporize 通过让每一次调度调用都返回一个代表该次执行结果的 Promise，实现了完整的类型推断和错误传播。它引入了 `debounceAsync`，提供了“排队”、“丢弃”和“取消前一个”三种策略来处理并发的异步任务，并能通过 AbortSignal 实现协作式取消。这种设计让开发者能够精确控制异步逻辑在时间轴上的重叠行为。</p><p>除了基础的定时功能，该库还涵盖了从 requestAnimationFrame 节流到 requestIdleCallback 调度的全套工具。对于高性能场景，它提供了参数批处理（batch）功能，能将短时间内的多次调用合并为一次 API 请求，并为每个原始调用者分发结果。此外，它还内置了并发限制器（concurrencyLimit）和支持随机抖动的指数退避重试机制。Temporize 采用 ESM 和 CommonJS 双重格式，具有极高的树摇（tree-shaking）效率。虽然它提供了 React 和 Vue 的 Hook 适配器，但这些都是可选的对等依赖，确保了核心库的零依赖特性和极小的体积占用。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>2 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49145015" target="_blank" rel="noopener noreferrer">@game_the0ry</a>
+        </div>
+        <p class="comment-text">有没有人注意到“防抖”（debounce）是一个非常流行的前端面试题？</p>
+        <p class="comment-reason"><span>入选理由</span>这条评论指出了该工具库所解决的核心问题在前端开发领域具有极高的普遍性和代表性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49144910" target="_blank" rel="noopener noreferrer">@mpalmer</a>
+        </div>
+        <p class="comment-text">这个 README 写得像 AI 生成的废话（slop），所以我真的不在乎。</p>
+        <p class="comment-reason"><span>入选理由</span>反映了 Hacker News 社区对文档质量以及疑似 AI 生成内容的敏感度和批判性态度。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>在现代前端开发中，我们几乎所有的副作用都是异步的，但我们沿用多年的 `lodash.debounce` 却还停留在同步回调的时代。Temporize 的出现正是为了让防抖和节流这些经典模式能够“原生”地支持 Promise。它最令人称赞的地方在于对异步重叠（overlap）的处理，这在处理搜索建议或频繁保存等场景时，能有效避免竞态条件。虽然有用户质疑其文档质量，但从技术实现上看，它对类型推断和 AbortSignal 的深度集成，确实比老牌工具库更符合现代 TypeScript 的开发直觉。</p>
+        </div>
+      </div>
+    </details>
+    </section>
+    <footer class="footer">
+      <p>新闻只按 HN 原始名次和讨论度排序后取前 20，不做主题挑选。评论来自有界采样，
+        只是观点，不作为新闻事实来源。</p>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const themeButtons = [
+        ...document.querySelectorAll(".theme-button[data-theme-choice]")
+      ];
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      const applyThemeChoice = (requestedChoice, persist = true) => {
+        const choice = ["auto", "day", "night"].includes(requestedChoice)
+          ? requestedChoice
+          : "auto";
+        const theme = choice === "auto" ? themeForLocalTime() : choice;
+        document.documentElement.dataset.themeChoice = choice;
+        document.documentElement.dataset.theme = theme;
+        themeButtons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.themeChoice === choice)
+          );
+        });
+        if (persist) {
+          try {
+            localStorage.setItem("hnDigestThemeChoice", choice);
+          } catch (_) {
+            // The switch still works when report sandboxing blocks storage.
+          }
+        }
+      };
+      const refreshAutomaticTheme = () => {
+        if (document.documentElement.dataset.themeChoice === "auto") {
+          applyThemeChoice("auto", false);
+        }
+      };
+      applyThemeChoice(document.documentElement.dataset.themeChoice, false);
+      themeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyThemeChoice(button.dataset.themeChoice);
+        });
+      });
+      window.setInterval(refreshAutomaticTheme, 60 * 1000);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) refreshAutomaticTheme();
+      });
+
+      const list = document.querySelector(".story-list");
+      const controls = document.querySelector(".view-switch");
+      const buttons = [...document.querySelectorAll(".view-button")];
+      const status = document.querySelector(".view-status");
+      const total = list ? list.children.length : 0;
+      if (!list || !controls || total <= 10) {
+        if (controls) controls.hidden = true;
+        return;
+      }
+
+      const visibleCountStorageKey = "hnDigestVisibleCountV3";
+      const applyVisibleCount = (requestedCount, persist = true) => {
+        const count = requestedCount === 20 ? 20 : 10;
+        const shown = Math.min(count, total);
+        list.dataset.visibleCount = String(count);
+        buttons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(Number(button.dataset.count) === count)
+          );
+        });
+        status.textContent = `当前显示前 ${shown}`;
+        if (persist) {
+          try {
+            localStorage.setItem(visibleCountStorageKey, String(count));
+          } catch (_) {
+            // The switch still works when local privacy settings block storage.
+          }
+        }
+      };
+
+      let initialCount = 20;
+      try {
+        const storedCount = Number(localStorage.getItem(visibleCountStorageKey));
+        if ([10, 20].includes(storedCount)) initialCount = storedCount;
+      } catch (_) {
+        // Keep the all-20 default.
+      }
+      applyVisibleCount(initialCount, false);
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyVisibleCount(Number(button.dataset.count));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
