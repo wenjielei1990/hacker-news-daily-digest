@@ -19,6 +19,17 @@ python3 scripts/publish.py
 python3 scripts/publish.py --push
 ```
 
+只发布一份已经生成的不可变快照：
+
+```bash
+python3 scripts/publish.py \
+  --timestamp 2026-08-02T08-01-54-0700 \
+  --push
+```
+
+指定时间戳时，脚本只复制该报告；归档首页会根据 `public/` 中已经发布
+的快照重新生成，因此不会暴露其他尚未发布的本地报告。
+
 脚本默认读取：
 
 ```text

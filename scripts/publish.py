@@ -14,10 +14,12 @@ import html
 import re
 import subprocess
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 
-
-TIMESTAMP_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}Z$")
+TIMESTAMP_RE = re.compile(
+    r"^\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}(?:Z|[+-]\d{4})$"
+)
 TITLE_RE = re.compile(r"<title>(.*?)</title>", re.IGNORECASE | re.DOTALL)
 UPDATED_RE = re.compile(r"<span>更新于\s+(.*?)</span>", re.IGNORECASE | re.DOTALL)
 
@@ -35,6 +37,14 @@ def _text_match(pattern: re.Pattern[str], document: str, fallback: str) -> str:
     if not match:
         return fallback
     return html.unescape(re.sub(r"\s+", " ", match.group(1)).strip())
+
+
+def _timestamp_sort_key(value: str) -> datetime:
+    """Order legacy UTC and new local-offset snapshot names by instant."""
+    if value.endswith("Z"):
+        parsed = datetime.strptime(value, "%Y-%m-%dT%H-%M-%SZ")
+        return parsed.replace(tzinfo=timezone.utc)
+    return datetime.strptime(value, "%Y-%m-%dT%H-%M-%S%z").astimezone(timezone.utc)
 
 
 def discover_reports(source_dir: Path) -> list[Report]:
@@ -58,7 +68,23 @@ def discover_reports(source_dir: Path) -> list[Report]:
                 updated=_text_match(UPDATED_RE, document, directory.name),
             )
         )
-    return sorted(reports, key=lambda report: report.timestamp, reverse=True)
+    return sorted(
+        reports,
+        key=lambda report: _timestamp_sort_key(report.timestamp),
+        reverse=True,
+    )
+
+
+def select_reports(reports: list[Report], timestamp: str | None) -> list[Report]:
+    """Select one immutable snapshot, or retain the legacy publish-all mode."""
+    if timestamp is None:
+        return reports
+    if not TIMESTAMP_RE.fullmatch(timestamp):
+        raise ValueError(f"Invalid report timestamp: {timestamp}")
+    selected = [report for report in reports if report.timestamp == timestamp]
+    if not selected:
+        raise FileNotFoundError(f"Hacker News report not found: {timestamp}")
+    return selected
 
 
 def copy_reports(reports: list[Report], site_dir: Path) -> None:
@@ -301,9 +327,12 @@ def render_index(reports: list[Report]) -> str:
   </main>
   <script>
     const parseTimestamp = (value) => {{
-      const match = /^(\\d{{4}}-\\d{{2}}-\\d{{2}})T(\\d{{2}})-(\\d{{2}})-(\\d{{2}})Z$/.exec(value);
+      const match = /^(\\d{{4}}-\\d{{2}}-\\d{{2}})T(\\d{{2}})-(\\d{{2}})-(\\d{{2}})(Z|[+-]\\d{{4}})$/.exec(value);
       if (!match) return null;
-      return new Date(`${{match[1]}}T${{match[2]}}:${{match[3]}}:${{match[4]}}Z`);
+      const zone = match[5] === "Z"
+        ? "Z"
+        : `${{match[5].slice(0, 3)}}:${{match[5].slice(3)}}`;
+      return new Date(`${{match[1]}}T${{match[2]}}:${{match[3]}}:${{match[4]}}${{zone}}`);
     }};
     const formatter = new Intl.DateTimeFormat("zh-CN", {{
       year: "numeric",
@@ -366,6 +395,10 @@ def main() -> int:
         default=Path(__file__).resolve().parents[1],
         help="Checked-out GitHub Pages repository",
     )
+    parser.add_argument(
+        "--timestamp",
+        help="Publish only this immutable timestamp; omit to publish all local reports",
+    )
     parser.add_argument("--commit", action="store_true", help="Create a git commit")
     parser.add_argument("--push", action="store_true", help="Commit and push to origin/main")
     args = parser.parse_args()
@@ -373,15 +406,23 @@ def main() -> int:
         args.commit = True
 
     reports = discover_reports(args.source.expanduser().resolve())
+    selected_reports = select_reports(reports, args.timestamp)
     repo_dir = args.repo.expanduser().resolve()
     site_dir = repo_dir / "public"
-    copy_reports(reports, site_dir)
-    (site_dir / "index.html").write_text(render_index(reports), encoding="utf-8")
+    copy_reports(selected_reports, site_dir)
+    published_reports = discover_reports(site_dir)
+    (site_dir / "index.html").write_text(
+        render_index(published_reports),
+        encoding="utf-8",
+    )
     (site_dir / ".nojekyll").touch()
-    print(f"Prepared {len(reports)} reports in {site_dir}")
+    print(f"Prepared {len(selected_reports)} report(s) in {site_dir}")
 
     if args.commit:
-        commit_and_push(repo_dir, reports[0].timestamp if reports else "", args.push)
+        commit_label = args.timestamp or (
+            published_reports[0].timestamp if published_reports else ""
+        )
+        commit_and_push(repo_dir, commit_label, args.push)
     return 0
 
 
