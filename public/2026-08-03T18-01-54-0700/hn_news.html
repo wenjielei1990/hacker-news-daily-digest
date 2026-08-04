@@ -1,0 +1,2008 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Hacker News 每日精选：通俗摘要、精彩评论与 LLM 锐评">
+  <title>HN 每日精选 · 2026-08-03</title>
+  <script>
+    (() => {
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      let choice = "auto";
+      try {
+        choice = localStorage.getItem("hnDigestThemeChoice") || "auto";
+      } catch (_) {
+        // Storage may be unavailable in a sandboxed report.
+      }
+      if (!["auto", "day", "night"].includes(choice)) {
+        choice = "auto";
+      }
+      const theme = choice === "auto" ? themeForLocalTime() : choice;
+      document.documentElement.dataset.themeChoice = choice;
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d252d;
+      --muted: #6c747c;
+      --paper: #f5f3ed;
+      --card: #fffefa;
+      --line: #d9d6ce;
+      --orange: #e85d2a;
+      --orange-soft: #fff0e8;
+      --blue-soft: #edf3f7;
+      --green: #25644f;
+      --story-open-line: #c7c3b9;
+      --story-shadow: rgba(31, 36, 40, .07);
+      --summary-ink: #47515a;
+      --detail-ink: #37424c;
+      --section-ink: #5f6871;
+      --hint-ink: #8a9095;
+      --comment-meta-ink: #637080;
+      --comment-label-bg: #d7e6ef;
+      --comment-label-ink: #315b73;
+      --comment-text-ink: #2e3944;
+      --comment-reason-ink: #637080;
+      --comment-reason-label: #2e5e78;
+      --comment-empty-ink: #8a9097;
+      --editorial-ink: #333b42;
+      --humor-bg: #f8e8bd;
+      --humor-ink: #795d16;
+      --wisdom-bg: #dcebdc;
+      --wisdom-ink: #315f3a;
+      --counterpoint-bg: #eadff1;
+      --counterpoint-ink: #614273;
+    }
+    html[data-theme="night"] {
+      color-scheme: dark;
+      --ink: #e0e7e1;
+      --muted: #9ba79f;
+      --paper: #111713;
+      --card: #1a221d;
+      --line: #303c34;
+      --orange-soft: #2c211b;
+      --blue-soft: #202c2e;
+      --green: #83c8a2;
+      --story-open-line: #435148;
+      --story-shadow: rgba(0, 0, 0, .28);
+      --summary-ink: #c2ccc5;
+      --detail-ink: #d1d8d3;
+      --section-ink: #aab5ae;
+      --hint-ink: #929e96;
+      --comment-meta-ink: #a8b7b8;
+      --comment-label-bg: #2f474d;
+      --comment-label-ink: #b8dbe2;
+      --comment-text-ink: #d5dcda;
+      --comment-reason-ink: #aebbb8;
+      --comment-reason-label: #92c6cf;
+      --comment-empty-ink: #929e96;
+      --editorial-ink: #d9d5d0;
+      --humor-bg: #403721;
+      --humor-ink: #e3cb87;
+      --wisdom-bg: #293c2c;
+      --wisdom-ink: #a8d3ae;
+      --counterpoint-bg: #382d40;
+      --counterpoint-ink: #d0b4df;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .18s ease, color .18s ease;
+    }
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--orange); }
+    .masthead {
+      border-top: 5px solid var(--orange);
+      border-bottom: 1px solid #343b43;
+      background: #18212a;
+      color: white;
+    }
+    .masthead-inner, main {
+      width: min(860px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+    .masthead-inner { padding: 25px 0 27px; }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      background: var(--orange);
+      color: white;
+      font-family: ui-serif, Georgia, serif;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+    .archive-link { color: #bac2ca; }
+    .theme-switch {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .theme-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 8px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .theme-button:hover { color: white; }
+    .theme-button[aria-pressed="true"] {
+      background: #46515b;
+      color: white;
+    }
+    .theme-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .eyebrow {
+      color: #ff9670;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 7px 0 8px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 6vw, 46px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.03;
+    }
+    .dek {
+      margin: 0;
+      color: #c0c8d0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      margin-top: 17px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .stats strong { color: white; font-size: 13px; margin-right: 3px; }
+    .view-switch {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 13px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .view-switch[hidden] { display: none; }
+    .view-buttons {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .view-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 9px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .view-button:hover { color: white; }
+    .view-button[aria-pressed="true"] {
+      background: var(--orange);
+      color: white;
+    }
+    .view-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .view-status { color: #c0c8d0; }
+    .ranking-rule {
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255, 255, 255, .09);
+      color: #9faab4;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .ranking-rule strong {
+      color: #e7eaed;
+      margin-right: 5px;
+    }
+    main { padding: 20px 0 72px; }
+    .story-list {
+      display: grid;
+      gap: 9px;
+    }
+    .story-list[data-visible-count="10"] .story:nth-child(n+11),
+    .story-list[data-visible-count="20"] .story:nth-child(n+21) {
+      display: none;
+    }
+    .story {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--card);
+      overflow: clip;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .story[open] {
+      border-color: var(--story-open-line);
+      box-shadow: 0 14px 34px var(--story-shadow);
+    }
+    .story-overview {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 13px;
+      padding: 17px 20px 15px 15px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .story-overview::-webkit-details-marker { display: none; }
+    .story-overview:focus-visible {
+      outline: 3px solid rgba(232, 93, 42, .45);
+      outline-offset: -3px;
+    }
+    .rank-number {
+      color: var(--orange);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .story-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 14px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .story-kicker .source {
+      color: var(--green);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h2 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 10px;
+      margin: 5px 0 5px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(17px, 2.3vw, 19px);
+      font-weight: 700;
+      letter-spacing: -.008em;
+      line-height: 1.28;
+    }
+    .title-link { text-decoration: none; }
+    .discussion-link {
+      color: var(--orange);
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .summary {
+      margin: 0;
+      color: var(--summary-ink);
+      font-size: 14.5px;
+      line-height: 1.72;
+      white-space: pre-line;
+    }
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--hint-ink);
+      font-size: 10px;
+      font-weight: 750;
+    }
+    .chevron {
+      display: inline-block;
+      color: var(--orange);
+      transition: transform .18s ease;
+    }
+    .story[open] .chevron { transform: rotate(180deg); }
+    .story[open] .expand-hint > span:first-child { font-size: 0; }
+    .story[open] .expand-hint > span:first-child::after {
+      content: "收起详情";
+      font-size: 10px;
+    }
+    .story-details {
+      margin-left: 80px;
+      padding: 17px 20px 24px 0;
+      border-top: 1px solid var(--line);
+    }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      color: var(--section-ink);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .detail-summary > p {
+      margin: 0;
+      color: var(--detail-ink);
+      font-size: 14px;
+      line-height: 1.78;
+    }
+    .detail-summary > p + p { margin-top: 12px; }
+    .comments-panel {
+      margin-top: 21px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+    .comments-list { display: grid; gap: 9px; }
+    .featured-comment {
+      margin: 0;
+      padding: 14px 16px;
+      border: 0;
+      border-radius: 3px;
+      background: var(--blue-soft);
+    }
+    .comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 7px;
+      font-size: 11px;
+    }
+    .comment-meta a { color: var(--comment-meta-ink); text-decoration: none; }
+    .comment-label {
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--comment-label-bg);
+      color: var(--comment-label-ink);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .05em;
+    }
+    .comment-label-humor {
+      background: var(--humor-bg);
+      color: var(--humor-ink);
+    }
+    .comment-label-wisdom {
+      background: var(--wisdom-bg);
+      color: var(--wisdom-ink);
+    }
+    .comment-label-counterpoint {
+      background: var(--counterpoint-bg);
+      color: var(--counterpoint-ink);
+    }
+    .comment-text {
+      margin: 0;
+      color: var(--comment-text-ink);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 13px;
+      line-height: 1.62;
+      white-space: pre-line;
+    }
+    .comment-reason {
+      margin: 9px 0 0;
+      color: var(--comment-reason-ink);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .comment-reason span {
+      margin-right: 7px;
+      color: var(--comment-reason-label);
+      font-weight: 850;
+    }
+    .comments-empty {
+      margin-top: 19px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      color: var(--comment-empty-ink);
+      font-size: 12px;
+    }
+    .editorial {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      align-items: start;
+      margin-top: 21px;
+      padding: 13px 15px;
+      border-left: 3px solid var(--orange);
+      background: var(--orange-soft);
+    }
+    .editorial-mark {
+      padding-top: 2px;
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+    .editorial p {
+      margin: 0;
+      color: var(--editorial-ink);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.62;
+    }
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 27px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .footer p { margin: 0; max-width: 680px; }
+    .footer a { font-weight: 800; }
+    @media (max-width: 620px) {
+      .masthead-inner, main { width: min(100% - 20px, 860px); }
+      .masthead-inner { padding-top: 18px; }
+      .topline {
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+      .top-actions {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
+      .story-overview {
+        grid-template-columns: 37px minmax(0, 1fr);
+        gap: 9px;
+        padding: 14px 13px 12px 10px;
+      }
+      .rank-number { font-size: 22px; }
+      .story-details { margin-left: 56px; padding-right: 13px; }
+      .editorial { grid-template-columns: 1fr; gap: 4px; }
+      .footer { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .masthead { background: white; color: var(--ink); border-bottom-color: var(--line); }
+      .topline, .archive-link, .expand-hint, .view-switch, .theme-switch { display: none; }
+      main { width: 100%; }
+      .story { display: block !important; break-inside: avoid; }
+      .story-details { display: block; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="topline">
+        <div class="brand"><span class="brand-mark">Y</span> Hacker News</div>
+        <div class="top-actions">
+          <div class="theme-switch" role="group" aria-label="选择页面颜色模式">
+            <button class="theme-button" type="button" data-theme-choice="auto" aria-pressed="true">自动</button>
+            <button class="theme-button" type="button" data-theme-choice="day" aria-pressed="false">日间</button>
+            <button class="theme-button" type="button" data-theme-choice="night" aria-pressed="false">夜间</button>
+          </div>
+          <a class="archive-link" href="../index.html">每日归档 →</a>
+        </div>
+      </div>
+      <div class="eyebrow">2026-08-03 · top feed · 过去 36 小时</div>
+      <h1>今天的 Hacker News</h1>
+      <p class="dek">前 20 篇已经全部准备好；默认显示前 20，也可以切换到前 10。</p>
+      <div class="stats">
+        <span><strong>20</strong>篇已准备</span>
+        <span><strong>18</strong>篇有精彩评论</span>
+        <span>更新于 2026-08-03 18:01 PDT</span>
+        <span>生成模型 <strong>gemini/gemini-3-flash-preview</strong></span>
+      </div>
+      <div class="view-switch" aria-label="选择新闻显示数量">
+        <span>显示</span>
+        <div class="view-buttons">
+          <button class="view-button" type="button" data-count="10" aria-pressed="false">前 10</button>
+          <button class="view-button" type="button" data-count="20" aria-pressed="true">前 20</button>
+        </div>
+        <span class="view-status" aria-live="polite">当前显示前 20</span>
+      </div>
+      <div class="ranking-rule">
+        <strong>排序规则</strong>HN 原始名次 + 低讨论量降权。公式：原始名次 + 0.3 × max(0, 50 − 评论数)；50 条评论以上不降权。
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="story-list" data-visible-count="20">
+      
+    <details class="story" id="story-49161518">
+      <summary class="story-overview">
+        <span class="rank-number">01</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">seangoedecke.com</span>
+            <span>378 points</span>
+            <span>原始 #1 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.seangoedecke.com/llms-reward-expertise/" target="_blank"
+              rel="noopener noreferrer">LLMs reward expertise</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49161518" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 173</a>
+          </h2>
+          <p class="summary">大语言模型（LLM）不仅能让外行变全才，更会显著放大专家的能力。文章指出，虽然任何人都能通过简单提示获得及格水平的输出，但像陶哲轩这样的领域专家能通过精准、简洁的引导，让模型进入“专家模式”并解决深层问题。专家能识别模型输出中细微的错误，并根据对特定代码库或理论的深刻理解来否定平庸的方案。这意味着人类的领域知识才是发挥 AI 潜力的瓶颈，而非模型本身。然而，这种依赖也引发了关于未来人才如何积累原始经验的担忧。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>本文探讨了 LLM 时代下“专家”与“通才”的权力动态。作者 Sean Goedecke 认为，尽管 LLM 降低了技术门槛（如让非专业人士也能写出可用的 CSS），但它对拥有深厚领域知识的专家奖励更多。通过分析数学家陶哲轩与 ChatGPT 讨论雅可比猜想的案例，作者发现专家并不需要冗长的提示词，而是通过极简的指令、对复杂性的敏锐直觉以及对模型建议的果断筛选，引导模型产出远超普通人水平的洞见。这种“信号传递”能让模型从“科普模式”切换到“专业对话模式”。</p><p>在软件工程中，这种优势体现为对代码库“理论模型”的掌握。专家能判断某个方案是否过于复杂，或是否违背了既有的系统设计原则。作者强调，系统设计往往由具体的细节而非通用原则主导，因此熟悉特定业务逻辑的开发者比仅懂通用架构的人更能榨取 AI 的价值。然而，这种模式也面临挑战：如果初级开发者过度依赖 AI 完成基础工作，他们可能永远无法积累起成为专家所需的深层直觉。未来的核心竞争力可能不再是“提示词工程”，而是如何利用正确的专业知识来约束和引导 AI 的输出。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49162323" target="_blank" rel="noopener noreferrer">@abixb</a>
+        </div>
+        <p class="comment-text">“放大镜”这个比喻在这里最贴切。LLM 最终是你与模型权重交互的反射，反映了你使用的语气、构建提示词的结构、你关注问题的侧重点，以及你的词汇量和世界观。那些（谨慎地）将其作为思维和感官延伸的人很可能会蓬勃发展，而那些将其作为思维和感官替代品的人则会挣扎。我让 Claude 自己生成了一个“分层学习概念”的技能——从 5 岁小孩水平到博士水平，每当我问一些非我本行的复杂话题时就会触发。这种能让一个 24 小时在线的超级智能 LLM 解释世间任何话题的能力，在短短 4 年前的 2022 年简直就像科幻小说一样不可思议。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了“放大镜”这一深刻比喻，强调了 LLM 是使用者能力的延伸而非替代。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49162234" target="_blank" rel="noopener noreferrer">@travisgriggs</a>
+        </div>
+        <p class="comment-text">我完全理解这一点。我刚花了 3 个小时盯着机器人写了一些循环脚本，用于测试我们制造的 BLE（低功耗蓝牙）设备的配置流程。过程非常顺利且高效。但这得益于我在 BLE 领域有丰富经验，对 Python 和 Shell 脚本也相当熟悉。所以我能分阶段引导过程，进行中间测试，做调整并继续。领域经验让这一切变得简单直接。我的两名初级工程师只有浅显的 BLE 知识，他们不可能做得这么高效。我焦虑的地方在于，担心以后再也没人能获得这种经验了。他们也许最终能成功，但谁知道在缺乏引导的情况下 LLM 会写出什么样的怪物代码。经验式学习可能正成为过去，这在有经验者和无经验者之间造成了真正的紧张关系。</p>
+        <p class="comment-reason"><span>入选理由</span>通过具体的工程案例验证了文章观点，并提出了关于“经验断层”的现实担忧。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49162729" target="_blank" rel="noopener noreferrer">@dbalatero</a>
+        </div>
+        <p class="comment-text">“当然两者都有用，但我宁愿熟悉代码库，也不愿对软件系统有深刻的通用理解。”
+根据我的经验，获得对特定代码库的非表面理解一直是一个亲力亲化的过程。例如，仅仅因为我知道很多软件通识是不够的，我必须了解当前代码库的细节，才能知道将什么应用到它上面是合理的。这是一个我发现很难用 LLM 解决的“鸡生蛋”问题。如果我们被推着把大部分工作委托给它们，你该如何建立那种专业知识？当然你可以问关于代码库的问题，但我认为那属于表面信息，而魔鬼往往隐藏在更深层的细节中。嗯。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个关键的悖论：如果依赖 AI，人类可能无法获得驾驭 AI 所需的深层专业知识。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49161777" target="_blank" rel="noopener noreferrer">@sramsay</a>
+        </div>
+        <p class="comment-text">我发现“展示专业背景”非常重要。比如：“我有深厚的圣经研究背景。你可以假设我已经读过新约研究领域最重要的著作。不要翻译希腊语、拉丁语、希伯来语或叙利亚语。现在，我想知道……”这会显著改变结果。同样，告诉它你有 20 多年的 C 语言编程经验，对机器组织、内存布局、嵌入式系统等有稳健的理解，也会产生类似效果。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了实用的操作建议，展示了如何通过身份设定来改变模型的输出质量。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章击中了当前 AI 浪潮中的一个核心焦虑：AI 到底是“平权工具”还是“贫富差距放大器”？作者 Sean Goedecke 倾向于后者，认为 LLM 实际上是一面“放大镜”（借用评论区 abixb 的话），它放大了使用者的智力资本。陶哲轩的例子极具说服力，它证明了在 AI 时代，提问者的水平决定了回答者的上限。然而，正如评论者 dbalategy 和 travisgriggs 所担忧的，这里存在一个残酷的“阶梯消失”困境：如果初级工作都被 AI 承包了，未来的专家该如何通过那些“脏活累活”磨练出足以驾驭 AI 的直觉？我们可能正在进入一个“专家通吃”的时代，但通往专家的路却变得前所未有的模糊。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49157930">
+      <summary class="story-overview">
+        <span class="rank-number">02</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">openai.com</span>
+            <span>412 points</span>
+            <span>原始 #2 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://openai.com/index/ten-advances-in-mathematics/" target="_blank"
+              rel="noopener noreferrer">Ten advances in mathematics and theoretical computer science</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49157930" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 692</a>
+          </h2>
+          <p class="summary">OpenAI 宣布其 AI 模型在数学和理论计算机科学领域取得了十项重大突破，证明了 AI 在处理严谨逻辑和抽象概念方面的显著进步。这些成果包括解决了一些长期存在的数学难题，其表现被认为可比肩全球顶尖数学家。这一进展的重要性在于 AI 正在从概率性的语言模仿转向确定性的符号推理，有望加速科学发现。然而，主要局限在于实验过程缺乏透明度，目前尚不清楚这些证明是源于真正的创新直觉，还是仅仅依靠高昂算力进行的复杂搜索。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>OpenAI 近期展示了其模型在数学和理论计算机科学领域的十项前沿进展，标志着 AI 在形式化推理能力上的飞跃。这些成果不仅涵盖了复杂的数学证明，还涉及软件性能优化（如通过修复 GPU 内核问题实现 15% 的性能提升），显示出通用智能在跨学科应用中的潜力。据推测，这些突破依赖于大规模的推理时计算（Inference-time compute），单项证明的成本据称在 2000 美元左右。这意味着 AI 已经能够处理那些需要极高逻辑严密性、且无法容忍“幻觉”的任务。</p><p>尽管成果令人瞩目，但学术界和技术社区仍持谨慎态度。主要的争议点在于 OpenAI 未披露实验的完整背景，例如在成功解决这十个问题之前，模型经历了多少次失败的尝试，以及是否针对特定问题进行了过度引导。此外，这些证明究竟是产生了全新的数学洞见，还是仅仅通过高效搜索现有数学工具的组合来完成“体力活”，目前尚无定论。目前 AI 尚未攻克如“千禧年大奖难题”等公认的顶级数学巅峰，这表明在真正的创造性突破与大规模计算搜索之间仍存在界限。未来值得关注的是，这种“计算驱动型数学”是否会改变数学家的工作范式，以及它能否在生物学等实验驱动领域复制类似的成功。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49134323" target="_blank" rel="noopener noreferrer">@kcexn</a>
+        </div>
+        <p class="comment-text">我并不是 OpenAI 所“推进”的任何领域的专家，所以我不想过早地贬低这一贡献的意义。然而，我担心他们在博文中使用的语言是为了营销而夸大其词。确实，以前没有可靠的计算方法来解决这些问题。但这些证明是否为数学语料库贡献了新思想，或者它们仅仅是一种有效的方法，通过穷举搜索文献来寻找现有工具的正确组合并应用于问题？本质上，这些问题在之前是否看起来已经有了直觉上的答案且证明是可行的，只是不值得专家投入时间的高价值目标？或者它们在这一点之前从根本上就是困难的，而 AI 似乎做了比仅仅把问题扔进一个大型求解器更多的事情。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提出了一个核心的哲学和技术疑问：AI 是在进行真正的创新，还是仅仅在进行高效的搜索。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49132235" target="_blank" rel="noopener noreferrer">@aabhay</a>
+        </div>
+        <p class="comment-text">我主要不满的是整个实验和构建过程缺乏透明度。我怀疑他们并不是简单地把模型指向这十个特定问题并给模型一次机会；因此，2000 美元这个数字可能具有完全的误导性，类似于通过不披露总实验设置来进行 P 值操纵（P-value hacking）。我想知道：1. 总共给了模型多少个问题，在放弃之前有多少比例的问题在什么成本下未被解决？2. 你们给了模型多少次尝试来解决这些问题？3. 测试环境有多昂贵，例如模型是否有权访问作业集群？</p>
+        <p class="comment-reason"><span>入选理由</span>评论者从科研严谨性的角度对 OpenAI 披露的数据提出了合理的质疑，指出了潜在的统计陷阱。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49161997" target="_blank" rel="noopener noreferrer">@plaidfuji</a>
+        </div>
+        <p class="comment-text">任何可计算的问题最终都会败给计算机。LLM 使数学证明变得更加“可计算”，因为计算机现在既可以生成潜在的解决方案，又可以自行检查其方案的有效性，并有合理的概率收敛到正确的结果。我假设这在某种程度上以前也能做到，但现在似乎变得指数级地容易了。但这并不意味着所有数学问题都会自动被解决。这有点类似于分子动力学、蛋白质折叠或有限元模拟等。一些以前通过计算无法处理的问题变得可以处理了。而其他问题——绝大多数其他问题——对于这些计算技术来说仍然是不可解的，因为所需的计算规模超出了想象。比如模拟一立方毫米水分子在一秒钟内的动力学，这简单的事情就远超目前的能力（LLM 也改变不了这一点）。我认为 LLM 棒极了，我每天都用，也认为它们有巨大价值。但如果这些东西真的像人们宣传或恐惧的那样具有革命性，你应该立即让它们去攻克最高价值的数学问题，看看进展如何。比如千禧年大奖难题。我还没看到那些问题的解。所以是有极限的——但我们即将了解什么是“送分题”级别的数学证明，什么是真正的难题，这种“新常态”会是什么样子。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论冷静地分析了 AI 在数学领域的局限性，并将其与传统的计算模拟进行了对比，提供了客观的视角。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>OpenAI 的这项声明标志着 AI 正在从“概率预测”向“逻辑验证”转型。长期以来，批评者认为 LLM 只是“随机鹦鹉”，但在数学和理论计算机科学这种不容许差错的领域取得进展，说明模型在形式化推理上确实有了质的突破。然而，正如社区所指出的，这种进步可能更多地源于“暴力美学”——即利用庞大的算力在已知的数学空间中进行深度搜索，而非像人类数学家那样产生跨时代的直觉。这种“计算密集型”的科研模式虽然能解决许多悬而未决的难题，但也可能导致科研成本的激增和透明度的下降。我们正处于一个转折点：AI 正在把数学变成一种可以通过投入算力来“收割”的资源，但这是否等同于人类智慧的延伸，仍是一个值得探讨的命题。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49156111">
+      <summary class="story-overview">
+        <span class="rank-number">03</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">blog.exe.dev</span>
+            <span>492 points</span>
+            <span>原始 #4 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://blog.exe.dev/devtools-must-be-open-source" target="_blank"
+              rel="noopener noreferrer">Devtools must be open source</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49156111" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 175</a>
+          </h2>
+          <p class="summary">本文主张在 AI 时代，开发者工具必须开源，因为 AI 代理（Agents）彻底改变了软件定制的成本收益比。过去由于维护成本高，开发者倾向于使用标准化的插件或配置文件，但现在 AI 可以自动完成“下载源码、按需修改、自动合并上游更新”的全过程。作者认为，如果软件开源，源码本身就是最强大的扩展接口，不再需要预设复杂的插件系统。这种模式让“为自己编写专属软件”变得极其简单，但也对闭源工具构成了挑战。然而，这种高度碎片化的定制也引发了关于代码质量和自动化维护可靠性的争议。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>文章指出，过去五年中，由于维护自定义软件的成本极高，开发者大多放弃了编写个人工具，转而使用标准化的商业软件。但随着 AI 代理（如 Shelley 或 Claude Code）的出现，情况发生了根本性变化。现在，开发者只需通过自然语言指令，就能让 AI 自动克隆仓库、理解逻辑并实施修改。作者展示了一个案例：通过一个简单的提示词，AI 就将一个名为 meat.dev 的代码精简工具集成到了 Shelley 代理中，并自动处理了后台预处理逻辑，这在传统的插件 API 框架下几乎是不可能完成的任务。</p><p>这种“个性化软件”的新范式意味着，软件不再需要繁琐的配置文件或扩展系统。如果你想修改编辑器字体，AI 可以直接修改源码中的硬编码值甚至重新编译。作者甚至建议设置定时任务，让 AI 每天自动拉取上游代码并重新对本地修改进行变基（rebase）。这种模式的局限性在于，它极度依赖源码的开放性，因此像 Claude Code 这样的闭源工具在灵活性上会大打折扣。此外，批评者也担心，这种自动化的“随性编程”可能会导致工作流在某天早晨因 AI 的误解而突然崩溃，且频繁重构和编译也会造成巨大的计算资源浪费。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49156719" target="_blank" rel="noopener noreferrer">@simonw</a>
+        </div>
+        <p class="comment-text">开源软件对终端用户的一个核心论点始终是：拥有检查和修改软件运作方式的自由。但现实中，即使是专家级程序员，这种自由更多是体现在“依赖他人去修改”上。大多数人无法证明花时间去阅读并修改常用工具的代码是合理的。我认为 LLM 改变了这个等式，让最初的梦想变得更加可行。现在我每天都会多次让 Claude 聊天机器人“从 GitHub 克隆 X/Y，然后告诉我 Z 是如何工作的”。以前让软件成功编译并开始动手修改的摩擦力很大，我经常懒得折腾。现在我把这看作是一个零时间投入的挑战：告诉 Codex 或 Claude Code 检出并构建 X，十分钟后再来看看进展。虽然我还没养成习惯去修改我使用的所有软件，但我已经看到了一条一年前还不存在的路径。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了 AI 如何通过消除“构建和理解代码”的摩擦力，将开源的理论自由转化为实际的生产力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49157016" target="_blank" rel="noopener noreferrer">@theamk</a>
+        </div>
+        <p class="comment-text">&gt; 设置一个每晚运行的 cron 任务，执行以下提示词：获取 &lt;软件&gt; 的上游更改，并将所有本地更改重新变基到上游之上。检查软件是否按预期工作，并替换当前版本。
+这听起来简直是地狱。你让一个不可靠的代理每晚重做软件，每天早上你醒来都可能发现自己的工作流坏了。而且，“检查软件是否按预期工作”是行不通的，因为 AI 非常擅长“听从字面意思但违背初衷”。是的，你的差异显示出来了，但缺少文件名。你把这个要求加进提示词了？好，文件名回来了，但字体大小是 4，小到没法看。你想让它们清晰可见？下周它们可能变成 54 号字，占满整个屏幕……这在常规 AI 开发中不是问题，因为你会审查更改并测试。但每天在没有监督的情况下这么干，纯粹是找麻烦。</p>
+        <p class="comment-reason"><span>入选理由</span>针对文中提到的“自动变基”方案提出了非常有力的现实主义批评，指出了 AI 在缺乏监督时的不可靠性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49159477" target="_blank" rel="noopener noreferrer">@jedberg</a>
+        </div>
+        <p class="comment-text">我曾在一家开发者工具公司工作，也当过 CEO。以下是我的想法：我同意工具需要开源，但这让建立成功的商业模式变得非常困难。虽然有成功的例子，但更多成功的开源工具从未变成成功的公司。最著名的例子是 Sendmail，他们拿了数百万融资，最终卖给了一家基础设施公司，给投资人的回报微乎其微。困难在于你的客户是开发者和运维人员，他们都觉得自己不需要你，因为他们完全有能力自己运行软件并添加所需功能。很多时候他们是对的。现在有了 AI 编程，情况变糟了 10 倍，因为他们可以拿走你的开源代码，然后通过“氛围编程（vibe coding）”搞出一个“够用就好”的商业版替代品。我不知道该如何解决这个死循环。有很多伟大的工具是人们出于热爱免费制作的，但这些人也得吃饭。有些工具开始采用对个人和初创公司免费、对盈利公司收费的许可证，这很有趣，但我知道有些公司恰恰因为这种许可证而不允许使用这些工具。</p>
+        <p class="comment-reason"><span>入选理由</span>从商业视角探讨了 AI 时代开源开发者工具面临的生存困境，补充了文章未提及的市场维度。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49156731" target="_blank" rel="noopener noreferrer">@kelnos</a>
+        </div>
+        <p class="comment-text">我同意开发者工具应该开源，但是……我非常不认同“工具不应该有配置文件、选项或插件系统，而是当你想要更改字体大小时，应该让 LLM 下载代码、修改硬编码值并重新构建”这个前提。这太低效且浪费了。假设在一个 LLM 承担大部分编码工作的世界里，我们是希望消耗电力让 LLM 构建一次选项对话框或配置解析器，还是希望在用户想要更改任何微小设置时，消耗数百万次电力让 LLM 去重构？我希望我的答案并不具有争议。让 AI 做一些别人不太可能感兴趣的定制化？当然没问题。但如果为一个软件添加了一个普遍有用的功能，却不打算尝试将其合并回主干？这太逊了。</p>
+        <p class="comment-reason"><span>入选理由</span>从计算效率和开源协作精神的角度对作者的“去配置化”观点提出了反驳。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49158172" target="_blank" rel="noopener noreferrer">@lalitmaganti</a>
+        </div>
+        <p class="comment-text">作为一个致力于让工具易于分叉和修改的维护者，我能理解这种思维的吸引力，但遗憾的是，我认为这太理想化了。使用工具的工程师和普通用户没什么区别，他们只希望东西能用。维护工具是实实在在的工作；例如，假设上游添加了你想要的功能，但它与你下游的修改冲突了——不是合并冲突，而是 UX 逻辑冲突。你愿意在每次发布时都去解决这个问题吗？全指望“AI 会搞定”？也许有一天可以，但就目前而言，代理可以做一些大方向正确的事，但无法很好地捕捉我的 UX 审美；如果重点是高度个性化，我希望它完全符合我的要求。此外，对于具有社交属性的工具（即很多人看同一个东西），让所有人看到的东西保持一致是有真实价值的。有一个用于教学、审计和验证的基准是非常宝贵的。总之，也许在某些类别的工具中，这种高度个性化确实会发生，但离普及还很远。</p>
+        <p class="comment-reason"><span>入选理由</span>从维护者角度指出了自动化定制在 UX 一致性和社交协作方面的局限性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>本文描绘了一个极具诱惑力的愿景：在 AI 的加持下，每个开发者都能拥有完全属于自己的、深度定制的工具链。这种“源码即接口”的论调挑战了过去几十年软件工程中关于“抽象”和“可扩展性”的常识。然而，正如评论区所指出的，这种自由并非没有代价。依靠 AI 进行“每晚自动变基”可能会演变成一场维护噩梦，将开发者从“配置地狱”推向“AI 幻觉地狱”。更深层的危机在于商业模式：如果 AI 让每个人都能轻松复刻并定制开源工具，那么支撑高质量工具开发的商业动力将进一步萎缩。我们可能会进入一个充满“够用就好”的碎片化软件时代，虽然个性化十足，却失去了共享标准带来的协作效率。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49155629">
+      <summary class="story-overview">
+        <span class="rank-number">04</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">blog.comfy.org</span>
+            <span>245 points</span>
+            <span>原始 #8 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://blog.comfy.org/p/minimax-h3-day-0-support-in-comfyui" target="_blank"
+              rel="noopener noreferrer">MiniMax H3 Day-0 Support in ComfyUI: Open Weights, Native Audio, and 2K Video</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49155629" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 78</a>
+          </h2>
+          <p class="summary">MiniMax 发布了其首个开源权重的视频生成模型 H3，并已在 ComfyUI 中实现首日支持。该模型支持生成最高 2K 分辨率、15 秒长的视频，并能同步生成原生立体声。技术上，开发团队通过将 40% 的调制权重替换为等效查找表，将内存占用降低了 66%，使其能在 RTX 3060 等消费级显卡上运行。尽管本地运行门槛降低，但生成速度仍是主要瓶颈，且在处理复杂逻辑场景时仍存在 AI 常见的“平滑感”或崩坏现象。这一开源举措被认为能有效对抗云端模型的审查限制并降低创作成本。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>MiniMax H3 是该公司继 Hailuo 01 和 02 之后的第三代视频模型，也是其首次开放权重的尝试。该模型不仅支持文本、图像生成视频，还引入了“首尾帧控制”和“参考视频运动转移”等高级功能，允许用户更精确地控制镜头衔接和动作节奏。值得注意的是，H3 实现了视频与立体声音频的同步原生生成，而非后期合成，这显著提升了多模态生成的连贯性。</p><p>为了让这一庞大模型在个人电脑上跑起来，ComfyUI 团队进行了深度优化。他们发现模型中约 40% 的参数（调制权重）可以被功能等效的查找表（Lookup Table）取代，配合 int8 量化技术，将全精度下 123.6 GB 的内存需求压缩至 42.5 GB。通过动态显存调度，拥有 12GB 显存的 RTX 3060 也能尝试生成 2K 视频。然而，本地算力的局限性依然明显，用户反馈在 16GB 显存的显卡上生成 10 秒 480p 视频仍需约 10 分钟。</p><p>目前社区对 H3 的评价呈现两极化：一方面，开源权重为创作者避开云端平台的“安全审查”和高昂费用提供了可能；另一方面，模型在处理非标准物理动作（如旋转的人体）时仍显吃力，且画面质感被部分用户批评为过于“AI 化”和缺乏艺术独特性。未来，这种本地化的高质量视频生成工具可能会改变独立导演的工作流，将 AI 作为一种高效的“素材剪辑师”而非全能导演。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49156169" target="_blank" rel="noopener noreferrer">@embedding-shape</a>
+        </div>
+        <p class="comment-text">“我们发现模型的调制权重（约占总参数的 40%）可以被剪枝并替换为功能等效的查找表，从而在不损失输出质量的情况下大幅缩小内存占用。”
+
+如果这是真的，这种通过“无损质量”来减少权重的方法在业界常见吗？听起来简单得有点不可思议。如果可行，这种方法是否也适用于大语言模型（LLM）？
+原生帧对帧生成很酷，但我好奇在剪辑交界处“链接”视频有多容易。通常模型在这些缝合点会丢失“惯性”，如果能在剪辑之间进行帧对帧融合，感觉会有所帮助。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地捕捉到了文章中最核心的技术优化点，并提出了跨领域应用的思考。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49155969" target="_blank" rel="noopener noreferrer">@vblanco</a>
+        </div>
+        <p class="comment-text">我在我的 4070ti super（16 GB 显存）上运行这个模型，生成一段 10 秒、480p 的视频需要 10 分钟。但结果非常惊人。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了具体的硬件运行表现和生成时间参考，对本地部署用户极具价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49156651" target="_blank" rel="noopener noreferrer">@echelon</a>
+        </div>
+        <p class="comment-text">这仍然比 Seedance 2.0/2.5 落后大约一年半。但它代表了领先的基础模型将面临的价格压力。开源将防止成本失控。此外，它还能防止那些反应过激的平台安全检查员关闭创意工作。视频模型在拒绝大量请求方面是出了名的糟糕。创意人士会更倾向于在云端或私有 GPU 集群上工作。为了几秒钟的 480p 视频等待 10 分钟是不可接受的。爱好者会觉得好玩，但大多数实际的生产工作还是在云端进行的。艺术家的效率就是金钱，他们喜欢同时开启几十个并发生成，以便更快地探索生成空间并推进工作进度。</p>
+        <p class="comment-reason"><span>入选理由</span>从专业生产力、成本和审查制度的角度提供了冷静的对比分析。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49162756" target="_blank" rel="noopener noreferrer">@vunderba</a>
+        </div>
+        <p class="comment-text">我翻出了高中时的一些恶搞点子，用我的 RTX 显卡跑了下 MiniMax H3。一旦脱离了比较正常的场景，画面肯定还是会有很多崩坏（jank）。当你开始转向更怪异的概念时，事情往往会失控，尤其是在一个有人被绑在轮子上旋转的游戏节目场景里。尽管如此，我还是对文生视频的整体效果和运行速度感到震惊。生成一段 10 秒、50 万像素的视频只需要几分钟，回想起早期的 WAN 时代，这简直不可思议。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了模型在极端/非典型场景下的表现，并对比了技术进步的跨度。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>MiniMax H3 的开源是视频生成领域的一个重要里程碑，它不仅挑战了闭源模型的垄断，更通过 ComfyUI 的极致优化展示了消费级硬件的潜力。最令人兴奋的技术细节莫过于将 40% 的权重转化为查找表 [49156169]，这种“空间换时间”的思路为本地运行超大规模模型提供了新路径。虽然目前本地生成的等待时间对于专业生产流来说依然漫长 [49156651]，且在复杂物理逻辑上仍有欠缺 [49162756]，但它赋予了创作者最宝贵的资产：不受审查限制的自由和极低的实验成本。正如用户所言，虽然云端更快，但开源的存在确保了创意的火种不会被平台的“安全过滤器”轻易熄灭。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49153374">
+      <summary class="story-overview">
+        <span class="rank-number">05</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">ankursethi.com</span>
+            <span>375 points</span>
+            <span>原始 #10 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://ankursethi.com/blog/prevent-cognitive-debt-by-manually-retyping-llm-generated-code/" target="_blank"
+              rel="noopener noreferrer">Prevent cognitive debt by manually retyping LLM-generated code</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49153374" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 316</a>
+          </h2>
+          <p class="summary">为了避免“认知债”，作者建议手动重打大模型（LLM）生成的代码，而非直接复制粘贴或让 AI 自动修改。这种做法虽然将开发速度从 10 倍降至约 2 倍，但能强迫开发者放慢速度，在输入过程中构建代码的心理模型。通过这种方式，开发者更容易察觉 AI 的幻觉或设计缺陷，并能实时进行重构和优化。作者认为，过度依赖 AI 自动生成代码会导致开发者丧失对系统的掌控力，甚至无法理解自己项目的运作方式。虽然这在追求产出的工业界显得低效，但对于保持个人项目的乐趣和深度理解至关重要。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>作者 Ankur Sethi 在其个人项目中发现，让 AI 助手直接一键生成功能会让他感到疏离和困惑，因此他制定了一套严格的规则：AI 只能在聊天窗口提供代码建议，严禁直接操作文件或运行命令。他坚持手动将每一行建议代码敲进编辑器，这种看似“低效”的行为实际上是一种认知保护机制。手动输入的过程不仅能帮助他理解 API 的调用逻辑，还能让他像审阅者一样实时重构代码、添加注释，并将其调整为自己的风格。作者将这种方法比作早年通过手抄书本代码来学习编程的经历，认为这有助于建立代码库的“空间地图”，明确每个功能模块的具体位置。</p><p>这种做法的核心在于权衡“理解力”与“生产力”。作者担心，如果整个软件行业都习惯于“机器人写代码、人类审阅”的模式，人类将很快面临无法理解数字基础设施的窘境，这无异于职业失职。尽管手动重打会牺牲一部分速度，但它能防止开发者沦为 AI 的“搬运工”。在 2026 年（文中设定背景）这个 AI 泛滥的时代，这种方法是对“快餐式编程”的一种反叛，旨在确保开发者依然是代码的真正主人，而非仅仅是 JIRA 工单的执行者。未来，这种对深度的追求可能会成为区分平庸开发者与资深专家的关键界限。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49154604" target="_blank" rel="noopener noreferrer">@sarreph</a>
+        </div>
+        <p class="comment-text">当我在大学自学编程时（我读的是商科），买了一本关于 iOS 开发的书。那本书强制要求你逐行输入所有的示例代码。当时我觉得这个主意挺傻的，但因为我什么都不懂又想学，就坚持了下来。14 年后的今天，作为一名软件工程师，我依然会想起那本书，我能将自己最初的进步归功于那种逐行编写代码的要求。我至今仍保持着这种死记硬背式的复制习惯，以此来学习新工具和命令（比如将文档示例原封不动地复制到编辑器中）。虽然有人说这就像重抄微积分答案一样学不到东西，但对我来说，这种方式确实有效！</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个支持“逐行输入”学习法的长期实践案例，反驳了“重打无用论”。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49155229" target="_blank" rel="noopener noreferrer">@npras1</a>
+        </div>
+        <p class="comment-text">我坚决反对通过手打来复现 LLM 生成的代码。但我非常赞成坚持手写代码，而不是交给 LLM，前提是这些代码必须是由你自己的大脑生成的。只有这样才能创造新的神经元和连接，从而防止认知退化。不使用 LLM 的约束反而会增强创造力。实际上，LLM 给你的代码带来的约束更多，因为它们只按训练过的方式写代码，你永远接触不到其他解法。我记得十多年前学 Ruby 时看 RubyQuiz.com，看到用户提交的各种完全不同的解法，虽然很多在今天看来不够高效或不标准，但通过重打并看它们运行，对我建立 Ruby 编程思维至关重要。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个深刻的观点：真正的认知提升来自于大脑原创而非复刻 AI 的输出。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49155724" target="_blank" rel="noopener noreferrer">@jader201</a>
+        </div>
+        <p class="comment-text">我百分之百同意手写代码对大脑有好处。但问题是，你的雇主并不关心你的大脑是否在创造新的神经元，他们只关心产出和利润。我觉得那些认为我们可以继续手写代码的人，要么是在否认 LLM 终将（如果还没实现的话）超越手写代码的事实，要么是在否认雇主无法接受低生产率。如果你有幸为一家不在乎或没意识到这一点的公司工作，那完全可以继续手写。或者如果你是在做副业，那也没问题。但仅仅因为手写代码对大脑发育更好，并不意味着整个行业会支持这种做法。</p>
+        <p class="comment-reason"><span>入选理由</span>将讨论从个人学习拉回到残酷的职场现实，指出了理想主义与商业效率之间的冲突。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49153987" target="_blank" rel="noopener noreferrer">@f311a</a>
+        </div>
+        <p class="comment-text">这听起来一点也不好玩。在个人项目里手动编程更好，你能学到更多。重打东西对学习来说是低效的，就像重抄微积分题的解法一样——你学不到东西。即使有代码逻辑的解释，也不是你自己想出来的，你也不知道替代方案。这只是在练习记忆，而不是建立直觉。更好的选择是先自己写，然后让 LLM 提供更好的优化建议。它们在优化热循环（hot loops）等方面表现非常出色。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了另一种 AI 协作模式：先自力更生再由 AI 优化，认为这比单纯重打更有助于建立直觉。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49156525" target="_blank" rel="noopener noreferrer">@WhyComboNadir</a>
+        </div>
+        <p class="comment-text">这里有很多反对意见，但如果这种方法对你有用，那就太好了。对我来说，我觉得 LLM 极大地扩展了我的认知能力。我现在更像是一个统领军队的将军，而不是在扮演士兵的角色。当然，这意味着我失去了作为孤独士兵的体验，但对我来说，这是一个显而易见的权衡。好了，我现在得去把我的车推到杂货店了（这样我就不会忘记怎么走路了），我和我那粗壮的小腿几小时后见。这只是个善意的玩笑。继续做你认为对的事，感谢分享，希望大家都能友好地开开玩笑。</p>
+        <p class="comment-reason"><span>入选理由</span>用幽默的类比指出了“为了锻炼而拒绝工具”可能存在的荒诞性，代表了效率至上派的观点。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>手动重打 AI 生成的代码，听起来像是数字时代的“苦行僧”。这种做法在程序员群体中引发了极大的分歧：支持者如 sarreph 认为这是一种有效的肌肉记忆学习法，能防止大脑在 AI 辅助下变得懒惰；而反对者则认为这只是在浪费时间，类似于为了锻炼腿部肌肉而推着汽车去超市。核心矛盾在于：我们编程的目标究竟是“交付产品”还是“磨练技艺”？在雇主追求极致效率的今天，这种追求深度理解的“匠人精神”正逐渐变成一种昂贵的奢侈品。正如评论所言，我们可能正集体步入一个“管理者”时代，虽然指挥着 AI 军队，却在逐渐丧失作为“士兵”的实战本领。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49158581">
+      <summary class="story-overview">
+        <span class="rank-number">06</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">blog.cloudflare.com</span>
+            <span>138 points</span>
+            <span>原始 #7 · 低讨论量降权 +4.2</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://blog.cloudflare.com/smaller-faster-safer-models/" target="_blank"
+              rel="noopener noreferrer">Smaller, faster, safer: running Kimi and GLM at scale</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49158581" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 36</a>
+          </h2>
+          <p class="summary">Cloudflare 分享了其 Workers AI 平台在高效运行 Kimi 和 GLM 等大型长文本模型方面的技术优化。通过将 KV 缓存从 16 位（BF16）量化为 8 位（FP8），他们在 Kimi K2.6 上实现了上下文容量翻倍，并将峰值吞吐量提升了 41%。此外，他们将 GLM 的权重压缩至 4 位（INT4），使解码速度在低并发下提升了 55%。为了确保多请求共享内存时的安全性，Cloudflare 还引入了开销低于 1% 的 KV 缓存完整性检查机制。尽管基准测试显示准确率损失极小，但社区对量化是否会影响编程等复杂任务仍存有疑虑。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Cloudflare 详细介绍了其在 Workers AI 上优化 Moonshot 的 Kimi 和 Z.ai 的 GLM 模型的实践。针对长文本模型面临的内存瓶颈，他们采用了 KV 缓存量化技术，将精度从 BF16 降至 FP8。这一举措虽然略微增加了单 token 的计算开销，但通过减小内存占用，使单台 GPU 能处理的并发请求数从 32 提升至 64，整体吞吐量显著增加。在模型权重方面，他们对 GLM 5.2 实施了 INT4 压缩，将权重体积缩小了 40%。由于解码阶段受内存带宽限制，INT4 显著提升了生成速度；而针对计算受限的预填充阶段，他们则保留了 FP8 精度以维持性能。</p><p>为了应对高并发下共享物理内存带来的安全风险，Cloudflare 开发了一套 KV 缓存完整性检查系统。该系统通过为物理缓存页添加动态标签，确保每个请求只能访问其预期的内存区域，防止数据泄露。测试表明，这一安全层的性能损耗控制在 1% 以内。尽管 Cloudflare 提供的 GSM8K 和 MMLU 等基准测试结果显示量化前后的模型表现“几乎无异”，但这种优化策略也引发了关于透明度的讨论。未来的工作重点将包括在更多模型上推广 FP8 缓存，以及在 NVIDIA Blackwell 架构上验证更低精度的权重方案。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49160216" target="_blank" rel="noopener noreferrer">@scrlk</a>
+        </div>
+        <p class="comment-text">很高兴看到有供应商对 KV 缓存量化保持透明。我一直怀疑有些供应商在推销其未量化权重模型的同时，私下里在做这种操作，尽管 KV 量化对质量的损害可能比权重量化更严重。然而，我希望他们的测试能更详细一些。首先，某些模型系列对 KV 量化的敏感度比其他模型更高（这里只测试了 Kimi K2.6）。其次，他们用来声称 FP8 KV 量化“无区别”的评估套件明显缺乏编程基准测试；在长时间运行的任务中，微小的工具调用错误会随时间累积。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从专业角度指出了 KV 缓存量化的潜在风险，特别是对编程任务的影响，补充了文章未提及的技术局限性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49161446" target="_blank" rel="noopener noreferrer">@lostmsu</a>
+        </div>
+        <p class="comment-text">所以他们量化了模型，却只在博客文章里提了一下（而不是在模型页面上给出警告），甚至在博客里还假装通过一些已经饱和的小上下文任务基准测试来证明没有区别。编程智能体可能会受到 KV 量化的严重负面影响。我认为在“商店”页面上不说明就提供量化模型是一种欺诈行为。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提出了一个关于行业透明度和道德的重要观点，质疑了云服务商在不明确告知用户的情况下进行量化的做法。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49161181" target="_blank" rel="noopener noreferrer">@amluto</a>
+        </div>
+        <p class="comment-text">他们提出了一个非常强有力的主张：
+&gt; 如果这改变了模型的答案，那么这一切都不重要了
+如果他们想断言答案没有改变，那么也许他们应该计算 token 概率输出之间的统计距离之类的指标。我怀疑结果不会表明答案在任何合理的解释下都没有改变。也许结果仍然足够好，但“无区别”这个说法太绝对了。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者对“无损量化”的说法提出了科学的质疑，建议用更严谨的统计方法来衡量模型质量的变化。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49162125" target="_blank" rel="noopener noreferrer">@TacticalCoder</a>
+        </div>
+        <p class="comment-text">“值得精确说明收益来自哪里，因为这并非原始速度。”
+有趣的是，这听起来就像 AI “学会”了说英语，但又没完全学会。人们根本不会使用这种奇怪的句式：这些句子听起来有点像一个“凯伦”（Karen）在试图表达观点。令我这个使用 AI 的开发者感到恐惧的是，这些大模型在写代码时也干同样的事：看起来像正经代码，但只要你深挖一点，就发现根本不是那么回事。它很啰嗦，却没增加任何实质内容：只是无穷无尽的废话和“烂面条”代码。疯狂的是，现在都 2026 年了，开发者们在发布博客文章之前，竟然懒得把他们那些 AI 生成的废话放进“去废话工具”里处理一下。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论幽默地吐槽了博客文章本身疑似 AI 生成的文风，反映了开发者社区对“AI 垃圾内容”的普遍反感。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Cloudflare 的这篇技术分享展示了云服务商在成本与性能之间进行的极限拉扯。通过 KV 缓存和权重的双重量化，他们确实在硬件利用率上取得了显著进步，这对于降低 AI 使用成本至关重要。然而，正如评论区所指出的，这种“效率提升”往往伴随着透明度的缺失。当服务商声称量化对模型质量“无影响”时，他们通常依赖的是已经趋于饱和的通用基准测试，而忽略了编程、长逻辑推理等对精度极度敏感的边缘场景。这种“静默量化”的做法在开发者社区引发了关于“欺诈”的激烈讨论。此外，讽刺的是，这篇讨论 AI 优化技术的文章本身因其浓重的“AI 腔”而遭到了读者的嫌弃，这提醒我们：在追求机器效率的同时，人类对真实、简洁沟通的需求依然不可忽视。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49156011">
+      <summary class="story-overview">
+        <span class="rank-number">07</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">clickhouse.com</span>
+            <span>269 points</span>
+            <span>原始 #12 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://clickhouse.com/blog/andy-pavlo-joins-clickhouse" target="_blank"
+              rel="noopener noreferrer">Andy Pavlo joins ClickHouse to establish ClickHouse Labs</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49156011" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 55</a>
+          </h2>
+          <p class="summary">卡内基梅隆大学（CMU）知名数据库教授 Andy Pavlo 宣布加入 ClickHouse，负责组建并领导全新的研究部门 ClickHouse Labs。该实验室的目标是建立世界一流的工业研究机构，类似于 IBM 或微软研究院，致力于推动数据库技术的边界。与传统的象牙塔式研究不同，ClickHouse Labs 将与工程团队紧密合作，将学术构想转化为实际的产品功能。研究重点将涵盖 ClickHouse 的分析性能、PostgreSQL 的可靠性，以及数据库如何更好地支持新兴的 AI 和智能体技术。这一举措旨在解决数据库领域长期存在的复杂挑战，如新型硬件适配、算法优化和自动化运维。尽管这种融合充满潜力，但如何在快速迭代的商业环境中平衡长期研究与短期交付将是其面临的主要挑战。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Andy Pavlo 是数据库领域的学术明星，以其在 CMU 的公开课和对数据库内部机制的深入研究而闻名。他选择加入 ClickHouse 是因为该系统自 2016 年开源以来，就凭借 C++ 编写和 SIMD 向量化执行等特性在性能上处于领先地位。ClickHouse Labs 的成立标志着公司从单纯的工程驱动向“研究+工程”双轮驱动转型。Pavlo 强调，实验室不会闭门造车，而是会深入参与 ClickHouse 和 PostgreSQL 托管服务的开发，确保研究成果能直接服务于用户并解决实际的性能瓶颈。</p><p>实验室的愿景非常宏大，计划探索包括新型硬件架构、执行策略以及数据结构在内的前沿课题。特别值得关注的是，Pavlo 计划研究数据库与 AI 智能体之间的双向互动：一方面是数据库如何进化以支撑 AI 负载，另一方面是利用 AI 来自动化数据库本身的开发和调优。这种探索对于解决图数据库或空间数据库中长期存在的扩展性难题具有重要意义。然而，这种模式也反映了当前学术界的一个现状：随着政府资助的波动，高影响力的基础研究正越来越多地向拥有雄厚财力的企业实验室转移。未来，ClickHouse Labs 能否在保持学术严谨性的同时，持续输出改变行业的游戏规则，值得开发者群体密切关注。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49157146" target="_blank" rel="noopener noreferrer">@pphysch</a>
+        </div>
+        <p class="comment-text">这很酷，但令人感到苦乐参半的是，公共研究基础设施（大学）现在的配置似乎已经不再支持这种高影响力的研究了。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了当前计算机科学研究重心从高校向企业实验室转移的社会背景。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49157788" target="_blank" rel="noopener noreferrer">@jandrewrogers</a>
+        </div>
+        <p class="comment-text">我们今天在生产中使用的数据库存在严重的局限性，甚至远未达到理论上的可能。数据库的许多传统部分（索引、缓存、调度等）其实都是 AI 完备（AI-complete）的算法问题。某些数据库子类（如图数据库或空间数据库）由于基础计算机科学中仍存在未解决的问题，其可扩展性和性能一直很差。事实上，提高数据库的通用性、可扩展性和性能在渐进路线上与设计通用人工智能（AGI）是汇合的，这表明它确实属于“深科技（deep tech）”。数据库中的许多问题非常困难，几十年来进展甚微。</p>
+        <p class="comment-reason"><span>入选理由</span>从底层科学角度论证了数据库研究的深度和挑战，反驳了“数据库已是成熟技术”的观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49158911" target="_blank" rel="noopener noreferrer">@AbbeFaria</a>
+        </div>
+        <p class="comment-text">我在 2026 年 4 月“旁听”了 CMU 15-445 课程。随后我申请了 Azure Hyperscale 数据库团队，并把完成的作业（缓冲池管理器、并发 B+ 树、事务支持等）直接私信发给了招聘经理作为求职筹码。凭借这些，我获得了面试机会，尽管最后因为 C++ 经验不足没过，但你的课程让我能在面试中对答如流。即使我除了这门课之外没有任何数据库经验，我也感到准备充分。感谢你将课程开源，作为一名职场人士，能利用业余时间学习非常有帮助。我是你的铁杆粉丝！</p>
+        <p class="comment-reason"><span>入选理由</span>展示了 Andy Pavlo 的学术贡献对开发者职业生涯的实际影响。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49158861" target="_blank" rel="noopener noreferrer">@a34729t</a>
+        </div>
+        <p class="comment-text">我非常好奇顶级快速 OLAP 产品（StarRocks, ClickHouse）与 Trino 的融合。听起来大家都在追求计算与存储分离，使用 S3 或类似设备作为存储层，从而放弃了同机连接（我知道 ClickHouse 的 join 性能很糟糕）……那么这对数据摄取（和索引）意味着什么？是 Iceberg V3？Paimon？还是通过数据库引擎进行定制化的摄取以完成索引？</p>
+        <p class="comment-reason"><span>入选理由</span>提出了关于数据库架构演进（存算分离、索引机制）的具体技术疑问。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Andy Pavlo 加入 ClickHouse 并组建实验室，是数据库界“学术大牛入世”的又一里程碑。这不仅是 ClickHouse 的人才胜利，更折射出数据库领域正进入一个“深科技”回归期。正如评论所言，现代数据库在索引、调度等环节仍面临 AI 完备级的难题，而传统的大学研究环境在算力和工程落地上的局限，使得像 ClickHouse Labs 这样的企业实验室成为了突破前沿的最佳阵地。Pavlo 提到的“数据库与 AI 智能体双向赋能”是一个极具前瞻性的方向，这预示着未来的数据库可能不再仅仅是冷冰冰的存储容器，而是具备自我优化能力的智能系统。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49158474">
+      <summary class="story-overview">
+        <span class="rank-number">08</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">changelog.complete.org</span>
+            <span>121 points</span>
+            <span>原始 #9 · 低讨论量降权 +4.5</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://changelog.complete.org/archives/44456-celebrating-45-years-of-kermit-with-the-first-new-c-kermit-release-in-15-years-and-working-with-a-decades-old-c-codebase" target="_blank"
+              rel="noopener noreferrer">Celebrating 45 Years of Kermit with the First New C-Kermit Release in 15 Years</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49158474" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 35</a>
+          </h2>
+          <p class="summary">Kermit 通信协议诞生于 1981 年，最初是为了解决哥伦比亚大学不同大型机之间的文件传输难题。近日，C-Kermit 发布了 15 年来的首个正式版本（v11），标志着这一经典软件在开源社区的重生。新版本由 Debian 维护者接手，修复了大量安全漏洞，并增加了 IPv6 支持和现代化的自动化测试框架。Kermit 以其极强的跨平台兼容性著称，曾应用于国际空间站、波音 787 制造及各类嵌入式系统。尽管现代网络多采用 TCP/IP，但 Kermit 在处理复杂的嵌套连接和老旧串行链路时依然具有无可替代的可靠性。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Kermit 协议由 Frank da Cruz 等人在 1981 年设计，旨在应对当时极其碎片化的计算环境。它具备处理 7 位链路、字符集转换（如 ASCII 到 EBCDIC）以及在极不稳定串行线路上纠错的能力。随着时间推移，C-Kermit 演变为功能最全的实现，集成了强大的脚本语言和 TCP 支持，甚至被用于国际空间站的数据传输。2011 年，哥伦比亚大学停止资助后，该项目转为 BSD 许可的开源软件，由创始人以志愿者身份继续维护。</p><p>此次发布的 C-Kermit 11 是由 John Goerzen 主导的现代化尝试。他在清理代码库时，面对的是一个充满了大量 `#ifdef` 宏定义、支持从 VMS 到 OS/2 等数十种古老系统的“活化石”。Goerzen 引入了 Git 版本控制，删除了大量冗余代码，并修复了长期存在的内存安全漏洞。为了适应现代需求，新版本增加了 IPv6 支持，并建立了包含 2000 个测试用例的 CI 流程，确保在 Linux、macOS 及各类 BSD 系统上的稳定性。</p><p>尽管 ZMODEM 等协议在 BBS 时代更流行，但 Kermit 在极端复杂的网络拓扑（如多层嵌套的 SSH 或跳板机）中表现卓越。它目前仍广泛应用于嵌入式设备的固件更新和工业自动化领域。这次发布不仅解决了现代编译器下的构建问题，还通过 Open Kermit 项目为未来的协作奠定了基础，同时也是对创始人 Frank da Cruz 坚持 44 年奉献的致敬。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49160687" target="_blank" rel="noopener noreferrer">@jonathaneunice</a>
+        </div>
+        <p class="comment-text">我在 1989 年左右为 IBM 的 AIX 系统编译过 Kermit，当时是为了研究“AIX 与其他 Unix 系统的兼容性如何”。在我的记忆中，Kermit 的源代码一直是软件支持多种不同、不兼容、非标准平台最高水平的代表。它甚至比 Unix 本身还要强，因为它还能在 VMS 和当时的非 Unix 系统上运行。我这辈子从未见过这么多的 `#ifdef`，以及如此复杂的“我是运行在这个平台还是那个平台？它有这个功能还是那个功能？没有，那另一个呢？也许是 HP-UX？HP-UX 6？不，是 7？不，是 8？不，那 VMS 呢？不，SunOS 呢？不，Unix System III 呢？”……等等等等，似乎永无止境。Kermit 是那个时代可移植性的非凡丰碑，当时的“可移植”通常意味着“我们已经单独适配了任何人建造过或可能仍在使用的每一个不兼容系统，无论这种可能性有多小”。</p>
+        <p class="comment-reason"><span>入选理由</span>这段评论生动地描述了 Kermit 源代码中令人惊叹的可移植性设计，是该软件历史地位的有力见证。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49160249" target="_blank" rel="noopener noreferrer">@chipotle_coyote</a>
+        </div>
+        <p class="comment-text">我记得在玩 BBS 的日子里，我大多会忽略 Kermit；当“SuperKermit”出现时，它的性能虽然能与 ZMODEM 竞争，但看起来已经很过时了。后来在 1991 年左右，一个朋友给了我他的大学 Unix 账号，让我可以玩 Gopher、Archie 和 TinyFugue（MUD/MUCK 等世界）。难点在于：要从我家里的机器连接到他的账号，我必须拨号进入一个佛罗里达州的网络，该网络允许你拨入并连接到各个大学校园的机器。那个网络运行在某种 IBM 小型机上。而且，它并不直接连接到 Unix 机器，不，它连接到一台 VAX，而那台 VAX 与 Unix 机器在同一个局域网内。所以我必须拨号到 IBM 机器，从那里连接到 VAX，然后再从 VAX telnet 到 Unix 盒子。令人难以置信的是，这一切都成功了，只有轻微的延迟……但当我尝试从 Unix 机器传输文件到我的个人电脑时，ZMODEM 不行，XMODEM 也不行。我记得还试过一两个我已经忘记名字的东西。然后我想起了 Kermit，以及它处理困难连接的名声。它第一次尝试就成功传输了文件。</p>
+        <p class="comment-reason"><span>入选理由</span>通过一个具体的历史案例，展示了 Kermit 在极端复杂、多层嵌套的网络环境下无与伦比的可靠性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49159194" target="_blank" rel="noopener noreferrer">@voakbasda</a>
+        </div>
+        <p class="comment-text">我是一个老兵（gray beard），现在仍然经常在嵌入式开发中使用 Kermit。它在通过串口控制台自动化操作方面非常方便。我很好奇现在的年轻人对它的采用程度如何。</p>
+        <p class="comment-reason"><span>入选理由</span>说明了 Kermit 在现代技术领域（尤其是嵌入式开发）中依然具有实用价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49162459" target="_blank" rel="noopener noreferrer">@donflamenco</a>
+        </div>
+        <p class="comment-text">一个很酷的功能是，你可以使用 C-Kermit 在打开的 SSH 会话中进行内联文件传输。它在 screen/tmux 之类的终端复用器上不起作用，但对于在客户端和远程主机之间快速传输文件非常有用。远程主机只需要有 kermit 或 zmodem (sz/rz)，因为至少 K95 也支持 zmodem。有些付费的 SSH 客户端（如 SecureCRT）有 Zmodem 功能。能在自由软件上拥有这个功能真的很棒。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了一个 Kermit 在现代开发环境（SSH 会话）中的实用技巧。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>在软件领域，很少有项目能像 Kermit 这样跨越 45 年的鸿沟。它诞生于那个“可移植性”意味着要手动适配每一个不兼容硬件的蛮荒时代，其代码库中密集的 `#ifdef` 宏定义简直是计算机通信史的活化石。正如评论所言，Kermit 的真正价值在于它的“不离不弃”：当现代协议在多层嵌套的 SSH 或极不稳定的串口链路上败下阵来时，Kermit 往往是那个唯一能把字节送达彼岸的工具。这次 v11 版本的发布不仅是技术上的修补，更是一种精神的延续——在万物皆可云的今天，依然有人在守护着这些支撑嵌入式系统和工业底座的“沉默支柱”。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49162086">
+      <summary class="story-overview">
+        <span class="rank-number">09</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">virtuallyfun.com</span>
+            <span>47 points</span>
+            <span>原始 #5 · 低讨论量降权 +9.9</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://virtuallyfun.com/2026/08/03/windows-xp-2002-for-the-itanium-unbridled-rage/" target="_blank"
+              rel="noopener noreferrer">Windows XP 2002 for the Itanium: Unbridled rage</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49162086" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 17</a>
+          </h2>
+          <p class="summary">开发者成功通过 QEMU 的一个新分支，在现代硬件上模拟了英特尔第一代安腾（Itanium Merced）处理器，并运行了 Windows XP 64 位版。这一过程涉及在 macOS 上使用 GCC 15 交叉编译安腾固件，并克服了模拟器极高的不稳定性。安腾架构曾被寄予厚望，试图用显式并行指令计算（VLIW）取代 x86，但最终因编译器开发难度大和性能不佳而失败。尽管具有历史意义，但目前的模拟仍处于早期阶段，系统安装成功率仅约五分之一。这一进展为研究和保存这一“失败”的计算历史分支提供了宝贵工具。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>本文记录了作者利用 Malte Kuhlmann 开发的 QEMU 分支，成功在现代 Mac Mini 上模拟英特尔安腾 Merced 处理器的过程。为了让模拟器运行，作者首先在 macOS 环境下构建了 GCC 15 交叉编译器，用于编译安腾架构所需的 EFI 固件。随后，作者尝试安装了 Windows XP 64-bit Edition（Build 2600）以及 Windows Server 2003 的安腾版本。尽管 QEMU 的这一分支引入了 AI 辅助技术来提升模拟效率，但过程依然充满挑战，安装过程极不稳定，作者经历了多次死机和尝试才最终完成安装。</p><p>安腾架构的历史充满了争议，它采用的 VLIW 架构将指令并行的复杂性从硬件转移到了编译器上。然而，这种设计在处理具有不可预测内存访问模式的通用任务（如数据库和 Web 服务）时表现糟糕。作者指出，由于安腾一代（Merced）与二代（McKinley）之间存在二进制兼容性问题，许多为后期安腾开发的软件无法在当前的模拟器中运行。此外，文中还对比了基于安腾内核的 XP 与后来基于 Server 2003 内核的 AMD64 版 XP 的差异。目前，该模拟器虽然能运行 Windows，但对 HP-UX 或 OpenVMS 等其他安腾原生系统的支持仍不完善，未来仍需观察其在指令集覆盖和稳定性上的改进。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49163221" target="_blank" rel="noopener noreferrer">@acdha</a>
+        </div>
+        <p class="comment-text">还有一篇由前英特尔芯片设计师撰写的长文，他对安腾团队仅凭几个针对浮点运算受限代码的手动调度例程就敢承诺性能数据感到不可思议。我认为有一个强有力的论点是：该设计并非基于对大多数 CPU 实际用途的正确理解，而是过度针对了性能最敏感的 HPC（高性能计算）代码。我曾协助在测试用的安腾系统上运行一些 HPC 代码，即便在那儿，也很容易脱离那些表现良好的模式，导致性能甚至比旧款奔腾还慢，这还没算上价格因素。
+
+&gt; 我说，抱歉打断一下。但如果没有编译器，你们怎么使用模拟器？他说，确实我们还没有编译器，所以我手动汇编了模拟程序。我问：“你是怎么用这种方式处理几千行代码的？”他说：“不，我只做了 30 行代码。”我惊呆了，说：“你们就靠 30 行手动生成的代码来预测这个架构的整个未来？”[笑声]，我就是这么直白说的，我不是想侮辱人，但我真的被雷到了。安迪·格鲁夫（Andy Grove）插话说：“我们现在不是来重新考虑这项工作的未来的，继续吧。”</p>
+        <p class="comment-reason"><span>入选理由</span>这段评论引用了极具价值的历史文献，揭示了安腾架构在设计初期存在的严重决策失误和技术盲点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49162805" target="_blank" rel="noopener noreferrer">@monocasa</a>
+        </div>
+        <p class="comment-text">我觉得我需要写篇博客来聊聊这个，简而言之，我认为有一个很好的论点：问题并不在于编译器，尽管大众普遍这么认为。我甚至不认为是因为不可预测的内存访问时间，因为安腾拥有大量特殊的架构硬件来处理不可预测的内存访问（其中很多本质上是 OoO（乱序执行）核心用于内部记账的原语，只是在架构上暴露了出来）。
+
+我只是认为这个架构与 Cell 等架构类似，它们是为一个没有“登纳德缩放比例定律（Dennard scaling）”终结的世界规划的，当我们不再以 10GHz 以上的消费级 CPU 为目标时，它就失去了意义。2006 年后趋于稳定的时钟周期也意味着，在 2006 年左右最合理的 CPU 架构（Tomasulo OoO 核心）将继续发挥作用，而工艺进步带来的收益大多只是用来制造更大、更宽的核心。</p>
+        <p class="comment-reason"><span>入选理由</span>评论从半导体物理和架构演进的角度，对安腾的失败提出了不同于“编译器背锅论”的深刻见解。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49162777" target="_blank" rel="noopener noreferrer">@sedatk</a>
+        </div>
+        <p class="comment-text">一个历史注记：文中提到的 Windows XP 64-bit Edition 是专门针对安腾架构的。它是基于 XP 内核的，而针对 AMD64 架构的 Windows XP x64 Edition 则是基于 Windows Server 2003 内核的。正因如此，Windows XP x64 Edition 与其他 XP 版本相比，具有显著不同的性能特征。从某些方面来看，它其实更接近 Vista 而非 XP。</p>
+        <p class="comment-reason"><span>入选理由</span>澄清了 Windows XP 历史上两个极易混淆的 64 位版本之间的本质区别。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49162615" target="_blank" rel="noopener noreferrer">@mghackerlady</a>
+        </div>
+        <p class="comment-text">我怀念安腾。说出这话我觉得自己像个疯子，但我确实怀念。它身上有一种吸引我的魅力。唉，那些问题太难解决，或者说不再值得去解决了。讽刺的是，它大约在 LLM/AI 开始变强的时候彻底消亡。我觉得 VLIW 的编译器问题在某种程度上可以通过专门构建的 AI 来解决。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一种有趣的假设，即现代 AI 技术或许能解决当年困扰安腾的编译器难题。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>安腾（Itanium）曾是英特尔试图终结 x86 统治地位的宏伟蓝图，却最终沦为计算机史上最著名的“烂尾楼”。看到开发者在 2026 年依然通过 QEMU 模拟器去复活那个运行在 Merced 处理器上的 Windows XP，这种“愤怒”与执着令人动容。安腾的失败不仅是技术上的，更是决策上的傲慢——正如评论中提到的，英特尔曾试图仅凭 30 行手动优化的代码就定义计算的未来。它代表了一个时代的终结：那个相信编译器能完美预测代码并行性、相信时钟频率能无限攀升的纯真时代。如今，我们在现代硬件上模拟它，更像是在研究一种已经灭绝的、进化点歪了的史前生物。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49157997">
+      <summary class="story-overview">
+        <span class="rank-number">10</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">hoplite.sh</span>
+            <span>55 points</span>
+            <span>原始 #16 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://hoplite.sh" target="_blank"
+              rel="noopener noreferrer">Launch HN: Hoplite (YC S26) – Effortlessly deploy cloud coding agents</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49157997" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 50</a>
+          </h2>
+          <p class="summary">Hoplite 是一个在云端部署编程智能体（coding agents）的平台，旨在简化开发和测试流程。它能将开发者的本地设置（如会话、内存和 MCP 服务）迁移到云端，实现开发环境的无缝衔接。该工具的核心优势在于每个沙箱都能生成实时 URL，让开发者无需本地操作即可直接预览和验证智能体生成的代码效果。创始人认为，未来开发者的重心将从审查代码行转向审查产品输出，如视觉效果和 API 功能。目前该服务支持并发运行数百个智能体，但其较高的订阅价格和对复杂存量架构的适配能力仍是潜在的挑战。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Hoplite 的核心理念是让编程智能体在云端“像人一样”工作，而不仅仅是生成代码片段。它通过将本地开发环境（包括 MCP 服务器和上下文记忆）完整搬到云端，解决了智能体在孤立环境中难以运行复杂项目的问题。最亮眼的功能是它为每个任务沙箱提供了一个实时 URL，这意味着智能体修改代码后，开发者可以直接在浏览器里看到运行效果，而不需要在本地拉取分支或配置环境。这种“预览优先”的模式非常适合快速验证 UI 更改、API 逻辑或跨平台兼容性。</p><p>在技术架构上，Hoplite 选择了自研智能体框架而非套用 Claude Code 等现成方案，以获得更高的定制自由度。他们利用 Modal 进行沙箱隔离，并使用 Temporal 确保长时工作流的可靠性。创始人预测，随着 AI 能力提升，开发者将从繁琐的代码行审查中解放出来，转而关注更高维度的产品验证。不过，对于拥有复杂本地依赖（如特定数据库集群或私有云设施）的大型成熟项目，如何完美复刻环境并保证安全性，将是 Hoplite 接下来需要面对的主要技术门槛。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49159660" target="_blank" rel="noopener noreferrer">@fishtoaster</a>
+        </div>
+        <p class="comment-text">我花了一分钟才看明白它的价值——我起初以为这只是 Cursor 的云端智能体。但对我来说关键点在于“每个沙箱都会在一个实时 URL 上启动你的应用”。Cursor 很难做到这一点，而这正是能让我彻底抛弃本地环境的原因：无需在本地检出代码就能实际尝试 PR（拉取请求）的效果。顺便问下：这是怎么实现的？我们在其他云环境中运行开发环境时遇到过困难，因为我们需要运行一些通过本地 docker compose 管理的组件（如 clickhouse、localstack、pg 等）。另外，关于定价的一点小建议：如果能有按需付费版本或更便宜的固定费用就太好了。我觉得 99 美元/人/月的模式对专业工作没问题，但对于个人项目来说投入太大了。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了 Hoplite 相比于 Cursor 等竞品的独特竞争优势（实时预览 URL），同时也提出了关于复杂环境迁移的现实疑问。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49160584" target="_blank" rel="noopener noreferrer">@asdev</a>
+        </div>
+        <p class="comment-text">提供一个参考点：我们公司内部正在构建类似的东西。如果你针对的是从零开始构建项目的人，这可能行得通；但你不可能迁移任何稍微成熟一点的基础设施栈，组织也不会愿意这么做。你需要处理每个人开发环境的多样复杂性，而这些环境本身就经常因为成千上万种原因在本地都跑不通。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者从企业级应用的角度提出了尖锐的挑战，质疑了云端迁移成熟开发环境的可行性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49160918" target="_blank" rel="noopener noreferrer">@kristianc</a>
+        </div>
+        <p class="comment-text">&gt;&gt; 它会开启一个拉取请求
+&gt;&gt; 然后随着评审意见的提出，在同一个线程和上下文中持续迭代。
+根据我的经验，特别是使用 Sol 的经验，智能体通常很不擅长判断什么时候该停止“迭代”，它们会不断去覆盖那些越来越离谱的边缘情况。Hoplite 是如何解决这个问题的？</p>
+        <p class="comment-reason"><span>入选理由</span>这是一个关于 AI 智能体实际工程应用中非常经典且棘手的“过度迭代”问题的反馈。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49159733" target="_blank" rel="noopener noreferrer">@scottydelta</a>
+        </div>
+        <p class="comment-text">我正在努力理解它与我目前使用的 Claude Code 移动端方案有何不同。在 Claude 的手机 App 或网页版上，我可以选择一个仓库，要求它开发一个功能，它就会写代码、运行测试、添加更多测试并创建一个新分支。然后我可以点击创建 PR，或者配置 Claude Code 自动创建 PR。我还有另一套方案，是在 VPN 后自托管的 docker compose，一个容器运行通过 agent of empires 管理的 Claude Code 智能体，另一个容器运行带有 SSE 的 playwright。通过这套方案，我的智能体可以访问真实的浏览器进行实时测试，我也可以通过 domain:port 访问智能体启动的应用。这是 Claude 原生无法提供的。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者分享了现有的替代方案和自建工具链，为评估 Hoplite 的市场定位提供了对比参考。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Hoplite 的出现反映了 AI 编程工具的一个重要趋势：从“辅助写代码”转向“自主交付功能”。通过提供云端沙箱和实时预览 URL，它试图解决智能体开发中最头疼的验证环节，让开发者从代码审查者转变为产品验收者。然而，正如评论区所指出的，99 美元的月费对个人开发者而言门槛颇高，且对于依赖复杂本地 Docker 环境的大型企业项目，云端环境的复刻与兼容性依然是巨大的挑战。这种“全托管云端开发”的愿景是否能跑通，取决于它处理复杂基础设施的能力。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49160437">
+      <summary class="story-overview">
+        <span class="rank-number">11</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">mcgill.ca</span>
+            <span>117 points</span>
+            <span>原始 #18 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.mcgill.ca/oss/article/critical-thinking/dunning-kruger-effect-probably-not-real" target="_blank"
+              rel="noopener noreferrer">The Dunning-Kruger effect may just be a data artefact (2020)</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49160437" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 121</a>
+          </h2>
+          <p class="summary">Dunning-Kruger 效应通常被认为是指“无知者无畏”，即能力欠缺的人往往会高估自己的水平。然而，麦吉尔大学的一篇文章指出，这一效应可能并非真实的心理偏差，而仅仅是统计学上的“数据伪影”。研究人员发现，使用完全随机生成的数据也能绘制出与原始研究几乎一致的图表。这种现象的本质可能是测量误差与数学边界的结合：由于排名存在上下限，表现最差的人只能向上偏离，而表现最好的人只能向下偏离。这意味着该效应可能只是数学上的必然结果，而非人类大脑特有的认知缺陷。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>1999年，Dunning 和 Kruger 提出，在特定领域缺乏技能的人不仅会犯错，还因为缺乏评估能力而无法意识到自己的平庸。这一理论在流行文化中极受欢迎，常被用来解释为什么“笨人不知道自己笨”。但近年来，数学家和统计学家通过研究指出，原始实验中使用的四分位数图表存在严重的统计陷阱。关键证据在于，当研究人员使用计算机生成的随机数据进行模拟时，竟然得到了与原始实验惊人相似的曲线。这种“伪影”源于测量的不确定性：在排名估算中，表现最差的人无法再低估自己，而表现最好的人也无法再高估自己，这种边界限制迫使数据向平均值靠拢。</p><p>此外，后续研究发现，专家和新手在估算准确度上的频率其实相似，只是专家的误差范围更窄。Dunning 本人辩称该效应更多关乎“被误导”而非“无知”，但批评者认为，如果一个心理效应可以通过随机噪声完美复制，那么它作为一种独特认知偏差的地位就岌岌可危。虽然我们日常生活中确实能见到傲慢的无知者，但这可能属于“过度自信偏差”或“优于平均水平效应”，而非 Dunning-Kruger 所描述的特定机制。这一争议也反映了心理学面临的“重复性危机”，提醒我们在解读看似直观的科学结论时需保持警惕。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49161081" target="_blank" rel="noopener noreferrer">@Aurornis</a>
+        </div>
+        <p class="comment-text">严格的学术定义早已脱离了通俗用法。也许一直以来都是这样：如果某个新手过度自信且力不从心，我们会说这是“Dunning-Kruger”；如果某人缺乏自信但表现优于自我评估，在通俗用法中通常不被视为 Dunning-Kruger，而是被称为冒充者综合征，或者根本没有标签。研究人员其实并没有反驳这一点。他们发现，新手对自己表现的自我评估范围比经验丰富的人更广。因此，在新手组中，你更有可能发现极度过度自信的人，但你也会发现低估自己的人。正如作者写给我的：“专家和新手低估和高估技能的频率是一样的，只是专家的波动范围更窄。”这并没有精确地反驳“在新手中心可以找到过度自信的人”这一观点，而这正是该词的通俗用法。所以我相信在对所有受试者取平均值时，这在统计上是抵消的。但我从未认为 Dunning-Kruger 的通俗用法是应用于平均人群的。它总是被用来形容那些处于新手群体长尾末端的离群值，那些甚至不知道自己不知道什么的人。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地指出了学术定义与大众通俗用法之间的脱节，解释了为什么人们在直觉上仍然觉得该效应“很准”。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49162163" target="_blank" rel="noopener noreferrer">@Jensson</a>
+        </div>
+        <p class="comment-text">不，论点是：表现最好的人无法高估自己的排名，而表现最差的人无法低估它。你表现得越好，高估自己技能的空间就越小，比如第二名最多只能估错一个位次。如果他们不是估算排名，而是估算具体分数，这种效应几乎会完全消失。因为除非测试太简单导致顶尖者拿了满分，否则每个人都有很大的空间去高估或低估自己。但就目前而言，当排名前 10% 的人都估计自己在前 10% 时，你会说他们低估了自己，因为平均而言前 10% 的人实际处于前 5% 的位置。与此同时，如果最后 10% 的人说自己在最后 10%，你会说他们高估了自己，因为实际上平均而言他们在最后 5%。但这两组人犯的是同样的错误，除非每个人都完美无缺，否则这种情况必然发生。</p>
+        <p class="comment-reason"><span>入选理由</span>评论从数学逻辑角度清晰地解释了为什么排名估算必然会导致类似 Dunning-Kruger 的统计结果。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49161114" target="_blank" rel="noopener noreferrer">@datakan</a>
+        </div>
+        <p class="comment-text">可重复性危机。超过一半的心理学研究是无法重复的。老实说，我现在已经到了甚至不再认为心理学是一门科学的地步了。</p>
+        <p class="comment-reason"><span>入选理由</span>将此问题置于更大的心理学研究信任危机背景下，提供了一个批判性的宏观视角。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Dunning-Kruger 效应的“塌房”提醒我们，很多看似深刻的心理学洞察，有时只是数学规律穿上了科学的外衣。正如评论区指出的，当我们将复杂的自我评价简化为排名估算时，数学上的边界效应——即第一名无法高估自己，最后一名无法低估自己——就注定了结果的走向。虽然这并不妨碍我们继续在社交场合使用这个词来调侃，但作为一项科学结论，它可能更多是统计学上的巧合而非大脑的固有缺陷。我们真正该警惕的，或许不是别人的无知，而是自己对那些“听起来很对”的科学金句不加思索的迷信。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49152842">
+      <summary class="story-overview">
+        <span class="rank-number">12</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">github.com</span>
+            <span>299 points</span>
+            <span>原始 #20 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://github.com/janestreet/bonsai" target="_blank"
+              rel="noopener noreferrer">Bonsai: Janestreet&#x27;s UI Library</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49152842" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 118</a>
+          </h2>
+          <p class="summary">Bonsai 是由量化交易巨头 Jane Street 开发的一款 OCaml UI 库，专门用于构建高性能、响应式的 Web 应用。它受 Elm 启发，将 UI 组件实现为纯函数式状态机，并利用增量计算技术确保仅在必要时更新视图和逻辑。该框架最大的优势在于能让前后端共用 OCaml 语言和类型系统，从而显著降低大型复杂应用的维护难度。除了 Web 端，它还支持构建终端界面（TUI），并提供了一套无需浏览器即可运行的自动化测试工具。然而，由于其深度绑定 OCaml 生态，对于习惯主流 JavaScript 生态的开发者来说，存在较高的学习门槛和集成难度。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Bonsai 是 Jane Street 内部几乎所有 Web 应用的基石，涵盖了从公司名录到实时交易监控系统的各类工具。它的核心理念是“增量化”（Incrementalization），这意味着不仅是视图渲染，连复杂的业务逻辑计算也会被自动缓存，只有当依赖的底层数据发生变化时才会重新触发计算。这种设计使得 Bonsai 在处理实时更新的海量交易数据时具有极高的性能优势。与 React 等主流框架将状态、逻辑和渲染耦合在组件内不同，Bonsai 允许开发者将这些原语解耦并按需组合，有效解决了复杂 UI（如多层嵌套选项卡）中常见的状态提升和生命周期管理难题。</p><p>在开发体验上，Bonsai 配合 ppx_html 和 ppx_css 等预处理器，提供了类似 JSX 的语法，同时保留了 OCaml 严谨的类型检查。其内置的“期待测试”（Expect tests）功能允许开发者在不打开浏览器的情况下，通过编程方式模拟用户操作并观察 DOM 的差异演变。尽管功能强大，但 Bonsai 的局限性也显而易见：它是一个高度定制化的工具链，旨在解决 Jane Street 特有的工程挑战。对于外部开发者而言，如何将这种“全栈 OCaml”模式与庞大的 JavaScript 生态系统（如现成的 React 组件或 GraphQL 库）进行整合，依然是一个巨大的挑战。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49153274" target="_blank" rel="noopener noreferrer">@Traster</a>
+        </div>
+        <p class="comment-text">我觉得“为什么选择 Bonsai？”那一节写得很有趣。让我帮你们重写一下：
+为什么选择 Bonsai？
+在 Jane Street，我们对函数式编程，尤其是 CAML 简直痴迷。所以当我们追求低延迟软件时，我们用 OCAML；当我们追求硬件时，我们写了自己的语言 HardCAML；而当我们追求 Web UI 时，我们就用 CAML 写了一个 Web UI 框架。因为我们他妈的太爱 CAML 了。</p>
+        <p class="comment-reason"><span>入选理由</span>幽默地揭示了 Jane Street 坚持使用 OCaml 构建一切（包括 UI 框架）的底层逻辑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49154060" target="_blank" rel="noopener noreferrer">@philipwhiuk</a>
+        </div>
+        <p class="comment-text">类似的尝试还包括 Scala.js。普遍的挑战在于，如何将用后端语言编写并编译成 JS 的那一小部分前端代码，与 JS 生态系统的其余部分集成。Jane Street 喜欢从头开始写自己的东西，所以这对他们来说不是问题，但对你来说可能是。因此，大多数人最终选择了“前端作为后端”（frontend-as-backend），而不是“后端作为前端”。</p>
+        <p class="comment-reason"><span>入选理由</span>深刻分析了非 JS 语言构建前端框架在生态集成方面面临的普遍困境。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49155639" target="_blank" rel="noopener noreferrer">@yuanBuilds</a>
+        </div>
+        <p class="comment-text">这也许是一个性能非常出色的 OCaml UI 框架，但所有的 UI 元素在我看来都显得极其简陋，就像一个绝顶聪明的电脑天才高中生在 90 年代为他的 Windows 侧边项目开发的 GUI。谢了，我还是把 JS 当作函数式编程语言来用吧。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个关于审美和实用主义的对立视角，指出该框架在视觉呈现上的不足。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49162818" target="_blank" rel="noopener noreferrer">@rew0rk</a>
+        </div>
+        <p class="comment-text">一个更实际的问题：有没有人在工作的内部应用生产环境中使用过这个？这类 UI 看起来不错，有一种我喜欢的独特风格，但如果我想在团队中引入它，而不是使用 Tailwind CSS 或自己封装组件，感觉会很奇怪。</p>
+        <p class="comment-reason"><span>入选理由</span>反映了开发者在实际工程决策中，面对非主流技术栈时的犹豫和考量。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Bonsai 的开源再次展示了 Jane Street 独特的工程哲学：如果现有的工具不符合其严苛的性能或类型安全要求，他们就用 OCaml 从底层重造轮子。这种“全栈 OCaml”的路径虽然在内部创造了极高的开发一致性和逻辑复用率，但也构建了一个与主流 Web 开发生态相对隔绝的“技术孤岛”。正如评论所指出的，Bonsai 解决的是复杂状态管理的工程问题，而非视觉美学问题。对于追求极致类型安全和增量计算性能的团队来说，它是一个强大的武器；但对于大多数依赖成熟 JS 生态的开发者而言，它更像是一件令人敬畏但难以驾驭的艺术品。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49154228">
+      <summary class="story-overview">
+        <span class="rank-number">13</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">github.com</span>
+            <span>185 points</span>
+            <span>原始 #21 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://github.com/lyogavin/airllm" target="_blank"
+              rel="noopener noreferrer">AirLLM 70B inference with single 4GB GPU</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49154228" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 75</a>
+          </h2>
+          <p class="summary">AirLLM 是一个开源项目，旨在让消费级显卡也能运行超大规模语言模型。它通过“分层流式推理”技术，每次仅将模型的一层或 MoE 模型中的单个专家载入显存，从而绕过了显存容量的限制。这使得 4GB 显存的显卡就能运行 70B 模型，甚至能在不到 4GB 的显存上运行 2.8T 参数的 Kimi K3。该技术的核心意义在于降低了本地运行顶级模型的门槛，让显存不再是硬伤。然而，其代价是极慢的推理速度，因为频繁的磁盘或内存到显存的数据传输成为了严重的性能瓶颈。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>AirLLM 通过改变模型加载机制，打破了运行大语言模型（LLM）必须具备海量显存的传统。它将模型分解为独立的层并存储在磁盘上，推理时仅在 GPU 中保留当前活跃的层，计算完成后立即替换为下一层。对于像 DeepSeek-V3 或 Kimi K3 这样基于混合专家（MoE）架构的模型，它甚至能实现“专家级流式加载”，即只加载当前 token 路由到的特定专家，进一步压缩了显存占用。这种方法让 405B 的 Llama 3.1 可以在 8GB 显存上运行，而 671B 的 DeepSeek-V3 仅需约 12GB。</p><p>为了在极低带宽下提升可用性，AirLLM 引入了预取技术（Prefetching）以重叠计算与加载过程，并支持 4-bit 或 8-bit 的块权重量化以减少数据传输量。尽管如此，性能依然是最大的权衡点：在某些配置下，生成一个 token 可能需要数百秒。此外，该方案对磁盘空间有较高要求，因为在推理前需要将原始模型重新分片存储。用户需要关注的是，这种工具更适合非实时任务，如离线文档分析或对速度不敏感的研究实验，而非交互式对话。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49155253" target="_blank" rel="noopener noreferrer">@imenani</a>
+        </div>
+        <p class="comment-text">给那些好奇“这到底有多慢”的人：据我所知，在 RTX 6000 Ada (48GB) 上运行 Kimi K3 的速度是 292 秒/token。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了具体的性能数据，直观展示了这种技术在速度上的巨大牺牲。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49156383" target="_blank" rel="noopener noreferrer">@nickpsecurity</a>
+        </div>
+        <p class="comment-text">如果我能接受硬件损耗和电力消耗，我愿意把这种方案用于批处理。比如准备一堆提示词，第二天再来看结果。这在进行代码重构或问答等常见操作时很有用，因为我可以利用比实时硬件支持的更强大的模型。大型且训练良好的模型通常一次就能给出基本正确的输出。而且，我把 AI 当作大脑的补充而非替代品，所以输出有点小问题也没关系，我只保留有用的部分。如果不需要反复生成，长期来看这比云端成本更低，而且已经买好的硬件是固定成本，不会随时间涨价。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个非常务实的潜在应用场景：离线批处理。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49155867" target="_blank" rel="noopener noreferrer">@pizza234</a>
+        </div>
+        <p class="comment-text">这是否有用取决于你的预期。有些人纯粹是为了在本地运行 LLM 而运行，所以慢一点也无所谓。MoE 模型在个人电脑上是有优势的，前提是你有足够高的内存带宽（以及大量的内存）——比如 Threadripper/Pro 平台。MoE 的优势在于每个 token 只使用模型专家库的一个子集，因此不需要所有权重同时存在于显存中。剩余的权重可以留在系统内存里，尽管移动和访问它们仍然有巨大的性能成本（这也是为什么需要高内存带宽的原因）。</p>
+        <p class="comment-reason"><span>入选理由</span>从架构角度解释了 MoE 模型在这种流式加载方案中的天然优势。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49155378" target="_blank" rel="noopener noreferrer">@roger_</a>
+        </div>
+        <p class="comment-text">最近看到很多这种“用 1GB 内存运行 1TB 模型”的项目。大多数看起来像是凭感觉写的代码（vibe coded），可能不会得到持续维护。希望能有一个真正有实力的优胜者脱颖而出。</p>
+        <p class="comment-reason"><span>入选理由</span>对这类项目的长期维护和代码质量提出了合理的质疑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49155500" target="_blank" rel="noopener noreferrer">@ilaksh</a>
+        </div>
+        <p class="comment-text">我猜它的使用场景大概是：你有一台稍微过时的 Mac 或 PC，或者有一堆这样的机器，你只需要写一封或几封有说服力的垃圾邮件，哪怕花上一整周才写完也行？</p>
+        <p class="comment-reason"><span>入选理由</span>用幽默的方式指出了极慢推理速度在实际应用中的尴尬境地。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>AirLLM 展示了一种极端的“空间换时间”策略：它让普通用户在自家“土豆电脑”上运行顶级模型成为可能，这在技术民主化上无疑是令人兴奋的。然而，正如评论区所指出的，每 token 近 300 秒的速度让它在交互式场景下几乎毫无用处。它的真正价值或许不在于对话，而在于为那些预算有限但需要高质量模型进行离线批处理的研究者提供了一条生路。这种“能跑就行”的思路，是本地 AI 社区在算力霸权面前的一种顽强抵抗。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49155555">
+      <summary class="story-overview">
+        <span class="rank-number">14</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">leoaido.com</span>
+            <span>4 points</span>
+            <span>原始 #13 · 低讨论量降权 +15</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://leoaido.com/how-llms-watch-video/" target="_blank"
+              rel="noopener noreferrer">Frame selection is the whole game: notes on making LLMs watch video</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49155555" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 0</a>
+          </h2>
+          <p class="summary">让大语言模型（LLM）“看”视频的核心挑战在于如何在有限的 Token 预算内挑选出最有代表性的关键帧。作者认为，传统的定时采样往往会产生大量冗余或错过关键瞬间，因此需要一套更智能的帧选择机制。他提出了一套多通道去重方案，分别针对全局画面变化、微小物体移动以及 UI 或文字的局部更新进行捕捉。此外，该方案还将 Whisper 生成的转录文本与选定帧按时间戳预先融合，以解决模型在长视频中容易出现的对齐错误。这种方法能让模型像“目击者”一样直接观察原始素材，而非依赖人类二手总结的信息。虽然该工具已通过 MCP 协议开源，但它目前仍无法捕捉镜头节奏或语音语调等感官细节。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>让 LLM 理解视频不仅仅是把素材丢进去，因为图像 Token 非常昂贵，通常一个视频的上下文预算只能容纳 100 到 150 帧。传统的固定频率采样（如每秒一帧）在面对谈话人头时会产生大量冗余，而在快速动作中又会漏掉关键信息。作者通过改进 FFmpeg 的场景得分算法，引入了滚动平均阈值，解决了动画和缓慢推拉镜头难以触发场景切换的问题。这种动态阈值让高动态素材提高门槛，让静态素材降低门槛，从而更精准地捕捉变化。</p><p>为了进一步精炼帧，作者设计了三个去重通道：全局通道通过低分辨率签名过滤重复画面；动作通道专门针对画面中占比极小的移动物体；静止通道则负责捕捉字幕更新或白板笔迹等微小局部变化。在处理音频时，作者利用 Whisper 生成转录，并特别处理了幻听和时间戳对齐问题，将帧直接嵌入到对应的文本段落中。这种“预融合”处理确保了模型在阅读长视频分析时，不会将画面与错误的台词挂钩。整个流程最终输出为简单的 JPEG 和文本文件，具有极强的跨模型通用性。</p><p>该方案目前已封装为开源工具 `claude-real-video`，支持通过 MCP 协议与 Claude 等模型直接交互。虽然这种方法极大地提升了模型对视频内容的理解深度，使其能发现人类总结中忽略的细节（如教程中闪过的错误代码），但它也有局限性。目前它还无法感知镜头的剪辑节奏、摄影机的运动轨迹或说话人的语气语调，这些更深层的视听语言感知仍是该领域下一步需要解决的问题。</p></div>
+        
+        <div class="comments-empty">
+          这条讨论暂未选出真正值得占用你注意力的评论。
+        </div>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章触及了当前多模态 AI 应用的一个痛点：我们并不缺能看图的模型，缺的是能高效、聪明地把长视频“喂”给模型的工程手段。作者提出的“目击者 vs 证词”类比非常精辟，人类的总结往往带有主观偏见或信息压缩，而让模型直接看关键帧能挖掘出那些被忽略的细节。这种基于启发式算法（如多通道去重）而非昂贵视觉编码器的预处理思路，是目前在 Token 成本和理解深度之间取得平衡的最务实方案。特别是对 MCP 协议的支持，让 LLM 能够像调用本地工具一样自主“调阅”视频，极大地扩展了 AI 助手的感知边界。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49161801">
+      <summary class="story-overview">
+        <span class="rank-number">15</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">bumbershootsoft.wordpress.com</span>
+            <span>16 points</span>
+            <span>原始 #15 · 低讨论量降权 +15</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://bumbershootsoft.wordpress.com/2026/05/30/zx-spectrum-system-tour-text-mode/" target="_blank"
+              rel="noopener noreferrer">ZX Spectrum System Tour: Text Mode</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49161801" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 0</a>
+          </h2>
+          <p class="summary">本文深入探讨了 ZX Spectrum 早期计算机的机器语言编程，重点关注其文本模式的实现。与同时代的 Commodore 或 MSX 不同，Spectrum 缺乏统一的固件接口，开发者通常需要直接调用 ROM 内部函数。文章介绍了如何通过 BASIC 环境加载并运行汇编代码，并利用 IY 寄存器访问系统变量。核心机制包括使用特定的指令打印字符，以及通过内存地址控制颜色和闪烁等属性。这种开发方式虽然高效，但也导致了不同机型之间严重的兼容性问题。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>ZX Spectrum 的 64KB 地址空间分配非常明确：前 16KB 是系统 ROM，随后是图形 RAM，其余部分供用户使用。文章指出，BASIC 与机器语言可以和谐共存，开发者通常先用 BASIC 的 CLEAR 命令预留内存，再通过 RANDOMIZE USR 函数启动汇编程序。在文本显示方面，系统将屏幕分为 22 行的主显示区和 2 行的状态区。开发者通过设置系统变量并调用 ROM 的 RST $10 例程来输出字符，这种方式支持标准 ASCII 以及用户自定义图形（UDG）。</p><p>文章还详细解析了 Spectrum 独特的文本属性系统，包括墨色、纸色、闪烁和亮度等。这些属性被分为“临时”和“永久”两类，分别存储在不同的系统变量中，由 ROM 例程在清屏或打印时调用。在输入处理上，开发者既可以依赖每帧触发的键盘扫描中断，也可以直接通过 Z80 处理器的 I/O 指令读取硬件端口。这种直接操作硬件的方法虽然赋予了开发者极大的控制权，但也意味着代码高度依赖特定的 ROM 布局，一旦 ROM 版本变动，程序就可能崩溃。读者可以从中了解到早期家用电脑如何在有限的硬件资源下实现灵活的图文显示。</p></div>
+        
+        <div class="comments-empty">
+          这条讨论暂未选出真正值得占用你注意力的评论。
+        </div>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>ZX Spectrum 的开发史就像是一场“没有规则的冒险”。由于 Sinclair 公司在设计固件时没有提供像 Commodore 那样的标准跳转表，开发者们不得不像考古学家一样挖掘 ROM 内部的秘密。这种“直接硬刚硬件”的文化虽然催生了极高的运行效率，但也埋下了兼容性的隐患。正如文中提到的 Timex Sinclair 2068 的失败，缺乏标准化的 API 往往会让一个优秀的硬件平台在市场扩张中折戟。对于现代开发者来说，这种对底层细节的极致掌控既是复古编程的魅力所在，也是一种关于系统架构设计的深刻教训。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49157786">
+      <summary class="story-overview">
+        <span class="rank-number">16</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">epoch.ai</span>
+            <span>66 points</span>
+            <span>原始 #30 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://epoch.ai/MirrorCode" target="_blank"
+              rel="noopener noreferrer">What&#x27;s the largest software project AI can complete on its own?</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49157786" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 74</a>
+          </h2>
+          <p class="summary">MirrorCode 是由 Epoch AI 和 METR 共同开发的基准测试，旨在评估 AI 完成长周期软件工程任务的能力。与以往修复小漏洞的任务不同，它要求 AI 在不接触源代码的情况下，仅凭输入输出规范从零重新实现整个程序。实验显示，Claude Opus 4.7 仅用 14 小时和 251 美元就完成了人类需数周才能完成的生物信息学工具包（约 1.6 万行代码）。该测试通过沙盒环境和隐藏测试集防止 AI 作弊，确保模型无法通过简单的查表法蒙混过关。然而，数据污染仍是主要挑战，因为模型在预训练阶段可能已经接触过这些开源项目的源代码。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>MirrorCode 基准测试标志着 AI 编程评估从“代码片段”向“完整项目”的跨越。该测试包含 25 个目标程序，涵盖 Unix 工具、生物信息学、解释器和加密算法等领域。AI 模型被置于无互联网、无原代码访问权限的沙盒中，必须通过自主运行、调试和测试来匹配原程序的行为。在最具代表性的案例中，AI 成功重构了包含 40 多个命令的 gotree 工具包，其效率远超人类工程师。为了确保评估的严肃性，研究者为单次任务提供了高达 2600 美元的推理预算，允许 AI 连续工作长达 19 天。</p><p>尽管结果令人振奋，但研究也揭示了 AI 编程的局限性。虽然模型通过了专门的“记忆筛选”测试，证明其并非单纯依靠背诵代码，但预训练中接触过的逻辑结构显然提供了巨大帮助。此外，AI 在处理复杂逻辑时仍会出现“反复横跳”的现象，即在某些错误上耗费数小时却收效甚微。未来的观察重点在于，当面对完全闭源或全新的软件架构时，AI 是否还能保持同样的重构成功率。目前，MirrorCode 已开源了大部分测试集，邀请社区共同探索 AI 独立完成复杂软件工程的极限。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49158971" target="_blank" rel="noopener noreferrer">@khazhoux</a>
+        </div>
+        <p class="comment-text">非常酷，但我持怀疑态度。在过去的一年里，我参与的每一个 Cursor/Claude/Codex 项目最终都演变成了糟糕的、东拼西凑的“胶带加补丁”式架构。所谓的“修复”只是在绕过已经损坏的代码，大量的重复导致了“打地鼠”式的 Bug 循环。系统起初运行良好，但随后 Bug 开始堆积并最终失控。我交流过的每个人都有类似的经历。更不用说如果我这个人类监督者不每天多次纠偏，它就会跑偏到爪哇国去。然而，我每周都能看到类似的评论和文章，说“我让代理运行了几个晚上，它就做出了这个超棒的工具”。这中间存在巨大的鸿沟，我还没搞清楚原因。要么是我（以及我交流过的所有人）用错了，要么是你的代码核心其实是有缺陷的，Bug 修复会变得越来越慢且永远无法收敛，或者……我只需要让我的代理运行 3 个月试试？</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提出了一个非常普遍且深刻的质疑：AI 生成代码的长期架构质量和可维护性问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49159527" target="_blank" rel="noopener noreferrer">@antonvs</a>
+        </div>
+        <p class="comment-text">根据我的经验，如果你具备以下条件，就能获得好结果：1. 拥有非常完备的测试。代理可以编写测试，但你需要提示它去做，且可能需要人类输入。2. 拥有良好的模块化架构。同样，这需要预先提示或开发。如果任务范围定义明确，限制了所需的上下文量，代理的工作就可以扩展。如果你让代理直接堆砌代码，就会出问题。这就是为什么你会听到像 SQLite 被移植到 Rust 这样的项目（由多个团队完成！）能成功。它拥有全面的单元测试套件和优秀的既有架构。这类移植项目受益于已经完成的前期工作，并且有原始源代码作为参考实现。正因如此，我做的大部分工作都涉及与代理的大量交互，因为我通常处理的是复杂的既有系统，它们不一定具备上述属性，而代理还没进化到能自主处理这些系统的程度。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者从工程实践角度解释了为什么“重构”类任务（如 MirrorCode）对 AI 来说相对容易，以及成功的关键要素。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49159777" target="_blank" rel="noopener noreferrer">@guybedo</a>
+        </div>
+        <p class="comment-text">过去几个月我一直在处理几个相当大的项目，并尝试尽可能少写代码。在我参与的最大项目中，我写的代码不超过 10 行，而项目包含：Java 90万行，TypeScript 72万行，C++ 18万行，Dart 9万行。从一开始就很明显，无论模型多么出色，在没有监督、控制和批评的情况下，都无法自主完成大规模工作。如果无人看管，模型通常只做一半工作，到处留下存根（stubs）和待办事项（TODO）。质量来自于尽可能多地应用软件工程原则，就像你对待初级开发团队一样：进行规划会议、带有对抗性评论的实施会议、尽可能详尽的前期规范、规划单元/冒烟/集成测试等。许多系统依赖代理集群来构建软件，但我发现如果不投入大量的沟通成本，很难获得好结果。因此，我构建了一个工作流引擎，将过程组织成工作流，并为不同的代理分配不同的角色。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了在大规模项目中使用 AI 的实际管理经验，强调了流程控制而非单纯依赖模型能力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49159556" target="_blank" rel="noopener noreferrer">@_doctor_love</a>
+        </div>
+        <p class="comment-text">在我看来，AI 能独立完成多大规模的项目并不是一个有趣的问题。随着 AI 和配套工具的完善，构建大型项目主要只是成本函数的问题。真正有趣的问题是：AI 在长周期内能维护多大规模的系统——同时保持架构的一致性，并能很好地适应和响应变化？同时还要保持高性能、可扩展性且易于人类理解。我还没见过运行时间最长的“氛围编程（vibe coded）”项目，但估计不会超过几年。所以在我看来，我们还没有太多的真实数据。</p>
+        <p class="comment-reason"><span>入选理由</span>将讨论从“构建”引向了更具挑战性的“长期维护”和“架构一致性”。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>MirrorCode 基准测试的出现，标志着 AI 编程已从“辅助写代码”进化到了“自主重构项目”的阶段。虽然 Claude Opus 4.7 在 14 小时内重现 1.6 万行代码的成绩令人惊叹，但我们必须清醒地认识到，这种“重构”本质上是在已知答案（输入输出规范）的前提下进行的逻辑复刻。正如评论区所指出的，AI 在“从零构建”和“长期维护”方面的表现仍存争议。许多开发者反映，缺乏人类严密监督的 AI 代码往往会陷入“胶带架构”的泥潭，随着项目规模扩大，维护成本会呈指数级增长。因此，MirrorCode 证明了 AI 具备极强的逻辑实现能力，但软件工程中真正的挑战——架构设计的远见和应对需求变化的灵活性——依然是人类工程师不可替代的阵地。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49151734">
+      <summary class="story-overview">
+        <span class="rank-number">17</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">mertbulan.com</span>
+            <span>395 points</span>
+            <span>原始 #32 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://mertbulan.com/more-german-than-many-germans/" target="_blank"
+              rel="noopener noreferrer">More German than many Germans</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49151734" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 307</a>
+          </h2>
+          <p class="summary">一位土耳其程序员分享了他在德国汉堡生活八年并最终入籍的心路历程。他认为德国社会的“规则感”并非束缚，而是通过明确标准降低了生活决策成本，提供了安全感。作者特别赞赏德国的社会民主特质，例如不同阶层共享同样的午餐，以及社会对历史错误的深刻反思。他坦言自己作为高薪技术移民拥有“软着陆”的优势，这与许多普通移民的艰辛有所不同。尽管极右翼势力抬头，他仍选择通过入籍来表达对德国民主价值的认同，并认为“抱怨”也是融入德国文化的一种表现。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这篇文章记录了作者从土耳其搬到德国汉堡，从实习生到正式入籍的心路历程。作者最初对德国人的刻板印象是冷漠且死板，但实际生活中，他感受到了极高的社会信任，比如不设防的公共交通和室友间的信任。他深入探讨了德国的“规则文化”，认为像“安静时间（Ruhezeit）”或红绿灯规则实际上减少了日常生活的认知负担，让社会运行更可预测。在社会公平方面，他观察到建筑工人和西装革履的高管在同一家餐厅吃着同样价格的披萨，这种社会民主的氛围让他产生了强烈的归属感。作者还通过阅读大量历史书籍，理解了德国如何通过反思纳粹历史来构建现代身份。在入籍过程中，他受益于德国最新的国籍法改革，将等待期缩短至五年。尽管他承认自己的成功部分归功于英语办公环境和高薪职位的“软着陆”，但他强调，认同并遵守民主价值观才是入籍的核心。他最后幽默地提到，像德国人一样为了让社会变得更好而“抱怨”，正是他完全融入的标志。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49152340" target="_blank" rel="noopener noreferrer">@bambax</a>
+        </div>
+        <p class="comment-text">我第一次去柏林时得坐公交车。我刚到车站车就开了，但它在下一个红灯处停了下来。于是我跑过去敲门。司机用一种关切的眼神看着我，想看看是不是出了什么事，当他明白我只是想在常规车站外上车时，他笑了起来。不是那种讽刺或恶意的笑，而是那种发自内心的、觉得我做了一件如此离奇、简直像恶作剧一样的事情的笑。然后绿灯一亮，他就直接开走了。我简直不敢相信；但当我把这件事告诉我的德国朋友时，他们也不太理解为什么会有人尝试在车站以外的地方上车。作为法国人，我很难理解你为什么不这么做。</p>
+        <p class="comment-reason"><span>入选理由</span>这个幽默的文化冲突案例生动地展示了德国人对“规则”近乎本能的坚守。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49153189" target="_blank" rel="noopener noreferrer">@probably_wrong</a>
+        </div>
+        <p class="comment-text">关于规则的话题：作者认为规则意味着有人深思熟虑后制定了标准，你只需查阅即可。我对此持保留意见。首先，“只需查阅”就像是在说 Linux 内核文档写得烂也没关系，因为你可以随时查看源码。你试着自己去搞清楚开设 GmbH（有限责任公司）的规则，看看在不找“懂行的人”的情况下你是否真的能搞定。其次，僵化规则的问题在于，当别人违反规则时你无能为力。比如续签居留许可：规则1规定不能提前超过 X 周预约，规则2规定你有权获得预约，规则3规定在线系统是唯一途径。那么当系统没有预约位时会发生什么？你会陷入恐慌，因为时间紧迫且联系不到任何人。如果你坚定地要求行使法律权利，根据我的经验，他们会叫保安把你赶出去。虽然我从未想过我第一次起诉别人会是起诉德国政府，但那是让他们在拖延数年后给我公民身份的唯一办法。规则只有在每个人都遵守时才有效。一旦政府开始无视规则却要求其他人遵守，每条规则都会变成潜在的头痛。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论为作者对“规则”的乐观态度提供了现实的批判，揭示了德国官僚主义中规则失效时的困境。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49152257" target="_blank" rel="noopener noreferrer">@schmorptron</a>
+        </div>
+        <p class="comment-text">这是一篇非常温馨的文章！我是德国人，真心希望我们能扭转极右翼崛起的势头。我不知道该怎么做，但我希望能在我们吓跑像作者这样的人之前做到这一点——他们来到这里，爱上这里，成为德国人，并最终让这里变得更好。（部分原因我认为我们应该降低早期学习语言的门槛，并提供更多激励，让那些不在英语主导的技术行业工作的人也能有积极的体验。这是一个冷启动问题。政府委托开发一个类似 RosettaStone 的德语学习应用并免费发放，应该不难吧？）但经济萎靡、多年来备受质疑的规划，以及作者提到的“受过教育的中产阶级”正在萎缩，这些都不是好兆头。这是替罪羊政治的绝佳温床。寻找替罪羊（外国人）来为一切问题负责，是人类思维中的一种认知“漏洞”，它是团结心怀不满的人并慢慢将他们变成仇恨怪物的有效工具。</p>
+        <p class="comment-reason"><span>入选理由</span>一位德国本地人的反思，指出了社会经济现状对移民环境的潜在威胁。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49152482" target="_blank" rel="noopener noreferrer">@rockyj</a>
+        </div>
+        <p class="comment-text">读起来很棒，这几乎就是我的经历。我在这里生活了四分之一的人生，我觉得我无法在其他任何地方生活了。人们可能因为我的肤色或其他原因不喜欢我待在这里，但我不在意。我安分守己，尽可能遵守所有“规则”。事实上，我喜欢大多数规则，规则是好事，因为它们确保了秩序、公平和平等。如果能多一点同理心当然更好，但我不能抱怨。说到抱怨，很多德国本地人在抱怨，甚至有人在离开（去年大约有10万人离开），但老实说，我访问或居住过九个国家，人们根本不知道他们在这里的生活有多好。我带着一个包、兜里揣着20欧元和一份工作邀请来到这里，十几年后，我拥有了人们梦寐以求的所有基本舒适和稳定，我的孩子们有着光明的未来，这在很多国家是不可能的。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了另一个成功的移民视角，强调了德国社会提供的稳定性和阶级跃迁的可能性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章引发了关于“德国性”的有趣讨论。作者作为一个“精神德国人”，将德国式的刻板规则解读为一种降低社会摩擦的公共产品，这种视角在技术社区中引起了强烈共鸣。然而，评论区揭示了硬币的另一面：当规则与低效的官僚系统碰撞时，它可能变成一种令人窒息的陷阱。正如一位评论者引用的那样，德国正从“工程师之国”转向“律师之国”。这种从“解决问题”到“遵守程序”的转变，或许正是德国在现代经济竞争中感到吃力的深层原因。尽管如此，作者的故事依然是一个关于社会契约如何成功同化外来者的正面案例，提醒我们一个社会的吸引力往往不在于它的完美，而在于它对公平和秩序的承诺。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49150470">
+      <summary class="story-overview">
+        <span class="rank-number">18</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">qwen.ai</span>
+            <span>1049 points</span>
+            <span>原始 #33 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://qwen.ai/blog?id=qwen3.8" target="_blank"
+              rel="noopener noreferrer">Qwen3.8-Max: A New Bar for Coding and Cowork</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49150470" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 564</a>
+          </h2>
+          <p class="summary">阿里巴巴正式发布了 Qwen3.8-Max，这是其 Qwen 系列中性能最强的模型，并宣布将于下周首次开源该级别的模型权重。该模型在编程和协作任务上设立了新标杆，支持超过 90 种编程语言，并在视觉网页开发（图片转代码）方面表现出色。Qwen3.8-Max 旨在挑战目前由 Claude 和 GPT 占据的顶尖模型地位，标志着开源模型在性能上正迅速追赶闭源商业模型。然而，早期测试者反映在实际使用中存在连接超时和系统稳定性不足的问题。这一发布对于希望在本地运行高性能模型的开发者来说具有重要意义。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Qwen3.8-Max 的发布是开源 AI 领域的一个重要里程碑，因为它不仅在多项基准测试中表现卓越，还承诺开源其最高规格的权重。该模型针对编程、逻辑推理和长上下文协作进行了深度优化，能够处理复杂的代码生成和调试任务。开发者特别关注其“视觉到代码”的能力，即通过分析 UI 设计稿直接生成高质量的单页应用（SPA）代码。在与 Claude Opus 5 的对比测试中，Qwen 在视觉理解和代码结构上展现了极强的竞争力。然而，目前的局限性在于其在线平台的稳定性，用户在重度任务中频繁遇到超时和错误，这限制了其在生产环境中的即时应用。</p><p>除了旗舰级的 Max 模型，社区对下周即将发布的 Qwen3.8-27B 版本也充满期待。由于之前的 3.6 版本在本地运行效率和性能平衡上获得了极高评价，新版本的开源被视为本地 AI 生态的重大升级。许多开发者已经开始将其作为日常主力工具，甚至取代了昂贵的闭源订阅服务。未来值得关注的是，随着这类高性能开源模型的普及，AI 公司的“护城河”是否会因为用户可以轻易切换模型而消失。同时，针对特定编程语言进行精简的专用模型也成为了社区讨论的新方向，以进一步降低本地运行的硬件门槛。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49151983" target="_blank" rel="noopener noreferrer">@jjcm</a>
+        </div>
+        <p class="comment-text">视觉网页开发/感知基准测试的分数在“图像转 HTML”流程中看起来非常乐观。以下是一些测试结果。原始设计稿是相当丰富、模式密集且细腻的设计。我要求模型将它们创建为地图在后台流动的单页应用（SPA）。Opus 5 的结果和 Qwen 3.8 Max 的结果相比，两者转换时使用了相同的提示词。我为 Qwen 版本使用了 OpenCode，但在运行过程中遇到了大量的错误和超时。Claude 在大约 16 分钟内完成了，但我花了接近 2 个小时来引导 Qwen 的构建。从实现结果看，它有很好的视觉能力，但频繁的超时使得它在生产环境中很难使用。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了具体的实测对比数据，揭示了模型在视觉代码生成方面的潜力及目前存在的稳定性短板。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49152992" target="_blank" rel="noopener noreferrer">@me551ah</a>
+        </div>
+        <p class="comment-text">这让我怀疑 AI 公司是否真的拥有“护城河”。对 LLM 的所有请求都是幂等的，每次 API 调用你都需要发送整个对话历史以便它处理。LLM 不会学习或记住任何东西，这使得用户可以非常容易地随时切换模型。如今大多数流行的 AI 框架只需改一行代码就能完成切换。这让我怀疑 OpenAI 和 Claude 的万亿级估值是否合理。因为如果那是合理的，那么 Kimi、Qwen、Deepseek 等也值万亿。或者它们其实都远没那么值钱。这两个结论必有一个是真的。此外，我也在想下一代 LLM 是否会基于微调，让模型真正从你过去的行为中学习，从而为产品提供一定的粘性。OpenAI 曾经提供 GPT-3.5 的微调运行，但现在似乎不再这么做了。</p>
+        <p class="comment-reason"><span>入选理由</span>从商业竞争和技术特性的角度探讨了模型同质化对行业估值的影响。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49157077" target="_blank" rel="noopener noreferrer">@ilaksh</a>
+        </div>
+        <p class="comment-text">作为一个正在寻找新编程合同的人，读到这些惊人的能力让我感到相当畏惧。尤其是我的大部分项目来自 Upwork 这种外包网站。我相信在某些情况下，我正在直接与这些前沿模型竞争。比如有很多程序员以前会把工作外包到那个网站，但现在他们把同样的工作交给 AI 智能体（agents）。自从 2022 年 11 月 ChatGPT 爆发以来，我一直专注于智能体以试图走在曲线前面。但我还没能让智能体业务起步，只能在网站上做一些报酬微薄的智能体项目。但现在每个人都在构建智能体，这份成就清单看起来我们已经接近“智能体构建智能体”的临界点了。事实上，下次我在 Upwork 拿到智能体合同时，我应该让我的智能体去跑一下，看看它能走多远。我现在看到很多请求都是要求尽可能自动化整个业务。总之，这些模型几乎已经能够胜任分析小企业、构建所有智能体并与店主一起迭代的全部工作了。</p>
+        <p class="comment-reason"><span>入选理由</span>反映了 AI 进步对自由职业者和外包市场的真实冲击，具有很强的现实意义。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49150929" target="_blank" rel="noopener noreferrer">@nozzlegear</a>
+        </div>
+        <p class="comment-text">Qwen3.6-35B 是我日常使用的 AI 主力，也是它让我在 4 月份取消了 Claude 的订阅。Qwen3.6 系列绝对是我尝试过的最好的本地模型，而我试过很多。我现在正让它在我的笔记本电脑上勤奋地工作，审查并修复我 F# 代码中的一些 bug。</p>
+        <p class="comment-reason"><span>入选理由</span>展示了 Qwen 系列在开发者群体中的实际口碑和替代闭源模型的趋势。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Qwen3.8-Max 的发布再次证明了开源模型与闭源旗舰之间的差距正在以惊人的速度缩小。阿里巴巴不仅在性能上紧咬 Claude 和 GPT，更通过“开源 Max 级别权重”这一举动，直接冲击了硅谷巨头们的商业壁垒。正如评论中所指出的，LLM 的幂等性使得用户切换成本极低，如果开源模型能持续提供同等甚至更优的编码和视觉理解能力，闭源巨头的高估值将面临严峻挑战。然而，Qwen 目前在基础设施稳定性上的短板也提醒我们，顶尖的 AI 体验不仅关乎模型权重，还关乎可靠的服务支撑。对于开发者而言，这无疑是一个黄金时代：本地运行 SOTA 级别模型已不再是梦想，但这也意味着像 Upwork 上的外包开发者必须加速向“智能体架构师”转型，以应对来自 AI 的直接竞争。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49154332">
+      <summary class="story-overview">
+        <span class="rank-number">19</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">research.jfrog.com</span>
+            <span>695 points</span>
+            <span>原始 #36 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://research.jfrog.com/post/sqlite-critical-cves-or-llm-slops/" target="_blank"
+              rel="noopener noreferrer">SQLite Critical CVEs or LLM Slop?</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49154332" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 347</a>
+          </h2>
+          <p class="summary">最近，GitHub 上出现了一批针对 SQLite 的“严重”漏洞（CVE）报告，但经 JFrog 研究发现，这些报告几乎全是 LLM（大语言模型）生成的虚假信息。这些报告引用的函数在对应版本中根本不存在，提供的攻击载荷（PoC）也无法运行，甚至引用的代码行号只是注释。尽管如此，由于美国国家漏洞数据库（NVD）的人工审核机制在 2024 年陷入停滞，这些虚假漏洞仍被标记为“严重”并进入了全球供应链。这反映了当前漏洞报告系统在面对 AI 生成的“垃圾信息”时的脆弱性。企业如果盲目信任这些自动化评分，将面临巨大的生产力浪费。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>JFrog 的安全研究人员对 GitHub 账号 `programmervuln` 发布的 50 多个 CVE 进行了审计，发现其中绝大多数是完全虚构的“AI 垃圾”。例如，CVE-2026-51302 声称存在堆释放后使用漏洞，但它引用的关键函数在目标版本中尚未实现；另一个 CVE 引用的代码行号甚至超过了文件总行数。这些报告具有典型的 AI 幻觉特征：逻辑看似通顺，但事实细节完全错误，甚至连所谓的“修复补丁”也是凭空捏造的。</p><p>造成这一乱象的深层原因是全球漏洞管理体系的崩溃。MITRE 的 CVE 提交过程缺乏身份验证，而原本作为“安全网”的 NIST/NVD 机构因报告量激增，自 2024 年 2 月起基本停止了深度人工分析。这导致虚假漏洞能轻易绕过审核，进入 Red Hat、GitHub 等下游数据库。对于依赖自动化扫描工具（如 Snyk 或 Veracode）的企业来说，这不仅意味着要处理大量“幽灵漏洞”，还可能因为强制修复政策而中断正常的开发流程。未来，如何建立有效的 AI 生成内容过滤机制，并恢复人工验证的权威性，将成为安全领域必须解决的难题。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49155075" target="_blank" rel="noopener noreferrer">@gortok</a>
+        </div>
+        <p class="comment-text">我们可以把这看作是人们对 LLM 能力的过度乐观与其实际本质之间差距的又一个例子。基于 LLM 的“AI”能够利用其庞大的输入语料库，计算出给定情境下统计学上最可能的输出。它是概率性的，而当你处理的是需要确定性而非概率的情况时，如果你的 LLM 搞错了概率，或者像本例中这样，声称一行代码产生了漏洞而实际上那只是一行注释，你的信誉将遭受巨大打击。LLM 是文本预测引擎。它们不是人工智能，也不应该以任何形式被视为拥有智能。让我感到困扰的是，那些依赖 LLM 生成这些漏洞的人本该对他们的工具有足够的了解，知道会发生这种事，但他们却没有。现在，我们所有人都要承担后果，成千上万甚至数百万美元的生产力被那些不得不处理“AI”滥用后果的团队白白浪费了。人类必须核实 LLM 作为事实呈现的一切。每一件事。如果你不这样做，我们都要付出代价。LLM 并没有减轻人类的责任，如果说有的话，它们反而放大了责任，因为 LLM 生成需要验证的输出速度比人类快得多。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深刻指出了 LLM 概率性本质与安全领域确定性需求之间的矛盾，并强调了人类验证的不可替代性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49155589" target="_blank" rel="noopener noreferrer">@jodacola</a>
+        </div>
+        <p class="comment-text">我向所有在企业环境中使用 Veracode 或 Snyk 等工具自动评估 CVE 并根据“发现”结果拦截合并或部署的人表示深切同情。根据我在这种环境下的经验，对于那些管控严密的组织来说，这将是一段艰难的时期。因为在某些环境下，“这个 CVE 是 AI 幻觉”这种异常申请可能很难被接受；而一旦被接受，它本身又会成为一种新的攻击途径，并给系统带来更多的噪音和混乱。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者从企业合规和自动化工具的角度，揭示了虚假 CVE 对实际生产流程的破坏性影响。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49158593" target="_blank" rel="noopener noreferrer">@adjfasn47573</a>
+        </div>
+        <p class="comment-text">“人类必须核实 LLM 作为事实呈现的一切。每一件事。”关于这一点我已经思考很久了。不，人类不需要核实一切。论据很简单：随机性。想想自动驾驶汽车：我们今天可以根据证据和真实数据证明，自动驾驶汽车比人类驾驶员更安全。这是一个事实，后果很明确：更多的自动驾驶汽车，更少的人类驾驶汽车，更少的事故，更少的伤亡。这些车是 100% 安全且永不犯错吗？不。但它们不需要做到。在现实世界中，没有任何事物是 100% 的。回到用于软件创作的 AI。“审查是瓶颈，因为一切都必须由人来判断。”不，不需要。我们只需要构建 AI 审查系统，让它比人类做得更好（或至少一样好）。人类审查质量的标准远低于 100%。如果我们可以证明（我认为在未来 12-24 个月内）AI 审查质量始终高于人类审查质量——同样，基于证据和真实数据——那么就没理由让渡给人类去审查代码了。是的，系统中会有另一层，另一个抽象级别，它将/必须在人类边界处结束。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个极具争议的对立观点，认为解决 AI 噪音的最终方案不是回归人工，而是更高级的 AI 审查。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这起 SQLite 虚假漏洞事件揭示了安全界一个尴尬的现状：我们正处于“AI 产生噪音”的速度远超“人工清理噪音”能力的转折点。CVE 系统曾是建立在专家互信基础上的权威机制，但现在它正被廉价的 LLM 幻觉淹没。讽刺的是，当企业投入巨资引入 AI 安全工具来防御漏洞时，这些工具却可能在追逐 AI 制造的幻影。如果漏洞数据库的准入门槛不提高，这种“信噪比”的崩溃将迫使安全团队陷入无休止的无效劳动中。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49156750">
+      <summary class="story-overview">
+        <span class="rank-number">20</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">pandoc.org</span>
+            <span>95 points</span>
+            <span>原始 #25 · 低讨论量降权 +11.7</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://pandoc.org/twenty-years-of-pandoc.html" target="_blank"
+              rel="noopener noreferrer">Twenty Years of Pandoc</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49156750" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 11</a>
+          </h2>
+          <p class="summary">2006年8月3日，哲学教授 John MacFarlane 发布了 Pandoc 的首个版本，最初这只是他学习 Haskell 语言的一个练手项目。Pandoc 采用了“N个解析器 × M个渲染器”的架构，通过抽象语法树（AST）实现了不同文档格式间的高效转换。经过二十年的发展，它已支持超过50种格式，成为 Haskell 社区最受欢迎的开源项目。Pandoc 不仅是学术写作工具 Quarto 和 Jupyter 的核心，也深刻影响了 Markdown 的标准化进程。尽管大语言模型在文本处理领域兴起，但 Pandoc 凭借其确定性、高效率和对复杂结构的精准处理，依然是文档转换领域的黄金标准。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Pandoc 的诞生源于作者对 Haskell 语言及其解析器组合子库（parsec）的兴趣。与当时依赖正则表达式进行简单替换的工具不同，Pandoc 将输入文档解析为抽象语法树（AST），再由渲染器输出。这种设计使得支持新格式变得极其高效：只需编写一个解析器或渲染器，即可与现有所有格式互通。在二十年的演进中，Pandoc 引入了 Lua 过滤器，极大地提升了用户自定义转换逻辑的性能；它还解决了 Markdown 语法歧义问题，推动了 Commonmark 标准的建立。</p><p>此外，Pandoc 对 LaTeX 公式、Word 文档（docx）以及复杂引用文献（CSL）的深度支持，使其成为了学术界和技术写作不可或缺的工具。进入 3.0 时代后，Pandoc 进行了模块化拆分，提供了更轻量级的命令行界面和独立的服务器模式。它持续拥抱新技术，例如增加了对 Typst 和 Djot 等新兴格式的支持。虽然大语言模型在处理非结构化文本转换方面表现出色，但 Pandoc 在处理大规模批处理任务、保证格式确定性以及维护文档语义完整性方面，依然具有不可替代的工程价值。未来，Pandoc 将继续作为连接各种文本生态系统的核心纽带。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49162376" target="_blank" rel="noopener noreferrer">@adamddev1</a>
+        </div>
+        <p class="comment-text">“通过编写 N 个解析器（‘readers’）和 M 个渲染器（‘writers’），就能支持 N × M 种转换。”
+为一个精彩的项目写的精彩总结。在这个充满“氛围感编程（vibe-coding）”炒作的时代，看到一个按照基本原则、手工正确构建的东西如何能够不断扩展并产生滚雪球般的实用价值，真是太好了。
+“也许，在未来，人们将不再需要像 pandoc 这样的工具。”
+我认为我们会越来越需要像 pandoc 这样美妙的东西。正如文中所提到的，两者在生态和实用性上有着巨大的差异。即使大语言模型（LLM）能够无限接近确定性级别的可靠性，pandoc 在效率上仍然要高出好几个数量级，尤其是在处理大型批处理作业等方面。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深刻指出了 Pandoc 架构设计的优越性，并对比了其与当前大语言模型在效率和确定性上的本质区别。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49163038" target="_blank" rel="noopener noreferrer">@aanet</a>
+        </div>
+        <p class="comment-text">一位哲学教授 [1] 创造了被全球数百万人使用的工具 [2]……这简直令人难以置信。是以一种非常棒的方式！
+Pandoc 是我的首选工具。谢谢您，先生！
+[1] https://johnmacfarlane.net/index.html
+[2] https://johnmacfarlane.net/tools.html</p>
+        <p class="comment-reason"><span>入选理由</span>评论强调了作者跨学科背景带来的惊喜，反映了 Pandoc 在学术界和开发者中的崇高地位。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49162642" target="_blank" rel="noopener noreferrer">@dannyobrien</a>
+        </div>
+        <p class="comment-text">我最常用的 pandoc 代码片段：
+tidyhtml () {
+  pandoc -f html-native_divs-native_spans -t markdown-raw_html-raw_attribute | pandoc -f markdown -t html
+}
+它可以从（例如）从 Google 或 Word 文档复制的 HTML 中剥离样式、包装用的 div、span、内联属性等。只保留语义上的精华！</p>
+        <p class="comment-reason"><span>入选理由</span>分享了一个非常实用的 Pandoc 使用技巧，展示了它在清理杂乱 HTML 方面的强大能力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49160892" target="_blank" rel="noopener noreferrer">@darthoctopus</a>
+        </div>
+        <p class="comment-text">感谢你创造了 pandoc。当我开始读博时，我做了一个（在当时看来可能并不明智的）决定，那就是全身心地投入到这个工具中，而这个决定从那时起就一直在给我带来回报。我能拥有现在的科学家职业生涯，都要归功于它。</p>
+        <p class="comment-reason"><span>入选理由</span>这是一个典型的用户证言，说明了 Pandoc 对学术研究和职业生涯的深远影响。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>一个哲学教授为了学编程而写的“拖延产物”，最终竟成了全球文档转换的基石，这本身就是开源界的一段佳话。Pandoc 的成功证明了“正确架构”的力量：通过 AST 实现的 N × M 转换逻辑，让它在面对层出不穷的新格式时依然游刃有余。在“提示词工程”泛滥的今天，Pandoc 这种基于严谨逻辑和确定性规则的工具反而显得愈发珍贵——正如评论所言，在处理大规模批处理或需要极高可靠性的任务时，Pandoc 的效率和精准度是大语言模型难以企及的。</p>
+        </div>
+      </div>
+    </details>
+    </section>
+    <footer class="footer">
+      <p>新闻只按 HN 原始名次和讨论度排序后取前 20，不做主题挑选。评论来自有界采样，
+        只是观点，不作为新闻事实来源。</p>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const themeButtons = [
+        ...document.querySelectorAll(".theme-button[data-theme-choice]")
+      ];
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      const applyThemeChoice = (requestedChoice, persist = true) => {
+        const choice = ["auto", "day", "night"].includes(requestedChoice)
+          ? requestedChoice
+          : "auto";
+        const theme = choice === "auto" ? themeForLocalTime() : choice;
+        document.documentElement.dataset.themeChoice = choice;
+        document.documentElement.dataset.theme = theme;
+        themeButtons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.themeChoice === choice)
+          );
+        });
+        if (persist) {
+          try {
+            localStorage.setItem("hnDigestThemeChoice", choice);
+          } catch (_) {
+            // The switch still works when report sandboxing blocks storage.
+          }
+        }
+      };
+      const refreshAutomaticTheme = () => {
+        if (document.documentElement.dataset.themeChoice === "auto") {
+          applyThemeChoice("auto", false);
+        }
+      };
+      applyThemeChoice(document.documentElement.dataset.themeChoice, false);
+      themeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyThemeChoice(button.dataset.themeChoice);
+        });
+      });
+      window.setInterval(refreshAutomaticTheme, 60 * 1000);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) refreshAutomaticTheme();
+      });
+
+      const list = document.querySelector(".story-list");
+      const controls = document.querySelector(".view-switch");
+      const buttons = [...document.querySelectorAll(".view-button")];
+      const status = document.querySelector(".view-status");
+      const total = list ? list.children.length : 0;
+      if (!list || !controls || total <= 10) {
+        if (controls) controls.hidden = true;
+        return;
+      }
+
+      const visibleCountStorageKey = "hnDigestVisibleCountV3";
+      const applyVisibleCount = (requestedCount, persist = true) => {
+        const count = requestedCount === 20 ? 20 : 10;
+        const shown = Math.min(count, total);
+        list.dataset.visibleCount = String(count);
+        buttons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(Number(button.dataset.count) === count)
+          );
+        });
+        status.textContent = `当前显示前 ${shown}`;
+        if (persist) {
+          try {
+            localStorage.setItem(visibleCountStorageKey, String(count));
+          } catch (_) {
+            // The switch still works when local privacy settings block storage.
+          }
+        }
+      };
+
+      let initialCount = 20;
+      try {
+        const storedCount = Number(localStorage.getItem(visibleCountStorageKey));
+        if ([10, 20].includes(storedCount)) initialCount = storedCount;
+      } catch (_) {
+        // Keep the all-20 default.
+      }
+      applyVisibleCount(initialCount, false);
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyVisibleCount(Number(button.dataset.count));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
