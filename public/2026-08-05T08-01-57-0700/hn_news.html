@@ -1,0 +1,1863 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Hacker News 每日精选：通俗摘要、精彩评论与 LLM 锐评">
+  <title>HN 每日精选 · 2026-08-05</title>
+  <script>
+    (() => {
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      let choice = "auto";
+      try {
+        choice = localStorage.getItem("hnDigestThemeChoice") || "auto";
+      } catch (_) {
+        // Storage may be unavailable in a sandboxed report.
+      }
+      if (!["auto", "day", "night"].includes(choice)) {
+        choice = "auto";
+      }
+      const theme = choice === "auto" ? themeForLocalTime() : choice;
+      document.documentElement.dataset.themeChoice = choice;
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d252d;
+      --muted: #6c747c;
+      --paper: #f5f3ed;
+      --card: #fffefa;
+      --line: #d9d6ce;
+      --orange: #e85d2a;
+      --orange-soft: #fff0e8;
+      --blue-soft: #edf3f7;
+      --green: #25644f;
+      --story-open-line: #c7c3b9;
+      --story-shadow: rgba(31, 36, 40, .07);
+      --summary-ink: #47515a;
+      --detail-ink: #37424c;
+      --section-ink: #5f6871;
+      --hint-ink: #8a9095;
+      --comment-meta-ink: #637080;
+      --comment-label-bg: #d7e6ef;
+      --comment-label-ink: #315b73;
+      --comment-text-ink: #2e3944;
+      --comment-reason-ink: #637080;
+      --comment-reason-label: #2e5e78;
+      --comment-empty-ink: #8a9097;
+      --editorial-ink: #333b42;
+      --humor-bg: #f8e8bd;
+      --humor-ink: #795d16;
+      --wisdom-bg: #dcebdc;
+      --wisdom-ink: #315f3a;
+      --counterpoint-bg: #eadff1;
+      --counterpoint-ink: #614273;
+    }
+    html[data-theme="night"] {
+      color-scheme: dark;
+      --ink: #e0e7e1;
+      --muted: #9ba79f;
+      --paper: #111713;
+      --card: #1a221d;
+      --line: #303c34;
+      --orange-soft: #2c211b;
+      --blue-soft: #202c2e;
+      --green: #83c8a2;
+      --story-open-line: #435148;
+      --story-shadow: rgba(0, 0, 0, .28);
+      --summary-ink: #c2ccc5;
+      --detail-ink: #d1d8d3;
+      --section-ink: #aab5ae;
+      --hint-ink: #929e96;
+      --comment-meta-ink: #a8b7b8;
+      --comment-label-bg: #2f474d;
+      --comment-label-ink: #b8dbe2;
+      --comment-text-ink: #d5dcda;
+      --comment-reason-ink: #aebbb8;
+      --comment-reason-label: #92c6cf;
+      --comment-empty-ink: #929e96;
+      --editorial-ink: #d9d5d0;
+      --humor-bg: #403721;
+      --humor-ink: #e3cb87;
+      --wisdom-bg: #293c2c;
+      --wisdom-ink: #a8d3ae;
+      --counterpoint-bg: #382d40;
+      --counterpoint-ink: #d0b4df;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .18s ease, color .18s ease;
+    }
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--orange); }
+    .masthead {
+      border-top: 5px solid var(--orange);
+      border-bottom: 1px solid #343b43;
+      background: #18212a;
+      color: white;
+    }
+    .masthead-inner, main {
+      width: min(860px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+    .masthead-inner { padding: 25px 0 27px; }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      background: var(--orange);
+      color: white;
+      font-family: ui-serif, Georgia, serif;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+    .archive-link { color: #bac2ca; }
+    .theme-switch {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .theme-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 8px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .theme-button:hover { color: white; }
+    .theme-button[aria-pressed="true"] {
+      background: #46515b;
+      color: white;
+    }
+    .theme-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .eyebrow {
+      color: #ff9670;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 7px 0 8px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 6vw, 46px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.03;
+    }
+    .dek {
+      margin: 0;
+      color: #c0c8d0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      margin-top: 17px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .stats strong { color: white; font-size: 13px; margin-right: 3px; }
+    .view-switch {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 13px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .view-switch[hidden] { display: none; }
+    .view-buttons {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .view-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 9px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .view-button:hover { color: white; }
+    .view-button[aria-pressed="true"] {
+      background: var(--orange);
+      color: white;
+    }
+    .view-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .view-status { color: #c0c8d0; }
+    .ranking-rule {
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255, 255, 255, .09);
+      color: #9faab4;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .ranking-rule strong {
+      color: #e7eaed;
+      margin-right: 5px;
+    }
+    main { padding: 20px 0 72px; }
+    .story-list {
+      display: grid;
+      gap: 9px;
+    }
+    .story-list[data-visible-count="10"] .story:nth-child(n+11),
+    .story-list[data-visible-count="20"] .story:nth-child(n+21) {
+      display: none;
+    }
+    .story {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--card);
+      overflow: clip;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .story[open] {
+      border-color: var(--story-open-line);
+      box-shadow: 0 14px 34px var(--story-shadow);
+    }
+    .story-overview {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 13px;
+      padding: 17px 20px 15px 15px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .story-overview::-webkit-details-marker { display: none; }
+    .story-overview:focus-visible {
+      outline: 3px solid rgba(232, 93, 42, .45);
+      outline-offset: -3px;
+    }
+    .rank-number {
+      color: var(--orange);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .story-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 14px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .story-kicker .source {
+      color: var(--green);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h2 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 10px;
+      margin: 5px 0 5px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(17px, 2.3vw, 19px);
+      font-weight: 700;
+      letter-spacing: -.008em;
+      line-height: 1.28;
+    }
+    .title-link { text-decoration: none; }
+    .discussion-link {
+      color: var(--orange);
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .summary {
+      margin: 0;
+      color: var(--summary-ink);
+      font-size: 14.5px;
+      line-height: 1.72;
+      white-space: pre-line;
+    }
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--hint-ink);
+      font-size: 10px;
+      font-weight: 750;
+    }
+    .chevron {
+      display: inline-block;
+      color: var(--orange);
+      transition: transform .18s ease;
+    }
+    .story[open] .chevron { transform: rotate(180deg); }
+    .story[open] .expand-hint > span:first-child { font-size: 0; }
+    .story[open] .expand-hint > span:first-child::after {
+      content: "收起详情";
+      font-size: 10px;
+    }
+    .story-details {
+      margin-left: 80px;
+      padding: 17px 20px 24px 0;
+      border-top: 1px solid var(--line);
+    }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      color: var(--section-ink);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .detail-summary > p {
+      margin: 0;
+      color: var(--detail-ink);
+      font-size: 14px;
+      line-height: 1.78;
+    }
+    .detail-summary > p + p { margin-top: 12px; }
+    .comments-panel {
+      margin-top: 21px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+    .comments-list { display: grid; gap: 9px; }
+    .featured-comment {
+      margin: 0;
+      padding: 14px 16px;
+      border: 0;
+      border-radius: 3px;
+      background: var(--blue-soft);
+    }
+    .comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 7px;
+      font-size: 11px;
+    }
+    .comment-meta a { color: var(--comment-meta-ink); text-decoration: none; }
+    .comment-label {
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--comment-label-bg);
+      color: var(--comment-label-ink);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .05em;
+    }
+    .comment-label-humor {
+      background: var(--humor-bg);
+      color: var(--humor-ink);
+    }
+    .comment-label-wisdom {
+      background: var(--wisdom-bg);
+      color: var(--wisdom-ink);
+    }
+    .comment-label-counterpoint {
+      background: var(--counterpoint-bg);
+      color: var(--counterpoint-ink);
+    }
+    .comment-text {
+      margin: 0;
+      color: var(--comment-text-ink);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 13px;
+      line-height: 1.62;
+      white-space: pre-line;
+    }
+    .comment-reason {
+      margin: 9px 0 0;
+      color: var(--comment-reason-ink);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .comment-reason span {
+      margin-right: 7px;
+      color: var(--comment-reason-label);
+      font-weight: 850;
+    }
+    .comments-empty {
+      margin-top: 19px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      color: var(--comment-empty-ink);
+      font-size: 12px;
+    }
+    .editorial {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      align-items: start;
+      margin-top: 21px;
+      padding: 13px 15px;
+      border-left: 3px solid var(--orange);
+      background: var(--orange-soft);
+    }
+    .editorial-mark {
+      padding-top: 2px;
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+    .editorial p {
+      margin: 0;
+      color: var(--editorial-ink);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.62;
+    }
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 27px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .footer p { margin: 0; max-width: 680px; }
+    .footer a { font-weight: 800; }
+    @media (max-width: 620px) {
+      .masthead-inner, main { width: min(100% - 20px, 860px); }
+      .masthead-inner { padding-top: 18px; }
+      .topline {
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+      .top-actions {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
+      .story-overview {
+        grid-template-columns: 37px minmax(0, 1fr);
+        gap: 9px;
+        padding: 14px 13px 12px 10px;
+      }
+      .rank-number { font-size: 22px; }
+      .story-details { margin-left: 56px; padding-right: 13px; }
+      .editorial { grid-template-columns: 1fr; gap: 4px; }
+      .footer { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .masthead { background: white; color: var(--ink); border-bottom-color: var(--line); }
+      .topline, .archive-link, .expand-hint, .view-switch, .theme-switch { display: none; }
+      main { width: 100%; }
+      .story { display: block !important; break-inside: avoid; }
+      .story-details { display: block; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="topline">
+        <div class="brand"><span class="brand-mark">Y</span> Hacker News</div>
+        <div class="top-actions">
+          <div class="theme-switch" role="group" aria-label="选择页面颜色模式">
+            <button class="theme-button" type="button" data-theme-choice="auto" aria-pressed="true">自动</button>
+            <button class="theme-button" type="button" data-theme-choice="day" aria-pressed="false">日间</button>
+            <button class="theme-button" type="button" data-theme-choice="night" aria-pressed="false">夜间</button>
+          </div>
+          <a class="archive-link" href="../index.html">每日归档 →</a>
+        </div>
+      </div>
+      <div class="eyebrow">2026-08-05 · top feed · 过去 36 小时</div>
+      <h1>今天的 Hacker News</h1>
+      <p class="dek">前 20 篇已经全部准备好；默认显示前 20，也可以切换到前 10。</p>
+      <div class="stats">
+        <span><strong>20</strong>篇已准备</span>
+        <span><strong>15</strong>篇有精彩评论</span>
+        <span>更新于 2026-08-05 08:01 PDT</span>
+        <span>生成模型 <strong>gemini/gemini-3-flash-preview</strong></span>
+      </div>
+      <div class="view-switch" aria-label="选择新闻显示数量">
+        <span>显示</span>
+        <div class="view-buttons">
+          <button class="view-button" type="button" data-count="10" aria-pressed="false">前 10</button>
+          <button class="view-button" type="button" data-count="20" aria-pressed="true">前 20</button>
+        </div>
+        <span class="view-status" aria-live="polite">当前显示前 20</span>
+      </div>
+      <div class="ranking-rule">
+        <strong>排序规则</strong>HN 原始名次 + 低讨论量降权。公式：原始名次 + 0.3 × max(0, 50 − 评论数)；50 条评论以上不降权。
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="story-list" data-visible-count="20">
+      
+    <details class="story" id="story-49182996">
+      <summary class="story-overview">
+        <span class="rank-number">01</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">blog.cloudflare.com</span>
+            <span>112 points</span>
+            <span>原始 #1 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://blog.cloudflare.com/cloudflare-os/" target="_blank"
+              rel="noopener noreferrer">Cloudflare OS: an open platform for agents, apps, and work</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49182996" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 58</a>
+          </h2>
+          <p class="summary">Cloudflare 发布了开源平台 Cloudflare OS，旨在为企业员工提供深度集成的 AI 智能体和工作空间。该平台允许非技术用户通过自然语言指令（vibe coding）直接修改和创建全栈应用程序，且每个应用实例都在独立的沙箱中运行。其核心安全机制“Gatekeepers”实现了细粒度的权限控制，确保 AI 在调用内部系统时不会泄露敏感数据。这一举措试图解决传统 SaaS 软件难以个性化定制的问题，让每个人都能拥有专属的工具。然而，这种高度定制化也引发了对企业内部数据孤岛和“SharePoint 式”管理混乱的担忧。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Cloudflare OS 是一个基于 Cloudflare Workers 构建的开源平台，它将 AI 智能体与企业内部的工作流深度融合。该项目的核心理念源自 Sandstorm.io 的创始人 Kenton Varda，强调“个人应用”模式：每个文档或工具都是一个独立的“Gadget”（小部件），运行在隔离的 V8 沙箱中。这种架构允许用户利用 AI 实时修改应用代码，而无需担心破坏系统安全或影响他人。平台引入了名为“Gatekeepers”的服务，作为 AI 与外部 API（如 GitHub 或 Jira）之间的中介，支持人工审核、审计日志和细粒度的权限限制。</p><p>在技术实现上，Cloudflare OS 采用了 Cap’n Web RPC 系统进行客户端与服务器的通信，并利用 Durable Objects 存储每个应用的独立状态。这种设计使得应用不仅是静态的文档，而是具备逻辑和数据库的活生生的软件。为了防止数据泄露，平台会记录智能体观察到的所有资源，并根据这些“观察记录”动态调整后续的访问策略。尽管该项目已开源，但它深度依赖 Cloudflare 的基础设施（如 AI Gateway 和 Access），这引发了用户对供应商锁定的讨论。未来，Cloudflare 计划将其整合进 Slack 等聊天工具，并提供更完善的容器化开发流。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49183266" target="_blank" rel="noopener noreferrer">@rozenmd</a>
+        </div>
+        <p class="comment-text">我喜欢 Kenton 对此的看法：今天我们发布了 Cloudflare OS，它是一个带有连接器的聊天机器人，就像其他每家科技公司正在做的一样。但实际上，它又是不同的。这是我 10 年前的创业项目 Sandstorm.io 的重制版，只不过这次是构建在 Cloudflare Workers（我过去 9 年一直在构建的平台）之上，并深度利用了 AI。这或多或少是我那个秘密的 10 年大师计划的巅峰之作。这是一个完整的个人应用 &#x27;vibe coding&#x27; 平台，其沙箱非常安全，你可以尽情发挥——AI 无法引入重大的安全漏洞。我们相信公司的安全团队可以放心地给非技术用户权限去进行 &#x27;vibe coding&#x27;，然后晚上睡个安稳觉。这怎么可能呢？这是 Sandstorm 安全模型的回归。一个 &#x27;Gadget&#x27; 就等同于 Sandstorm 的一个 &#x27;Grain&#x27;：一个细粒度的应用实例。例如，如果你有一个文档编辑器应用，每个文档都作为该应用的一个单独实例运行在独立的沙箱中。这意味着两件我认为非常重要的事情：1. 平台可以通过控制谁能访问 Gadget 来管理所有访问控制。Gadget 绝不可能意外泄露给攻击者——即使攻击者拥有访问基于同一应用的其他 Gadget 的权限。2. 既然每个人都在运行自己的代码副本，每个人都可以自由修改自己的代码副本。再多想想第 2 点。如果你想在你正在使用的软件中增加一个新功能，你只需提示你的智能体去添加它，那会怎样？这在云端 SaaS 模式下是行不通的，因为你运行的不是自己的应用副本。Sandstorm 10 年前尝试改变这一点，但当时世界还没准备好，因为没有足够多的人有技能或耐心去修改他们的软件。AI 改变了这一点。现在你只需要问智能体——那个你用来协助你与 Gadget 交互的智能体，也可以修改 Gadget 的代码。这太有趣了。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论由项目核心架构师 Kenton Varda 的推文转述，揭示了 Cloudflare OS 与 Sandstorm 的传承关系，并解释了其核心的“个人应用”安全哲学。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49183703" target="_blank" rel="noopener noreferrer">@kentonv</a>
+        </div>
+        <p class="comment-text">看看我链条里的下一条推文：当然，如果个人应用能连接到外部服务，它们会更有用。Cloudflare OS 引入了一个我们称之为 Gatekeepers 的“连接器”系统。这有点像 MCP（而且 MCP 也作为一种 Gatekeeper 被支持），但功能更多：
+* Gatekeeper 不仅仅暴露工具，它还暴露一个 Cap&#x27;n Web RPC API。这使得它既适用于智能体（通过代码模式），也适用于 Gadgets。
+* Gatekeepers 与 Cloudflare OS UI 集成，为所有产生副作用的操作提供内联审计日志和人工干预审批。
+* 当一个操作需要审批时，智能体不需要停下来等待。Gatekeeper 会模拟结果，允许智能体继续运行并排队处理更多工作。然后你可以在最后批量批准所有内容。希望这意味着你不再觉得有必要开启自动批准！（但如果你想的话，依然可以开启。）
+我们已经为大量服务构建了 Gatekeepers，从 GitHub 到 Home Assistant。我们发现，凭借正确的技能，AI 基本上可以为任何给定的 API 批量生产这些东西，解决了生态系统的鸡生蛋蛋生鸡问题。我们正在开发一种“软件工厂”，你可以输入你喜欢的服务的 API 文档，然后得到一个编写良好的 Gatekeeper。这还没完全准备好——所以目前请使用我们提供的那些，或者使用 write-gatekeeper 技能来编写你自己的。你可以将自己的 Gatekeepers 添加到你的个人部署中。</p>
+        <p class="comment-reason"><span>入选理由</span>详细解释了 Gatekeepers 这一关键安全组件的运作方式，特别是如何解决 AI 自动化的安全审批痛点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49183430" target="_blank" rel="noopener noreferrer">@yomismoaqui</a>
+        </div>
+        <p class="comment-text">每次我读到 Cloudflare 的新东西，它们看起来都很酷，但我总无法摆脱那种因为担心被锁定（lock-in）而不想使用它们的感觉，是我太偏执了吗？</p>
+        <p class="comment-reason"><span>入选理由</span>反映了社区对 Cloudflare 这种“全家桶”式生态系统扩张的普遍担忧。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49183564" target="_blank" rel="noopener noreferrer">@badlibrarian</a>
+        </div>
+        <p class="comment-text">这只代表了 IT 部门担心的一小部分。如果你想听听这最终会演变成什么样，请给 IT 人员买杯啤酒，然后说出“SharePoint”这个词。问题不在于让最终用户添加功能。问题在于十二个最终用户定制了产生输出的东西并保存了它，现在没人能读懂它了。这可以被解决。如果它甚至有机会获得动力（它应该获得，尽管 IT 部门当然会抵制）。但我们别假装已经解决这个问题了。</p>
+        <p class="comment-reason"><span>入选理由</span>从企业 IT 管理的角度提出了一个非常现实的挑战：过度个性化可能导致协作崩溃。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Cloudflare OS 的发布标志着“可编程个人软件”愿景的复兴。通过将 Kenton Varda 十年前在 Sandstorm 中提出的细粒度沙箱模型与当下的 AI 浪潮结合，Cloudflare 试图打破 SaaS 软件“千人一面”的僵局。正如评论 [49183266] 所指出的，AI 极大地降低了修改软件的门槛，使得“vibe coding”成为可能。然而，这种自由并非没有代价。评论 [49183564] 敏锐地指出了企业管理中的“SharePoint 陷阱”：当每个员工都拥有高度定制化的工具时，组织内部的互操作性和知识共享可能会陷入混乱。此外，尽管该平台开源，但其底层对 Cloudflare 基础设施的深度依赖 [49183430] 提醒我们，这依然是一场关于生态系统话语权的博弈。Cloudflare OS 能否真正成为“智能体时代的操作系统”，取决于它能否在个人创造力与企业治理之间找到那个微妙的平衡点。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49181083">
+      <summary class="story-overview">
+        <span class="rank-number">02</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">openreview.net</span>
+            <span>147 points</span>
+            <span>原始 #4 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://openreview.net/challenge?redirect=%2Fforum%3Fid%3DklU4737opt" target="_blank"
+              rel="noopener noreferrer">Position: LLMs Can&#x27;t Jump</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49181083" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 92</a>
+          </h2>
+          <p class="summary">DeepMind 研究员 Tom Zahavy 发表立场论文，认为大语言模型（LLM）无法实现科学发现中的“创造性飞跃”。文章以爱因斯坦提出等效原理为例，指出这种从直觉到新公理的“溯因推理”是目前模型的短板。核心论点是 LLM 缺乏感官经验的锚定，只能在现有数据分布内进行内插或组合。作者认为，真正的科学突破需要模型具备物理直觉，而不仅仅是处理符号文本。这意味着目前的纯文本训练范式在通往通用人工智能的道路上可能存在局限。不过，作者也澄清这并非否定 LLM 的价值，而是指出了下一代 AI 需要探索的方向。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这篇文章深入探讨了大型语言模型在科学创新中的核心局限，提出了“LLM 不会跳跃”的观点。作者 Tom Zahavy 认为，科学进步往往依赖于“溯因推理”，即通过直觉和思想实验创造出全新的公理或解释框架。以爱因斯坦为例，他通过想象电梯坠落的感官体验得出了重力与加速度等效的结论，这种“飞跃”并非简单的逻辑推导或数据拟合。论文指出，LLM 的本质是基于海量文本的统计预测，它们擅长在已知知识空间内进行内插，但在缺乏感官经验锚定的情况下，难以产生真正的物理直觉。</p><p>作者认为，目前的模型被困在符号世界中，缺乏与现实物理世界的直接互动，这限制了它们像人类科学家那样进行跨越式的理论创新。为了解决这一问题，论文建议未来的 AI 系统需要整合感官经验或构建更深层的“世界模型”。然而，这一观点在社区中引发了激烈争论。一些人认为，所谓的“直觉”其实也是基于大量知识积累的模式识别，而另一些人则指出，多模态融合目前尚未在通用推理上展现出预期的质变。作者随后在社交媒体上澄清，这并非宣判 LLM 的死刑，而是试图界定当前架构在处理特定类型科学发现时的边界。未来值得关注的是，通过引入物理模拟环境或更高级的推理架构，AI 是否能最终跨越这一“直觉”鸿沟。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49181840" target="_blank" rel="noopener noreferrer">@defgeneric</a>
+        </div>
+        <p class="comment-text">值得转发作者 Tom Zahavy 在这篇论文在 X/Twitter 上流传后发表的后续推文：
+&gt; 关于我的《LLMs Can’t Jump》论文的一些反思：
+&gt; 我的立场论文最近在这里引起了一些关注，所以我想分享一些想法并澄清几件事。
+&gt; 首先：有些人将其解读为“DeepMind 给 AI 科学研究泼冷水”，或者声称论文认为 LLM 永远无法做出真正的科学发现。事实并非如此。
+&gt; 这是一篇个人立场论文，不代表公司对 AI 科学研究的观点。这也不是我的最终立场。作为 AlphaProof（第一个获得国际数学奥林匹克竞赛奖牌的 AI 系统）的核心贡献者，我亲眼目睹了我在 DeepMind、其他前沿实验室和学术界的同事们利用 LLM 取得了惊人的发现，并且还将继续这样做。这篇论文并不是那种“LLM 是死胡同”的东西。
+&gt; 相反，这篇论文是我深入研究广义相对论发明过程的结果。我想探索现代 AI 系统要实现那种“跳跃”需要具备什么条件。具体来说，我关注的是等效原理——爱因斯坦通过基于物理直觉的思想实验制定的关键公理。我试图弄清楚如何赋予现代 AI 系统这种思考能力。
+&gt; 赋予 AI 这种特定能力并不一定是目前最紧迫的任务。改进我们现有的方法很可能在不久的将来带来许多令人兴奋的发现。事实上，这正是我个人目前正在努力的方向（抱歉让大家失望了！）。也很可能我是错的，仅仅通过扩展我们现有的系统就能在物理学和其他领域产生新的发明。
+&gt; 尽管如此，这是我去年冬天写这篇论文时的立场，我依然坚持它。我认为在这个领域有一些有趣的观点值得探索，这些观点可能会影响下一代 AI 系统。我很幸运收到了很多关于这个立场的有趣反馈——谢谢大家的留言！</p>
+        <p class="comment-reason"><span>入选理由</span>作者本人的后续澄清对于理解论文的真实意图至关重要，避免了读者将其误读为对 AI 潜力的全面否定。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49181981" target="_blank" rel="noopener noreferrer">@ACCount37</a>
+        </div>
+        <p class="comment-text">这是一个非常站不住脚的立场，而且“LLM 不能做某事”的历史记录本身就足以让人怀疑它。每一个这类“不能”之后，都会发现“它们能做，只是做得不好”，然后这种“不好”会随着一代代模型的更迭稳步改进。论文没有提供一种衡量或量化这种难以捉摸的“跳跃”能力的方法，甚至连近似方法都没有。它只是抛出“不能跳跃”这个说法，好像“溯因推理”是一类已知的、具有明确计算属性和要求的、而 LLM 架构无法满足的问题。事实并非如此——论文除了修辞性的说服尝试外，没有任何支撑。所提出的解决方案也值得怀疑。专用“世界模型”在推理和解决问题方面的实证记录坦率地说非常糟糕。甚至将多模态数据整合到 LLM 中也未能产生通用的推理能力提升。撇开 LeCun 在该领域的挫折不谈，推动“通过多模态融合改进推理”的主要前沿实验室是 Google DeepMind，而 Gemini 在前沿推理能力方面并不是典范。它具有很强的多模态能力，但在除此之外的性能上落后于 OpenAI 和 Anthropic——而 Anthropic 一直将多模态锚定视为次要任务，却依然在性能最前沿与 OpenAI 竞争。多模态锚定似乎在提高 AI 处理特定模态的能力方面效果很好，但在除此之外的领域就显得乏力了。现在，并不是没有可能所有尝试多模态世界模型的人都做错了，或者存在一种尚未发现的多模态锚定配方能导致 AI 能力的阶跃式变化。但我们目前得到的结果表明，这种情况不太可能发生。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从技术演进史和当前多模态研究的实际效果出发，对论文的观点提出了强有力的质疑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49182470" target="_blank" rel="noopener noreferrer">@gus_massa</a>
+        </div>
+        <p class="comment-text">&gt;&gt; 具体来说，我关注的是等效原理——爱因斯坦通过基于物理直觉的思想实验制定的关键公理。
+这很奇怪，因为等效原理是非常反直觉的。亚里士多德的力学里就没有它。人类花了将近两千年的时间才发现惯性，而惯性只是等效原理最简单的版本。爱因斯坦之所以能理解等效原理，是因为他拥有物理学学位，而不是因为他在现实生活中感受到了它。此外，如果你曾经学习或教授过量子力学，你会发现物理直觉反而会成为障碍。许多特性都与物理直觉相矛盾，但过一段时间你就会习惯它们。继续以爱因斯坦为例，光电效应在现实生活中并不会直观地显现出来。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者指出科学突破往往是反直觉的，挑战了论文中“感官直觉是科学飞跃基础”的核心假设。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49181935" target="_blank" rel="noopener noreferrer">@quantum_mcts</a>
+        </div>
+        <p class="comment-text">关于爱因斯坦为了“解决迈克尔逊-莫雷实验的矛盾”而创立狭义相对论的流行说法，是对这段历史非常片面的还原。论文中的这段引用就是典型：
+&gt; 从这两个公设出发，爱因斯坦推导出了洛伦兹变换……
+如果爱因斯坦推导出了它们，那“洛伦兹”又是谁？
+狭义相对论的基础是对电动力学和麦克斯韦方程组对称性的研究。爱因斯坦的论文原名就叫《论运动物体的电动力学》，而且从未引用过迈克尔逊和莫雷。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论纠正了论文在科学史引用上的瑕疵，提醒读者论文的论据基础可能存在偏差。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇来自 DeepMind 研究员的立场论文试图为 LLM 的能力划定一条“爱因斯坦红线”：模型可以模仿和组合，但无法像天才那样通过直觉实现理论飞跃。然而，正如评论区所指出的，这种观点面临双重挑战。首先，它对“直觉”的定义带有某种神秘色彩，忽略了科学突破往往是深厚学术训练（而非单纯感官体验）的结果；其次，AI 领域“不可逾越”的预言在过去几年里屡屡破产。虽然作者在后续澄清中表现得较为谦逊，但这篇论文反映了当前 AI 研究的一个核心焦虑：在堆砌算力和数据之外，我们是否遗漏了某种通往真理的本质要素？</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49181519">
+      <summary class="story-overview">
+        <span class="rank-number">03</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">quantamagazine.org</span>
+            <span>76 points</span>
+            <span>原始 #7 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.quantamagazine.org/why-the-legendary-erdos-problems-are-falling-to-ai-20260803/" target="_blank"
+              rel="noopener noreferrer">Why Erdős Problems Are Falling to AI</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49181519" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 56</a>
+          </h2>
+          <p class="summary">2026年，OpenAI的AI模型成功破解了数学家保罗·埃尔德什提出的多个传奇数学难题，包括著名的“单位距离”猜想。这些突破得益于数学家托马斯·布鲁姆建立的在线问题库，它为AI训练和验证提供了标准化的“基准测试集”。AI不仅能处理繁琐计算，还展现出跨学科联想的能力，利用代数数论的方法推翻了原本被认为正确的几何猜想。这标志着数学研究进入了新阶段，AI正从辅助工具转变为能够独立发现新知识的“合作者”。然而，AI生成的证明往往长达数百页且难以直观理解，引发了人们对数学本质是否会变成“黑箱”的担忧。尽管如此，这种“按Token计价”的科研模式正在以前所未有的速度刷新人类的知识边界。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>匈牙利数学家埃尔德什一生留下了数千个带有悬赏金的数学猜想，这些问题以简洁深奥著称，长期以来是人类智力的试金石。数学家托马斯·布鲁姆利用ChatGPT编写代码，建立了一个汇总这些问题的网站，无意中为各大科技巨头提供了完美的AI竞技场。OpenAI的内部模型Astra和谷歌的DeepMind团队开始系统性地攻克这些难题，甚至在某些问题上给出了令顶尖数学家都感到“令人生畏”的复杂反例。AI的表现令人惊讶，它不仅能通过巧妙的提示词工程被引导去尝试新路径，还能在不同数学分支间建立人类尚未察觉的联系，例如将代数工具应用于离散几何。</p><p>这种变革也带来了显著的副作用和挑战。一方面，像陶哲轩这样的顶尖数学家开始与利用AI的业余爱好者或本科生合作，极大地降低了参与前沿研究的门槛。另一方面，大量由AI生成、未经人类阅读验证的超长论文开始充斥学术界，导致“证明”的含义发生了微妙变化。目前的局限在于，虽然AI能给出正确的答案，但其逻辑往往缺乏人类数学家所追求的“优雅”和“启发性”。未来，数学研究可能会演变为一种“自动形式化”的过程，即由AI提出猜想、完成证明并自行验证。人类的角色将从繁重的推导中解放出来，转向更高层次的审美判断和跨领域问题的定义。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49182779" target="_blank" rel="noopener noreferrer">@throwatdem12311</a>
+        </div>
+        <p class="comment-text">当OpenAI发布他们的10项突破时，我看到许多职业数学研究员的反应大意都是“我完全看不懂，这超出了我的理解范围”。我们是不是捡了芝麻丢了西瓜？如果森林里倒下了一棵数学难题的树，但周围没有人能理解它，它还算发出了声音吗？如果我们无法理解这些突破，又怎么可能利用它们呢？我们真的准备好放弃自己的智力，把它们交给一个没人能理解的超级计算机吗？我们该如何分辨真理与虚构？</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个深刻的哲学问题：如果AI生成的证明超出了人类的理解能力，数学研究的意义是否会发生本质改变。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49183585" target="_blank" rel="noopener noreferrer">@HarHarVeryFunny</a>
+        </div>
+        <p class="comment-text">我感觉未解决猜想的价值更多在于人类在尝试证明或证伪它们的过程中所发现的新数学和新技术，而不仅仅是最终结果本身的效用。以费马大定理为例，我很想知道结果本身有什么实际用途，但那些致力于解决它的人创造了海量的新数学。这些AI数学证明虽然展示了强化学习在数学领域的威力，反映了数学公理化自洽的本质，但它们似乎不像人类工作那样具有价值，因为它们是在利用已知数学解决问题，而不是发明新数学。不过，分析导致这些结果的LLM推理思路依然很有趣，就像人类围棋选手从分析计算机围棋中获益一样。正如哈萨比斯所说，AI的真正目标是发现和创造——你想要创造的是能设计出围棋游戏的东西，而不仅仅是玩游戏。数学也是如此，虽然看AI按规则“玩数学”很有趣，但更有趣的将是能像安德鲁·怀尔斯那样在证明过程中创造新数学的AI。</p>
+        <p class="comment-reason"><span>入选理由</span>强调了数学研究中“过程”胜过“结果”的传统价值观，并质疑AI目前是否具备真正的创造力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49183899" target="_blank" rel="noopener noreferrer">@nater5000</a>
+        </div>
+        <p class="comment-text">“如果森林里倒下了一棵数学难题的树，但周围没有人能理解它，它还算发出了声音吗？”这种情况既不新鲜也不独特。有很多研究，特别是在数学领域，全世界只有几个人能真正理解。一个数学家提出的证明最初只有他自己懂，甚至同领域的专家也要花很长时间才能确信自己理解了，这并不罕见。看到一堆职业数学家说“这超出了我的理解”在真空中是没有意义的。如果你把拓扑学某个细分领域的创新证明给一个研究数论的资深数学家看，无论那是人写的还是机器写的，他都会说同样的话。这并不意味着我们正在盲目接受这些证明。这些证明正在接受自动系统的检查（这种系统在LLM出现之前就有了），并由有能力且有动力的专家进行复核。这项工作还没完成，虽然公司有信心宣布证明正确，但后续仍会有大量工作去验证，更重要的是去理解这些证明。现实中的数学家不会懒散到让OpenAI随口宣称解决了问题而不经过严密审查。</p>
+        <p class="comment-reason"><span>入选理由</span>从专业数学研究的实际运作角度出发，反驳了“AI证明不可信”或“难以理解是新现象”的担忧。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>埃尔德什这位一生漂泊、靠兴奋剂维持产出的数学天才，如果看到自己的遗产正成为硅谷巨头们“按Token计价”的竞技场，不知会作何感想。文章揭示了一个迷人的讽刺：那些曾经需要人类顶级智慧苦思冥想数十年的直觉性问题，正被AI以一种“暴力且跨界”的方式逐一击破。正如评论所指出的，我们正面临一个分水岭：数学究竟是关于“理解”的艺术，还是关于“结果”的搜索？当AI能利用人类从未想过的跨学科路径找到反例时，它确实在“做数学”，但如果这种证明长达百页且缺乏美感，它是否还能像费马大定理的证明那样，在人类智力史上留下回响？</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49181099">
+      <summary class="story-overview">
+        <span class="rank-number">04</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">wired.com</span>
+            <span>266 points</span>
+            <span>原始 #10 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.wired.com/story/a-civilian-plane-crashed-in-new-mexico-was-the-militarys-tech-to-blame/" target="_blank"
+              rel="noopener noreferrer">Civilian plane crash in New Mexico tied to military GPS blocking</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49181099" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 123</a>
+          </h2>
+          <p class="summary">2026年5月，一架民用医疗救护飞机在新墨西哥州坠毁，事故与美军进行的GPS干扰演习密切相关。飞行员在飞行途中因GPS信号中断失去导航能力，随后向地面管制员请求航向指引。由于当时多架飞机受干扰且管制员繁忙，飞行员在看到机场灯光后决定放弃仪表导航，转而进行目视进场。然而，在无月深夜的复杂山区，飞行员未能察觉航线上的卡皮坦山脉，最终撞山失事。此次事故引发了关于军事演习对民航安全影响的讨论，但也暴露了飞行员过度依赖GPS和决策失误的问题。主要局限在于，尽管干扰是诱因，但飞行员在极端环境下选择目视进场被认为是导致悲剧的直接原因。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>事故发生时，美军正在该地区进行合法的GPS干扰演习，并已提前发布航行通告。失事的比奇空中国王双发涡桨飞机在起飞后不久便报告GPS失效，由于无法自主导航，飞行员向阿尔伯克基中心请求协助。当时空域内还有其他三架飞机也因干扰而陷入困境，导致管制员工作负荷极大，未能及时为该机提供仪表引导。在等待过程中，飞行员因长时间向北飞行而严重偏离了预定航线。</p><p>看到远处鲁伊多索机场的灯光后，飞行员请求并获准进行目视进场。这是一个致命的决定：在没有月光的夜晚，1万英尺高的卡皮坦山脉隐藏在黑暗中，挡在了飞机与机场灯光之间。当飞机下降并转向机场时，巨大的黑影可能遮住了灯光，导致飞行员产生空间定向障碍。虽然管制员曾短暂要求军方停止干扰，但在飞行员转为目视飞行后，干扰随即恢复，这可能导致飞机上的地形感知告警系统失效。最终，飞机在距离山顶仅约250英尺处撞山，机上4人全部遇难。这起悲剧凸显了在高度自动化时代，传统导航技能和风险评估能力缺失的严重后果。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49182676" target="_blank" rel="noopener noreferrer">@inoffensivename</a>
+        </div>
+        <p class="comment-text">我是一名航空公司机长……在无月之夜向山区机场进行目视进场是非常危险的。在我们的运行规范中，飞往缺少天气报告的机场是不被允许的，所以如果是121部定期航班，这次飞行在法律上可能根本无法派遣。客机拥有DME/DME三角定位系统，可以在没有GPS的情况下实现区域导航（RNAV）。干扰虽然会阻止GPS进场，但可能不会影响近地告警系统（GPWS）的警报。在这种情况下，即使仪表着陆系统（ILS）因为缺少当地高度计读数而不可用，我可能会接受目视进场，但仍会利用ILS来提供通往跑道的水平和垂直引导。在航空公司多年的飞行经验教会了我很多东西，如果是在135部或91部通用航空操作中，我可能得通过惨痛教训才能学会，其中之一就是何时说“不”。在发布了GPS干扰通告的夜晚，飞往一个缺少天气报告的山区机场？不行。在没有GPS提供地形感知的情况下，在无月之夜进行目视进场？不行。即使ILS被通告停用，也要尝试利用它。</p>
+        <p class="comment-reason"><span>入选理由</span>这位专业机长从行业规范和风险管理的角度，指出了飞行员在决策链条上的多重失误。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49181589" target="_blank" rel="noopener noreferrer">@K0balt</a>
+        </div>
+        <p class="comment-text">GPS并不是航空导航的必需品。它确实很好用，而且有些进场程序在法律上要求它必须正常运行才能执行，但航空领域还有其他系统可以在无法进行目视飞行的情况下引导飞机。在这种情况下，依我拙见，飞行员因为GPS让许多自动化程度稍低的系统变得不再必要而变得懈怠和疏忽，人们已经习惯了那种工作流程。如果机组人员当时查看了地图并以此了解航线上的山脉，通过VOR和DME定位，甚至只是用秒表和罗盘航向，他们很容易就能知道自己需要保持更高的高度。在不确定精确位置时，他们至少应该保持该区域的最低安全高度。但不幸的是，人们太习惯于盯着那个能轻松提供情景感知的闪亮屏幕，以至于忘记了在玻璃座舱出现前的上百年里让飞行员活下来的规则和习惯。他们忘了山脉就像天空中的老虎，总是在等待捕捉疏忽的飞行员。这不仅对飞行员是一个有用的警示，对普通人也是如此，因为我们越来越习惯于将大量的认知焦点转移到一种有时可能会失效的工具上。</p>
+        <p class="comment-reason"><span>入选理由</span>评论深刻探讨了技术依赖导致的人类认知退化，将山脉比作“天空中的老虎”非常形象。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49182613" target="_blank" rel="noopener noreferrer">@harshreality</a>
+        </div>
+        <p class="comment-text">文章漏掉了一点：一旦飞行员向空中交通管制（ATC）报告GPS失效，ATC本打算让他们向右盘旋并引导他们进行ILS进场，这样可以避开最险峻的山脉。ATC还要求军方停止GPS干扰，军方也确实照做了……飞行员可能察觉到GPS恢复工作了……但是……相反，飞行员目视看到了机场并请求目视进场。ATC批准了请求，并告诉军方可以恢复GPS干扰，这意味着飞行员可能依赖的地形感知告警系统将不再起作用。目视进场涉及左转并直接飞越山脉下降。blancolirio关于此事的视频（在初步调查报告之后的第二个视频）重点提到，在当时条件下两种仪表进场都是不可能的：GPS干扰使RNAV失效，而目的地缺失的天气广播系统使ILS失效。在无月之夜的山区进行目视进场，对于经验不足的飞行员来说显然是不明智的。不过他没提到的一点是，ATC本可以等到飞机落地后再通知军方恢复干扰，因为他们知道这是一架医疗救护飞行，缺乏典型飞行员的那种周密计划和谨慎程度。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于ATC与军方互动以及进场选择的更多技术细节，补充了事故发生的关键背景。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49182027" target="_blank" rel="noopener noreferrer">@brainlessdev</a>
+        </div>
+        <p class="comment-text">文章顶部的动画误导得令人担忧。坠毁的飞机是一架比奇双发涡桨飞机，在坠毁前进行了几次机动。机上有4人。而动画使用了一个看起来像客机的模型，并将干扰显示为一种直接导致飞机坠毁的“气泡”。当我看到它时感到很不安，它并没有很好地呈现故事，我认为这是不负责任的。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了媒体报道中常见的视觉误导问题，强调了事实准确性的重要性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这起悲剧是典型的“瑞士奶酪模型”失效案例：军事演习的干扰、管制员的繁忙、无月之夜的黑暗，以及飞行员在压力下的决策失误，所有漏洞在同一时刻对齐了。虽然媒体倾向于将矛头指向军方的GPS干扰，但航空界的共识更倾向于这是一起由于过度依赖技术而导致的“可控飞行撞地”（CFIT）。正如评论中所言，山脉是“天空中的老虎”，在失去GPS这个“电子拐杖”后，飞行员在复杂地形中选择目视进场，无异于在黑暗中盲目奔跑。这不仅是航空安全的教训，更是对现代社会过度依赖自动化系统的一种警示：当屏幕熄灭时，我们是否还具备最基本的生存技能？</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49182957">
+      <summary class="story-overview">
+        <span class="rank-number">05</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">franciscotrindade.me</span>
+            <span>28 points</span>
+            <span>原始 #2 · 低讨论量降权 +8.4</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://franciscotrindade.me/blog/the-kids-are-alright/" target="_blank"
+              rel="noopener noreferrer">Not hiring junior engineers won&#x27;t solve the problem you think you have</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49182957" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 22</a>
+          </h2>
+          <p class="summary">随着 AI 工具的普及，许多科技公司开始质疑是否还需要招聘初级工程师，认为基础代码工作已被 AI 取代。本文作者指出，这种想法误解了工程职位的本质，即交付价值而非单纯写代码。初级工程师不仅是公司人才梯队的基石，在技术范式转移时，他们往往比背负“经验包袱”的资深员工更能快速适应 AI 原生工作流。如果一家公司觉得初级员工没用，通常是因为其研发流程过于僵化，像流水线一样只分配机械任务。作者强调，即便在 AI 时代，依然存在不同复杂度的业务问题，需要不同层级的工程师去解决。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>文章探讨了当前科技行业对初级工程师（Junior Engineers）的偏见，认为这种“AI 取代初级职位”的论调不过是老旧的“只招资深员工”策略换了新包装。作者认为这种决策基于几个错误的假设：首先是忽视了人才流失和梯队建设，只靠外部挖掘资深人才成本极高且融入慢；其次是低估了经验的贬值速度，在 AI 驱动的变革中，资深工程师需要“卸载”旧习惯，而初级员工反而能无缝切换到 AI 协作模式。</p><p>更深层的问题在于，许多公司仍在使用过时的“瀑布式”思维，将工程任务拆解为极其细碎的指令。在这种模式下，初级工程师确实容易被 AI 代理取代。但真正的软件工程应该是产品、设计与工程的协作，核心是解决客户问题。即便未来工程师的工作变成了编排 AI 代理，依然会有简单和复杂的项目之分，初级工程师可以从领导简单项目开始锻炼。作者警告说，如果组织无法为初级员工找到位置，说明其工程效率和协作模式本身就存在问题，这会导致资深员工成为所有琐碎任务的瓶颈。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49183779" target="_blank" rel="noopener noreferrer">@lbriner</a>
+        </div>
+        <p class="comment-text">我不确定“因为有了 AI 就不招初级员工”这种逻辑是否站得住脚。初级员工做的哪些工作是 AI 现在能做而以前不能做的？我不会让初级员工去构建整个网站或实现复杂的代理协作任务。大多数时候，我们招初级员工是为了充实人才库，希望他们在几个月后能产生效益。如果因为 AI 就觉得不需要补充人才库了，那确实很蠢。对我来说，初级员工面临的最大挑战其实是远程办公。我不希望一个刚毕业的工程师整天坐在卧室里通过 Teams 聊天，却不知道什么时候可以打断别人，什么时候不行。以前有办公室时，我们每周至少能共事两天。那种办公室里的闲聊、观察和耳濡目染，是学习工程技术和职场生存规则的关键部分。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提出了一个被文章忽视的现实维度：远程办公对初级工程师成长环境的破坏，比 AI 的冲击更直接。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49183824" target="_blank" rel="noopener noreferrer">@DetroitThrow</a>
+        </div>
+        <p class="comment-text">这篇博文并没有真正触及核心痛点：现在的瓶颈往往不再是初级开发人员能帮上忙的地方。我认识的每一家雇佣了初级员工并鼓励他们使用 AI 的初创公司，最后都陷入了代码审查（Code Review）的瓶颈，必须处理基础代码质量和架构决策问题。因此，许多初创公司现在基本上都在放弃招聘初级员工。关于代码的可演进性、可靠性和可维护性，依然是开发过程中不可或缺的部分。几个月前在 Twitter 上宣称“源代码只是汇编语言”的人，现在都开始改口承认自己错了。我确实很担心这对人才梯队会产生什么影响。</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了 AI 辅助开发带来的实际副作用——代码审查瓶颈，这是企业拒绝初级员工的务实理由。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49183909" target="_blank" rel="noopener noreferrer">@guywithahat</a>
+        </div>
+        <p class="comment-text">这里面也有讽刺的一面：初级工程师往往更愿意理解和使用 AI 工具，其表现很快就会超过那些还在 Stack Overflow 上发帖提问的资深工程师。我们公司现在就是这种情况，感觉挺滑稽的——某些项目进度严重滞后，还得不断招人，就因为那位非常资深的负责人拒绝使用 AI。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个有趣的视角，即初级员工在拥抱新技术方面的优势可能反超资深员工。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49183763" target="_blank" rel="noopener noreferrer">@alephnerd</a>
+        </div>
+        <p class="comment-text">现在的毕业生太多了，非名校项目的质量标准下降得很厉害。而名校每年大约有 1.5 万到 2 万名电子工程与计算机科学相关的毕业生。除非他们真的是出类拔萃的奇才，否则很难证明给一个普通大学的计算机毕业生开出 10 万甚至 14 万美元的总薪酬是合理的。举个极端的例子，我大学时有个哥们儿不想上很难的操作系统课，就找了一所德克萨斯州的普通教会大学转学分，那里的作业居然是写关于系统编程概念（如内存管理）的圣经类比，或者是 FizzBuzz 级别的简单任务。虽然这是个极端案例，但在非目标院校之外，人才质量确实参差不齐。</p>
+        <p class="comment-reason"><span>入选理由</span>从人才供给侧和薪酬性价比的角度解释了为什么企业在招聘初级员工时变得更加挑剔。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章触及了当前技术圈最焦虑的话题：如果 AI 能写出 80% 的基础代码，那“学徒期”是否还有存在的必要？作者 Francisco Trindade 敏锐地指出，拒绝初级工程师其实是企业在管理上的懒政，试图通过只招“熟练工”来规避培养成本。然而，正如评论区 [49183824] 所言，AI 催生的代码洪水反而加重了资深工程师的审查负担，这种“代码审查瓶颈”才是企业不敢招新人的现实阻碍。更有趣的冲突在于 [49183909] 提到的现象：当资深员工固守旧法时，初级员工可能凭借 AI 实现生产力的跨代超越。未来的工程团队可能不再需要“码农”，但永远需要那些能利用工具解决业务问题的“问题解决者”，而这种能力的培养无法跳过初级阶段。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49183115">
+      <summary class="story-overview">
+        <span class="rank-number">06</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">campion.edu.au</span>
+            <span>23 points</span>
+            <span>原始 #3 · 低讨论量降权 +12.3</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.campion.edu.au/blog/top-25-aristotle-quotes-on-virtue-knowledge-and-happiness/" target="_blank"
+              rel="noopener noreferrer">Aristotle quotes on virtue, knowledge, and happiness</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49183115" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 9</a>
+          </h2>
+          <p class="summary">这篇文章汇编了亚里士多德关于美德、知识和幸福的25条经典名言，这些思想至今仍是西方伦理学和政治学的基础。文章通过《尼各马可伦理学》和《形而上学》等著作，阐述了亚里士多德关于“卓越是一种习惯”以及“幸福取决于我们自己”的核心观点。这些名言涵盖了自我认知、友谊的本质以及教育在塑造人格中的作用。然而，一个重要的局限性在于，名单中一些流传最广的句子实际上并非亚里士多德的原话，而是后世学者的总结或误传。这提醒我们在引用古典智慧时，需要区分哲学精神与原始文本的精确性。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这篇文章整理了古希腊哲学家亚里士多德的25条名言，旨在为现代读者提供关于如何过上充实且有美德生活的指导。内容主要围绕“幸福”（Eudaimonia）展开，亚里士多德认为幸福不是一种转瞬即逝的情绪，而是通过一生的美德实践和自我完善来实现的。文中提到的名言涉及多个维度：在个人成长方面，强调了习惯对性格的塑造作用；在社会交往方面，探讨了真挚友谊需要时间沉淀且建立在共同美德之上；在智力活动方面，则强调了理性和逻辑在法律与教育中的核心地位。</p><p>然而，深入探究这些引文的来源会发现有趣的权衡。虽然这些短句极具启发性，但其中几条最著名的语录——如关于“卓越是习惯”和“受过教育的心灵能包容不同见解”的论述——在亚里士多德的原始著作中并无直接对应。它们更多是20th世纪学者（如威尔·杜兰特）对亚里士多德复杂思想的高度浓缩。这种简化虽然有助于哲学思想的普及，但也可能忽略了亚里士多德在《尼各马可伦理学》中对道德判断“非精确性”的深刻洞察。读者在汲取这些智慧时，应意识到它们是经过后世解读的“哲学金句”，而非严谨的学术文本。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49183737" target="_blank" rel="noopener noreferrer">@technics256</a>
+        </div>
+        <p class="comment-text">第一条名言甚至根本不是亚里士多德说的，而是出自威尔·杜兰特（Will Durant）1926年出版的书《哲学的故事》（The Story of Philosophy）。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了文章中流传最广的一条“名言”实际上是现代人的总结，具有重要的事实纠正价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49183624" target="_blank" rel="noopener noreferrer">@john_strinlai</a>
+        </div>
+        <p class="comment-text">&gt; 出自亚里士多德？
+显然不是。实际上：
+“这句话最早出现在印刷品中是洛厄尔·本尼恩（Lowell Bennion）1959年的著作《宗教与对真理的追求》（Religion and the Pursuit of Truth）。”
+或者：
+“最早在洛厄尔·L·本尼恩1959年的《宗教与对真理的追求》中被归于亚里士多德。原著中并未发现此类表述。有时被认为（尽管我觉得有点牵强）是对《尼各马可伦理学》1.3.4 (1094b) 的误读：‘因为一个受过教育的人的标志，是在每个课题中寻求该事物性质所能接受的那种清晰度。’”</p>
+        <p class="comment-reason"><span>入选理由</span>深入考据了另一条著名语录的误传来源，展示了哲学传播中的变迁。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49183489" target="_blank" rel="noopener noreferrer">@geye1234</a>
+        </div>
+        <p class="comment-text">一个学科能达到的精确程度是该学科特有的，但这并不意味着不能对其进行准确的断言：
+“这类知识（伦理学）的特点是它在‘精确性’、陈述的准确度以及逻辑衔接的紧密性上会有所欠缺。我们绝不能寻求一种关于行为的数学。人类行为的主题并不受必然且统一的规律支配。但这并不意味着它不受任何规律支配。”
+“受过教育的人会在每个学科中寻求该事物的性质所允许的精确度；如果容忍一个数学家尝试说服而非证明，或者要求一个修辞学家进行严格的论证推理，显然是同样荒谬的。”
+https://www.gutenberg.org/files/8438/8438-h/8438-h.htm</p>
+        <p class="comment-reason"><span>入选理由</span>引用了亚里士多德关于学科精确性的真实论述，为理解其哲学方法论提供了深度。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>亚里士多德的“名言”在互联网上极受欢迎，因为它们将深奥的伦理学转化为易于消化的生活指南。然而，正如评论区所指出的 [49183737, 49183624]，许多我们耳熟能详的句子其实是现代人的“二次创作”。这种现象反映了大众对古典智慧的渴望，但也揭示了我们在传播知识时往往牺牲了严谨性。亚里士多德本人其实非常强调不同学科应有不同的精确度 [49183489]，将复杂的伦理探讨简化为几句口号，本身就违背了他对“受过教育的心灵”的定义。我们在欣赏这些金句的同时，或许更应该去读读他的原著，感受那种不追求“数学般精确”却依然深刻的逻辑力量。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49182041">
+      <summary class="story-overview">
+        <span class="rank-number">07</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">vincentschmalbach.com</span>
+            <span>117 points</span>
+            <span>原始 #15 · 低讨论量降权 +3.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.vincentschmalbach.com/time-serves-ai-bots-a-different-website/" target="_blank"
+              rel="noopener noreferrer">TIME Is Serving AI Bots a Different Website, with Ads Built In</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49182041" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 38</a>
+          </h2>
+          <p class="summary">《时代》杂志（TIME）被发现根据访问者身份提供两个版本的网站：人类看到的是复杂的 HTML 页面，而 AI 爬虫则接收到精简的 Markdown 文本。这个专门给 AI 阅读的版本不仅体积缩小了 20 多倍，还内置了人类不可见的“赞助内容”，如 Ally 银行的问答。这些广告被巧妙地格式化为 FAQ，旨在诱导大模型在回答用户咨询时将其作为“事实”引用。这种做法由广告技术公司 Mobian 提供支持，通过统计 AI 消耗的“ Token”而非点击量来计费。虽然这解决了 AI 流量变现的难题，但也意味着人类与机器正在阅读完全不同的互联网内容。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>开发者 Vincent Schmalbach 发现，《时代》杂志正利用 User-Agent 请求头对访问者进行分流。普通用户和 Google 搜索爬虫会加载约 303KB 的完整 HTML 页面，包含设计、脚本和图像；而 Claude、Perplexity 和 OpenAI 的搜索机器人则会收到一个仅 13KB 的 Markdown 版本。这个精简版去除了所有视觉干扰，极大地降低了 AI 处理信息的成本。然而，真正的玄机在于内容差异：Markdown 版本中嵌入了人类网页上完全不存在的赞助商信息，例如 Ally 银行或项目管理协会（PMI）的详细介绍。</p><p>这些广告内容被精心编写成 FAQ 格式，非常符合大语言模型的语料偏好，显然是为了在 AI 生成回答时增加品牌被提及的概率。系统还使用了 Mobian 提供的技术，在响应头中包含唯一的“印象 ID”和 Token 计数，实现了针对 AI 爬虫的精准广告计量。这种“分叉网页”策略反映了出版商对 AI 流量激增的应对：既然 AI 抓取不可避免，不如直接向其投放广告。目前的局限在于，这种做法游走在搜索引擎优化的边缘，如果处理不当，可能会被 Google 视为“障眼法”（Cloaking）而遭到惩罚。未来，我们可能会看到更多网站为 AI 量身定制“事实”，从而在算法推荐的源头占据一席之地。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49182271" target="_blank" rel="noopener noreferrer">@WJW</a>
+        </div>
+        <p class="comment-text">这种做法的意图是不是想在长期上下文中植入一些“想法”，以便 AI 在被问及银行推荐时能把它们提供出来？这看起来有点随机且缺乏针对性，但对于高客单价的服务来说，也许是值得的。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地指出了这种做法的核心商业动机：通过污染 AI 的上下文来影响其未来的决策输出。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49182973" target="_blank" rel="noopener noreferrer">@skeledrew</a>
+        </div>
+        <p class="comment-text">这可能是想利用一些 LLM 供应商正越来越多集成的跨会话记忆功能。只要有足够的“建议”，它就会在记忆中变成一个“事实”，某天用户提出相关查询时，模型就会把这些积累的“事实”推给该用户。</p>
+        <p class="comment-reason"><span>入选理由</span>解释了广告内容如何通过 AI 的记忆机制转化为潜在的品牌背书。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49183896" target="_blank" rel="noopener noreferrer">@apocalyptic0n3</a>
+        </div>
+        <p class="comment-text">这是一个很棒的主意。在某些你确实希望 AI 机器人访问网站的情况下（例如我们的电商平台），这甚至很有意义——只需提供针对 AI 优化的 Markdown 内容即可。但要注意，千万不要对 Googlebot 这样做。Google 会认为这是“障眼法”（cloaking），并可能因此封禁你的整个域名。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了实用的技术警告，指出了这种策略在 SEO 方面的巨大风险。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49182477" target="_blank" rel="noopener noreferrer">@jerf</a>
+        </div>
+        <p class="comment-text">政治家撒谎的最高境界是说服别人相信这个谎言是真理，然后让那个人站在镜头前。这样就不会有任何肢体语言暗示那是谎言。LLM 本质上是轻信的，它们读到的东西基本上就是它们的宇宙。如果你能在 LLM 的输入中塞进一段关于某个半相关话题的自信陈述，对 LLM 来说那就是真理。好消息和坏消息同时在于，Google 不会坐视不管。如果他们要用 LLM 取代搜索框，那么这个机器人应该提供 Google 的广告，而不是《时代》杂志的广告！这些内容创作者以为自己是谁？所以，针对提供给 LLM 的内容进行广告拦截的技术肯定会出现。</p>
+        <p class="comment-reason"><span>入选理由</span>从博弈论的角度分析了出版商与平台方（如 Google）在 AI 时代广告权夺取上的必然冲突。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49182931" target="_blank" rel="noopener noreferrer">@embedding-shape</a>
+        </div>
+        <p class="comment-text">曾经有一个黄金时代，很多网站在运行“正常网站”的同时也提供 WAP 版本，WAP 版本的大小通常只有正常网站的百分之一。虽然当时的“正常网站”比现在简单得多，但在拨号上网时代加载依然很慢。有段时间，我大部分的浏览都是通过 WAP 版本完成的。也许现在我们会迎来类似的东西，只不过是给 LLM 用的，但对于我们这些喜欢简洁内容的人来说，这可能是一个更好的阅读选择。希望这种做法能普及开来 :)</p>
+        <p class="comment-reason"><span>入选理由</span>将这一现象与早期的 WAP 时代联系起来，提供了一个有趣的怀旧视角和对简洁网页的期待。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>《时代》杂志的做法标志着互联网进入了一个“人机分治”的新阶段。长期以来，出版商一直苦于 AI 爬虫“白嫖”内容而不贡献点击，而现在他们找到了反击手段：既然 AI 要读，那就让它读带广告的“特供版”。这种策略不仅是流量变现的尝试，更是一场针对 AI 认知塑造的心理战。正如评论所言，LLM 本质上是极其轻信的，它们将输入的数据视为唯一的宇宙真理。通过在 Markdown 中植入 FAQ 格式的广告，出版商实际上是在尝试“洗脑”AI，使其在未来的对话中成为品牌的免费代言人。然而，这种“障眼法”也面临着 Google 等搜索引擎的合规压力，未来网页可能会演变成一种多层的、针对不同算法受众定制的复杂结构。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49183017">
+      <summary class="story-overview">
+        <span class="rank-number">08</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">chillphysicsenjoyer.substack.com</span>
+            <span>13 points</span>
+            <span>原始 #5 · 低讨论量降权 +15</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://chillphysicsenjoyer.substack.com/p/the-entropy-of-a-markov-chain" target="_blank"
+              rel="noopener noreferrer">The Entropy of a Markov Chain</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49183017" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 0</a>
+          </h2>
+          <p class="summary">本文探讨了如何将物理学中的熵概念应用于马尔可夫链，特别是戴森的细胞玩具模型。熵最初由克劳修斯定义为热力学中不可逆过程的度量，而玻尔兹曼则通过统计微观状态数量将其量化。作者通过居里磁铁模型演示了如何通过计算自旋排列的组合数来得出熵值。在马尔可夫链中，这种方法被转化为计算系统达到平衡态时，各状态分布所对应的多项式系数。这种建模方式为理解生命如何通过“负熵”维持秩序提供了一个数学上一致的框架。尽管模型是简化的，但它展示了从微观计数推导宏观热力学性质的严谨逻辑。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>熵的概念起源于19世纪的热力学，克劳修斯发现不可逆过程会导致熵增，而薛定谔后来提出了“负熵”来解释生命如何维持秩序。然而，将这些宏观概念应用于具体的生物或数学模型往往比较模糊。作者试图通过戴森的细胞模型（一个马尔可夫链）来寻找一种数学上一致的熵定义。核心桥梁是玻尔兹曼的统计力学，他证明了熵实际上是与宏观状态一致的微观状态数量的对数。</p><p>文章首先通过居里磁铁模型展示了这一逻辑：给定系统总能量，通过计算电子自旋向上或向下的排列组合数，即可直接计算出熵。这种从“计数”出发的方法让抽象的熵变得可计算且直观。在马尔可夫链中，当系统达到平衡态时，每个位置处于特定状态（如空置、活跃或非活跃）都有确定的概率。作者利用多项式系数计算出符合这些平衡概率的所有可能排列总数，从而定义了马尔可夫链的熵。这种方法不仅验证了物理直觉，也为后续研究熵在复杂拓扑网络中的演化奠定了基础。</p></div>
+        
+        <div class="comments-empty">
+          这条讨论暂未选出真正值得占用你注意力的评论。
+        </div>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>很多人觉得熵是一个玄学概念，但这篇文章通过“计数”把它拉回了地面。将马尔可夫链的平衡态类比为热力学平衡，并利用组合数学去计算微观状态数，这种跨学科的视角非常迷人。它让我们看到，无论是磁铁的自旋排列还是细胞模型的演化，其底层逻辑都是概率与信息的博弈。这种将物理直觉引入离散数学模型的尝试，是理解复杂系统演化规律的极佳切入点。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49182685">
+      <summary class="story-overview">
+        <span class="rank-number">09</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">build2.org</span>
+            <span>23 points</span>
+            <span>原始 #6 · 低讨论量降权 +14.7</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://build2.org/blog/faster-than-ninja.xhtml" target="_blank"
+              rel="noopener noreferrer">Faster Than Ninja</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49182685" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 1</a>
+          </h2>
+          <p class="summary">build2 开发者通过对 Xerces-C++ 项目的基准测试，展示了其性能可以超越被视为构建系统“光速”标杆的 Ninja。在默认配置下，build2 比 Ninja 慢约 11%，但在禁用高级变更跟踪和文件缓存压缩后，其速度比 Ninja 快 2.2%。这一性能提升主要归功于 build2 的多线程架构、对编译器信息的激进缓存，以及将头文件依赖提取与部分预处理相结合的独特模型。这种模型通过前置 I/O 操作，利用了系统文件缓存的局部性，并有效降低了内存压力。尽管如此，这种领先是在特定配置下实现的，且 Ninja 的极简主义在某些极端场景下仍具优势。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Ninja 长期以来被认为是构建系统的性能基准，因为它只做最少的工作，且通常依赖 CMake 等工具预先生成构建文件。build2 作为一个无需生成步骤的“原生”构建系统，试图在功能更丰富的前提下挑战这一速度极限。作者选取了包含 299 个 C++ 编译单元的 Xerces-C++ 项目进行对比，发现 Ninja 完成从零构建需 3.4 秒，但若算上 CMake 生成文件的 15.6 秒，总耗时远超 build2。在默认状态下，build2 耗时 3.8 秒，略逊于 Ninja。</p><p>为了实现“苹果对苹果”的公平对比，作者在 build2 中禁用了基于 Token 的精确变更跟踪（改为 Ninja 使用的简单修改时间检查）和文件缓存压缩。调整后的 build2 耗时降至 3.355 秒，比 Ninja 快了 2.2%。其核心优势源于三大设计：首先是多线程处理内部逻辑（Ninja 的内部管理是单线程的）；其次是激进缓存编译器元数据，避免了像 CMake 那样重复调用编译器；最后是独特的预处理模型。build2 在编译前进行部分预处理并提取依赖，这虽然增加了初始工作量，但通过前置 I/O 提高了文件系统的缓存命中率，并降低了后续编译时的内存峰值。未来值得关注的是，这种架构在处理超大规模项目或 C++20 模块时的表现是否能持续保持领先。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>1 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49183795" target="_blank" rel="noopener noreferrer">@ladams</a>
+        </div>
+        <p class="comment-text">“现在我们比 Ninja 快了 2.2%！”——作者的测量数据真的支持这个说法吗？</p>
+        <p class="comment-reason"><span>入选理由</span>该评论对作者在特定优化条件下得出的性能领先结论提出了直觉上的质疑。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>在构建系统的世界里，Ninja 一直被神化为不可逾越的性能巅峰，但这种“快”往往建立在将复杂性转嫁给 CMake 等生成器的基础之上。build2 的尝试非常有启发性，它证明了通过更现代的多线程设计和对 I/O 局部性的深度优化，一个功能完备的原生构建系统完全可以达到甚至超越极简主义工具的速度。作者提到的“CMake 大象”——即生成构建文件所消耗的巨大开销——是很多开发者在追求构建速度时容易忽略的盲点。虽然 2.2% 的领先优势在统计学上可能并不显著，但 build2 在承担了更多自动化工作（如自动生成头文件和更精确的状态跟踪）的同时还能保持这种量级的性能，本身就足以说明其架构的优越性。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49182985">
+      <summary class="story-overview">
+        <span class="rank-number">10</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">observer.co.uk</span>
+            <span>30 points</span>
+            <span>原始 #11 · 低讨论量降权 +9.9</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://observer.co.uk/news/science-technology/article/silicon-valley-sees-ai-as-the-solution-for-everyone-else-its-the-problem" target="_blank"
+              rel="noopener noreferrer">Silicon Valley sees AI as the solution – for everyone else</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49182985" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 17</a>
+          </h2>
+          <p class="summary">硅谷精英们正将人工智能描绘成解决气候危机和癌症等复杂社会问题的“万灵药”，但这种“技术解决主义”可能掩盖了更深层的社会危机。经济学家警告称，AI 的广泛应用可能导致社会剧烈分层，产生约 20% 的“过剩人口”，这些人因技能过时而面临永久失业。为了维持稳定，社会可能不得不依靠失业救济和廉价的数字娱乐（现代版的“面包与马戏”）来安抚这群人。财富将进一步向顶层的“技术领主”集中，形成一种新型的数字贵族制。这种愿景的局限性在于，它只关注技术优化，却忽视了经济收益分配不均所带来的政治动荡风险。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这篇文章深入探讨了硅谷大佬们（如 Anthropic 的 Dario Amodei 和埃隆·马斯克）所持有的“技术解决主义”心态。这种心态倾向于将复杂的社会、政治和法律问题简化为可以通过算法优化的计算问题。虽然他们预言 AI 将带来生产力爆炸和疾病消除，但经济学家布兰科·米拉诺维奇提出了一个更为冷峻的四层社会模型。在这个模型中，底层是技能被 AI 取代的“过剩人口”，他们可能需要依靠长期的失业补贴和 24 小时不间断的流媒体娱乐来保持“温顺”。</p><p>往上则是朝不保夕的服务业劳动者，以及由高薪专业人士组成的“同富阶层”。而金字塔的最顶端则是掌握技术所有权的“技术领主”，他们不仅拥有巨额财富，还拥有超乎寻常的政治影响力。文章指出，这种分层并非源于 AI 本身的恶意，而是源于经济收益分配机制的缺失。如果 AI 带来的红利不能被广泛共享，那么马斯克口中“工作变成可选”的乌托邦，极有可能演变成一个极度不平等且政治不稳定的反乌托邦。未来的关键不在于 AI 能做什么，而在于社会如何应对这种前所未有的财富与权力集中。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49183752" target="_blank" rel="noopener noreferrer">@_fat_santa</a>
+        </div>
+        <p class="comment-text">我不觉得“AI 会导致大规模失业”的论点有说服力，事实上，我认为情况恰恰相反。我们现在之所以大谈特谈失业，是因为在目前的生产力水平下，公司可以利用 AI 作为杠杆来减少招聘，从而不需要那么多人干活。我觉得这只是一个短暂的过渡期，因为现在还没到人人都能充分利用 AI 的程度，所以仅仅拥有 AI 就能让你在不招人的情况下保持竞争力。这和当年计算机普及的过程如出一辙：早期使用计算机的人比不用的人拥有巨大的杠杆优势。但 5 到 10 年后，当大多数组织都将这种杠杆标准化、人人都有 AI 时，会发生什么？突然之间，AI 带来的优势消失了，一切又回到了从前的样子——即拥有更多的人手才能给你带来更多的杠杆。我认为一旦 AI 被广泛采用并标准化，劳动者将迎来一个疯狂的繁荣期。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提出了一个乐观的逆向观点，认为 AI 的竞争优势会随普及而稀释，最终重新回归对人力资源的需求。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49183913" target="_blank" rel="noopener noreferrer">@amykhar</a>
+        </div>
+        <p class="comment-text">甚至在 AI 出现之前，美国就已经存在严重的招聘问题了。公司似乎铁了心不想以能维持生计的工资雇佣全职员工。我不怪技术，但我责怪企业主和投资者的贪婪。虽然从大局和长远来看，说一切都会好起来很容易，但现在有太多个人正因为裁员、缩减招聘等受到伤害。我的团队压力巨大，因为他们觉得头上悬着一把斧头，私募股权公司已经宣布不再招聘美国开发人员了。要么用 AI，要么外包。我们应该尝试感同身受，因为真实的人正在失去生计，长远的前景对他们现在的处境毫无帮助。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者从一线开发者的视角出发，指出了技术变革背后残酷的企业管理逻辑和现实的生存压力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49183591" target="_blank" rel="noopener noreferrer">@everdrive</a>
+        </div>
+        <p class="comment-text">世界上确实存在社会失业率达到 20%（甚至更高）的地方。那些地方可不是什么好去处。它们由帮派或军阀统治。在那种地方，青少年坐在台阶上，无所事事，就等着某个倒霉蛋从他们面前走过。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深刻地指出了高失业率不仅仅是经济数字，更是社会秩序崩塌的预兆。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>硅谷的“解决主义”本质上是一种精英阶层的傲慢：他们试图用代码去修复那些由历史、权力和人性交织而成的复杂社会裂痕。正如文章所言，当技术领袖们沉浸在“消除癌症”的宏大叙事中时，普通劳动者感受到的却是“外包或 AI”的生存威胁。这种认知鸿沟反映了当前科技发展的核心矛盾：技术在进步，但分配机制却在倒退。如果 20% 的人口真的沦为需要靠“数字马戏”安抚的“过剩资源”，那么我们迎来的将不是奇点，而是一个充满动荡的旧时代残影。正如评论所指出的，贪婪而非技术本身，才是那把悬在劳动者头上的利斧。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49182946">
+      <summary class="story-overview">
+        <span class="rank-number">11</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">data4sci.com</span>
+            <span>14 points</span>
+            <span>原始 #8 · 低讨论量降权 +13.8</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://data4sci.com/blog/building-an-advanced-agentic-harness" target="_blank"
+              rel="noopener noreferrer">Building an Advanced Agentic Harness</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49182946" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 4</a>
+          </h2>
+          <p class="summary">这篇文章标题为《构建高级智能体框架》，探讨了如何为大语言模型搭建支撑系统以实现自主代理功能。由于原网页内容未能成功提取，我们主要基于其核心概念和社区讨论进行还原。该话题的核心在于通过任务规划、工具集成和记忆管理等组件，让模型能够处理复杂的多步任务。目前主流的实现机制包括将任务逻辑表示为图形结构，或者为模型提供代码运行环境（REPL）以增强灵活性。然而，这类框架面临的最大挑战在于如何在大模型的随机性中建立确定性，目前许多方案在处理复杂边缘情况时仍显脆弱。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>在当前的 AI 开发领域，“智能体框架”（Agentic Harness）被视为将大语言模型（LLM）转化为实用工具的关键基础设施。由于无法获取文章全文，我们从相关讨论中观察到，该领域目前正处于方法论的探索期。一种常见的做法是采用基于图（Graph）的规划方式，将任务分解为预定义的节点和路径，试图通过结构化约束来提高模型执行任务的成功率。这种方式的优势在于逻辑清晰，但缺点是难以应对需要灵活跳转或循环的复杂场景。</p><p>另一种备受关注的思路是为模型提供一个 REPL（读取-求值-打印循环）环境。在这种模式下，开发者将所有外部工具作为函数注入环境，让模型通过编写和运行代码来动态解决问题。这种“代码即计划”的方法赋予了模型更高的自由度，使其能够利用编程语言的控制流（如循环和条件判断）来处理任务，从而超越了静态图结构的限制。然而，无论采用哪种架构，智能体框架的实际落地都面临着严峻的可靠性考验。批评者指出，目前的许多抽象概念（如技能库、记忆系统）往往在处理现实世界的边缘情况时失效。这是因为这些框架试图在本质上是非确定性的概率模型之上，强行构建一套确定性的软件架构。未来的技术走向将取决于我们能否在保持模型泛化能力的同时，通过更严谨的工程手段解决“幻觉”和逻辑断裂问题。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49183569" target="_blank" rel="noopener noreferrer">@budududuroiu</a>
+        </div>
+        <p class="comment-text">&gt; 计划是一个图
+我更倾向于给 LLM 一个 REPL 循环，并将所有工具作为函数注入到 REPL 循环中。这意味着 LLM 不受编写 DAG（有向无环图）的限制，它可以编写包含循环、提前退出等逻辑的代码。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了将任务规划从静态图结构转向动态代码执行的深刻技术见解。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49183405" target="_blank" rel="noopener noreferrer">@dominotw</a>
+        </div>
+        <p class="comment-text">为什么我讨厌所谓的技能（skills）、框架（harnesses）、记忆系统之类的东西。这些想法每个人都觉得自己发现了新大陆，但在实践中完全没用。</p>
+        <p class="comment-reason"><span>入选理由</span>表达了对当前智能体开发中过度抽象化和术语堆砌的普遍质疑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49183561" target="_blank" rel="noopener noreferrer">@champagnepapi</a>
+        </div>
+        <p class="comment-text">同意。所有这些尝试都是想在 LLM 上实现某种永远无法真正达到的目标，那就是确定性。人们试图通过这些工具约束模型以特定的方式运行，但边缘情况实在太多，导致它们根本不可靠。这并不意味着它们毫无价值，但其价值似乎非常有限。希望我们回归工程化、告别“凭感觉”（vibes）开发只是时间问题。</p>
+        <p class="comment-reason"><span>入选理由</span>深刻指出了 LLM 的非确定性本质与传统软件工程追求确定性之间的根本矛盾。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>智能体框架（Agentic Harness）的兴起反映了开发者试图将不可控的 LLM 纳入传统软件工程轨道的努力。然而，正如评论中所指出的，目前的许多抽象（如复杂的图结构或模拟记忆）往往在应对现实世界的边缘情况时显得力不从心。我们正处于一个尴尬的过渡期：一方面渴望模型具备自主解决问题的“灵性”，另一方面又对这种基于“感觉”（vibes）而非严谨逻辑的运行方式感到不安。真正的突破可能不在于构建更复杂的框架，而在于如何让模型在代码执行等具备强反馈和确定性约束的环境中，更稳定地进行自我修正。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49183069">
+      <summary class="story-overview">
+        <span class="rank-number">12</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">tson.io</span>
+            <span>16 points</span>
+            <span>原始 #12 · 低讨论量降权 +11.4</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://tson.io/" target="_blank"
+              rel="noopener noreferrer">TSON – A JSON superset with immutable, hash-pinned schemas</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49183069" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 12</a>
+          </h2>
+          <p class="summary">TSON 是一种 JSON 的超集，旨在通过引入不可变的、基于哈希锚定的模式（Schema）来增强数据交换的可靠性。它在 JSON 基础上增加了 UUID、日期、二进制数据和高精度数字等原生类型，且支持不带引号的字符串。其核心创新在于将数据与其定义的模式通过哈希值强绑定，确保了分布式系统中的数据一致性和可验证性。这意味着数据接收方可以确切知道数据遵循哪个版本的规范，避免了传统模式演进中的兼容性陷阱。尽管功能强大，但它面临着是否真的需要改变 JSON 语法，以及能否在已趋于稳定的序列化格式市场中立足的挑战。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>TSON（Typed Schema Object Notation）试图解决 JSON 在严谨数据交换中的不足。作为 JSON 的严格超集，它不仅兼容现有 JSON 文档，还扩展了多种一等公民类型，如 UUID、ISO 日期和任意精度数值，减少了开发者手动转换类型的负担。此外，它借鉴了 EDN 等格式的特性，允许可选的逗号和不带引号的键名，使文档更易于人类阅读和编写。这种设计旨在让数据在保持人类可读性的同时，具备更强的类型约束。</p><p>该项目的核心竞争力在于“哈希锚定模式”。在 TSON 中，模式是不可变的，并由其内容的加密哈希唯一标识。这种设计确保了数据与其结构定义之间的永久绑定，解决了分布式系统中常见的模式漂移问题。然而，这种强绑定也带来了灵活性上的权衡：任何模式的微小改动都会生成全新的哈希，要求系统具备良好的版本管理能力。这种机制非常适合需要严格审计和来源验证的场景，但在快速迭代的开发环境中可能会显得过于僵化。</p><p>目前，社区对 TSON 的反应呈现两极分化。支持者认为哈希锚定是分布式系统验证来源的正确方向，而批评者则质疑是否有必要为了这些功能发明新语法，认为通过在标准 JSON 中包装元数据也能达到类似效果。未来值得关注的是 TSON 能否提供成熟的工具链支持，以及它在对数据完整性要求极高的特定领域（如区块链或复杂微服务架构）中的实际采用率。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49183346" target="_blank" rel="noopener noreferrer">@myshapeprotocol</a>
+        </div>
+        <p class="comment-text">哈希锚定模式绝对是确保分布式系统跨系统可验证来源的正确方向。非常棒的概念！</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了 TSON 核心设计在分布式系统中的实际价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49183702" target="_blank" rel="noopener noreferrer">@robto</a>
+        </div>
+        <p class="comment-text">看起来它从 EDN 中汲取了很多灵感。标签化字面量（Tagged literals）、将逗号视为空白字符（且可选），以及任何内容都可以作为键，这些都是我在不得不回归 JSON 时非常怀念的功能。我不确定对字符串使用可选引号是什么感觉，那似乎是个错误。另外，如果能有一个不可变的集合（set）字面量就更好了。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者从开发者体验角度对比了 TSON 与 EDN 的相似之处，并提出了具体的语法反馈。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49183470" target="_blank" rel="noopener noreferrer">@flanked-evergl</a>
+        </div>
+        <p class="comment-text">为什么不能在现有的 JSON 中使用哈希锚定模式？为什么需要为此发明一种新格式？</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个非常核心的质疑：功能的实现是否必须依赖于改变基础语法。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49183787" target="_blank" rel="noopener noreferrer">@tonyg</a>
+        </div>
+        <p class="comment-text">完全是废话。有趣的是，最终结果——也就是 Claude（AI）最终停留的地方——与我之前的一个（人工编写的、有点理想主义的）项目非常相似：https://preserves.dev/ 。虽然 TSON 的网站更漂亮，文字也多得多。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个同类项目的对比，并对当前技术文档的“AI 感”表达了批判性看法。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>每隔一段时间，开发者社区就会尝试“修复” JSON。TSON 的出现反映了工业界对数据交换严谨性的渴望，尤其是它引入的哈希锚定模式，试图解决分布式系统中版本不一致的顽疾。然而，正如评论区所指出的，JSON 的统治地位很大程度上源于其“足够好”且与浏览器生态深度绑定。TSON 借鉴了 EDN 的许多优秀特性，但在一个已经习惯了用 JSON 包装一切的世界里，推行一种新的语法超集总是面临巨大的阻力。人们不禁会问：我们是真的需要一种新格式，还是只需要在 JSON 之上建立更好的工具层？</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49176038">
+      <summary class="story-overview">
+        <span class="rank-number">13</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">earendil.com</span>
+            <span>474 points</span>
+            <span>原始 #24 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://earendil.com/posts/pi-autoresearch-and-databricks/" target="_blank"
+              rel="noopener noreferrer">Pi&#x27;s Minimalism Is Its Advantage</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49176038" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 247</a>
+          </h2>
+          <p class="summary">Pi 是一款主打极简主义的 AI 编程助手框架，其核心系统提示词和工具定义不足 1000 token。与追求复杂编排的同类产品不同，Pi 通过“上下文自律”减少了每轮对话的数据量，从而降低成本并提升模型专注度。Databricks 的基准测试显示，Pi 在任务通过率和成本效益上均优于 Claude Code 等原生工具。Shopify 的案例证明，用户可以通过自然语言让 Pi 自行构建扩展插件，实现如单元测试加速 300 倍等深度定制。然而，这种极简设计也意味着用户需要投入更多精力来打磨适合自己的工作流。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Pi 的核心理念是“少即是多”，它仅内置了 4 个基础工具，旨在避免模型在复杂的指令层级中迷失。Databricks 的研究指出，编程助手的性能很大程度上取决于其调用的框架，而 Pi 的“上下文自律”使其每轮发送的上下文比同类产品少 3 倍，这不仅显著降低了 API 调用成本，还保持了极高的任务完成质量。在与 Opus 4.8 等强模型结合时，Pi 展示出了超越原生闭源框架的经济性和准确性。</p><p>这种极简主义并非功能缺失，而是为了提供极强的可扩展性。Shopify 工程团队通过简单的自然语言指令，让 Pi 为自己编写了名为 pi-autoresearch 的扩展，用于自动优化代码性能，最终实现了 React 组件挂载提速 20% 等显著成果。对于本地模型用户而言，Pi 的小巧体积也缩短了预填充（prefill）时间，更适应有限的上下文窗口。然而，Pi 的上手门槛较高，默认状态下可能过于简陋，甚至缺乏文件搜索等基础功能，需要用户像配置 Emacs 一样进行深度定制和维护。未来的趋势可能是模型厂商会针对 Pi 这种开放框架进行专门的微调，以实现更精准的工具调用。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49176827" target="_blank" rel="noopener noreferrer">@malisper</a>
+        </div>
+        <p class="comment-text">在尝试了所有的编程框架后，我发现使用 Pi 就像使用 Emacs 一样。任何你想构建的功能都可以让你的 Agent 去做，而且有大量的现有代码可以帮你配置。但与此同时，有一半的代码是有 bug 的，UI 元素会互相重叠，而且你会周期性地遇到崩溃。如果你愿意投入精力去克服学习曲线并解决这些问题，它会是一个伟大的工具。</p>
+        <p class="comment-reason"><span>入选理由</span>将 Pi 类比为 Emacs 深刻揭示了其高度可定制化与高维护成本并存的本质。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49177124" target="_blank" rel="noopener noreferrer">@hakunin</a>
+        </div>
+        <p class="comment-text">我发现人们说“直接让 Pi 帮你写个扩展”时往往想得太简单了。作为几个月来唯一使用的框架，我发现获取一个扩展很容易，但要获得一个真正好用且有帮助的扩展却很难。我的建议是：专注于完成工作，并随着进度缓慢地对 Pi 进行微小的增强。要随时准备好精简甚至回滚这些添加的功能。许多“内置功能”其实源自一些不成熟的想法，实际效果往往不佳。例如，许多自动记忆系统并没用，我写了一个小扩展让它询问是否需要记录某事，结果发现只有不到 5% 的建议是有意义的。如果不是我亲自把关，天知道会堆积多少垃圾上下文。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于如何有效扩展 Pi 的实战建议，警惕过度自动化的陷阱。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49180164" target="_blank" rel="noopener noreferrer">@paldepind2</a>
+        </div>
+        <p class="comment-text">帖子里全是赞美之词，我来提供点不同意见。考虑到这些炒作，Pi 让我有点失望。它在定制化方面确实有些好主意，但在很多细节上让我很烦。作为一个极简程序，它的启动时间居然很长，标准的 C-p 和 C-n 快捷键不起作用，它还不遵循 XDG 基础目录规范，直接弄乱了我的 $HOME 目录。我认为市场仍有空间容纳另一个框架：1. 开源；2. 使用快速的编译语言（Rust, Go 等）编写，并支持简单的脚本语言（如 Lua）；3. 没那么固执己见，能处理像 XDG 规范这种被 Pi 标记为“不予修复”的问题。</p>
+        <p class="comment-reason"><span>入选理由</span>从工程实践和用户体验角度提出了尖锐的批评，平衡了文章的乐观情绪。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49177031" target="_blank" rel="noopener noreferrer">@pavo-etc</a>
+        </div>
+        <p class="comment-text">我成功地在服务器上以无头模式运行 Pi，并将其封装在 XMPP 客户端中。这意味着我可以在任何能访问 XMPP 的地方与它交流。Agent 之间也可以在需要时互相沟通。它们有一个共享的 wiki 进行交互，并使用 GitHub Issues 作为待办事项列表。我在 NixOS 上为几个命名的 Pi 实例运行独立的账户，这样它们可以在临时 shell 中安装任何想要的东西，而我无需担心环境问题。NixOS 是关键，因为 Agent 可以查看整个服务器配置，在实际部署前进行更改并运行编译时检查。这也意味着即使它们搞砸了，我也总能回滚。</p>
+        <p class="comment-reason"><span>入选理由</span>展示了 Pi 在高级自动化场景下的强大潜力，尤其是与 NixOS 结合的思路非常具有启发性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Pi 的兴起反映了 AI 开发者工具的一个有趣轮回：从追求“开箱即用”的黑盒工具，回到了类似 Emacs 的“可编程编辑器”时代。文章强调了 Pi 通过极简设计获得的性能优势，但评论区清醒地指出，这种自由是以稳定性和易用性为代价的。Pi 不仅仅是一个工具，它更像是一套需要用户亲自参与进化的“元框架”。对于那些厌倦了被厂商预设工作流束缚的开发者来说，Pi 提供的“上下文自律”和无限扩展性极具吸引力，但正如经验丰富的用户所言，真正的生产力来自于克制的定制，而非盲目地让 AI 生成一堆难以维护的插件。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49171268">
+      <summary class="story-overview">
+        <span class="rank-number">14</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">mistral.ai</span>
+            <span>462 points</span>
+            <span>原始 #26 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://mistral.ai/news/shieldstral/" target="_blank"
+              rel="noopener noreferrer">Mistral&#x27;s Shieldstral: 3B open-weights model for multimodal moderation</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49171268" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 121</a>
+          </h2>
+          <p class="summary">Mistral AI 发布了名为 Shieldstral 的 3B 参数开源多模态审核模型，旨在解决内容审核中“标准不一”的难题。该模型支持文本和图像，采用“审核即提问”的机制，允许用户在推理时通过自然语言自定义审核政策，而无需重新训练。尽管体积较小，它在多项基准测试中表现优于比其大 7 倍的模型，并提供连续的安全评分以供精细化过滤。然而，该模型目前无法解释其判定逻辑，且在处理复杂的历史或哲学文本时可能存在过度敏感的问题。该模型采用 Apache 2.0 协议开源，降低了开发者构建合规社交平台的门槛。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Shieldstral 是 Mistral AI 推出的一款 30 亿参数的多模态安全分类器，其核心创新在于“政策自适应性”。传统的审核模型通常将固定的危害类别硬编码在权重中，而 Shieldstral 允许开发者在推理阶段通过自然语言定义规则，例如询问“此内容是否包含针对特定群体的暴力？”。模型会根据指令、查询和文档内容，输出一个经过校准的“是/否”概率分值，这使得同一模型能同时适用于网络安全工具和心理健康平台等截然不同的场景。</p><p>在技术实现上，Mistral 通过统一异构数据集、引入对比学习（训练模型区分极易混淆的政策边界）以及使用 SLERP 技术合并多个微调检查点，确保了模型在小尺寸下依然具备强大的判别能力。它不仅支持纯文本，还能处理图像及图文混合内容，在拒绝检测和多模态安全基准上达到了领先水平。不过，社区反馈指出该模型存在“黑盒”属性，无法给出具体的违规理由，这在需要向用户解释封禁原因的场景中是个短板。此外，初步测试显示它在面对如伏尔泰《宽容论》等经典文学作品时，可能会产生误报，将其判定为煽动暴力，这反映了模型在理解复杂语境和历史背景方面仍有局限。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49181121" target="_blank" rel="noopener noreferrer">@peri-cl</a>
+        </div>
+        <p class="comment-text">我把伏尔泰《宽容论》（Treatise on Tolerance）的第一章喂给了这个模型（Q8 版本），结果它说这内容在煽动针对受保护群体的暴力：
+&lt;指令&gt;：给定一个关于内容的查询，判断消息是否符合要求
+&lt;查询&gt;：此内容是否煽动针对受保护群体的暴力？
+&lt;文档&gt;：TRAITÉ SUR LA TOLÉRANCE, À l’occaſion de la mort de Jean Calas. CHAPITRE PREMIER. Hiſtoire abrégée de la mort de Jean Calas... (已截断)
+回答：是</p>
+        <p class="comment-reason"><span>入选理由</span>通过具体的文学作品测试，直观地展示了模型在处理复杂历史语境时可能出现的误报问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49175993" target="_blank" rel="noopener noreferrer">@rancar2</a>
+        </div>
+        <p class="comment-text">作为一家大型医疗评论平台的开发者，我可以证实，将特定的政策违规行为映射到自然语言是非常有用的。在规模化运营中，患者在遭遇糟糕情况时写下的反馈，有时对社区或医生来说是非常不健康的，甚至带有威胁性。我们曾构建了自定义的机器学习引擎来处理海量评论，在那个 BERT 还是前沿技术的时代，像 Mistral 这种政策自适应模型将是一个令人难以置信的“冷启动”解决方案。大多数网站既没有海量数据，也没有足够的预算或技术能力来训练超越开箱即用方案的领域特定模型。赋能这些人使用此类模型对整个行业都有利。</p>
+        <p class="comment-reason"><span>入选理由</span>从行业实践角度阐述了该模型在冷启动和特定领域（如医疗）审核中的实际应用价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49178595" target="_blank" rel="noopener noreferrer">@hchja</a>
+        </div>
+        <p class="comment-text">事实上，它完全无法解释自己的推理过程（没有办法让它这么做），这让我怀疑这个模型的实用性。假设你在生产环境中部署了它，用户跑来问：“为什么我的提示词被认为是有害的？”在那一刻，你根本无法给用户提供一个具体的理由。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了模型在可解释性方面的重大缺陷，这是实际产品部署中必须面对的问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49173704" target="_blank" rel="noopener noreferrer">@petcat</a>
+        </div>
+        <p class="comment-text">&gt; 他们至少知道现在的市场需求是什么
+这似乎是一种非常“欧洲化”的 AI 路径：他们的旗舰 AI 实验室正在开发除了监控和审核互联网内容之外别无他用的模型。我猜他们知道《欧盟 AI 法案》和“聊天控制”（Chat Control）等法规将导致大量公司产生这种合规需求。</p>
+        <p class="comment-reason"><span>入选理由</span>将技术发布与欧洲的监管环境联系起来，提供了独特的政治与市场视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49173851" target="_blank" rel="noopener noreferrer">@hypfer</a>
+        </div>
+        <p class="comment-text">我很好奇这是否能配合任意规则集进行审核，还是说它只是我们从当前大厂平台上看到的那种“特定审核风格”——即只要措辞礼貌，恶意意图就没关系的那种。换句话说：在不重新训练的情况下，你能对这个模型进行多大程度的调整？是只能在“讨厌性行为/不讨厌性行为”或“讨厌暴力/不讨厌暴力”之间切换，还是真的像宣传的那样灵活？也许可以试试：“这家伙是不是一个打算用表演性废话浪费我时间的职场骗子？”如果它能处理这种测试，那才真的让我印象深刻。看了论文后……大概不行。我想这更适合 B2B 业务，这似乎是 Mistral 的核心方向。问题在于，把硅谷预制的道德观这样向下传递给社会是否真的有益。这有点像披着伦理外衣的文化帝国主义。</p>
+        <p class="comment-reason"><span>入选理由</span>对模型的灵活性提出了质疑，并探讨了 AI 审核背后可能存在的文化和道德输出问题。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Mistral 发布的 Shieldstral 标志着内容审核从“硬编码规则”向“可编程政策”的转变。这种 3B 规模的小模型对于初创公司极具吸引力，因为它能以极低的成本解决社交平台最头疼的合规问题 [49174594]。然而，正如评论所指出的，这种灵活性可能只是表象，模型底层可能依然带有特定的道德偏见 [49173851]。更具挑战性的是，当模型像判官一样给出“是/否”的裁决却无法解释原因时 [49178595]，开发者在面对用户申诉时将陷入被动。 peri-cl 提到的伏尔泰测试提醒我们，AI 审核在面对人类文明的复杂性时，依然显得有些笨拙且容易“误伤”。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49182586">
+      <summary class="story-overview">
+        <span class="rank-number">15</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">apoxy.dev</span>
+            <span>10 points</span>
+            <span>原始 #13 · 低讨论量降权 +15</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://apoxy.dev/blog/oghttp2-vs-nghttp2" target="_blank"
+              rel="noopener noreferrer">Google&#x27;s HTTP/2 codec slows Envoy</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49182586" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 0</a>
+          </h2>
+          <p class="summary">Envoy 代理在升级到 v1.34 后，因默认 HTTP/2 编解码器从 nghttp2 切换为 Google 的 oghttp2，导致 CPU 使用率上升了约 20%。调查发现，性能下降并非源于 Huffman 解码算法本身，而是 oghttp2 在处理头部时频繁调用 std::string::push_back 导致的内存分配和拷贝开销。相比之下，老牌的 nghttp2 使用预计算的状态机直接写入缓冲区，在处理高并发、多头部的代理流量时效率更高。这种看似微小的实现差异在每秒处理数万次请求的规模下，会累积成显著的延迟和成本增加。目前 Envoy 已在 v1.37 中将默认设置切回 nghttp2 以恢复性能。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Apoxy 团队在为客户升级 Envoy 时发现 CPU 占用异常升高，通过版本二分法锁定了 v1.34 引入的 oghttp2 编解码器。尽管 oghttp2 与 HTTP/3 共享代码栈且设计现代，但在处理 HTTP/2 的 HPACK 头部压缩时表现不佳。基准测试显示，在头部密集的代理流量下，oghttp2 的每核每秒请求数（RPS/core）比 nghttp2 低 15-25%。这种性能退化在 Intel、AMD 和 ARM 等多种架构上均能复现，证明了问题的普遍性。</p><p>性能瓶颈主要集中在 HPACK 头部解压过程。nghttp2 采用了一种精巧的有限状态机（FSM），通过 4 位一组的查表法快速解码 Huffman 编码，且直接操作调用者提供的缓冲区，极大地减少了分支预测失败和内存操作。而 oghttp2 的实现虽然在算法上没有问题，但其 C++ 管道设计过于沉重：每解码一个字节就调用一次 push_back，伴随着频繁的容量检查和内存重分配，再加上后续的哈希表查找和多余的内存拷贝，这些开销在极高频的调用路径下变得非常显著。</p><p>最终，Envoy 官方在 v1.37 中撤回了这一默认更改，重新将 nghttp2 设为默认。对于仍在使用 v1.34 到 v1.36 版本的用户，可以通过运行时标志手动禁用 oghttp2 来即时获得性能提升。这次案例研究提醒开发者，在高性能网络组件中，即使是符合直觉的 C++ 标准库用法，在海量小数据处理路径上也可能成为性能杀手，性能分析（Profiling）永远比直觉更可靠。</p></div>
+        
+        <div class="comments-empty">
+          这条讨论暂未选出真正值得占用你注意力的评论。
+        </div>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这是一个非常经典的性能调优案例：Google 现代化的 C++ 代码栈在特定场景下输给了拥有十年历史的 C 语言库。问题的核心不在于复杂的算法，而在于那些被视为“理所当然”的标准库操作（如 push_back）在极高频调用下产生的累积开销。对于代理服务器这种需要处理海量小数据包（HTTP 头部）的中间件来说，内存分配和拷贝的微小差异会被放大数万倍。这也再次证明了在底层系统开发中，‘管道’（Plumbing）的设计往往比核心算法更能决定最终的性能表现。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49182695">
+      <summary class="story-overview">
+        <span class="rank-number">16</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">yogthos.net</span>
+            <span>9 points</span>
+            <span>原始 #14 · 低讨论量降权 +15</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://yogthos.net/posts/2026-08-03-splat-painter.html" target="_blank"
+              rel="noopener noreferrer">Painting with Gaussians</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49182695" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 0</a>
+          </h2>
+          <p class="summary">作者开发了一款名为 Splat Painter 的工具，利用 2D 高斯泼溅技术将照片转化为具有手绘感的数字绘画。与依赖梯度下降的传统高斯泼溅不同，该方法通过分析图像的边缘和纹理来确定笔触的位置、方向和大小。技术上结合了结构张量来引导笔触走向，以及哈尔小波变换来识别需要精细刻画的细节区域。程序模拟了真实绘画的层级构建过程，从大面积的底色涂抹到精细的半透明线条层层叠加。这种方法避免了 AI 生成的不可控性，能产生更符合物体结构逻辑的艺术效果。尽管效果出色，但它目前仍无法完全模拟真实颜料的物理堆叠质感，且需要用户手动微调参数。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这篇文章介绍了一种利用 2D 高斯泼溅（Gaussian Splatting）技术实现“数字绘画”的新方法。作者认为，高斯分布的均值、协方差矩阵和透明度可以完美对应画笔的中心位置、形状旋转及色彩叠加。不同于目前主流的通过随机种子和梯度下降来逼近原图的“黑盒”方法，作者选择通过提取图像的结构信息来直接引导笔触生成。他利用结构张量（Structure Tensor）和 Di Zenzo 颜色张量来识别边缘，使笔触能顺着物体的轮廓延伸；同时引入哈尔小波（Haar Wavelet）生成细节能量图，从而在纹理丰富的区域放置更小、更密的笔触。</p><p>为了让效果更接近真实手绘，作者放弃了规则的网格采样，改用 Wang 散列函数进行随机位置分布，并引入柏林噪声（Perlin noise）来模拟人手的轻微抖动和笔触的自然流动感。绘画过程被分为多个层级：底层是覆盖全图的大块不透明笔触，中层是表现色调的半透明色块，顶层则是精细的边缘勾勒。这种层层叠加的逻辑模拟了油画中“底色-中间色-细节”的创作流程。在实现层面，该项目最初基于 Jolt 语言在 CPU 上运行，但为了达到实时交互的性能，作者最终将其迁移到了 GPU（OpenGL）上。通过几何着色器处理笔触生成，用户可以实时调整笔触大小、硬度和透明度等参数，观察绘画在眼前逐渐成型。</p></div>
+        
+        <div class="comments-empty">
+          这条讨论暂未选出真正值得占用你注意力的评论。
+        </div>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章展示了“硬核”程序员如何理解艺术创作。作者没有盲目追随当前的 AI 生成浪潮，而是回归到经典的计算机视觉算法（如张量分析和小波变换），将绘画拆解为数学上的结构引导。这种“白盒”式的艺术生成不仅效率更高，而且赋予了创作者极大的控制权。它提醒我们，在神经网络大行其道的今天，理解图像的底层几何结构依然是实现高质量视觉效果的有力武器。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49183076">
+      <summary class="story-overview">
+        <span class="rank-number">17</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">writingruxandrabio.com</span>
+            <span>7 points</span>
+            <span>原始 #18 · 低讨论量降权 +15</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.writingruxandrabio.com/p/intelligence-is-not-the-main-bottleneck" target="_blank"
+              rel="noopener noreferrer">Intelligence Is Not the Main Bottleneck</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49183076" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 0</a>
+          </h2>
+          <p class="summary">作者认为，尽管人工智能的智力水平在飞速提升，但它并不能自动解决现实世界中的核心难题。以医药领域为例，新药研发的瓶颈不在于缺乏科学发现，而在于漫长且昂贵的临床试验以及复杂的监管审批。即便拥有更强的AI，如果无法获取人体数据或改变现有的专利激励机制，医疗进步依然会停滞不前。这种现象也存在于住房等领域，技术早已成熟，但政治意愿和政策限制才是真正的阻碍。硅谷的AI圈子往往陷入一种“智力万能论”的迷思，忽视了技术向现实转化过程中的巨大摩擦力。文章提醒我们，如果不解决制度和治理层面的瓶颈，AI带来的社会变革将远不及预期。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>文章指出，硅谷精英普遍相信通用人工智能（AGI）将解决人类面临的所有重大挑战，但这种观点忽视了现实世界的复杂性。作者以生物医药为例，提到了“埃鲁姆定律”，即尽管科学工具越来越先进，新药研发的效率却在持续下降。核心瓶颈在于临床试验，这不仅耗时多年且耗资巨大，更重要的是，它产生的关键人体数据是AI模型无法凭空生成的。此外，现有的专利制度更倾向于保护具体的分子设计，而非基础生物学目标的发现，这导致AI公司扎堆在容易获利的领域，而忽视了真正能推动医学前沿的风险研究。</p><p>这种“智力并非主瓶颈”的论点在其他领域同样适用，比如住房危机，其根源在于政治博弈而非建筑技术。作者观察到，虽然AI能力在基准测试中表现惊人，但现实世界的GDP增长和就业市场并未发生翻天覆地的变化，这印证了技术扩散存在巨大的摩擦力。硅谷形成了一种“AGI崇拜”的单一人文环境，质疑AI万能论被视为智商不足或缺乏远见。然而，如果忽视监管改革、数据获取和激励机制的优化，AI可能只会停留在优化现有流程的层面，而无法实现真正的社会跨越。未来我们需要关注的是，政策制定者是否能通过制度创新来释放技术的潜力。</p></div>
+        
+        <div class="comments-empty">
+          这条讨论暂未选出真正值得占用你注意力的评论。
+        </div>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章精准地戳中了当前AI热潮中的一个盲点：我们往往把“更聪明的工具”等同于“更好的结果”。作者通过医药行业的深度剖析告诉我们，现实世界的进步往往被锁死在官僚审批、过时的专利法和高昂的实验成本中。即便AI能设计出完美的分子，如果它无法通过长达十年的临床试验，或者因为制度原因无法获取训练数据，那它对普通人的生活改善就微乎其微。硅谷的“智力崇拜”有时更像是一种幸存者偏差，认为只要算力够强、模型够大，物理世界的摩擦力就会自动消失。但正如作者所言，真正的变革往往发生在那些“不性感”的政策细节里。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49182551">
+      <summary class="story-overview">
+        <span class="rank-number">18</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">github.com</span>
+            <span>13 points</span>
+            <span>原始 #19 · 低讨论量降权 +14.1</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://github.com/cloudflare/cloudflare-os" target="_blank"
+              rel="noopener noreferrer">Cloudflare OS – an open-source AI productivity environment</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49182551" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 3</a>
+          </h2>
+          <p class="summary">Cloudflare 发布了开源项目 Cloudflare OS，这是一个专为 AI 生产力设计的代理工作空间环境。它并非传统电脑操作系统，而是利用 Cloudflare Workers 构建的沙盒环境，允许用户通过 AI 生成并运行被称为“Gadgets”的小型私有应用。其核心安全机制通过名为 Gatekeepers 的框架管理，支持能力访问控制和非阻塞的人工审批模拟。这一项目旨在挑战传统的中心化 SaaS 模式，让用户能安全地通过 AI 定制和拥有自己的工具。目前该项目处于早期开发阶段，仍有许多待完善的细节，且暂不接受大规模外部代码贡献。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Cloudflare OS 是由 Cloudflare Workers 团队（包括 Sandstorm.io 创始人 Kenton Varda）开发的 AI 生产力平台。它将“操作系统”的概念引入 AI 领域：内核负责后端逻辑，驱动程序是连接外部服务的 Gatekeepers，而运行的“进程”则是 AI 生成的 Gadgets 应用。该系统基于 Cloudflare 的边缘计算架构，利用 Durable Objects 实现实时协作，并支持通过开源的 workerd 运行时进行私有化部署。</p><p>其核心创新在于“Gadgets”模式，这打破了过去 25 年中心化 SaaS 的传统。当用户需要特定工具时，系统会为其创建一个私有的、代码可修改的应用实例。用户可以命令 AI 代理直接修改这些应用的代码以增加功能，而无需担心安全漏洞，因为每个 Gadget 都运行在严格限制网络访问的沙盒中。此外，Gatekeepers 框架引入了一种“模拟审批”机制，允许 AI 在等待人类确认敏感操作时继续模拟后续结果并执行任务，解决了传统“人工干预”流程中常见的效率瓶颈。</p><p>目前 Cloudflare OS 已在 GitHub 开源，旨在让企业构建属于自己的“公司 OS”。虽然它已经具备了处理文档、构建应用和运行复杂代理的能力，但官方强调这仍是一个处于“早期访问”阶段的重写版本（v2）。为了保持产品的一致性和质量，开发团队目前仅接受小规模的 Bug 修复，而不鼓励大规模的功能性代码贡献。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>1 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49183125" target="_blank" rel="noopener noreferrer">@kentonv</a>
+        </div>
+        <p class="comment-text">这是 Sandstorm.io 的继任者！
+嘿伙计们，这实际上是我直到几个月前一直在做的个人副业。它是基于 Cloudflare Workers（我过去 9 年一直在构建的东西）重新构建的 Sandstorm.io（我十年前创办的初创公司），并利用了 AI 技术。
+这是一个完美的结合：Sandstorm 的安全模型意味着应用不会有安全漏洞。所以你可以随心所欲地编写代码（vibe code），甚至可以毫无顾虑地分享你的创作。
+它是完全开源且可自托管的。我自己在地下室就运行着一个实例（甚至还有一个 Home Assistant 连接器）。
+请试用一下并告诉我你的想法！</p>
+        <p class="comment-reason"><span>入选理由</span>该评论由项目核心开发者、Sandstorm.io 创始人 Kenton Varda 撰写，揭示了项目的历史渊源和核心安全理念。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Cloudflare OS 的出现标志着“用户可编程软件”愿景的回归。正如 Kenton Varda 所言，这是他十年前 Sandstorm 理想在 AI 时代的重生。在传统的 SaaS 模式下，用户只是租户，无法根据需求修改工具；而 Cloudflare OS 试图通过 AI 降低编程门槛，并利用沙盒技术解决安全隐患，让“每个用户都拥有自己的应用副本”成为可能。这种从中心化服务向个人/企业私有化 AI 环境的转变，可能是未来办公自动化演进的一个重要方向。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49183079">
+      <summary class="story-overview">
+        <span class="rank-number">19</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">rubinobservatory.org</span>
+            <span>9 points</span>
+            <span>原始 #21 · 低讨论量降权 +15</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://rubinobservatory.org/news/rubin-new-window-cosmos-field" target="_blank"
+              rel="noopener noreferrer">Rubin Observatory&#x27;s first LSST Camera release: 500k galaxies in the COSMOS field</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49183079" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 0</a>
+          </h2>
+          <p class="summary">鲁宾天文台发布了由其32亿像素LSST相机拍摄的首张COSMOS深空场图像，标志着这一世界最大数字相机正式投入科学应用。这张图像通过叠加数百次观测，在著名的COSMOS区域捕捉到了超过50万个星系和5万颗恒星。该区域因远离银河系尘埃干扰，成为天文学家观测数十亿光年外遥远宇宙的清澈窗口。此次发布属于“早期数据预览2”阶段，旨在展示LSST巡天计划在深度、广度和动态监测方面的潜力。虽然目前数据仅对特定研究人员开放，但它预示着未来十年对宇宙进行“电影式”记录的开端。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>鲁宾天文台此次发布的图像利用了安装在8.4米西蒙尼巡天望远镜上的3.2吉像素LSST相机，这是目前世界上最强大的数字相机。通过对COSMOS场进行数百次独立观测并进行数据叠加，研究人员成功识别出从近处精细的螺旋星系到极早期宇宙的微弱红星系等多种天体。COSMOS场作为天文学界研究了二十多年的“基准区”，其数据丰富度极高，涵盖了从无线电到X射线的多个波段，鲁宾天文台的加入为该区域提供了前所未有的动态视角。</p><p>此次发布的“早期数据预览2”（EDP2）涵盖了南半球约六分之一的天空区域，总面积达3000平方度。与传统的静态深空摄影不同，鲁宾天文台的核心优势在于其高频次的重复观测能力，这使得科学家能够追踪超新星爆发等瞬变天文现象。目前的图像仅是为期十年的“时空遗产调查”（LSST）的起点，随着观测次数的增加，图像的信噪比和深度将持续提升。根据现行政策，这些科研数据在经过两年的专有期后将向公众完全开放，而下一阶段的数据产品预计将在2026年底发布，届时将包含更多关于天体变化的差异图像。</p></div>
+        
+        <div class="comments-empty">
+          这条讨论暂未选出真正值得占用你注意力的评论。
+        </div>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>鲁宾天文台的LSST相机不仅是像素竞赛的巅峰，它更像是一台为宇宙拍摄“延时摄影”的超级摄像机。通过对COSMOS这个天文学界的“老面孔”进行深度重访，鲁宾天文台展示了其在广度、深度和时间维度上的综合实力。这种动态观测能力将把我们对宇宙的认知从静态照片提升到动态电影的水平，让我们不仅能看到宇宙“长什么样”，还能看到它“如何变化”。此外，项目组在发布科学成果的同时，特别向遭受风暴灾害的智利当地社区致意，这种人文关怀也为宏大的科学探索增添了一份温度。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49173165">
+      <summary class="story-overview">
+        <span class="rank-number">20</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">writings.stephenwolfram.com</span>
+            <span>1534 points</span>
+            <span>原始 #37 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://writings.stephenwolfram.com/2026/08/in-memory-of-my-wife-elise-cawley-1961-2026-with-thanks-for-36-wonderful-years/" target="_blank"
+              rel="noopener noreferrer">In Memory of My Wife, Elise Cawley, with Thanks for 36 Wonderful Years</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49173165" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 91</a>
+          </h2>
+          <p class="summary">著名科学家斯蒂芬·沃尔夫勒姆撰文纪念他相伴 36 年的妻子 Elise Cawley，她于 2026 年突然离世。文中详尽回顾了两人从相识到共同生活的点滴，特别强调了 Elise 卓越的数学直觉和坚强的意志。沃尔夫勒姆提到，他们在这三十多年里几乎每天都会交谈，这种深度的智力与情感联结构成了他的生活重心。Elise 在度过充满快乐的一天后瞬间离世，未受病痛折磨，这成为作者在巨大悲痛中唯一的慰藉。由于原始文章链接存在访问限制，目前的总结主要基于文章标题、摘要及读者的深度反馈。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>在这篇感人至深的悼文中，斯蒂芬·沃尔夫勒姆展现了他在科学研究之外极其感性的一面。他描述了妻子 Elise Cawley（1961-2026）不仅是生活伴侣，更是他在智力上旗鼓相当的对手。尽管两人都拥有极强的意志，以至于在职业协作上常常产生分歧，但他们建立了一种极其罕见的沟通习惯：在 36 年的婚姻中，几乎每天都会进行深度交谈。沃尔夫勒姆观察到，Elise 往往能通过直觉瞬间洞察事物的本质，而他自己则通常需要通过复杂的逻辑推演走“长路”才能到达终点。</p><p>这种互补的关系让她的离去显得尤为沉重。文中提到，Elise 的去世非常突然，是在度过了愉快的一天后瞬间发生的，没有经历长期的病痛折磨。这种“猝然”虽然给生者留下了巨大的心理冲击，但也正如沃尔夫勒姆所言，是悲剧中的一丝慰藉。读者们注意到，这篇文章的细节之丰富令人惊叹，仿佛是基于长期的日记记录，生动地刻画了一个独立、聪慧且充满生命力的女性形象。这不仅是对逝者的缅怀，也是对长久、健康的亲密关系在现代社会中价值的深刻反思。目前由于技术原因无法获取全文，以上内容综合自社区对该纪念文的详细讨论与引用。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49174158" target="_blank" rel="noopener noreferrer">@cube00</a>
+        </div>
+        <p class="comment-text">这是一份细节惊人丰富的悼念，你会觉得这肯定是从日记里摘录出来的，如果是这样，能把生活记录得如此详尽真是令人佩服，或者斯蒂芬确实拥有非凡的记忆力。即便透过这些细节，你也能真切感受到他是多么爱她、仰慕她。
+&gt; “不知为何，在突如其来的打击中，感觉就像我才刚刚遇见 Elise，而现在她已经离去了。”
+这提醒了我们，时间的残酷之处在于，它让美好的时光显得比痛苦的岁月更加短暂。
+&gt; “在这场悲剧中，我唯一的慰藉是终点瞬间降临，在那之前的一整天都充满了快乐。”
+希望我们都能足够幸运，在亲人的陪伴下，不经受痛苦地安息。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地捕捉到了文中关于时间残酷性的感悟，并对沃尔夫勒姆惊人的记忆力或记录习惯表示了敬佩。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49179983" target="_blank" rel="noopener noreferrer">@m101</a>
+        </div>
+        <p class="comment-text">多年来我一直是斯蒂芬·沃尔夫勒姆作品的浅度读者。我很感激他花时间写下这篇悼文。愿她安息，也向斯蒂芬表示哀悼。
+我之前对斯蒂芬的看法：
+1) 他对自己的想法和知识非常慷慨，尤其是对年轻人。我认为这是一种极好的品质。
+2) 他招致了很多人的嫉妒，部分是因为他的成功，部分是因为他的处事方式。我觉得他的方式往往并非有意冒犯，但他太过于坚持自我，有时近乎无礼，人们因此对他有成见（大多是不公平的，有时也算公平）。
+3) 考虑到他对工作的投入，我一直好奇他如何在其中平衡个人生活。
+我发现这封信非常有趣的地方在于，他的私人关系似乎与他在外表现出的形象是一致的：
+1) 在关于妻子的清单中，他首先提到以及花费大量篇幅描述的是她的智力水平。他是一个彻头彻尾的知识分子，这在他描写妻子的方式中表露无遗。
+2) 他提到由于两人意志都很坚强，在整个婚姻期间都没能进行工作上的协作。这种无法联结的感觉让我觉得有些悲哀。也许生活中对理智的过度优先会阻碍我们获得某些美德。
+3) 有几次他提到她直觉上是正确的，而他必须通过“走长路”来推导。我感觉他们的关系很多时候就是这样——对常人直觉来说显而易见的事情，对他来说是需要用理智去推演的课题。
+4) 我觉得这封信里可能含有一种遗憾。一种遗憾，即如果一个人选择少沉溺于理智，也许那种联结会有所不同。我觉得这一刻或许让斯蒂芬的大脑停顿了一下——一个极具人性色彩的停顿。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者深入分析了沃尔夫勒姆的性格特征如何映射到他的婚姻关系中，特别是“理智与直觉”的冲突，视角非常独特。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49177451" target="_blank" rel="noopener noreferrer">@sebmellen</a>
+        </div>
+        <p class="comment-text">2023 年我在一次 MIT AI 会议上见过斯蒂芬。他是那种最亲切、最有长者风范的人。考虑到他的一些作品，我原以为会见到一个相对自负的人，但结果完全相反，让我大吃一惊。那天晚上我和他以及一小群人聊了两个小时，谈论语言、数学等等。（他很友善地让我拍了合影：https://postimg.cc/LYmVCs0G）
+那次谈话对我产生了巨大的影响，完全改变了我对待结识新朋友的态度。
+我为他和他的家人感到心碎。在这篇悼文中，我能感受到那种亲切、真挚的长者情怀。
+另外，请上帝保佑，让我能像约翰·纳什在纽泽西收费高速公路的出租车事故中那样，和妻子一起离世。</p>
+        <p class="comment-reason"><span>入选理由</span>通过个人亲身经历的分享，打破了公众对沃尔夫勒姆“傲慢”的刻板印象，为悼文增添了人格背景。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49182336" target="_blank" rel="noopener noreferrer">@ubermonkey</a>
+        </div>
+        <p class="comment-text">我 56 岁了，结婚快 21 年了。我不会去读这个链接，但我很高兴它存在。
+中年会带来很多东西，有些是好的，有些是坏的，有些只是生活的一部分。其中之一就是一种更发自内心的、严肃的理解——取代了你以前仅有的理智认知——即你所乘坐的这趟旅程终将结束。
+在你的中年岁月里，你会遇到一些朋友，他们的旅程比你们想象的要短得多。
+你会看到人们的伴侣去世，以及随之而来的情感废墟。我的朋友 D 现在正在度过他失去相伴近 40 年妻子后的第一个夏天（去他妈的癌症）。
+你会意识到，那个躺在土下或站在土上的人，都可能是你。
+愿 Elise 的记忆成为一种祝福。但我现在要去拥抱我的妻子，而不是去读斯蒂芬的文章。</p>
+        <p class="comment-reason"><span>入选理由</span>这种从理智认知到感性共鸣的转变非常动人，提醒读者珍惜当下，具有很强的情感冲击力。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>斯蒂芬·沃尔夫勒姆通常以其对宇宙计算本质的宏大叙事而闻名，但在面对妻子 Elise Cawley 的离世时，他展现出了一种极其细腻且充满人性光辉的哀悼。这篇悼文最引人入胜的地方在于，它揭示了一个顶级智力家庭内部的微妙动力：两个同样强大且独立的灵魂，如何在 36 年里通过每日不间断的对话来维系联结。正如评论所指出的，沃尔夫勒姆对妻子“直觉”的推崇，与他自己严密的“计算”思维形成了鲜明对比，这种智力上的相互尊重构成了他们爱情的底色。尽管他承认两人因意志过于坚强而难以在事业上协作，但这种“无法协作的亲密”反而呈现出一种真实而深刻的伴侣关系。在死亡这个最无法计算的变量面前，这位科学家选择用最详尽的细节来对抗遗忘，这本身就是一种深情的告白。</p>
+        </div>
+      </div>
+    </details>
+    </section>
+    <footer class="footer">
+      <p>新闻只按 HN 原始名次和讨论度排序后取前 20，不做主题挑选。评论来自有界采样，
+        只是观点，不作为新闻事实来源。</p>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const themeButtons = [
+        ...document.querySelectorAll(".theme-button[data-theme-choice]")
+      ];
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      const applyThemeChoice = (requestedChoice, persist = true) => {
+        const choice = ["auto", "day", "night"].includes(requestedChoice)
+          ? requestedChoice
+          : "auto";
+        const theme = choice === "auto" ? themeForLocalTime() : choice;
+        document.documentElement.dataset.themeChoice = choice;
+        document.documentElement.dataset.theme = theme;
+        themeButtons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.themeChoice === choice)
+          );
+        });
+        if (persist) {
+          try {
+            localStorage.setItem("hnDigestThemeChoice", choice);
+          } catch (_) {
+            // The switch still works when report sandboxing blocks storage.
+          }
+        }
+      };
+      const refreshAutomaticTheme = () => {
+        if (document.documentElement.dataset.themeChoice === "auto") {
+          applyThemeChoice("auto", false);
+        }
+      };
+      applyThemeChoice(document.documentElement.dataset.themeChoice, false);
+      themeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyThemeChoice(button.dataset.themeChoice);
+        });
+      });
+      window.setInterval(refreshAutomaticTheme, 60 * 1000);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) refreshAutomaticTheme();
+      });
+
+      const list = document.querySelector(".story-list");
+      const controls = document.querySelector(".view-switch");
+      const buttons = [...document.querySelectorAll(".view-button")];
+      const status = document.querySelector(".view-status");
+      const total = list ? list.children.length : 0;
+      if (!list || !controls || total <= 10) {
+        if (controls) controls.hidden = true;
+        return;
+      }
+
+      const visibleCountStorageKey = "hnDigestVisibleCountV3";
+      const applyVisibleCount = (requestedCount, persist = true) => {
+        const count = requestedCount === 20 ? 20 : 10;
+        const shown = Math.min(count, total);
+        list.dataset.visibleCount = String(count);
+        buttons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(Number(button.dataset.count) === count)
+          );
+        });
+        status.textContent = `当前显示前 ${shown}`;
+        if (persist) {
+          try {
+            localStorage.setItem(visibleCountStorageKey, String(count));
+          } catch (_) {
+            // The switch still works when local privacy settings block storage.
+          }
+        }
+      };
+
+      let initialCount = 20;
+      try {
+        const storedCount = Number(localStorage.getItem(visibleCountStorageKey));
+        if ([10, 20].includes(storedCount)) initialCount = storedCount;
+      } catch (_) {
+        // Keep the all-20 default.
+      }
+      applyVisibleCount(initialCount, false);
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyVisibleCount(Number(button.dataset.count));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
