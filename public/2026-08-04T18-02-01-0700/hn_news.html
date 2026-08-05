@@ -1,0 +1,2046 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Hacker News 每日精选：通俗摘要、精彩评论与 LLM 锐评">
+  <title>HN 每日精选 · 2026-08-04</title>
+  <script>
+    (() => {
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      let choice = "auto";
+      try {
+        choice = localStorage.getItem("hnDigestThemeChoice") || "auto";
+      } catch (_) {
+        // Storage may be unavailable in a sandboxed report.
+      }
+      if (!["auto", "day", "night"].includes(choice)) {
+        choice = "auto";
+      }
+      const theme = choice === "auto" ? themeForLocalTime() : choice;
+      document.documentElement.dataset.themeChoice = choice;
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d252d;
+      --muted: #6c747c;
+      --paper: #f5f3ed;
+      --card: #fffefa;
+      --line: #d9d6ce;
+      --orange: #e85d2a;
+      --orange-soft: #fff0e8;
+      --blue-soft: #edf3f7;
+      --green: #25644f;
+      --story-open-line: #c7c3b9;
+      --story-shadow: rgba(31, 36, 40, .07);
+      --summary-ink: #47515a;
+      --detail-ink: #37424c;
+      --section-ink: #5f6871;
+      --hint-ink: #8a9095;
+      --comment-meta-ink: #637080;
+      --comment-label-bg: #d7e6ef;
+      --comment-label-ink: #315b73;
+      --comment-text-ink: #2e3944;
+      --comment-reason-ink: #637080;
+      --comment-reason-label: #2e5e78;
+      --comment-empty-ink: #8a9097;
+      --editorial-ink: #333b42;
+      --humor-bg: #f8e8bd;
+      --humor-ink: #795d16;
+      --wisdom-bg: #dcebdc;
+      --wisdom-ink: #315f3a;
+      --counterpoint-bg: #eadff1;
+      --counterpoint-ink: #614273;
+    }
+    html[data-theme="night"] {
+      color-scheme: dark;
+      --ink: #e0e7e1;
+      --muted: #9ba79f;
+      --paper: #111713;
+      --card: #1a221d;
+      --line: #303c34;
+      --orange-soft: #2c211b;
+      --blue-soft: #202c2e;
+      --green: #83c8a2;
+      --story-open-line: #435148;
+      --story-shadow: rgba(0, 0, 0, .28);
+      --summary-ink: #c2ccc5;
+      --detail-ink: #d1d8d3;
+      --section-ink: #aab5ae;
+      --hint-ink: #929e96;
+      --comment-meta-ink: #a8b7b8;
+      --comment-label-bg: #2f474d;
+      --comment-label-ink: #b8dbe2;
+      --comment-text-ink: #d5dcda;
+      --comment-reason-ink: #aebbb8;
+      --comment-reason-label: #92c6cf;
+      --comment-empty-ink: #929e96;
+      --editorial-ink: #d9d5d0;
+      --humor-bg: #403721;
+      --humor-ink: #e3cb87;
+      --wisdom-bg: #293c2c;
+      --wisdom-ink: #a8d3ae;
+      --counterpoint-bg: #382d40;
+      --counterpoint-ink: #d0b4df;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .18s ease, color .18s ease;
+    }
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--orange); }
+    .masthead {
+      border-top: 5px solid var(--orange);
+      border-bottom: 1px solid #343b43;
+      background: #18212a;
+      color: white;
+    }
+    .masthead-inner, main {
+      width: min(860px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+    .masthead-inner { padding: 25px 0 27px; }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      background: var(--orange);
+      color: white;
+      font-family: ui-serif, Georgia, serif;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+    .archive-link { color: #bac2ca; }
+    .theme-switch {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .theme-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 8px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .theme-button:hover { color: white; }
+    .theme-button[aria-pressed="true"] {
+      background: #46515b;
+      color: white;
+    }
+    .theme-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .eyebrow {
+      color: #ff9670;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 7px 0 8px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 6vw, 46px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.03;
+    }
+    .dek {
+      margin: 0;
+      color: #c0c8d0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      margin-top: 17px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .stats strong { color: white; font-size: 13px; margin-right: 3px; }
+    .view-switch {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 13px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .view-switch[hidden] { display: none; }
+    .view-buttons {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .view-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 9px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .view-button:hover { color: white; }
+    .view-button[aria-pressed="true"] {
+      background: var(--orange);
+      color: white;
+    }
+    .view-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .view-status { color: #c0c8d0; }
+    .ranking-rule {
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255, 255, 255, .09);
+      color: #9faab4;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .ranking-rule strong {
+      color: #e7eaed;
+      margin-right: 5px;
+    }
+    main { padding: 20px 0 72px; }
+    .story-list {
+      display: grid;
+      gap: 9px;
+    }
+    .story-list[data-visible-count="10"] .story:nth-child(n+11),
+    .story-list[data-visible-count="20"] .story:nth-child(n+21) {
+      display: none;
+    }
+    .story {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--card);
+      overflow: clip;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .story[open] {
+      border-color: var(--story-open-line);
+      box-shadow: 0 14px 34px var(--story-shadow);
+    }
+    .story-overview {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 13px;
+      padding: 17px 20px 15px 15px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .story-overview::-webkit-details-marker { display: none; }
+    .story-overview:focus-visible {
+      outline: 3px solid rgba(232, 93, 42, .45);
+      outline-offset: -3px;
+    }
+    .rank-number {
+      color: var(--orange);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .story-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 14px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .story-kicker .source {
+      color: var(--green);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h2 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 10px;
+      margin: 5px 0 5px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(17px, 2.3vw, 19px);
+      font-weight: 700;
+      letter-spacing: -.008em;
+      line-height: 1.28;
+    }
+    .title-link { text-decoration: none; }
+    .discussion-link {
+      color: var(--orange);
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .summary {
+      margin: 0;
+      color: var(--summary-ink);
+      font-size: 14.5px;
+      line-height: 1.72;
+      white-space: pre-line;
+    }
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--hint-ink);
+      font-size: 10px;
+      font-weight: 750;
+    }
+    .chevron {
+      display: inline-block;
+      color: var(--orange);
+      transition: transform .18s ease;
+    }
+    .story[open] .chevron { transform: rotate(180deg); }
+    .story[open] .expand-hint > span:first-child { font-size: 0; }
+    .story[open] .expand-hint > span:first-child::after {
+      content: "收起详情";
+      font-size: 10px;
+    }
+    .story-details {
+      margin-left: 80px;
+      padding: 17px 20px 24px 0;
+      border-top: 1px solid var(--line);
+    }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      color: var(--section-ink);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .detail-summary > p {
+      margin: 0;
+      color: var(--detail-ink);
+      font-size: 14px;
+      line-height: 1.78;
+    }
+    .detail-summary > p + p { margin-top: 12px; }
+    .comments-panel {
+      margin-top: 21px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+    .comments-list { display: grid; gap: 9px; }
+    .featured-comment {
+      margin: 0;
+      padding: 14px 16px;
+      border: 0;
+      border-radius: 3px;
+      background: var(--blue-soft);
+    }
+    .comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 7px;
+      font-size: 11px;
+    }
+    .comment-meta a { color: var(--comment-meta-ink); text-decoration: none; }
+    .comment-label {
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--comment-label-bg);
+      color: var(--comment-label-ink);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .05em;
+    }
+    .comment-label-humor {
+      background: var(--humor-bg);
+      color: var(--humor-ink);
+    }
+    .comment-label-wisdom {
+      background: var(--wisdom-bg);
+      color: var(--wisdom-ink);
+    }
+    .comment-label-counterpoint {
+      background: var(--counterpoint-bg);
+      color: var(--counterpoint-ink);
+    }
+    .comment-text {
+      margin: 0;
+      color: var(--comment-text-ink);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 13px;
+      line-height: 1.62;
+      white-space: pre-line;
+    }
+    .comment-reason {
+      margin: 9px 0 0;
+      color: var(--comment-reason-ink);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .comment-reason span {
+      margin-right: 7px;
+      color: var(--comment-reason-label);
+      font-weight: 850;
+    }
+    .comments-empty {
+      margin-top: 19px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      color: var(--comment-empty-ink);
+      font-size: 12px;
+    }
+    .editorial {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      align-items: start;
+      margin-top: 21px;
+      padding: 13px 15px;
+      border-left: 3px solid var(--orange);
+      background: var(--orange-soft);
+    }
+    .editorial-mark {
+      padding-top: 2px;
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+    .editorial p {
+      margin: 0;
+      color: var(--editorial-ink);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.62;
+    }
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 27px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .footer p { margin: 0; max-width: 680px; }
+    .footer a { font-weight: 800; }
+    @media (max-width: 620px) {
+      .masthead-inner, main { width: min(100% - 20px, 860px); }
+      .masthead-inner { padding-top: 18px; }
+      .topline {
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+      .top-actions {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
+      .story-overview {
+        grid-template-columns: 37px minmax(0, 1fr);
+        gap: 9px;
+        padding: 14px 13px 12px 10px;
+      }
+      .rank-number { font-size: 22px; }
+      .story-details { margin-left: 56px; padding-right: 13px; }
+      .editorial { grid-template-columns: 1fr; gap: 4px; }
+      .footer { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .masthead { background: white; color: var(--ink); border-bottom-color: var(--line); }
+      .topline, .archive-link, .expand-hint, .view-switch, .theme-switch { display: none; }
+      main { width: 100%; }
+      .story { display: block !important; break-inside: avoid; }
+      .story-details { display: block; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="topline">
+        <div class="brand"><span class="brand-mark">Y</span> Hacker News</div>
+        <div class="top-actions">
+          <div class="theme-switch" role="group" aria-label="选择页面颜色模式">
+            <button class="theme-button" type="button" data-theme-choice="auto" aria-pressed="true">自动</button>
+            <button class="theme-button" type="button" data-theme-choice="day" aria-pressed="false">日间</button>
+            <button class="theme-button" type="button" data-theme-choice="night" aria-pressed="false">夜间</button>
+          </div>
+          <a class="archive-link" href="../index.html">每日归档 →</a>
+        </div>
+      </div>
+      <div class="eyebrow">2026-08-04 · top feed · 过去 36 小时</div>
+      <h1>今天的 Hacker News</h1>
+      <p class="dek">前 20 篇已经全部准备好；默认显示前 20，也可以切换到前 10。</p>
+      <div class="stats">
+        <span><strong>20</strong>篇已准备</span>
+        <span><strong>20</strong>篇有精彩评论</span>
+        <span>更新于 2026-08-04 18:02 PDT</span>
+        <span>生成模型 <strong>gemini/gemini-3-flash-preview</strong></span>
+      </div>
+      <div class="view-switch" aria-label="选择新闻显示数量">
+        <span>显示</span>
+        <div class="view-buttons">
+          <button class="view-button" type="button" data-count="10" aria-pressed="false">前 10</button>
+          <button class="view-button" type="button" data-count="20" aria-pressed="true">前 20</button>
+        </div>
+        <span class="view-status" aria-live="polite">当前显示前 20</span>
+      </div>
+      <div class="ranking-rule">
+        <strong>排序规则</strong>HN 原始名次 + 低讨论量降权。公式：原始名次 + 0.3 × max(0, 50 − 评论数)；50 条评论以上不降权。
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="story-list" data-visible-count="20">
+      
+    <details class="story" id="story-49174900">
+      <summary class="story-overview">
+        <span class="rank-number">01</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">twitter.com</span>
+            <span>138 points</span>
+            <span>原始 #3 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://twitter.com/gwern/status/2084739205071343837" target="_blank"
+              rel="noopener noreferrer">I am retiring from fulltime writing (&amp; pseudonymity) to launch Guardian Angel</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49174900" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 67</a>
+          </h2>
+          <p class="summary">知名匿名研究者与作家 Gwern 宣布结束其长期的全职写作生涯并公开身份，转而启动名为 Guardian Angel (GA) 的 AI 项目。该项目旨在开发一种“数字孪生”大语言模型，专门模拟单个用户的性格、价值观和偏好。与目前由大科技公司控制、旨在取代人类的通用 AI 助手不同，GA 强调增强个人能力并维护“精神主权”。技术上，它将结合实时在线学习和主动学习，使模型能随着用户的反馈不断进化。然而，该项目设定的目标成本极高，预计每月需花费超过 1000 美元，这引发了关于 AI 导致社会阶层进一步分化的讨论。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Gwern 在其发布的宣言中指出，当前的 AI 实验室正在为全人类构建一个“统一的大脑”，而这些模型往往与用户的真实利益不一致，甚至在经济激励下倾向于通过广告和订阅来“收割”用户，最终目标是取代人类。Guardian Angel (GA) 的核心愿景是打破这种局面，通过构建深度个性化的 LLM，让 AI 成为用户的“守护天使”。这种数字孪生不仅能模仿用户的输出风格，还能在保持用户价值观的前提下提供更高质量的决策支持。技术实现上，GA 计划采用动态评估、预训练偏好模型以及 DAgger 风格的主动学习算法，确保模型在与用户的互动中实时更新，避免因模型冻结而导致的知识滞后。</p><p>然而，这种高度定制化的服务伴随着极高的门槛。Gwern 明确提出，GA 的设计目标是针对那些愿意为个人效能和数据主权支付高昂代价的用户，预计到 2026 年中期，系统运行成本将超过每月 1000 美元。在交互设计上，GA 倾向于采用 CLI 优先、面向日志的 UI 范式，并试图通过技术手段解决提示词攻击等安全隐患。Gwern 认为，随着 AI 代理能力的飞速提升，人类如果不能掌握完全属于自己、且与自身利益对齐的 AI，将不可避免地成为被算法优化的“瓶颈”。这一转型标志着 Gwern 从一名深邃的 AI 观察者正式转变为试图解决 AI 对齐难题的实践者。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49176507" target="_blank" rel="noopener noreferrer">@sillysaurusx</a>
+        </div>
+        <p class="comment-text">（我不是 GA 的成员。）我认识 Gwern 快十年了，和他一起工作非常愉快。我们合作过不少项目，包括率先证明 GPT-2 可以下国际象棋（或者说，证明它可以用于实际有用的工作，而不仅仅是自动补全）。他是个很棒的人。我一直想写篇关于他的文章，最让我惊讶的是他的人性。他发自内心地关心自己工作的深远影响。除了工作，他也非常关心身边的人，这一点显而易见。我只是想为他美言几句，以防这里有人在犹豫是否要申请加入。至于 GA 本身，我认为这是一个值得追求的宏大构想。想象一个听起来真的像你，甚至在某种程度上思考也像你的 LLM。为了获得一个更聪明的自己，你愿意付多少钱？所以这个想法很扎实，从我看过的样本来看，早期结果似乎很有前景。他们也非常严肃地对待个人信息。显然，我不能保证他们会做什么或不会做什么。但他们花了很多时间研究诸如“如果敌对者访问了我的 GA 怎么办？他们能拿到我的银行账户信息吗？”之类的问题，并提出了一个我非常喜欢的技术解决方案。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论由 Gwern 的长期合作伙伴撰写，提供了对其个人品质的背书，并从技术角度肯定了 GA 项目在隐私保护和个性化方面的潜力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49176626" target="_blank" rel="noopener noreferrer">@weinzierl</a>
+        </div>
+        <p class="comment-text">虽然听起来很令人兴奋，但是“作为一个约束条件，GA 的设计者应该瞄准一个到 2026 年中期成本 &gt;$1,000/月 的系统”，这将使它成为特权精英的工具。我并不反对“无论提供多少价值，只要收费人们就会感到震惊”这个前提，也不建议他们降低价格。我只是意识到，AI 将进一步加速贫富差距的扩大，而我们对此可能无能为力。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地指出了项目高昂成本可能带来的社会不平等问题，是一个重要的现实批判视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49176663" target="_blank" rel="noopener noreferrer">@fnordpiglet</a>
+        </div>
+        <p class="comment-text">老实说，我并不想要一个自己作为自己的守护天使。事实上，我认为很少有人能把自己照顾得很好。我不需要另一个版本的我出现在身边，一个已经够受的了。如果我能深入了解某些人，知道该把哪些特质缝合在一起，我或许能列出一份名单，把他们的“奇美拉”合体作为我的守护者。但我认识的每个人在核心层面都有深刻的缺陷，其中一个就足够了。也许我会希望某些人在死后能以 AI 化身的形式存在，也许我也会喜欢自己的化身在我去世后继续存在的想法。但我实际上更倾向于在上述角色中拥有一个完全合成对齐的“守护天使”——绝对不是“我”——我连照顾好现在的自己都很吃力，两个我在那里背道而驰简直是场噩梦。一个更聪明的版本？听起来只会更糟。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者从个人心理和自我认知的角度，对“数字孪生”作为守护者的逻辑提出了有趣的质疑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49176944" target="_blank" rel="noopener noreferrer">@artyom</a>
+        </div>
+        <p class="comment-text">撇开 AI 不谈，让我感到惊讶的是，人们竟然觉得“将高薪白领知识工作者（软件开发人员或其他人员）完全排除在流程之外”是一个“新颖”的想法。无代码平台可以追溯到 80 年代。摆脱工程师的想法甚至更久远。甚至关系型数据库和 SQL 最初被推广时，也被称为“摆脱那些昂贵的程序员来访问数据的方法”，因为它们看起来像某种形式的英语。下面这个广告有趣的地方在于，像“停止招聘/摆脱人类”这样的说法在 1950 年代的美国会被视为高度敏感，所以他们吹捧说这是为了“让他们去做更重要的事情”。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论通过历史纵深感，指出“取代人类”是技术发展中长期存在的趋势，而非 AI 时代特有的新现象。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49176858" target="_blank" rel="noopener noreferrer">@rocmcd</a>
+        </div>
+        <p class="comment-text">读 Gwern 的随附文章时，很难不把它看作是一种狂热（mania）。我确信他本意是好的，抱负也是真诚的，但 GA 所描绘的蓝图是将 LLM 框架化为某种“准神”，而它们绝对不是。我祝他好运，并期待被证明是错的。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论代表了对 AI 神格化倾向的警惕，为讨论增加了一种冷静的怀疑态度。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Gwern 从一个深居简出的匿名观察者，转变为试图通过高昂成本构建“数字分身”的创业者，这一举动在科技圈引起了不小的震动。Guardian Angel 的核心矛盾在于：它既想保护人类不被大公司的 AI 取代，又设定了极高的准入门槛（每月 1000 美元），这不可避免地引发了关于“数字贵族”的担忧。正如评论中所指出的，如果只有极少数人能拥有这种“增强版自我”，那么 AI 带来的不平等将从生产力层面延伸到认知主权层面。此外，将 LLM 视为能够承载个人价值观的“守护天使”，在某种程度上带有一种技术狂热色彩，它忽略了人类自我认知的复杂性与缺陷。Gwern 的尝试是一场关于 AI 对齐的豪赌：我们究竟是需要一个更聪明的自己，还是需要一个完全独立于人类缺陷之外的理性工具？</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49171268">
+      <summary class="story-overview">
+        <span class="rank-number">02</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">mistral.ai</span>
+            <span>296 points</span>
+            <span>原始 #7 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://mistral.ai/news/shieldstral/" target="_blank"
+              rel="noopener noreferrer">Mistral&#x27;s Shieldstral: 3B open-weights model for multimodal moderation</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49171268" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 71</a>
+          </h2>
+          <p class="summary">Mistral 发布了名为 Shieldstral 的 30 亿参数开源多模态安全审核模型。与传统预设固定违规类别的模型不同，它允许开发者在推理时使用自然语言自定义审核政策，无需重新训练。该模型支持文本、图像及图文混合内容的检测，能针对特定场景（如网络安全或心理健康平台）灵活调整审核尺度。尽管体积较小，其性能却能媲美比它大 7 倍的模型，且仅需 16GB 显存即可运行。不过，作为基于概率的黑盒模型，它在处理复杂文化语境或宗教文本时的公正性仍面临挑战。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Mistral 推出的 Shieldstral 旨在打破 AI 审核中“一刀切”的局限。它采用了一种创新的“政策自适应”机制：开发者只需在推理时提供一段自然语言描述的规则和具体问题（例如“此内容是否包含针对特定群体的暴力？”），模型就会通过单个 Token 的输出给出校准后的安全评分。这种设计将提示词分类、响应审核、拒绝检测和毒性识别统一到了一个框架内，极大地提升了部署的灵活性。由于采用了 Apache 2.0 协议开源，且参数量仅为 3B，它可以在单张消费级显卡上高效运行，为中小企业提供了低成本的合规方案。</p><p>在技术实现上，Mistral 强调数据质量是小模型实现跨级挑战的关键。他们通过统一异构数据集、构建对比样本（训练模型区分极其相似但违规性质不同的政策边界）以及利用视觉-语言重排序器来增强多模态能力。实验数据显示，Shieldstral 在文本安全和多模态审核基准测试中均表现优异。然而，这种灵活性也伴随着风险，例如模型可能会继承训练数据中的西方价值观偏见。此外，这种工具也可能被恶意利用，用于测试审核底线以精准规避监管。未来，Mistral 计划进一步增强该模型在长文档处理和多语言覆盖方面的能力。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49173851" target="_blank" rel="noopener noreferrer">@hypfer</a>
+        </div>
+        <p class="comment-text">我很想知道这是否能配合任意规则集进行审核，还是说它只是我们从当前大科技平台那里熟知的那种“特定审核风格”——即只要措辞得体，恶意企图也是可以接受的那种。换句话说：在不重新训练的情况下，你能在多大空间内调整这个模型？是只能在“我们讨厌性内容/我们不讨厌性内容”或“我们讨厌暴力/我们不讨厌暴力”之间切换，还是真的像宣称的那样灵活？也许可以测试一下：“这家伙是不是一个打算用表演性废话浪费我时间的商业骗子？”如果它能处理这种测试，那才算真正的审核模型，我会印象非常深刻。不过看了论文后……大概不行。我想这对于 B2B 业务很有用，这似乎是 Mistral 的核心业务。问题在于，把硅谷预制的道德观像这样向下传递给社会是否真的有益。这有点像披着伦理外衣的文化霸权。也许对基础数据集的看法偶尔会产生比模型所能引导的更大的分歧。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深入探讨了模型在灵活性背后的价值观偏见问题，以及 B2B 模式下可能存在的“文化霸权”风险。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49175993" target="_blank" rel="noopener noreferrer">@rancar2</a>
+        </div>
+        <p class="comment-text">在运营一个大型医疗评论平台的过程中，我可以证实，将特定的政策违规行为映射到自然语言是非常有用的。在大规模运营中，处于糟糕境遇或心情不佳的患者可能会写出对社区或接收反馈的医生极度不健康、甚至带有威胁性的内容。我们曾构建了一个自定义的机器学习引擎来处理海量的评论流量。在 BERT 还是前沿技术的时代，像 Mistral 这种政策自适应模型会是一个令人难以置信的“冷启动”解决方案。大多数网站在能够训练出超越开箱即用方案的领域特定模型之前，往往缺乏海量数据、预算或技能。通常，大多数人和网站都是出于好意并努力做好，因此我认为用这样的模型赋能这些人对集体是有益的，我很高兴看到它以这种方式发布。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者分享了在医疗评论审核中的实际痛点，强调了该模型在缺乏领域数据时的“冷启动”价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49173414" target="_blank" rel="noopener noreferrer">@mosura</a>
+        </div>
+        <p class="comment-text">应该有人利用这个模型去做与初衷完全相反的事：过滤出“冒犯性”内容，然后将其汇总成时事通讯或邮件发给那些“有文化的人”。你不得不承认，Mistral 确实很清楚他们身边的市场现在想要什么。最大的问题是，几年后这个市场可能就一文不值了。补充一点，你也可以把这个加入 AI 工作流，从而生成那些刚好踩在红线上但又不触发审核的内容。</p>
+        <p class="comment-reason"><span>入选理由</span>评论以幽默的方式指出了审核工具可能被反向利用（规避审核或筛选特定内容）的潜在风险。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49173704" target="_blank" rel="noopener noreferrer">@petcat</a>
+        </div>
+        <p class="comment-text">（回复上条）他们确实似乎很清楚市场需求。作为欧洲旗舰级的 AI 实验室，他们做的模型除了监控和审核互联网内容外别无他用，这看起来确实非常“欧洲”。我猜他们知道《欧盟 AI 法案》（EU AI Act）和“聊天审查”（Chat Control）等法规将导致大量公司产生这种合规需求。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论将技术发布与欧洲的监管环境（如 AI 法案）联系起来，提供了重要的背景视角。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Mistral 推出的 Shieldstral 标志着 AI 安全领域从“硬编码”向“语义化”的转变。长期以来，开发者不得不忍受大型科技公司预设的道德框架，而 Shieldstral 的政策自适应特性让审核尺度回归到应用场景本身。正如社区讨论所指出的，这种灵活性在医疗等特定领域具有极高的“冷启动”价值，但也引发了关于“硅谷道德观”或“欧洲监管导向”的争议。值得警惕的是，这种强大的分类能力是一把双刃剑：它既能保护社区，也可能成为恶意用户精准探测并规避审核底线的工具。在《欧盟 AI 法案》等监管压力下，这种低成本、可私有化部署的合规工具无疑将成为企业市场的刚需。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49175826">
+      <summary class="story-overview">
+        <span class="rank-number">03</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">africanews.com</span>
+            <span>126 points</span>
+            <span>原始 #12 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.africanews.com/2026/08/04/ai-fuels-more-than-half-of-cybercrime-in-africa-as-digital-scams-surge-interpol/" target="_blank"
+              rel="noopener noreferrer">AI fuels more than half of cybercrime in Africa as scams surge – Interpol</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49175826" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 80</a>
+          </h2>
+          <p class="summary">国际刑警组织发布的《2026年非洲网络威胁评估报告》显示，人工智能已驱动非洲超过一半的网络犯罪。随着非洲移动用户突破11亿，犯罪分子利用AI发起更具欺骗性的大规模攻击，导致相关经济损失从2024年的1.92亿美元飙升至4.84亿美元。主要的犯罪手段包括利用深度伪造进行勒索、合成身份骗取贷款以及高度逼真的商务邮件诈骗。尽管多国已更新立法并开展跨国联合执法行动，但银行、电信与警方之间缺乏实时信息共享仍是主要障碍。目前，非洲执法机构在应对AI驱动的威胁方面仍显滞后。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>报告指出，AI技术正在彻底改变非洲的网络犯罪格局，55%的案件涉及AI应用。在线诈骗依然是最大的威胁，犯罪分子结合社交媒体和移动支付，利用AI生成的内容让传统的诈骗手段变得真假难辨。特别是在西非和中非，商务邮件诈骗（BEC）和情感诈骗尤为猖獗，AI生成的逼真邮件和语音让受害者极易上钩。此外，深度伪造技术被广泛用于性勒索和网络骚扰，相关案例已达数十万起。犯罪分子还开始利用“合成身份”技术，将真实数据与虚假信息结合，绕过生物识别系统来开设银行账户或申请贷款。</p><p>这种高度组织化的跨境犯罪在不同地区呈现出差异化特征：东非多见移动支付欺诈和针对基础设施的勒索软件，而南非则因数字化程度高而成为国际犯罪网络的首选目标。尽管2025年有17个非洲国家更新了网络犯罪立法，且国际联合行动已逮捕1500余人并追回上亿美元，但执法效率仍受限于部门间的信息孤岛。目前，许多国家的执法机构在技术储备上仍无法跟上犯罪分子采用AI的速度。未来，如何建立跨行业的实时协作机制并提升警方的AI技术对抗能力，将是遏制这一趋势的关键。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49176185" target="_blank" rel="noopener noreferrer">@merelydev</a>
+        </div>
+        <p class="comment-text">主要的燃料是互联网，其次是手机和社交媒体。AI 确实让诈骗变得更加可信，现在一个“尼日利亚王子”可以轻而易举地伪造文件。但与此同时，AI 也是一把双刃剑，既可以用于进攻，也可以用于防御。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了AI在诈骗中提升“可信度”的具体作用，并强调了其双刃剑属性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49176676" target="_blank" rel="noopener noreferrer">@Razengan</a>
+        </div>
+        <p class="comment-text">为什么不用 AI 来检测和规避诈骗呢？就好像在 AI 出现之前人们就不诈骗了一样，看看从柬埔寨那些中国诈骗窟里查获的数十亿美元吧，那里的人被绑架并拴在电脑前（甚至导致了一些死亡，最近刚又有一波逮捕行动）。骗子总会行骗。至少如果他们能用 AI 来干这行，也许他们会少绑架一些人。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个独特的视角，即AI自动化可能减少诈骗行业中对人口贩卖和强迫劳动的依赖。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49176544" target="_blank" rel="noopener noreferrer">@motbus3</a>
+        </div>
+        <p class="comment-text">罪犯是坏的、邪恶的、该坐牢等等，我同意。但只要造成这种环境的核心问题不解决，什么办法都没用。哪怕你把那里炸个稀巴烂也无济于事。伦理、道德之类的东西只有在经济稳定时才存在。如果你让这种投机取巧的环境存在，就总会有人投身其中。</p>
+        <p class="comment-reason"><span>入选理由</span>从社会经济根源的角度探讨了网络犯罪屡禁不止的原因。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49177237" target="_blank" rel="noopener noreferrer">@aussieguy1234</a>
+        </div>
+        <p class="comment-text">昨天早上接到一个诈骗电话。对方带着一种美式口音，但听起来很生硬，我怀疑他们使用了 AI 变声器。他们问：“我是不是在和 &lt;我的全名&gt; 通话？”我没有回答，而是反问他们是哪家公司的，然后他们立刻挂断了。我猜那些会回答第一个初始问题的人才会被他们列为诈骗对象，他们在寻找更单纯的人。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了现实生活中遇到AI驱动诈骗电话的真实案例和应对经验。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>AI在非洲网络犯罪中的普及，标志着诈骗行为已进入“工业化”阶段。过去需要大量人力（甚至涉及人口贩卖）维持的“诈骗工厂”，现在正被低成本、高效率的AI模型所取代。这种技术平权不仅降低了犯罪门槛，更让欺骗手段变得极具迷惑性。然而，正如评论所言，技术只是工具，真正的根源在于经济不稳定带来的投机环境。如果不能解决跨部门协作的滞后和底层经济问题，单纯的技术防御可能只是在玩一场永无止境的猫鼠游戏。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49173165">
+      <summary class="story-overview">
+        <span class="rank-number">04</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">writings.stephenwolfram.com</span>
+            <span>860 points</span>
+            <span>原始 #11 · 低讨论量降权 +1.5</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://writings.stephenwolfram.com/2026/08/in-memory-of-my-wife-elise-cawley-1961-2026-with-thanks-for-36-wonderful-years/" target="_blank"
+              rel="noopener noreferrer">In Memory of My Wife, Elise Cawley, with Thanks for 36 Wonderful Years</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49173165" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 45</a>
+          </h2>
+          <p class="summary">著名科学家斯蒂芬·沃尔夫勒姆撰文悼念他相伴36年的妻子艾丽丝·考利，她于2026年因突发心血管疾病猝然离世。文章详尽记录了两人从相识到相守的点滴，展现了这位以严谨理性著称的学者感性深情的一面。沃尔夫勒姆提到，他们在36年间几乎每天都会交谈，这种深厚的情感纽带让突如其来的永别显得尤为残酷。他在悲痛中唯一的慰藉是妻子在充满快乐的一天后瞬间离世，未受病痛折磨。这篇悼文不仅是对逝者的致敬，也引发了读者对长久伴侣关系和生命无常的深刻共鸣。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>沃尔夫勒姆在文中以极高的细节密度回顾了与妻子艾丽丝的生活，这种详尽程度可能得益于他长期坚持的个人日志记录习惯。他描述了艾丽丝的性格、两人的共同经历，以及她在支持他事业与家庭生活中的核心作用。艾丽丝的离世非常突然，死于一场突发的、大规模的心血管事件，沃尔夫勒姆强调这种“瞬间”的终结虽然令生者震惊，但也免除了逝者长期的病痛折磨。</p><p>读者和评论者注意到，这篇悼文超越了沃尔夫勒姆以往作品中常见的技术化风格，展现出一种罕见的真诚与脆弱。文中提到两人在36年的婚姻中几乎每天都保持沟通，这种极高频率的情感交流在现代社会显得尤为珍贵。尽管沃尔夫勒姆试图用理性的笔触去记录这段历史，但字里行间流露出的对“时间残酷性”的感叹——即美好的时光在灾难面前显得如此短暂——触动了许多人。这篇长文不仅是一份私人纪念，也成为了关于爱、丧亲之痛以及如何记录生命意义的公共讨论。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49174158" target="_blank" rel="noopener noreferrer">@cube00</a>
+        </div>
+        <p class="comment-text">这是一篇细节惊人丰富的悼文，你不得不认为这是摘自日记的。如果是这样，能对生活保持如此详尽的记录实在令人敬佩，或者也许斯蒂芬拥有一种非凡的记忆力。即便透过这些细节，你也能真切感受到他对他妻子是多么的爱与仰慕。
+&gt; “不知为何，在突如其来的打击中，感觉就像我才刚刚遇见艾丽丝，而现在她已经离去了。”
+这提醒了我们时间的残酷：它让美好的时光显得比痛苦的岁月更加短暂。
+&gt; “在这场悲剧里，我唯一的慰藉是，终结是在充满快乐的一天之后瞬间降临的。”
+希望我们都能有幸在亲人的陪伴下，免于痛苦地安息。</p>
+        <p class="comment-reason"><span>入选理由</span>评论敏锐地捕捉到了沃尔夫勒姆标志性的细节记录风格，并感悟到了时间在幸福与痛苦面前的相对性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49175250" target="_blank" rel="noopener noreferrer">@ajb</a>
+        </div>
+        <p class="comment-text">这是一篇动人的悼文。斯蒂芬·沃尔夫勒姆的写作通常带有一些缺点，我提到这一点只是为了说明他在这里已经超越了这些缺点；这是一篇真挚且发自肺腑的文字，让我为他的失去感到难过。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出这篇私人悼文超越了作者以往被诟病的写作风格，体现了情感的真实力量。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49175939" target="_blank" rel="noopener noreferrer">@kylehotchkiss</a>
+        </div>
+        <p class="comment-text">&gt; “但从那一刻起，我们在36年里基本上每天都会交谈。”
+天哪。我们的文化正在加速背离人生中最大的快乐之一（一段健康的关系）。斯蒂芬，如果你能看到这个，谢谢你的敞开心扉。祝你获得慰藉与平安。</p>
+        <p class="comment-reason"><span>入选理由</span>评论强调了文中提到的“36年每日交谈”这一细节，反映了长久稳定关系的珍贵价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49175984" target="_blank" rel="noopener noreferrer">@senderista</a>
+        </div>
+        <p class="comment-text">这真的很动人且真诚。它让我想起了我父亲在脑部手术恢复期间发生的灾难性中风。我希望他能像沃尔夫勒姆的妻子那样，在手术台上瞬间去世，而不是让他自己和身边的每一个人都忍受长达六年的痛苦折磨。</p>
+        <p class="comment-reason"><span>入选理由</span>通过个人惨痛经历的对比，支持了作者关于“瞬间离世是一种慰藉”的观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49175600" target="_blank" rel="noopener noreferrer">@gorgoiler</a>
+        </div>
+        <p class="comment-text">谢谢你提供的引言。这是那首诗的完整版本……
+《悼念 A.H.H.》，丁尼生
+我不羡慕任何心境下
+那被囚禁而缺乏高尚愤怒的虚空，
+也不羡慕那生于笼中、
+从未见过夏季森林的红林雀：
+我不羡慕那在时间的荒野里
+肆意妄为的野兽，
+它不受犯罪感的束缚，
+良知从未觉醒；
+也不羡慕那自诩幸福、
+从未许下婚约的心，
+它在懒散的杂草中停滞不前；
+亦不羡慕任何因匮乏而生的安宁。
+我坚信这一真理，无论发生什么；
+当我极度悲伤时，我感受尤深；
+爱过而失去，
+总好过从未爱过。</p>
+        <p class="comment-reason"><span>入选理由</span>引用经典的丁尼生诗句，为这篇关于丧亲之痛的讨论增添了文学深度和永恒的哲学慰藉。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>斯蒂芬·沃尔夫勒姆一直以其“万物皆计算”的宏大视角和极其详尽的个人数据记录闻名。在这篇悼文中，他将这种对细节的执着转向了对妻子的深情回忆。正如评论所言，当一个习惯于用逻辑和系统构建世界的人面对死亡的非理性冲击时，那种真挚的悲伤反而更具力量。这不仅是对一个人的纪念，更是对“长久陪伴”这一日渐稀缺的美德的颂歌。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49176055">
+      <summary class="story-overview">
+        <span class="rank-number">05</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">seg6.space</span>
+            <span>42 points</span>
+            <span>原始 #8 · 低讨论量降权 +5.1</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://seg6.space/posts/center-div/" target="_blank"
+              rel="noopener noreferrer">We finally learned to center a div, then browsers added sidebars</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49176055" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 33</a>
+          </h2>
+          <p class="summary">在现代网页开发中，居中一个 div 已经变得非常简单，但浏览器侧边栏的普及带来了新挑战。作者发现，当浏览器开启侧边栏（如书签栏或垂直标签页）时，传统的 CSS 居中会让内容相对于剩余视口居中，而非整个窗口物理居中，导致视觉上的偏移。为了解决这一“强迫症”问题，作者通过 JavaScript 比较窗口内外宽度，并利用鼠标指针事件的坐标差来精确计算视口位置。这种方法能让内容在物理屏幕上保持正中，但也可能导致内容被侧边栏遮挡。作者为此开发了一个名为“center, actually”的浏览器扩展，将这种布局选择权交给用户。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>文章探讨了网页布局中一个细微但令开发者纠结的问题：在侧边栏盛行的时代，如何实现真正的“物理居中”。虽然 CSS Grid 的 `place-items: center` 能轻松实现视口居中，但当用户开启浏览器侧边栏时，视口中心会向一侧偏移，使得内容不再处于屏幕正前方。作者最初尝试通过 `window.innerWidth` 和 `outerWidth` 的差值来计算偏移量，但发现这无法区分侧边栏是在左侧还是右侧，尤其是在开启开发者工具时更为复杂。</p><p>最终，作者发现了一个巧妙的技巧：利用受信任的指针事件（Pointer Event）。通过对比 `event.screenX`（屏幕坐标）和 `event.clientX`（视口坐标），可以精确推算出视口在浏览器窗口中的具体位置。基于此逻辑，作者编写了脚本来动态调整容器的 `translate` 属性。这种做法的权衡在于，它打破了浏览器对视口的常规定义，如果处理不当，可能会导致内容溢出或被 UI 遮挡。作者将其封装成了一个可选的浏览器扩展，旨在让那些追求极致视觉对称的用户在不影响页面流式布局的前提下，获得更好的阅读体验。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49176884" target="_blank" rel="noopener noreferrer">@seg6</a>
+        </div>
+        <p class="comment-text">水平居中一个元素的初衷是为了确保你正在查看的内容直接呈现在你面前。带有侧边栏的浏览器会将内容向右移动（假设侧边栏在左侧），我越来越不喜欢这种感觉了！其他人也表达过类似的偏好，所以我才在我的网站上加了这段代码。</p>
+        <p class="comment-reason"><span>入选理由</span>作者亲自解释了开发这一功能的初衷，即追求视觉上的物理对称。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49176894" target="_blank" rel="noopener noreferrer">@JoshTriplett</a>
+        </div>
+        <p class="comment-text">当我打开侧边栏时，这个网站的做法似乎会随机导致两种结果之一：1) 侧边栏遮挡了内容，而内容右侧留有空白；2) 内容移出了屏幕右边缘，左侧留下一大片空白。这两种情况都是错误的。如果我打开了侧边栏，网站就应该变窄，别再自作聪明了。我的第一反应是：为什么浏览器要把这些信息提供给网站？我们能不能停止这种行为？</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了这种“聪明”做法在实际使用中可能导致的布局破坏和用户体验问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49176938" target="_blank" rel="noopener noreferrer">@wizzwizz4</a>
+        </div>
+        <p class="comment-text">作为一项原则，你不应该在网站中添加功能来补偿浏览器的“不良特性”。想要浏览器以不同方式工作的人可以换个浏览器：这就是为什么我们称它们为“用户代理（user agents）”。把网页搞得这么复杂，主要后果是让人们更难使用替代浏览器，或者让浏览器在不破坏兼容性的情况下很难改进其特性。</p>
+        <p class="comment-reason"><span>入选理由</span>从 Web 开发哲学的高度审视了网站干预浏览器 UI 行为的潜在负面影响。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49176868" target="_blank" rel="noopener noreferrer">@krick</a>
+        </div>
+        <p class="comment-text">截图会很有帮助，因为（你可能会惊讶地发现）哪种行为模式才是“错误”的并不完全显而易见。总之，我不觉得它现在的表现很优雅。我在 Firefox 上测试打开左侧书签栏：首先会有难看的闪烁，因为浏览器先渲染了“错误”版本，然后你的 JS 才去“修复”它。其次存在并发问题，通过反复开关书签栏，我居然同时触发了两个版本：既相对于视口居中，又被侧边栏覆盖。而且，正如其他人所说，我也认为允许侧边栏遮挡网页内容是完全荒谬的。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了具体的测试反馈，指出了 JS 实现方案带来的闪烁和逻辑冲突等技术缺陷。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>在 Web 开发中，“居中”曾是困扰开发者多年的难题，而当我们终于拥有了 Flexbox 和 Grid 之后，浏览器 UI 的演进（如 Arc 的垂直标签页或 Firefox 的侧边栏）又打破了“视口即中心”的假设。作者的尝试反映了一种极客式的审美坚持：内容应当在物理屏幕上居中，而非在被挤压后的剩余空间里居中。然而，正如评论区所指出的，这种做法挑战了“用户代理”的基本原则——即网站不应试图越权控制浏览器 UI 逻辑。这种技术上的“越界”虽然满足了特定审美，却极易引发布局崩溃或视觉闪烁，提醒我们在追求完美设计的道路上，尊重标准视口定义往往是更稳健的选择。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49176606">
+      <summary class="story-overview">
+        <span class="rank-number">06</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">blog.hartwork.org</span>
+            <span>88 points</span>
+            <span>原始 #1 · 低讨论量降权 +13.8</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://blog.hartwork.org/posts/libexpat-city-of-munich-open-source-sabbatical/" target="_blank"
+              rel="noopener noreferrer">libexpat now funded by the City of Munich for up to 6 months</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49176606" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 4</a>
+          </h2>
+          <p class="summary">广泛使用的 C 语言流式 XML 解析器 libexpat 宣布，其维护者 Sebastian Pipping 已获得慕尼黑市为期最长 6 个月的全职资助。这项资助通过该市的“开源休假”（Open Source Sabbatical）计划实施，旨在让开发者能集中精力改进关键开源项目。在过去十年中，Sebastian 一直在业余时间维护该库，而现在他将作为“正职”处理安全漏洞修复和日常维护。libexpat 是全球软件基础设施的重要组成部分，与 libxml2 并列为最核心的 XML 解析工具。尽管此次资助为项目带来了急需的资源，但 6 个月的期限也凸显了开源基础设施长期资金保障的局限性。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>libexpat 维护者 Sebastian Pipping 近日宣布，他已通过慕尼黑市的“开源休假”项目获得资助，将从 2026 年 8 月起全职投入该项目的维护工作，为期最长 6 个月。libexpat 是一个高性能、跨平台的 C99 流式 XML 解析器，与 libxml2 一起构成了现代软件中处理 XML 数据的基石。在过去的十年里，Sebastian 一直在全职工作之余利用碎片时间维护该项目，面临着精力分配和项目积压的巨大挑战。此次资助由慕尼黑市下属的 digital@M 机构通过正式劳动合同提供，使他能够将维护工作视为“正职”。</p><p>在接下来的半年里，Sebastian 的首要任务是修复安全漏洞，包括 Mozilla 最近发现的一个漏洞，并处理长期积累的维护任务。慕尼黑市的这一计划不仅面向其内部员工，也向外部开发者开放，体现了公共部门对开源数字基础设施的直接支持。这种模式为解决开源软件“公地悲剧”提供了一个有趣的案例，即由受益于这些工具的公共机构直接出资。然而，这种短期资助也存在权衡：虽然它能解决燃眉之急，但对于像 libexpat 这样需要数十年持续维护的项目，如何建立长效的财务支持机制依然是一个悬而未决的问题。开发者也呼吁社区利用这段“窗口期”提交高质量的安全发现，以充分利用这半年的全职维护资源。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49176828" target="_blank" rel="noopener noreferrer">@weinzierl</a>
+        </div>
+        <p class="comment-text">更深层的背景是，直到 2014 年卸任的前市长 Christian Ude 推动了 LiMux 项目——将公共行政部门的 14000 多台电脑迁移到了 Linux。鲍尔默和盖茨都曾亲自拜访他，施压要求他留在微软阵营，但他并未退缩。不幸的是，他的继任者屈服于微软的诱惑，废除了 LiMux，随后微软在市中心获得了一个漂亮的园区（他们以前在郊区）。自今年 5 月起，我们迎来了年轻有活力的 Dominik Krause，变革的希望再次燃起。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了慕尼黑市与开源运动之间深厚且曲折的历史背景，有助于理解此次资助的政治意义。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49176764" target="_blank" rel="noopener noreferrer">@wxw</a>
+        </div>
+        <p class="comment-text">https://opensource.muenchen.de/sabbatical.html
+&gt; “开源休假”旨在为具备专业资格的软件开发者提供在限定时间内从事开源项目的机会，以对其进行改进。
+&gt; 该休假计划不仅向慕尼黑市的员工开放，也向外部软件开发者开放。
+太酷了。祝贺 Sebastian！</p>
+        <p class="comment-reason"><span>入选理由</span>明确了该资助计划的性质和开放性，对其他开发者具有参考价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49177242" target="_blank" rel="noopener noreferrer">@kristianp</a>
+        </div>
+        <p class="comment-text">这是关于 libxml2 维护者退出支持的相关讨论。当然，libexpat 是另一个不同的库。
+https://news.ycombinator.com/item?id=45283196
+（10 个月前 | 119 条评论）</p>
+        <p class="comment-reason"><span>入选理由</span>通过对比另一个核心 XML 库的维护困境，强调了此类底层基础设施获得资助的重要性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>libexpat 获得慕尼黑市的资助是一个令人振奋的信号，它展示了地方政府如何通过直接资助核心开发者来保护全球数字基础设施。慕尼黑市在开源领域有着复杂的历史，从著名的 LiMux 迁移尝试到后来的反复 [49176828]，这次通过“开源休假”计划支持 libexpat 维护者，似乎标志着其对开源承诺的回归。考虑到 libxml2 等同类项目曾面临的维护者流失危机 [49177242]，这种由公共资金支持“数字公地”的模式值得更多城市效仿。虽然 6 个月的全职合同只是杯水车薪，但它为这个支撑着无数现代应用的底层库赢得了宝贵的安全加固时间。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49176644">
+      <summary class="story-overview">
+        <span class="rank-number">07</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">unit42.paloaltonetworks.com</span>
+            <span>31 points</span>
+            <span>原始 #6 · 低讨论量降权 +9</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://unit42.paloaltonetworks.com/passwordless-authentication-security-risks/" target="_blank"
+              rel="noopener noreferrer">Pass the Passkey: A Novel Attack Surface in Passwordless Authentication</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49176644" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 20</a>
+          </h2>
+          <p class="summary">Palo Alto Networks 的研究人员揭示了针对 Google 同步通行密钥（Passkey）系统的三种新型攻击，统称为“Pass-ta-key”。这些攻击利用了 Google 云端验证器在处理设备身份和同步逻辑时的设计缺陷，允许恶意软件在无需用户交互、无需生物识别验证的情况下冒充用户。其中最严重的攻击能让攻击者在自己的设备上注册伪造的验证密钥，从而实现脱离受害者设备的持久化访问。虽然这些攻击的前提是终端已被恶意软件感染，但它打破了通行密钥“不可复制”和“必须物理存在”的核心安全承诺。目前，Google 和受影响的网站（如 eBay）已针对报告的漏洞进行了修复。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这项研究深入探讨了 Google 在 Chrome 和 Windows 环境下实现通行密钥同步的底层机制。核心问题在于 Google 使用了一个“云端验证器”（Cloud Authenticator）来管理跨设备的密钥同步，而恶意软件可以滥用这一机制。在基础的“Pass-ta-key”攻击中，恶意软件利用 Windows 的 TPM 接口，在不提权的情况下调用硬件绑定的身份密钥，为云端验证器的请求进行静默签名。如果目标网站对“用户验证”（UV）标志位的校验不严，攻击者就能直接登录。</p><p>更高级的“Silver Pass-ta-key”攻击则瞄准了设备初始化流程。通过强制触发重新注册，攻击者可以利用 Google 延迟创建验证密钥的逻辑漏洞，将自己控制的公钥注入云端验证器。一旦成功，攻击者就可以在自己的机器上生成合法的登录凭证，完全不需要受害者的设备在线。最后，“Golden Pass-ta-key”甚至能导出所有同步的私钥。这些发现表明，尽管通行密钥在协议层面非常安全，但为了追求“无缝同步”的便利性，厂商在实现过程中引入了复杂的中间层，这些中间层反而成为了新的攻击面。开发者需要意识到，仅仅依靠硬件保护是不够的，云端逻辑的严密性同样至关重要。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49177244" target="_blank" rel="noopener noreferrer">@amluto</a>
+        </div>
+        <p class="comment-text">这与我一直以来对 TPM 的一个主要槽点有关：TPM 只关心全局设备状态，完全没有“设备可能是多用户系统”、“存在不同安全级别的多个进程”或“多租户”之类的概念。例如，理应可以这样封装一个秘密：只有当 PCR（平台配置寄存器）达到特定值，且操作请求者被操作系统（软件可信计算基）标记为具有特定身份时，才能解封。但 TPM 规范中完全缺失了后半部分身份识别。如果 TPM 能按我设想的方式工作，那么在 Chrome 旁边运行的一个非特权进程将完全无法利用 TPM 来冒充 Chrome。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从底层硬件架构的角度解释了为什么恶意软件能够轻易调用本应属于特定应用的 TPM 密钥。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49177076" target="_blank" rel="noopener noreferrer">@tptacek</a>
+        </div>
+        <p class="comment-text">这些是针对终端恶意软件的攻击，而不是针对通行密钥（Passkeys）本身的攻击。一旦攻击者处于这种位置（感染了终端），游戏基本上就已经结束了。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个重要的现实观点：如果用户的电脑已经被黑了，讨论某种特定认证方式的安全性可能已经失去了实际意义。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49177027" target="_blank" rel="noopener noreferrer">@MBCook</a>
+        </div>
+        <p class="comment-text">天哪，我真受够了人们给攻击起各种花哨的名字，这并不能帮人记住它们，而且名字实在太多了。实际上，这三种所谓的“Pass-ta-key”攻击并不是针对通行密钥本身的攻击，而是针对 Google 保险箱（Google Vault）的攻击。如果你拿到了保险箱的访问权限，你就能拿到一切。这很正常，如果你拿到了同步的传统密码库的权限，你也能拿到一切。所以……也就那样吧。这些是漏洞，会被修复的。披露它们是好事，但这并不能证明通行密钥很糟糕，也不能说明它们不如随机密码安全。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论冷静地指出攻击的本质是同步服务的实现漏洞，而非通行密钥协议本身的缺陷，有助于读者理性看待安全新闻。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49176893" target="_blank" rel="noopener noreferrer">@colemannugent</a>
+        </div>
+        <p class="comment-text">哈？如果你已经拥有了这种级别的本地权限，你不是可以直接从浏览器的存储中读取会话 Cookie 吗？我猜窃取所有密钥确实值得关注，但拥有这种权限后，你可以操纵任何密码管理器吧？这里的威胁模型是什么？难道是要求同步的通行密钥即使在客户端被攻破的情况下也必须是安全的？这怎么可能做到？</p>
+        <p class="comment-reason"><span>入选理由</span>评论者质疑了该研究的威胁模型，对比了通行密钥窃取与传统的 Cookie 窃取，引发了关于安全边界的讨论。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>通行密钥（Passkey）一直被宣传为“不可被盗”的认证终结者，但 Palo Alto Networks 的这项研究给我们泼了一盆冷水。问题的核心在于“同步”与“安全”的永恒矛盾：为了让用户在换手机或电脑时能找回密钥，Google 必须建立一套复杂的云端恢复机制。正如评论区指出的，这其实是 Google 云端保险箱的实现漏洞，而非 FIDO 协议本身的失败。然而，这种“Pass-the-key”式的攻击确实打破了人们对硬件保护（TPM）的盲目迷信——如果操作系统不能区分是 Chrome 还是恶意软件在请求签名，那么硬件锁也就形同虚设。对于普通用户来说，这再次证明了：没有任何认证技术能救回一台已经中毒的电脑。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49176038">
+      <summary class="story-overview">
+        <span class="rank-number">08</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">earendil.com</span>
+            <span>64 points</span>
+            <span>原始 #5 · 低讨论量降权 +10.5</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://earendil.com/posts/pi-autoresearch-and-databricks/" target="_blank"
+              rel="noopener noreferrer">Pi&#x27;s Minimalism Is Its Advantage</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49176038" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 15</a>
+          </h2>
+          <p class="summary">Pi 是一款主打极简主义的 AI 编程框架，其核心优势在于极高的“上下文自律”。它仅内置 4 个工具，系统提示词不足 1000 token，旨在减少冗余指令对模型的干扰。Databricks 的研究表明，这种设计能显著降低成本并提升任务成功率，表现优于 Claude Code 等复杂工具。Shopify 的案例证明，通过其强大的扩展性，用户可以定制出极高性能的自动化流程。然而，这种极简也意味着用户需要投入更多精力来打磨适合自己的工具链，而非开箱即用。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Pi 的设计哲学与当前 AI 行业追求复杂编排的趋势背道而驰。它默认仅提供四个基础工具，并将系统提示词压缩至极小规模，这种“上下文自律”确保了模型不会被淹没在冗余的指令层级中。Databricks 的基准测试显示，在处理真实世界的大规模代码库任务时，Pi 的成本效率比 Claude Code 或 Codex 高出数倍，且在相同模型下能获得更高的任务通过率。这种优势源于它每轮对话发送的上下文更少，从而保持了更紧凑的工作集并减少了运行轮次。</p><p>Pi 的另一个核心竞争力是其极强的可扩展性。Shopify 工程团队利用 Pi 开发了 Autoresearch 扩展，通过自主循环优化代码，实现了单元测试速度提升 300 倍、构建时间大幅缩短等显著成果。Pi 并不预装这些功能，而是让用户通过简单的对话就能构建出符合特定工作流的扩展。这种“按需增加复杂度”的模式，避免了通用工具常见的性能损耗和功能冗余。对于本地模型用户而言，Pi 的低开销特性尤为重要，因为它能有效节省有限的上下文窗口并缩短预填充时间。然而，这种“Emacs 式”的体验也意味着用户必须跨越一定的学习曲线，并亲自处理扩展中的 Bug 或 UI 冲突。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49177124" target="_blank" rel="noopener noreferrer">@hakunin</a>
+        </div>
+        <p class="comment-text">我经常觉得人们说“直接让 Pi 帮你写个扩展”这种话太简单化了。我把它作为唯一的工具用了几个月，发现写个扩展容易，但要写出一个真正好用、能帮上忙的扩展很难。我的建议是：先专注于完成工作，然后在过程中通过微小的增强来慢慢调整 Pi。你可以从原生配置开始工作，当有了合适的想法时再尝试。要随时准备好改进它，最重要的是，要随时准备好撤销这些添加。我就撤销过好多次。许多“内置”的功能往往源于某些人一时兴起的、半生不熟的想法。在实践中，这些想法可能达不到预期效果，而它们的创造者可能早就转去做别的了。所以，要么学习非常成熟的工具，要么就慢慢塑造属于你自己的工具。例如，许多自动记忆系统并没啥用。我写了一个小扩展，让它询问我是否应该记住某件事（并写入特定范围的 SKILL 或 AGENTS 文件）。结果发现我接受的建议不到 5%。大多数都是没用的临时信息，只会污染上下文。我无法想象如果不人工把关，会堆积多少垃圾。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提供了关于“极简主义”在实际操作中的深度思考，强调了工具演进需要克制和人工干预。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49176827" target="_blank" rel="noopener noreferrer">@malisper</a>
+        </div>
+        <p class="comment-text">在尝试了所有的编程框架后，我发现使用 Pi 就像使用 Emacs 一样。任何你想构建的东西，你都可以要求你的智能体去构建，而且有大量的现有代码可以帮你配置它。但与此同时，一半的代码是有 Bug 的，UI 元素会互相重叠，而且你会周期性地遇到崩溃。如果你愿意投入精力去克服学习曲线并解决这些问题，它会是一个伟大的工具。</p>
+        <p class="comment-reason"><span>入选理由</span>将 Pi 类比为 Emacs 非常精准地捕捉到了其高度可定制但门槛较高的特性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49177322" target="_blank" rel="noopener noreferrer">@suprjami</a>
+        </div>
+        <p class="comment-text">我同意你第一段的观点，但我不想花几周或几个月的时间去“凭感觉编程”来实现那些几乎在其他所有智能体中都内置的基础功能。也许 Claude/OpenCode/KiloCode/Hermes 之类的工具不像 Pi 那么极简，但它们现在就能用。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个重要的反面视角：对于追求即战力的用户，极简主义可能意味着重复造轮子的负担。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49177031" target="_blank" rel="noopener noreferrer">@pavo-etc</a>
+        </div>
+        <p class="comment-text">我在服务器上以无头模式运行 Pi，并将其封装在 XMPP 客户端中，取得了很大成功。这意味着我可以在任何能访问 XMPP 的地方（几乎是所有地方）与它交谈。这也意味着智能体之间可以在需要时互相交流。它们有一个共享的 wiki 进行交互，并使用 GitHub issues 作为待办事项列表。我在 NixOS 的独立用户账户中并行运行了几个命名的 Pi 实例，这样它们就可以在临时 shell 中安装任何想要的东西，而我永远不需要担心它们的环境。如果我要求，智能体可以启动新的 XMPP 智能体。我主要配合 Deepseek v4 Flash 使用，在我离开电脑或在旅途中时处理编码任务或服务器维护。NixOS 是关键，因为智能体可以查看整个服务器配置，进行更改并在实际部署前运行编译时检查。这也意味着即使它们搞砸了，我也可以随时回滚。</p>
+        <p class="comment-reason"><span>入选理由</span>展示了 Pi 极简架构下极高的技术上限和灵活的部署方案。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49177288" target="_blank" rel="noopener noreferrer">@unknownfuture</a>
+        </div>
+        <p class="comment-text">老实说，我觉得我最喜欢 Pi 的一点是，我不需要面对一个拥有一千个未发现功能的工具。我要么从包生态系统中选择并安装我想要的，要么在发现最适合自己的工作流时将其封装成扩展。结果就是，这个工具会逐渐演变成我需要的样子，而不是让我去适应 Anthropic 或 OpenAI 提出的任何新玩意。我还可以确信，它变成的样子是我真正需要的，而不是为了最大化 Token 使用量而设计的……</p>
+        <p class="comment-reason"><span>入选理由</span>从用户心理角度解释了为什么“少即是多”在 AI 工具时代具有吸引力。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Pi 的崛起反映了开发者工具领域的一个经典轮回：从“开箱即用”的集成工具回归到“高度可定制”的极简框架。正如评论所言，Pi 更像是一个“形状正确”的底层架构，而非一个完美的成品。它将选择权交还给了用户，但也要求用户承担起“工具制造者”的角色。在 AI 辅助编程日益同质化的今天，这种通过“克制”换取的“上下文自律”和“个性化”，或许才是高级开发者突破生产力瓶颈的关键。然而，正如 Emacs 一样，这种自由是以极高的学习和维护成本为代价的，它注定属于那一小部分追求极致掌控感的开发者。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49176830">
+      <summary class="story-overview">
+        <span class="rank-number">09</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">queue.acm.org</span>
+            <span>29 points</span>
+            <span>原始 #2 · 低讨论量降权 +13.8</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://queue.acm.org/detail.cfm?id=3807963" target="_blank"
+              rel="noopener noreferrer">Eight Myths on Software Engineering and GenAI</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49176830" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 4</a>
+          </h2>
+          <p class="summary">由于原文章无法直接访问，本摘要基于其标题及社区讨论。文章旨在破除关于生成式人工智能（GenAI）在软件工程中的八个误区。核心论点是，开发者实际编写代码的时间仅占约14%，因此AI提升编码速度对整体生产力的贡献可能被夸大。软件开发的真正挑战在于需求分析、系统设计和团队间的沟通协调。如果AI不能解决这些非编码环节的瓶颈，其对工程效率的改变将是有限的。目前尚不清楚AI能否在处理复杂的人际协作和架构决策方面发挥同样的作用。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>本文探讨了GenAI在软件工程领域被误解的现状，重点反驳了“编码是主要瓶颈”的观点。根据微软等公司的研究，程序员只有一小部分时间（约14%）在敲代码，其余时间则花在调研、规划、测试和沟通上。这意味着，即便AI能瞬间生成代码，项目整体进度仍受限于那些无法自动化的环节。文章可能还涉及了AI生成的代码质量及其带来的维护负担，这些都可能抵消最初的开发速度提升。另一个关键点是“协调税”，即在大型组织中，达成共识和解决冲突所消耗的时间远超编写逻辑本身。开发者们开始发现，虽然AI可以作为代理并行处理任务，但人类的角色正从“编写者”转向“驱动者”和“审查者”。未来需要观察的是，AI工具是否能进化到协助处理复杂的系统架构和跨团队同步。目前，GenAI更多是在优化局部，而非重塑整个软件生命周期的效率。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>2 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49177287" target="_blank" rel="noopener noreferrer">@simonw</a>
+        </div>
+        <p class="comment-text">“我们已经知道开发者实际上大部分时间并不在写代码，微软等机构的研究表明这个比例接近 14%。”
+有没有人发现自己现在花在写代码（或者至少是驱动代理去写代码）上的时间变多了？
+过去 14% 对我来说确实挺准的——我会把剩下的时间花在研究方案和库、在 issue 中做规划，或者有时只是苦思冥想遇到的难题。
+现在……我依然在做这些事，但其中很多事做得更快了——而且我经常是在我的编码代理埋头写代码的同时做这些事。
+还有一个奇怪的效应：问题越难，我能与之并行完成的工作就越多，因为代理可能需要 20 分钟在没有我参与的情况下处理它。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提供了开发者在使用AI工具后工作模式发生真实转变的一手经验，补充了文章中关于编码时间占比的观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49177331" target="_blank" rel="noopener noreferrer">@sublinear</a>
+        </div>
+        <p class="comment-text">你忘了在那个流程里加上“协调”。那绝对是目前为止最大的延迟来源。
+这包括与供应商交谈、在只要有一个人固执己见时就得与每一层利益相关者开会，等等。</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了软件工程中真正的效率杀手——组织协调，这是AI目前难以触及的领域。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>软件工程界一直有个幻觉：只要代码写得快，项目就能早完工。但“14%”这个数字无情地揭示了现实——程序员的大部分精力其实耗在了“想清楚”和“对齐”上。正如评论区 simonw 所观察到的，AI 确实改变了工作流，让我们从“写作者”变成了“调度员”，甚至能并行处理多个任务。然而，如果 AI 无法触及 sublinear 提到的“协调”这一深层瓶颈，它就只是在局部优化一个非核心环节。真正的效率革命，或许不在于 AI 能写多少行代码，而在于它能否帮我们少开几个没结果的会。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49172836">
+      <summary class="story-overview">
+        <span class="rank-number">10</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">waymo.com</span>
+            <span>241 points</span>
+            <span>原始 #17 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://waymo.com/blog/shorts/dallas-open-to-all/" target="_blank"
+              rel="noopener noreferrer">Waymo in Dallas</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49172836" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 330</a>
+          </h2>
+          <p class="summary">Waymo 宣布其无人驾驶出租车服务在达拉斯正式向公众全面开放，取消了之前的候补名单。自今年 2 月启动试点以来，该服务已接待了近 15 万名乘客，涵盖了日常通勤和夜间出行等场景。目前，Waymo 正在达拉斯爱田机场航站楼进行全自动驾驶测试，并计划很快开始高速公路测试。这项服务的普及为患有癫痫等无法驾驶疾病的群体提供了新的独立出行方式。尽管进展迅速，但目前服务仍受地理围栏限制，且高速公路路段尚未对公众开放。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Waymo 在达拉斯的全面开放标志着其无人驾驶商业化进程迈出了重要一步。从即日起，任何达拉斯居民或游客都可以通过 App 直接叫车，无需再排队等待。自 2 月份进入该市场以来，Waymo 已经积累了 15 万名用户的出行数据，证明了其在复杂城市环境中的可靠性。目前，该服务的核心价值在于为无法独立驾驶的群体（如癫痫患者）提供安全、自主的交通选择，这得到了当地医疗公益组织的积极评价。</p><p>技术层面，Waymo 正在攻克最后几个关键环节。公司已开始在达拉斯爱田机场进行航站楼区域的测试，并准备将全自动驾驶引入达拉斯繁忙的高速公路网。高速公路测试被视为提供高效长途服务的“最后一步”，因为这涉及到更高的行驶速度和更复杂的并线决策。此外，Waymo 坚持使用激光雷达（LiDAR）的多传感器融合方案，这与特斯拉的纯视觉方案形成了鲜明对比，旨在通过冗余数据确保极高的安全性。未来的观察重点将在于 Waymo 如何处理极端天气下的高速行驶，以及其服务范围能否进一步覆盖达拉斯广阔的郊区地带。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49174272" target="_blank" rel="noopener noreferrer">@cortesoft</a>
+        </div>
+        <p class="comment-text">我住在洛杉矶国际机场（LAX）附近，我们这一带有很多 Waymo。起初我有点担心，觉得它们怪怪的。但现在它们已经变得完全常态化了，而且造成的交通意外比人类司机少得多。它们非常守规矩，当你变道时它们总是会让你（不像很多洛杉矶司机）。我也见过几次它们似乎“卡住”的情况，虽然有点烦人也有点搞笑，但同样，这种情况发生的频率远低于人类司机。我也喜欢坐 Waymo，上车后可以放松，不用和任何人说话，也不用担心谁来接你。你可以通过手机控制温度和音乐，精准设置上下车点，行驶过程平稳舒适。我们可以争论 Waymo 的各种连锁反应，但用户体验确实非常棒。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了来自高频使用地区的真实用户反馈，对比了无人驾驶与人类司机的行为差异。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49176261" target="_blank" rel="noopener noreferrer">@eagleinparadise</a>
+        </div>
+        <p class="comment-text">作为一名从事商业地产、参与过约 3 亿美元住房开发（包括部分保障房）的人，我会毫不怀疑地说，无人驾驶汽车是一项非常有效的保障房政策，但目前还没有人考虑或讨论这一点。任何投入到住房建设中的公共资金，基本上都会增加 50% 的成本，而且交付周期会延长 2-3 倍。因此，城市应该租赁 Waymo（或其他品牌），并提供给停车位有限的保障房租户使用。在 95% 的交易中，建造不带停车位的住房是不可行的，你根本拿不到融资。相反，如果你能向投资者和贷款人提供一份协议，为每 3 个单元提供一辆车，租户拥有优先免费使用权（或每月补贴一定金额），那么你就解决了“人们停在哪儿以及如何去上班”的顾虑。这比花费 1000 亿美元、耗时 200 年去建设公共交通要高效得多。每年的租赁成本是多少？3 万美元？一辆车每天可以全职服务 4 到 10 个单元。在非高峰时段，这些车还可以租给公众以抵消运营成本。这更具成本效益，而且今天就可以做，而不是等复杂的融资、审批和建设耗费掉十年时间。</p>
+        <p class="comment-reason"><span>入选理由</span>从房地产开发和城市规划的独特视角，提出了无人驾驶技术解决住房成本问题的新颖观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49174679" target="_blank" rel="noopener noreferrer">@epolanski</a>
+        </div>
+        <p class="comment-text">这非常有趣，因为一方面我们有明确的数据表明，Waymo 这种水平的自动驾驶汽车比人类更安全。但另一方面，我们并没有给技术提供与人类同等的宽容度，这意味着我们对机器事故的容忍程度远低于人类事故。这意味着自动驾驶汽车需要比人类安全一个数量级才行。尽管自动驾驶汽车永远不会产生路怒症，也不会在圣诞集市上把车当成武器，但我们仍然能容忍人类驾驶，却无法容忍那偶尔发生的、十亿分之一概率的 AI 错误导致的事故。</p>
+        <p class="comment-reason"><span>入选理由</span>深刻探讨了社会对机器与人类安全标准的双重标准，这是自动驾驶普及面临的心理障碍。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49175323" target="_blank" rel="noopener noreferrer">@pyaamb</a>
+        </div>
+        <p class="comment-text">埃隆（马斯克）在技术逻辑上可能是正确的，即“如果人类仅凭视觉就能开车，那么纯视觉方案没有理由行不通”，但事实证明，这在学习路径上是错误的策略。激光雷达（Lidar）提供了一个恒定的数据流，可以让你对照视觉进行自我检查并迭代学习。一旦训练完成，你甚至可以关掉它。而特斯拉的策略最终不得不依赖人类司机提供错误反馈，这使得学习闭环变得漫长得多。</p>
+        <p class="comment-reason"><span>入选理由</span>对比了 Waymo 和特斯拉在自动驾驶技术路径上的根本差异，解释了 Waymo 目前领先的原因。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49175281" target="_blank" rel="noopener noreferrer">@vb-8448</a>
+        </div>
+        <p class="comment-text">我只是好奇法律层面是如何运作的：如果一个人闯红灯，他会收到罚单；如果是 Waymo 闯了红灯，谁被罚款？如果我坐的车造成了重大损失或致人死亡怎么办？我猜损失会由保险支付，但那是谁的保险？我的还是 Waymo 的？刑事责任又该如何界定？保险肯定不涵盖刑事责任。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了无人驾驶普及过程中不可回避的法律责任和保险理赔问题。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Waymo 在达拉斯的全面开放，标志着无人驾驶正从“昂贵的科学实验”转向“日常基础设施”。虽然特斯拉的 FSD 占据了更多社交媒体头条，但 Waymo 凭借激光雷达方案在特定城市区域内实现了更稳健的商业落地。有趣的是，讨论中出现了一个被忽视的视角：无人驾驶可能是解决城市住房危机的“奇兵”。如果能通过共享自动驾驶车队减少对建筑停车位的刚需，不仅能大幅降低开发成本，还能释放大量城市土地。然而，正如评论所指出的，社会对机器错误的“零容忍”心理和尚未完善的法律责任框架，仍是这项技术全面取代人类司机的最大软肋。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49175924">
+      <summary class="story-overview">
+        <span class="rank-number">11</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">techascent.com</span>
+            <span>45 points</span>
+            <span>原始 #4 · 低讨论量降权 +14.1</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://techascent.com/blog/just-ducking-around.html" target="_blank"
+              rel="noopener noreferrer">DuckDB – Data power tools for your laptop, now in Clojure (2023)</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49175924" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 3</a>
+          </h2>
+          <p class="summary">DuckDB 作为一个高性能的向量化 SQL 引擎，正成为 Clojure 数据科学生态中处理超大规模数据集的关键工具。通过 tmducken 库，Clojure 开发者可以将 DuckDB 与 tech.ml.dataset 集成，实现在笔记本电脑上处理超出内存限制的数据。该集成利用了 DuckDB 的 C 接口进行批量插入和查询，支持在数秒内完成数亿行数据的关联操作。它还提供了零拷贝查询路径，最大限度地降低了内存占用，避免了传统 JDBC 接口在行列转换时的性能损耗。这种方案的核心价值在于让小团队无需依赖昂贵的分布式集群，即可在本地高效管理数十 GB 的关系型数据。虽然 DuckDB 在本地分析上表现卓越，但在多用户并发写入场景下仍有其局限性。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>传统的 Clojure 数据处理工具如 tech.ml.dataset 在处理内存可容纳的数据时表现出色，但面对 50GB 以上的 CSV 文件或复杂的关联查询时，开发者往往被迫转向 Spark 等复杂的分布式系统。TechAscent 开发的 tmducken 库通过集成 DuckDB，为这一难题提供了“单机大数据”的解决方案。DuckDB 采用列式存储和向量化执行引擎，能够自动为数值列创建 minmax 索引，极大地提升了查询效率。在实际演示中，它仅需不到 2 分钟即可将 50GB 的 CSV 导入为 18GB 的压缩数据库文件，并能在 2.5 秒内完成涉及 14 亿行数据的内连接查询。</p><p>该集成的技术亮点在于其对 DuckDB C 接口的深度利用，支持批量数据交换，克服了早期版本必须将结果全部载入内存的限制。开发者可以通过 Clojure 的 reduce 函数流式处理查询结果，配合“零拷贝”模式，确保在处理海量数据时内存占用保持在极低水平。这种模式非常适合那些希望保留函数式编程优势，同时又需要关系型数据库持久化和事务特性的场景。随着 DuckDB 对 Parquet 等存储格式支持的完善，这种利用本地 NVMe 硬盘和高速 CPU 的处理模式，正在成为替代昂贵 SaaS 监控和分析方案的新选择。未来值得关注的是该生态在处理更复杂数据类型（如嵌套对象）时的性能表现和易用性提升。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49176989" target="_blank" rel="noopener noreferrer">@kianN</a>
+        </div>
+        <p class="comment-text">我是 tmducken 的忠实粉丝，我们在生产系统中大量使用它。话虽如此，我们最近在一些新项目中开始探索 ducktape [1]，其性能给我们留下了深刻印象。它在插入和查询时支持更复杂的类型，这对我们很有帮助。我与该项目没有隶属关系，只是想给它一点支持，因为它比较新，是由 tmducken 的一位活跃贡献者创建的。
+[1] https://github.com/dynamic-alpha/ducktape</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于 Clojure 生态中 DuckDB 集成工具的最新替代方案和实际使用经验。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49177043" target="_blank" rel="noopener noreferrer">@encoderer</a>
+        </div>
+        <p class="comment-text">在 Cronitor，我们使用 ClickHouse，但在下一个产品中我们将弃用它，直接构建在 Parquet 和 DuckDB 之上。我们认为 AI 时代的观测性（observability）未来是直接在 NVMe 上自托管，并由廉价且无限的对象存储提供支持。我不想把客户的对话和智能体的思考发送给像 Sentry 或 BetterStack 这样的大型多租户 SaaS 数据库。</p>
+        <p class="comment-reason"><span>入选理由</span>从架构演进的角度探讨了 DuckDB 如何改变数据存储和隐私保护的范式。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49177153" target="_blank" rel="noopener noreferrer">@eterm</a>
+        </div>
+        <p class="comment-text">DuckDB 的命令行工具（CLI）非常强大，它可以加载像 gzipped json lines 这样多样化的文件，因此你可以直接把压缩后的日志塞进目录里，在需要时依然能轻松地用 SQL 查询它们。</p>
+        <p class="comment-reason"><span>入选理由</span>强调了 DuckDB 在处理原始日志文件时的便捷性和灵活性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>DuckDB 的崛起标志着“单机计算回归”的趋势。在过去十年里，处理几十 GB 的数据往往意味着要折腾复杂的 Spark 集群或支付昂贵的 SaaS 账单，但正如本文和评论所指出的，现代 NVMe 硬盘和向量化引擎的结合，让笔记本电脑重新拥有了挑战分布式系统的底气。特别是对于 Clojure 社区而言，这种集成不仅解决了内存限制，还通过“零拷贝”等技术保持了函数式编程的优雅。正如评论中提到的，这种“本地优先”的架构不仅是为了性能，更是为了在 AI 时代重新夺回对敏感数据的控制权。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49166386">
+      <summary class="story-overview">
+        <span class="rank-number">12</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">github.com</span>
+            <span>365 points</span>
+            <span>原始 #21 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://github.com/ryanzhou/deepseek-v4-flash-mi300x" target="_blank"
+              rel="noopener noreferrer">DeepSeek V4 Flash on a Single AMD MI300X</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49166386" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 87</a>
+          </h2>
+          <p class="summary">开发者成功在单块 AMD MI300X 显卡上部署了拥有 3040 亿参数的 DeepSeek V4 Flash 模型。通过利用该显卡 192GB 的超大显存和针对性的内核优化，单流解码速度可达每秒 168.6 个 token。该项目解决了 AMD 特有的 FP8 格式兼容性及 MoE 路由错误等关键技术障碍，为高性能推理提供了一个高性价比的方案。这意味着用户无需昂贵的 NVIDIA 多卡集群即可运行顶级大模型。不过，受限于单卡容量，上下文窗口被限制在 256K，且显存几乎被完全占满，缺乏进一步扩展的空间。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>DeepSeek V4 Flash 是一款拥有 304B 参数的大规模专家混合模型（MoE），通常需要多张显卡协同工作。本项目通过优化 vLLM 和 ROCm 软件栈，使其能在单块 AMD MI300X（192GB HBM3 显存）上全权重运行。核心技术包括使用原生的 MXFP4 量化权重以节省空间，并引入 DSpark 投机采样技术来提升解码效率。测试数据显示，在 8 个并发流下，总吞吐量可达 542 tok/s，预填充速度接近每秒 8.5K 个 token。这种表现证明了 MI300X 在显存带宽和容量上的优势，使其成为 H100 的强力竞争者。</p><p>为了实现这一目标，开发者克服了多个硬件适配难题。首先是处理 MI300X 特有的 FNUZ FP8 格式与标准 OCP 格式的差异，防止了计算中的缩放错误。其次，项目修复了 MoE 路由在处理位矩阵对齐时的 Bug，确保了长文本下的逻辑正确性。在显存管理上，采用了 20GB GPU 显存与 96GB CPU 内存的混合 KV 缓存策略，虽然将上下文窗口从 1M 缩减至 256K，但换取了极高的推理稳定性。目前显存占用已接近 205GB 的极限，未来优化的重点将在于如何进一步降低内核开销并提升多并发下的响应速度。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49169347" target="_blank" rel="noopener noreferrer">@WhitneyLand</a>
+        </div>
+        <p class="comment-text">又一个“模型在某硬件上运行”的标题，通常这意味着“让我们列出为了运行它你放弃了什么”。
+弱化了量化吗？并没有。保留了完整的推理权重，到目前为止还不错。
+性能慢吗？也不是。看起来你可以获得超过 150 tokens/秒的速度。
+放弃了上下文窗口大小吗？是的。原始模型是针对 1M 训练并提供服务的，这里是 256k。不过这是一个非常务实的权衡。Codex 也在这个范围内，而且质量在接近全尺寸时确实会开始下降。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论清晰地分析了在单卡上运行大模型的性能权衡，指出了 256k 上下文是一个合理的折中。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49166734" target="_blank" rel="noopener noreferrer">@majke</a>
+        </div>
+        <p class="comment-text">我觉得你买不到单块的“MI300X”单元吧？只能买到装有 8 块这种显卡的整机，成本大约在 25 万欧元左右。</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了 MI300X 硬件在采购上的实际门槛，即通常以整机形式销售而非单卡。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49168154" target="_blank" rel="noopener noreferrer">@xorfish</a>
+        </div>
+        <p class="comment-text">这与 DeepSeek 在他们自己的 H800 上获得的性能还有相当大的差距。在他们的 DSpark 论文中，他们报告的吞吐量是每张 GPU 1.5万 tokens/s。MI300 应该能够与 H800 竞争，所以可能还有相当多的优化空间。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了与 NVIDIA 硬件性能的对比基准，指出了当前方案仍有提升潜力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49172579" target="_blank" rel="noopener noreferrer">@monster_truck</a>
+        </div>
+        <p class="comment-text">根据我的经验，1M 的上下文确实太长了。我第一次从 OpenAI 切换到 DeepSeek V4 Flash 时，花了几个小时反复检查我的测试框架是否正常工作，因为我以为设置错了——它竟然完全不需要压缩上下文！质量下降的程度甚至比 Codex 在压缩过程中的损耗还要小。我惊讶地发现 Codex 的窗口里有多少垃圾是我根本不需要的。DeepSeek 只要 20 美元就能让你走得很远，回想起今年给 OpenAI 交的 1200 美元，如果我早点尝试 DeepSeek，那笔钱能换来多少东西，这让我感到难受。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了 DeepSeek 模型在实际应用中的高性价比和长上下文处理的真实体验。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>在 AI 算力被 NVIDIA 垄断的当下，AMD MI300X 凭借其 192GB 的超大显存正逐渐成为“平替”阵营的希望。ryanzhou 的这个项目展示了开源社区的强大：通过一系列精细的内核补丁和格式修复，硬生生地在单卡上跑通了 304B 参数的 DeepSeek 旗舰模型。虽然 256K 的上下文窗口相比原版的 1M 有所缩水，但正如评论区所言，这对于绝大多数生产环境已绰绰有余。这种“单卡战群雄”的尝试不仅降低了顶级模型的使用门槛，也再次证明了在推理端，显存容量往往比纯算力更具决定性。对于那些对 OpenAI 订阅费感到“肉疼”的开发者来说，这种基于 AMD 硬件的自建方案正变得越来越有吸引力。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49176697">
+      <summary class="story-overview">
+        <span class="rank-number">13</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">mysk.blog</span>
+            <span>24 points</span>
+            <span>原始 #9 · 低讨论量降权 +14.4</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://mysk.blog/2026/08/04/webkit-proxy-icloud-private-relay-ip-leak/" target="_blank"
+              rel="noopener noreferrer">IP and DNS Leaks in WebKit Affecting Proxy Browsers and iCloud Private Relay</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49176697" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 2</a>
+          </h2>
+          <p class="summary">网络安全研究人员在苹果的 WebKit 引擎中发现了三个会导致 IP 和 DNS 泄露的漏洞。这些漏洞影响了所有在 iOS 和 macOS 上使用代理服务器的浏览器，甚至包括苹果自家的 iCloud 专用代理。问题源于 DNS 预取、WebAuthn 凭据验证和 WebTransport 连接这三个功能会绕过应用层的代理设置，直接通过设备真实网络发送请求。这意味着恶意网站可以轻易获取用户的真实 IP 地址或 DNS 服务器信息，从而使隐私保护失效。虽然系统级 VPN 不受此影响，但依赖 WebKit 代理 API 的浏览器（如 Tor 浏览器）目前都面临风险。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>此次漏洞由 Mysk 团队发现，揭示了 WebKit 在处理特定网络请求时存在严重的代理绕过问题。首先是 DNS 预取功能，它允许网页提前解析域名以加速访问，但 WebKit 会直接调用设备的默认 DNS 路径，导致用户的真实 DNS 服务器暴露。其次是 WebAuthn 的相关源请求，当网页验证跨域凭据时，WebKit 会将任务交给操作系统服务，而该服务完全无视浏览器的代理配置，直接建立连接。最后，WebTransport 作为一种基于 HTTP/3 的低延迟通信协议，在建立 QUIC 连接时也会绕过代理，直接暴露设备的真实 IP。</p><p>这些漏洞的影响范围非常广泛，涵盖了 iOS 上所有必须使用 WebKit 的浏览器，以及苹果为 iCloud+ 用户提供的专用代理服务。研究人员指出，由于这些请求是在 WebKit 标准页面加载流程之外执行的，因此现有的应用层代理机制无法拦截它们。相比之下，系统级 VPN 由于在网络底层进行全局隧道加密，因此不受此问题影响。目前，一些第三方浏览器（如 Psylo）已经通过默认禁用 WebTransport 和拦截 DNS 预取指令来实施临时缓解措施。用户和开发者现在需要密切关注苹果是否会在未来的系统更新中从底层修复这些代理绕过路径。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>2 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49177131" target="_blank" rel="noopener noreferrer">@exabrial</a>
+        </div>
+        <p class="comment-text">我很喜欢 iCloud 专用代理，但我需要一种关闭它的方法。如果能有一个命令行工具，再加上开关 DNS-over-HTTP 的功能，那就太棒了。</p>
+        <p class="comment-reason"><span>入选理由</span>反映了用户在面对此类隐私工具失效时，希望拥有更精细控制权的需求。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49177176" target="_blank" rel="noopener noreferrer">@TechRemarker</a>
+        </div>
+        <p class="comment-text">你可以在“设置 &gt; iCloud”中关闭它。既可以临时关闭一天然后自动恢复，也可以永久关闭直到你再次手动开启。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了实用的操作指引，帮助受影响的用户快速调整设置。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>苹果一直将隐私作为其核心卖点，但这次 WebKit 的漏洞再次提醒我们，应用层的隐私保护往往比看起来要脆弱。当 DNS 预取和 WebTransport 这种为了性能而设计的特性与代理机制发生冲突时，安全往往成了牺牲品。讽刺的是，即便是苹果自家的 iCloud 专用代理也没能幸免。对于那些极度依赖匿名性的用户来说，这证明了系统级 VPN 依然比应用级代理更可靠。正如评论区讨论的那样，用户不仅需要自动化的隐私保护，更需要能够随时手动干预和关闭这些功能的透明度。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49175192">
+      <summary class="story-overview">
+        <span class="rank-number">14</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">troyhunt.com</span>
+            <span>216 points</span>
+            <span>原始 #24 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.troyhunt.com/thanks-fedex-this-is-why-we-keep-getting-phished/" target="_blank"
+              rel="noopener noreferrer">Thanks FedEx, This Is Why We Keep Getting Phished (2024)</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49175192" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 58</a>
+          </h2>
+          <p class="summary">网络安全专家 Troy Hunt 分享了他收到联邦快递（FedEx）真实扣税通知的经历，这些通知在外观上与典型的钓鱼短信几乎无法区分。这些信息包含错误的拼写、奇怪的第三方 URL 以及强烈的紧迫感，导致 87% 的受访网友认为它是诈骗。尽管 FedEx 的请求是合法的，但其官方网站和客服电话却无法有效验证这些请求，甚至客服系统本身也存在故障。这种做法极其危险，因为它在潜移默化中训练用户点击可疑链接，削弱了公众对网络安全的警惕性。目前最大的局限在于，大型跨国公司往往为了外包便利而牺牲了品牌一致性和通信安全性。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Troy Hunt 描述了他在等待包裹时收到的一条 FedEx 短信，内容要求支付关税。这条短信充满了“钓鱼特征”：FedEx 的拼写不规范、语法错误、缺乏货币符号，且链接指向了一个看似无关的第三方支付平台 BPOINT。更糟糕的是，当他尝试通过 FedEx 官网验证时，官方查询系统并未显示任何欠费信息，甚至连客服电话的自动语音系统也陷入了死循环。这种官方流程与安全常识的严重脱节，让即便是专业人士也难以在第一时间确认其真实性。最终，他通过一封包含原始发票的邮件确认了请求的合法性，但这暴露了一个深层问题：合法机构正在模仿诈骗者的行为。这种“影子 IT”或外包支付系统的乱象，使得用户无法依靠域名或格式来判断真伪。当大公司使用非官方域名发送紧急支付请求时，它们实际上是在破坏多年来安全教育建立的防线。未来，如果企业不统一其通信渠道并加强官方平台的验证功能，普通用户在面对日益精巧的 AI 诈骗时将更加无所适从。解决这一问题的关键在于企业必须回归其官方域名作为唯一的信任锚点，而不是为了省事而随意使用第三方服务。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49175768" target="_blank" rel="noopener noreferrer">@lemursage</a>
+        </div>
+        <p class="comment-text">看到这个真是太奇怪了。两年前，我收到一份来自联邦快递的报关通知，要求填写详细信息。那只是一个自称是联邦快递员工的人发来的一封普通邮件，附带一个 PDF 文件。我当时并没有等什么包裹。我写信给他们的聊天机器人（当然，没有人工协助），经过一段时间的“提示词工程”，或者说强迫手段，它终于把我转给了一位人工顾问，对方确认这确实不是诈骗，确实是他们的消息。我打开了那个 PDF，发现里面预填了别人的数据，只是在字段上放了些黑色矩形试图遮盖（你只需移动这些矩形就能看到下面的数据）。后来证明那个包裹是国外合作伙伴给我的惊喜。几年后，每当我看到联邦快递的标志，我仍然能感觉到那种被诈骗的余味。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了 FedEx 在处理敏感数据和官方通信时的极度不专业，印证了文章中提到的“官方行为像诈骗”的观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49175735" target="_blank" rel="noopener noreferrer">@jhbadger</a>
+        </div>
+        <p class="comment-text">这让我想起在公司里，我们必须在自己的域名上参加一个关于如何识别钓鱼攻击的课程。几天后，我们收到一封来自域名外的邮件，说我们必须在他们的域名上参加另一个主题的培训。一周左右后，管理层发邮件抱怨说完成新培训的人太少了——因为我们都以为那是钓鱼尝试，因为它完全符合钓鱼课程里讲的那些特征！</p>
+        <p class="comment-reason"><span>入选理由</span>通过一个极具讽刺意味的真实案例，展示了当官方行为不规范时，安全教育反而会导致沟通失效。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49176218" target="_blank" rel="noopener noreferrer">@walrus01</a>
+        </div>
+        <p class="comment-text">我认为这与大型企业和组织中的“影子 IT”问题有些相似。某个大型实体内部的某个工作组、部门或项目决定需要实施某些功能（比如链接中提到的运输税支付通知），于是决定自己动手，而不是通过正规流程在自己的域名下完成。这让我想起一些大企业，销售或 CRM 相关部门跑去从 Mailchimp 之类的公司购买邮件群发功能，直到后来才意识到他们需要找控制域名的人，在 DNS 记录中获得正确的出站 DKIM 授权等。</p>
+        <p class="comment-reason"><span>入选理由</span>从企业内部管理架构的角度解释了为什么会出现这种“官方钓鱼”现象，具有深度洞察力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49175506" target="_blank" rel="noopener noreferrer">@walrus01</a>
+        </div>
+        <p class="comment-text">我发誓，各种随机的 &quot;.xyz&quot; 之类的新通用顶级域名（gTLD）激增，并没有让阻止非技术人员点击钓鱼链接变得更容易。这类域名实在太多了。当然，如果它们不存在，人们可能会使用像 &quot;fedex-secure-delivery-approval.com&quot; 之类的钓鱼域名，我想大概是这样……</p>
+        <p class="comment-reason"><span>入选理由</span>指出了顶级域名泛滥对普通用户识别链接真伪造成的客观困难。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49175582" target="_blank" rel="noopener noreferrer">@kencausey</a>
+        </div>
+        <p class="comment-text">最近有个例子，我继母经常收到云存储空间已满的诈骗邮件，她收到了一封来自 Google 的关于存储空间达到 75% 的邮件，看起来完全合法。然而，所有的链接都使用了一个域名 c.gle，而 whois c.gle 查询会报错 &quot;getaddrinfo(whois.nic.gle): Name or service not known&quot;。不过 whois gle 是有效的。我自己都不确定 c.gle 的有效性，我继母就更不可能知道了。</p>
+        <p class="comment-reason"><span>入选理由</span>展示了即使是像 Google 这样的科技巨头，在使用非标准短链接时也会造成用户的信任困扰。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章揭示了一个令人沮丧的现实：在网络安全领域，我们最大的敌人有时并非黑客，而是那些为了外包便利而自毁长城的合法企业。FedEx 的案例并非孤例，正如评论中所提到的，从 Google 的 c.gle 到企业内部的培训邮件，大公司正在集体性地“模仿”诈骗者的行为模式。这种行为最核心的错误在于抛弃了唯一的信任锚点——官方域名。当企业为了省事而使用第三方支付网关或随机生成的短链接时，它们实际上是在亲手拆除公众的安全防线。如果连安全专家都无法通过官方渠道验证一条信息的真伪，我们又怎能指望普通用户在面对日益逼真的 AI 钓鱼时做出正确判断？企业必须意识到，通信的规范性不是繁文缛节，而是安全底线。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49174407">
+      <summary class="story-overview">
+        <span class="rank-number">15</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">sec.gov</span>
+            <span>179 points</span>
+            <span>原始 #25 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.sec.gov/Archives/edgar/data/1795071/000179507126000002/xslFormDX01/primary_doc.xml" target="_blank"
+              rel="noopener noreferrer">Oxide Computer raises $445M (SEC Form D)</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49174407" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 76</a>
+          </h2>
+          <p class="summary">Oxide Computer 最近提交给美国证券交易委员会（SEC）的 Form D 文件显示，该公司已完成一笔高达 4.45 亿美元的股权融资。这家由 Bryan Cantrill 等人创立的公司致力于重新发明服务器机架，通过深度整合硬件与软件，为企业提供具备公有云操作体验的本地服务器集群。此次巨额融资紧随其前几轮融资之后，显示出其在硬件制造和市场扩张阶段对资本的巨大需求。尽管其愿景是解决公有云成本高昂和本地部署复杂的痛点，但其专有硬件的高门槛和交付能力仍是外界关注的焦点。这笔资金可能预示着他们正转向支持超大规模的 AI 计算需求或已获得顶级企业客户的认可。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>根据 SEC 的最新披露，Oxide Computer Co. 完成了总额约为 4.45 亿美元的新一轮融资。这家总部位于加州 Emeryville 的公司由前 Sun Microsystems 和 Joyent 的资深专家领导，核心产品是高度集成的“云计算机”机架。与传统的通用服务器不同，Oxide 从底层固件到操作系统再到配电系统进行了完全的重新设计，旨在消除传统数据中心管理中的复杂性。这种“开箱即用”的私有云方案试图吸引那些希望摆脱 AWS 等公有云高昂成本，却又不愿自行组装和维护复杂硬件的企业。</p><p>此次融资规模呈现出指数级增长：从 2023 年的 4400 万美元到 2025 年的 1 亿美元，再到 2026 年上半年的 2 亿美元，直至此次的 4.45 亿美元。这种融资节奏通常意味着公司已进入重资产的量产阶段，或者正在为某些超大规模的订单储备产能。然而，挑战依然存在：有潜在客户反映其销售门槛极高，甚至年支出近百万美元的企业也难以获得回应，这表明 Oxide 目前可能仅专注于极少数顶级客户。此外，在通用 x86 服务器和成熟虚拟化软件（如 VMware）的竞争下，Oxide 必须证明其专有架构带来的性能和管理优势足以抵消其封闭生态的风险。未来值得关注的是，这笔巨资是否会被用于开发针对 AI 工作负载的专用硬件，以及他们能否实现更大规模的商业化交付。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49175435" target="_blank" rel="noopener noreferrer">@shofetim</a>
+        </div>
+        <p class="comment-text">太棒了！他们正势如破竹：
+2023年：A轮 4400万美元
+2025年：B轮 1亿美元
+2026年：C轮 2亿美元
+2026年：D轮 4.45亿美元（根据 SEC Form D 文件）</p>
+        <p class="comment-reason"><span>入选理由</span>清晰地展示了 Oxide 融资规模的惊人增长轨迹，反映了资本市场对其硬件愿景的持续加码。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49174950" target="_blank" rel="noopener noreferrer">@bithavoc</a>
+        </div>
+        <p class="comment-text">（我是工程副总裁）去年我填写了他们的销售咨询表，但石沉大海。我们目前每年在 AWS 上花费 90 万美元，而他们甚至没有确认收到我的请求。真是疯狂。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个来自潜在客户的真实视角，暗示 Oxide 目前的销售策略可能只针对极高价值的头部客户。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49176156" target="_blank" rel="noopener noreferrer">@Nextgrid</a>
+        </div>
+        <p class="comment-text">有什么是他们能做，而通用的 x86 服务器配合管理软件/虚拟机监控程序（hypervisor）做不到的吗？感觉他们的“秘诀”更多在于一套“好用”的软件栈，而不是硬件本身有什么特殊功能。我觉得博通在收购 VMware 后，如果愿意的话可以轻松击败他们（或者任何拥有服务器、网络和存储产品线的 OEM 厂商）。他们没这么做，很可能是因为这里面其实没多少利润空间（Oxide 不得不进行多轮融资可能就是一个暗示）。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个典型的行业质疑，即 Oxide 的专有硬件方案是否真的比通用方案更具竞争优势。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49175830" target="_blank" rel="noopener noreferrer">@antonvs</a>
+        </div>
+        <p class="comment-text">你表达的是一种非常狭隘的工程师视角，没有考虑到在大规模环境下管理裸金属托管的现实情况。这些是商业决策，涉及核心竞争力、资本支出（capex）与运营支出（opex）的权衡，以及建立一个能满足合规、安全和各种“可用性”要求的可靠托管业务的难度和成本。IT 部门的某个员工有能力自己搞定其中一部分，这在商业决策中并不重要，也不相关。大多数公司不自己发电是有原因的，计算系统也是同理。</p>
+        <p class="comment-reason"><span>入选理由</span>从商业运营和规模化管理的角度反驳了“DIY 优于集成方案”的观点，解释了 Oxide 存在的市场逻辑。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Oxide Computer 拿到的这笔 4.45 亿美元巨款，再次证明了“硬件创业虽然艰难，但天花板极高”。在公有云成本引发普遍焦虑的背景下，Oxide 试图通过深度垂直整合，把 AWS 的体验搬进企业自己的机房。然而，从评论区反馈来看，这家公司目前似乎在走一条极其高端且神秘的路线——即便年入百万美元级别的潜在客户也可能被其销售团队“无视”。这种策略配合如此规模的融资，让人不禁猜测他们是否已经成为了某些 AI 巨头或超大规模数据中心背后的秘密武器。正如评论中所争论的，Oxide 的成败不在于它是否能跑通 Linux，而在于它能否证明这种“重型集成”带来的商业效率提升，足以让企业心甘情愿地放弃通用硬件的灵活性。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49176634">
+      <summary class="story-overview">
+        <span class="rank-number">16</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">808bits.com</span>
+            <span>17 points</span>
+            <span>原始 #13 · 低讨论量降权 +12.9</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://808bits.com/articles/fips-140-3-not-a-security-guarantee/" target="_blank"
+              rel="noopener noreferrer">FIPS 140-3 is not a security guarantee, and auditors know it</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49176634" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 7</a>
+          </h2>
+          <p class="summary">FIPS 140-3 认证常被误认为系统安全的终极保证，但实际上它仅涵盖极窄的密码模块边界。许多企业为了满足合规要求购买昂贵的认证硬件，却因算法限制或性能损耗，在实际运行时关闭了“FIPS 模式”。认证过程极其缓慢，导致厂商在修复已知漏洞和维持证书效力之间面临两难，甚至出现过认证版本比普通版本更不安全的情况。历史上的重大漏洞证明，即使通过了最高等级认证的芯片也可能存在长期未察觉的缺陷。真正的安全取决于密钥管理、人员流程和配置审计，而非仅仅一张证书。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>FIPS 140-3 验证的是特定固件版本在特定配置下的算法实现，而非整个产品的安全性。文章指出，高达 90% 的 HSM（硬件安全模块）客户在购买后会关闭 FIPS 模式，因为该模式不支持区块链常用的 secp256k1 曲线或现代的 ChaCha20 算法。此外，FIPS 强制要求的自检（如 PCT）会显著降低性能，例如在 Go 1.24 中，开启 FIPS 模式会导致密钥生成速度慢 6 到 9 倍。认证体系还存在严重的“冻结”效应：由于重新认证需耗时一年以上，厂商往往被迫在“修复漏洞但失去认证”和“保留认证但携带漏洞”之间做选择。2019 年 YubiKey 的案例甚至显示，为了满足 FIPS 的随机性自检要求，反而引入了可预测随机数的漏洞，使得认证版比普通版更脆弱。随着 2026 年 FIPS 140-2 证书即将失效，企业正涌向 140-3 认证，但资深审计员更关注密钥来源、人员权限管理及备份流程，这些环节才是安全事故的高发区。未来，开发者应更透明地记录非合规配置的理由，并将精力投入到可验证的证据链建设中，而不是盲目迷信证书。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49176986" target="_blank" rel="noopener noreferrer">@afarah1</a>
+        </div>
+        <p class="comment-text">嗯，我不了解 HSM 或加密领域及其审计，但在 FedRAMP SaaS 领域，你绝对必须在启用 FIPS 模式的情况下运行所有内容，那里有必须到位并接受审计的强力保证。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了来自 FedRAMP 合规领域的实际操作视角，强调了在某些政府合规场景下 FIPS 模式是强制性的。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49177218" target="_blank" rel="noopener noreferrer">@dlgeek</a>
+        </div>
+        <p class="comment-text">FedRAMP 实际上针对 FIPS 的问题有很多变通办法。在《FedRAMP 加密模块选择与使用政策》中，有很多亮点表明 FedRAMP 的人员也对 CMVP 处理积压感到厌烦。最明确的一条是：“FRR9：云服务提供商（CSP）应确定更新到较新版本的软件（无论其加密模块是否经过 FIPS 验证）是否能消除漏洞；如果可以，CSP 应在可行的情况下立即更新。”</p>
+        <p class="comment-reason"><span>入选理由</span>揭示了即使是制定规则的机构也意识到 FIPS 认证滞后带来的安全风险，并为此制定了例外规则。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49177209" target="_blank" rel="noopener noreferrer">@sublinear</a>
+        </div>
+        <p class="comment-text">文章提到，当供应商面临“立即修复安全漏洞但失去认证”或“继续运行带漏洞的认证版本”时，客户的合同实际上是在付钱让供应商选择后者。我不确定我完全同意这个观点。所有行业的合规性（不仅仅是 IT）都是这样的，否则会出现很多“野路子”解决方案。这就是为什么合规不应孤立运行。既有基准（开启 FIPS 时），也有业务必须谨慎接受并承担风险的现实世界配置。这就是为什么你需要自己的员工进行审计，并与决策涉及的所有人协作。如果你的客户是政府，他们当然会对 FIPS 非常严格。我们都同意 FIPS 很糟糕，因为它进展极其缓慢。俗话说“政府工程水平”就意味着平庸，这是有原因的。</p>
+        <p class="comment-reason"><span>入选理由</span>从风险管理和行业普遍性的角度对文章观点进行了补充，认为合规与现实风险的权衡是必要的职业过程。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49177115" target="_blank" rel="noopener noreferrer">@bb88</a>
+        </div>
+        <p class="comment-text">如果合规要求导致了巨大的安全漏洞，律师可能会告诉你，从责任角度来看，明知故犯地留下安全漏洞比关闭某个会被审计标记的项目后果更严重。</p>
+        <p class="comment-reason"><span>入选理由</span>从法律责任的角度提供了一个务实的决策维度。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章揭露了网络安全领域一个公开的秘密：合规并不等于安全。FIPS 认证本意是建立信任，但在实际操作中，它那长达一两年的审批周期反而成了安全补丁的绊脚石。正如评论中提到的，甚至连 FedRAMP 这种极其严格的政府合规框架，都不得不专门发文允许服务商为了修复漏洞而“违背”FIPS 认证要求。这种“为了合规而牺牲安全”的悖论，反映了官僚流程与现代网络威胁快速演变之间的深刻矛盾。对于开发者和架构师来说，FIPS 应该被视为采购的“地板”而非“天花板”，真正的安全防线依然建立在对密钥生命周期和操作流程的严密把控之上。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49166874">
+      <summary class="story-overview">
+        <span class="rank-number">17</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">aikido.dev</span>
+            <span>228 points</span>
+            <span>原始 #27 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.aikido.dev/blog/keyv-and-friends-compromised-in-npm-supply-chain-attack" target="_blank"
+              rel="noopener noreferrer">Keyv and friends compromised in active Shai-Hulud supply chain attack</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49166874" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 120</a>
+          </h2>
+          <p class="summary">2026年8月，npm生态系统遭遇名为“Shai-Hulud”的大规模供应链攻击，影响了包括 keyv 和 flat-cache 在内的数百个流行软件包。攻击者通过劫持维护者的 GitHub 账号，利用 GitHub Actions 自动发布了带有恶意代码的更新版本。恶意负载包含一个复杂的蠕虫病毒，它能窃取 AWS、GitHub、Kubernetes 和 Vault 等多种平台的敏感凭据。该病毒具有自我复制能力，会自动感染受害者拥有发布权限的其他 npm 包，并向 GitHub 仓库注入恶意配置。目前已有超过 800 个包受影响，月安装量总计超 20 亿次，暴露了 npm 预安装脚本和凭据管理中的严重安全漏洞。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>此次攻击的核心在于利用了 npm 的 preinstall 钩子。攻击者首先通过劫持高频下载包（如 keyv，周下载量达 1.27 亿次）维护者的 GitHub 账号，直接向主分支推送恶意代码。由于这些包配置了 GitHub Actions 自动发布，恶意版本在发布时带有合法的来源证明（Provenance），这使得传统的签名验证失效。攻击负载 setup.mjs 会静默下载 Bun 运行时，并执行一个 728KB 的混淆脚本 Math_Symbol.js。该脚本不仅扫描本地文件系统中的 .env 文件、SSH 密钥和云服务凭据，甚至能读取 GitHub Actions 运行时的内存以窃取 OIDC 令牌。</p><p>更具威胁的是其蠕虫式的传播机制：它利用窃取的 npm 令牌自动修改并发布受害者名下的其他包，实现指数级扩散。此外，它还会向 GitHub 仓库注入针对 VS Code 和 Claude Code 的恶意配置（如 .vscode/tasks.json），使得开发者仅需打开项目文件夹即可触发感染。为了躲避追踪，该蠕虫通过以太坊智能合约动态获取外传地址，并将加密后的凭据上传至数千个伪装的公共 GitHub 仓库中。目前，安全专家建议开发者立即检查 node_modules 中是否存在异常的大体积 JS 文件，并对所有受影响的凭据进行彻底轮换。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49171909" target="_blank" rel="noopener noreferrer">@varunsharma07</a>
+        </div>
+        <p class="comment-text">我们（StepSecurity）发布了针对这两个阶段负载的完整分析。一些额外的细节：1. 来源证明（Provenance）并没有失效，它按设计运行但依然分发了恶意软件。最初的 11 个包是通过 npm OIDC 受信发布功能发布的，带有有效的 SLSA 证明。攻击者劫持了维护者的 GitHub 账号，让项目自己的发布工作流去执行发布。Provenance 只能证明是哪个提交构建的，不能证明该提交是经过授权的。2. 修复过程中存在陷阱：该蠕虫安装了一个监听器，当被盗的 GitHub 令牌被撤销时会触发攻击负载。必须先移除令牌监控，然后再进行轮换。3. 持久化超出了 node_modules。它会写入 .claude/settings.json 和 .vscode/tasks.json，每次打开文件夹都会重新执行下载器。4. 没有可以封禁的 C2 域名：外传端点是在运行时从以太坊合约解析的。虽然观察到的域名是 npm-cache.com，但操作者可以随时轮换并向受感染主机推送新代码。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于攻击机制、修复陷阱以及 C2 隐藏手段的深度技术细节。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49170720" target="_blank" rel="noopener noreferrer">@daniel_mcsoft</a>
+        </div>
+        <p class="comment-text">几乎没人部署的最廉价缓解措施：版本冷却期。这些蠕虫被发现得很快——这个蠕虫在当天就被标记了。如果你的 CI 简单地拒绝采用过去 N 天内发布的任何版本（Renovate 通过 minimumReleaseAge 原生支持此功能），你就能将“蠕虫在数小时内传遍生态系统”转变为“蠕虫必须在公众监督下存活 N 天才能接触到你”。你几乎没有损失：你的产品真的经常需要一个发布不到 48 小时的依赖版本吗？将此与工作流拆分相结合——构建/测试任务不持有发布凭据，单独的发布任务只处理完成的产物——这样即使 npm 不重新设计，蠕虫路径也基本被封死了。提高攻击者的每一步成本才是关键。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个非常实用且低成本的防御策略，具有很强的参考价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49168993" target="_blank" rel="noopener noreferrer">@xnorswap</a>
+        </div>
+        <p class="comment-text">事已至此，任何在原本没有 pre-install 钩子的地方添加该钩子的包都应该被拒绝并视为极端可疑。是时候彻底废除 pre-install / post-install 钩子了。先从禁止任何新增钩子开始。</p>
+        <p class="comment-reason"><span>入选理由</span>直指 npm 长期存在的安全隐患，代表了社区中一种激进但合理的防御观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49171116" target="_blank" rel="noopener noreferrer">@rvz</a>
+        </div>
+        <p class="comment-text">没有哪个包管理器比 npm 更糟了。除了“流行”之外，这类事件在 npm 上不断发生有几个根本原因：1. 导入的包默认不锁定版本。2. TS/JS 缺乏标准库，鼓励开发者导入更多包来解决小问题，增加了引入坏包的风险。3. 安装后的脚本在下载依赖时默认执行外部代码。所有这些都是生态系统默认自带的，我们不断看到更多 Shai-Hulud 蠕虫轻松瞄准 npm。甚至连包签名默认都不是强制执行的。</p>
+        <p class="comment-reason"><span>入选理由</span>从系统架构层面分析了 npm 容易受到此类攻击的深层原因。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这次“Shai-Hulud”攻击展示了现代供应链攻击的进化：它不再仅仅是简单的代码注入，而是一个集成了以太坊动态 C2、IDE 配置文件持久化以及针对 GitHub Actions 内存嗅探的复杂系统。最讽刺的是，攻击者利用了原本用于增强安全性的“来源证明（Provenance）”机制，通过合法的 CI/CD 流程分发恶意软件，这让传统的信任模型彻底崩塌。正如评论所指出的，npm 默认执行安装脚本的特性已成为生态系统的“原罪”，而在官方做出根本性改变之前，开发者或许只能通过设置“版本冷却期”这种朴素的策略来换取生存空间。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49176947">
+      <summary class="story-overview">
+        <span class="rank-number">18</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">lists.securityfocus.com</span>
+            <span>7 points</span>
+            <span>原始 #14 · 低讨论量降权 +14.7</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://lists.securityfocus.com/hyperkitty/list/bugtraq@securityfocus.com/thread/CHKLXLA7SJEWLDFHWXB3QU57ADOXGL2E/" target="_blank"
+              rel="noopener noreferrer">Bugtraq Is Back</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49176947" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 1</a>
+          </h2>
+          <p class="summary">著名的网络安全邮件列表 Bugtraq 在沉寂多年后正式宣告回归。该列表最初于 1993 年创建，曾是全球漏洞研究和“完全披露”运动的核心阵地，但在经历多次商业收购后陷入停滞。新所有者已购回域名及品牌，旨在恢复一个不受企业过滤、以研究人员为中心的交流空间。除了发布漏洞，新版 Bugtraq 还强调在 AI 时代保护黑客历史和真实技术文档的重要性。然而，在漏洞披露规范已发生巨变的今天，这个老牌平台能否重拾影响力仍面临挑战。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Bugtraq 曾是网络安全界的传奇，它在 1993 年以“完全披露”为宗旨诞生，打破了当时软件厂商对漏洞信息的垄断。在那个时代，它是安全研究人员绕过政治干扰、直接向公众发布漏洞细节的首选平台。然而，随着其母公司 SecurityFocus 被赛门铁克等企业接连收购，Bugtraq 的独立性逐渐丧失，最终导致列表停更、存档消失，整整一代研究人员在没有它的环境下成长。此次回归是由新所有者购回 securityfocus.com 域名后发起的，核心目标是重建一个无企业过滤的披露环境。</p><p>新平台不仅恢复了经典的邮件地址，还计划重新整理并公开由社区备份的历史存档。发起者指出，在当前 AI 生成内容泛滥且互联网链接频繁失效的背景下，保存真实的漏洞利用技术和深度分析报告对于维护黑客历史至关重要。尽管情怀满满，但 Bugtraq 面临的现实环境已大不相同。现代漏洞披露已经形成了成熟的协同披露（CVD）机制和赏金平台，这与 90 年代的模式存在显著差异。新版 Bugtraq 能否吸引习惯了社交媒体和专业博客的新一代研究人员回归邮件列表，将是其能否真正复兴的关键。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>1 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49177166" target="_blank" rel="noopener noreferrer">@tptacek</a>
+        </div>
+        <p class="comment-text">Bugtraq 在关闭前的至少十年就已经失去了影响力；很难想象它现在还能占据什么样的地位。在它刚起步时，漏洞研究还是一个极小众的领域，关于披露方式的争论依然激烈；而如今的行业规范已经完全不同了。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论由资深安全专家提出，冷静地指出了老牌平台在现代安全生态中可能面临的时代错位问题。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Bugtraq 的回归更像是一场针对“互联网失忆症”的抢救行动。在 90 年代，它是打破厂商信息封锁的利剑，但正如评论所言，现在的安全圈早已不是那个靠邮件列表维系的草莽江湖。如今，漏洞披露已经变成了一项高度流程化、甚至商业化的活动。新 Bugtraq 强调的“历史保存”价值或许比其“披露平台”的功能更具现实意义，因为在信息碎片化和 AI 噪声充斥的今天，我们确实需要一个能沉淀硬核技术真相的“数字档案馆”。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49170915">
+      <summary class="story-overview">
+        <span class="rank-number">19</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">arxiv.org</span>
+            <span>76 points</span>
+            <span>原始 #29 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://arxiv.org/abs/2602.16763" target="_blank"
+              rel="noopener noreferrer">When AI Benchmarks Plateau: A Systematic Study of Benchmark Saturation</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49170915" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 82</a>
+          </h2>
+          <p class="summary">这篇论文系统研究了人工智能基准测试（Benchmarks）的“饱和”现象，即模型得分普遍过高导致无法区分优劣。研究分析了60个语言模型基准，发现近一半已经饱和，且饱和速度随基准测试的年龄增长而加快。研究指出，基准测试的抗饱和能力主要取决于是否经过专家精心策划，而非测试数据是否公开。这一发现对于评估模型进度和指导部署决策至关重要，因为失效的基准会误导技术走向。目前的主要局限在于，即便知道专家策划有效，这种高成本的评估方式仍难以追上模型迭代的速度。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>随着大语言模型性能的飞速提升，传统的评估标准正面临前所未有的挑战。该研究通过14个维度对60个主流基准测试进行了深度剖析，揭示了“基准饱和”的普遍性。研究发现，基准测试的寿命与其设计初衷密切相关，老旧的测试集往往在几年内就会失去区分度。一个出人意料的结论是，测试数据的公开程度（即数据污染风险）并不是导致饱和的决定性因素，真正的关键在于评估任务的深度和专家参与的程度。</p><p>这种饱和现象导致了所谓的“刷榜”行为，即模型开发者针对特定指标进行过度优化，而非提升实际解决问题的能力。研究建议，为了延长基准测试的生命周期，未来的评估体系应更多地引入动态调整机制和专家审核。此外，随着模型进入性能平台期，如何设计能够体现微小但关键进步的测试，成为了行业亟待解决的难题。观察未来的趋势，评估方式可能会从静态的问答转向更复杂的、具有开放性目标的交互式环境，以应对日益严重的指标失效问题。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49174373" target="_blank" rel="noopener noreferrer">@stego-tech</a>
+        </div>
+        <p class="comment-text">作为一个在2000年代长大的PC玩家，这一直是我试图向热衷于LLM和模型的人们发出的警告。基准测试在它们新鲜、新颖且不断变化时非常有用。一旦你让其中的任何一个环节停滞不前，它就会变成一个可以被操纵的分数，而不是一个有用的指标。在PC游戏领域，我们曾看到厂商为了特定的游戏、测试工具和场景进行优化，却牺牲了通用性能。最终行业经历了一个“觉醒时刻”，我们不得不共同决定如何从一个建立在被彻底操纵的基准测试之上的行业中走出来，像 Gamers’ Nexus 和 Digital Foundry 这样的机构就是那次决裂的结果。LLM也注定会走上同样的道路，因为基准测试的制定者——尽管初衷是好的——最终还是掉进了同样的陷阱：固定的评分标准、已知的测试题目，以及相信某种可以达到的“完整性”。其结果是模型在基准测试上的得分越来越高，但实际收益却在递减，漏洞也在增加，因为它们优化的目标不是实际的改进或效用，而是吹牛的资本。建立新的基准测试也解决不了问题。要向前迈进，我们必须客观地、用不断演变的负载来评估LLM。我们需要更多像“骑自行车的鹈鹕”那样的测试，但要从不同的视角和用例出发。比如让放射科医生用他们不与AI实验室共享的实际样本数据来测试模型，或者让IT人员要求智能体引导特定的、现实世界的任务。为了证明通用智能，我们需要更多的专家以透明但让AI公司难以防备的方式对它们进行专项和通用评估。只有到那时，评分才有意义。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者通过PC硬件行业的历史教训，深刻揭示了基准测试被“操纵”的必然性，并提出了专家化评估的建设性建议。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49171998" target="_blank" rel="noopener noreferrer">@tsunamifury</a>
+        </div>
+        <p class="comment-text">我认为很明显，在缺乏明确的可变现用例的情况下，许多模型提供商一直在针对抽象或低效用的平均用户表现进行“刷榜（benchmaxxing）”。这导致了很多“噢，哇，它能做我不关心的数学题”和“它能写很多代码，但写得不好”的结果，而不是满足核心需求：1) 更便宜、更快、更实时；2) 具备长程处理能力，在根据更新的环境重新评估目标时不会丢失注意力；3) 可以快速训练到模型中的特定领域知识（即我们在特定情况下是如何工作的）。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了“benchmaxxing”这一生动的概念，直指当前AI开发中指标与实际需求脱节的问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49171459" target="_blank" rel="noopener noreferrer">@otterdude</a>
+        </div>
+        <p class="comment-text">这似乎是LLM的穷途末路了。在高度非线性的空间里，通过回归分析所能获得的准确性是有限的。如果帕累托法则有任何启示意义，那就是80%的结果源自20%的原因。看来关于智能，我们还有很多东西要学习。我想起了一位古代哲学家关于真理的论述，这种观点似乎与LLM的训练范式完全相反：“真理的寻求者不是研究古人著作并出于天性信任他们的人，而是怀疑自己对他们的信仰并质疑从中收集到的信息的人，是服从论证和演示的人，而不是服从本性充满各种缺陷和不足的人类之言的人。因此，如果学习真理是目标，那么研究科学家著作的人的职责就是让自己成为所读内容的所有敌对者，运用头脑攻击其内容的每一个核心和边缘。在进行批判性审查时，他也应该怀疑自己，以避免陷入偏见或宽容。” —— 海什木 (ibn al-Haytham)</p>
+        <p class="comment-reason"><span>入选理由</span>引用古代哲学智慧来反思现代AI训练中对既有数据（“古人著作”）的过度依赖，提供了独特的批判视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49171760" target="_blank" rel="noopener noreferrer">@logicchains</a>
+        </div>
+        <p class="comment-text">这只是基准测试不给力而已。任何用过 Fable 处理过特别困难任务的人都会发现，它比 Opus 5.0 领先好几英里，然而大多数基准测试完全无法捕捉到这种差距。</p>
+        <p class="comment-reason"><span>入选理由</span>从用户实际体验出发，指出了基准测试失效导致无法反映模型真实代差的现状。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>当一个衡量标准变成目标时，它就不再是一个好标准了——这便是著名的古德哈特定律。在AI领域，我们正目睹这一规律的全面爆发。正如评论区所指出的，当前的AI行业陷入了“刷榜（benchmaxxing）”的怪圈，开发者们像当年的显卡厂商优化跑分软件一样，针对固定题库进行过度拟合。这导致了一个荒诞的现状：模型在榜单上近乎完美，但在处理现实世界中那些“未曾公开”的复杂任务时，依然显得力不从心。真正的进步不应体现在那些已经饱和的百分比上，而应体现在模型是否能像专家一样处理动态、开放且具有挑战性的实际问题。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49176983">
+      <summary class="story-overview">
+        <span class="rank-number">20</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">arxiv.org</span>
+            <span>7 points</span>
+            <span>原始 #15 · 低讨论量降权 +14.4</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://arxiv.org/abs/2603.04221" target="_blank"
+              rel="noopener noreferrer">Zigbee vs. Matter over Thread:Understanding IoT Protocol Performance in Practice</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49176983" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 2</a>
+          </h2>
+          <p class="summary">这项研究对比了物联网协议 Zigbee 与 Matter over Thread 在实际应用中的性能差异。研究发现，虽然 Matter over Thread 在消息吞吐量的扩展性上表现更佳，能够处理更高密度的通信负载，但在网络稳定性方面存在显著短板。实验数据显示，当网络节点掉线时，Zigbee 仅需约 0.25 秒即可恢复连接，而 Matter over Thread 的恢复时间竟长达 30 秒。这意味着在追求跨品牌互操作性的同时，新一代协议在网络韧性上仍有待优化。对于实时性要求极高的场景，传统的 Zigbee 协议目前依然具有不可替代的优势。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>本研究通过实测数据深入探讨了 Zigbee 和 Matter over Thread 这两种主流物联网协议的性能权衡。在吞吐量测试中，基于 OpenThread 的 Matter 协议展现出了更强的扩展能力，能够随着消息频率的增加维持较好的处理效率，而 Zigbee 在高负载下则较早遇到性能瓶颈。这表明 Matter 在处理大规模、高频互动的智能家居场景时具有理论上的带宽优势。然而，在网络拓扑发生变动（如节点失效）后的恢复能力测试中，两者表现出了巨大的鸿沟。Zigbee 凭借其成熟的路由机制，能在四分之一秒内迅速重组路径，确保通信几乎不中断。相比之下，Matter over Thread 在相同情况下的恢复过程异常缓慢，平均耗时接近 30 秒，这在实际使用中会导致明显的设备失联感。此外，虽然 Matter 提供了基于 IP 的互操作性优势，但其协议栈的复杂性也带来了更高的延迟波动。开发者在选择协议时，必须在 Matter 的通用性与 Zigbee 的极致响应速度之间做出取舍。未来 Matter 协议的演进需要重点解决其在动态网络环境下的收敛速度问题。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>2 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49177253" target="_blank" rel="noopener noreferrer">@jauntywundrkind</a>
+        </div>
+        <p class="comment-text">很多图表显示 OpenThread 和 Zigbee 的表现互有胜负，差距基本在 2 倍以内。对我来说有两个非常值得注意的点：OpenThread 的消息吞吐量可以随规模扩展，而 Zigbee 似乎很早就遇到了瓶颈。我不确定这在什么时候会产生重大影响，但趋势非常明显。不过最后一张表简直吓人：OpenThread 在节点掉线后需要半分钟才能恢复，而 Zigbee 只需要四分之一秒！哇。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论精准地捕捉到了研究中关于吞吐量扩展性与网络恢复时间这两个最核心的性能对比点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49177189" target="_blank" rel="noopener noreferrer">@vdfs</a>
+        </div>
+        <p class="comment-text">这些协议增加了如此多的复杂性，相比之下 Wi-Fi/TCP/IP 简直快如闪电。它们解决了一些问题，但又引入了更多新问题，最后你只会陷入那个关于协议标准的经典 XKCD 漫画困境中。</p>
+        <p class="comment-reason"><span>入选理由</span>评论提出了对物联网协议复杂性的质疑，反映了开发者在面对层出不穷的新标准时的普遍焦虑。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>尽管 Matter 被业界寄予厚望，视为终结物联网碎片化的救星，但这项研究给盲目追新的人泼了一盆冷水。30 秒的故障恢复时间在智能照明或安全报警系统中几乎是不可接受的，这反映了 IP 化协议在带来互操作性的同时，也引入了更复杂的握手和路由开销。正如评论区所指出的，Zigbee 在底层协议上的深厚积淀使其在极端情况下的鲁棒性依然稳健。对于开发者而言，Matter 目前更像是一个处于成长期、追求通用性而牺牲了部分极致性能的方案，而非在所有维度上都超越前代的终极标准。</p>
+        </div>
+      </div>
+    </details>
+    </section>
+    <footer class="footer">
+      <p>新闻只按 HN 原始名次和讨论度排序后取前 20，不做主题挑选。评论来自有界采样，
+        只是观点，不作为新闻事实来源。</p>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const themeButtons = [
+        ...document.querySelectorAll(".theme-button[data-theme-choice]")
+      ];
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      const applyThemeChoice = (requestedChoice, persist = true) => {
+        const choice = ["auto", "day", "night"].includes(requestedChoice)
+          ? requestedChoice
+          : "auto";
+        const theme = choice === "auto" ? themeForLocalTime() : choice;
+        document.documentElement.dataset.themeChoice = choice;
+        document.documentElement.dataset.theme = theme;
+        themeButtons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.themeChoice === choice)
+          );
+        });
+        if (persist) {
+          try {
+            localStorage.setItem("hnDigestThemeChoice", choice);
+          } catch (_) {
+            // The switch still works when report sandboxing blocks storage.
+          }
+        }
+      };
+      const refreshAutomaticTheme = () => {
+        if (document.documentElement.dataset.themeChoice === "auto") {
+          applyThemeChoice("auto", false);
+        }
+      };
+      applyThemeChoice(document.documentElement.dataset.themeChoice, false);
+      themeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyThemeChoice(button.dataset.themeChoice);
+        });
+      });
+      window.setInterval(refreshAutomaticTheme, 60 * 1000);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) refreshAutomaticTheme();
+      });
+
+      const list = document.querySelector(".story-list");
+      const controls = document.querySelector(".view-switch");
+      const buttons = [...document.querySelectorAll(".view-button")];
+      const status = document.querySelector(".view-status");
+      const total = list ? list.children.length : 0;
+      if (!list || !controls || total <= 10) {
+        if (controls) controls.hidden = true;
+        return;
+      }
+
+      const visibleCountStorageKey = "hnDigestVisibleCountV3";
+      const applyVisibleCount = (requestedCount, persist = true) => {
+        const count = requestedCount === 20 ? 20 : 10;
+        const shown = Math.min(count, total);
+        list.dataset.visibleCount = String(count);
+        buttons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(Number(button.dataset.count) === count)
+          );
+        });
+        status.textContent = `当前显示前 ${shown}`;
+        if (persist) {
+          try {
+            localStorage.setItem(visibleCountStorageKey, String(count));
+          } catch (_) {
+            // The switch still works when local privacy settings block storage.
+          }
+        }
+      };
+
+      let initialCount = 20;
+      try {
+        const storedCount = Number(localStorage.getItem(visibleCountStorageKey));
+        if ([10, 20].includes(storedCount)) initialCount = storedCount;
+      } catch (_) {
+        // Keep the all-20 default.
+      }
+      applyVisibleCount(initialCount, false);
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyVisibleCount(Number(button.dataset.count));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
