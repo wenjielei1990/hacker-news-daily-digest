@@ -1,0 +1,2059 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Hacker News 每日精选：通俗摘要、精彩评论与 LLM 锐评">
+  <title>HN 每日精选 · 2026-08-07</title>
+  <script>
+    (() => {
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      let choice = "auto";
+      try {
+        choice = localStorage.getItem("hnDigestThemeChoice") || "auto";
+      } catch (_) {
+        // Storage may be unavailable in a sandboxed report.
+      }
+      if (!["auto", "day", "night"].includes(choice)) {
+        choice = "auto";
+      }
+      const theme = choice === "auto" ? themeForLocalTime() : choice;
+      document.documentElement.dataset.themeChoice = choice;
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d252d;
+      --muted: #6c747c;
+      --paper: #f5f3ed;
+      --card: #fffefa;
+      --line: #d9d6ce;
+      --orange: #e85d2a;
+      --orange-soft: #fff0e8;
+      --blue-soft: #edf3f7;
+      --green: #25644f;
+      --story-open-line: #c7c3b9;
+      --story-shadow: rgba(31, 36, 40, .07);
+      --summary-ink: #47515a;
+      --detail-ink: #37424c;
+      --section-ink: #5f6871;
+      --hint-ink: #8a9095;
+      --comment-meta-ink: #637080;
+      --comment-label-bg: #d7e6ef;
+      --comment-label-ink: #315b73;
+      --comment-text-ink: #2e3944;
+      --comment-reason-ink: #637080;
+      --comment-reason-label: #2e5e78;
+      --comment-empty-ink: #8a9097;
+      --editorial-ink: #333b42;
+      --humor-bg: #f8e8bd;
+      --humor-ink: #795d16;
+      --wisdom-bg: #dcebdc;
+      --wisdom-ink: #315f3a;
+      --counterpoint-bg: #eadff1;
+      --counterpoint-ink: #614273;
+    }
+    html[data-theme="night"] {
+      color-scheme: dark;
+      --ink: #e0e7e1;
+      --muted: #9ba79f;
+      --paper: #111713;
+      --card: #1a221d;
+      --line: #303c34;
+      --orange-soft: #2c211b;
+      --blue-soft: #202c2e;
+      --green: #83c8a2;
+      --story-open-line: #435148;
+      --story-shadow: rgba(0, 0, 0, .28);
+      --summary-ink: #c2ccc5;
+      --detail-ink: #d1d8d3;
+      --section-ink: #aab5ae;
+      --hint-ink: #929e96;
+      --comment-meta-ink: #a8b7b8;
+      --comment-label-bg: #2f474d;
+      --comment-label-ink: #b8dbe2;
+      --comment-text-ink: #d5dcda;
+      --comment-reason-ink: #aebbb8;
+      --comment-reason-label: #92c6cf;
+      --comment-empty-ink: #929e96;
+      --editorial-ink: #d9d5d0;
+      --humor-bg: #403721;
+      --humor-ink: #e3cb87;
+      --wisdom-bg: #293c2c;
+      --wisdom-ink: #a8d3ae;
+      --counterpoint-bg: #382d40;
+      --counterpoint-ink: #d0b4df;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .18s ease, color .18s ease;
+    }
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--orange); }
+    .masthead {
+      border-top: 5px solid var(--orange);
+      border-bottom: 1px solid #343b43;
+      background: #18212a;
+      color: white;
+    }
+    .masthead-inner, main {
+      width: min(860px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+    .masthead-inner { padding: 25px 0 27px; }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      background: var(--orange);
+      color: white;
+      font-family: ui-serif, Georgia, serif;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+    .archive-link { color: #bac2ca; }
+    .theme-switch {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .theme-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 8px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .theme-button:hover { color: white; }
+    .theme-button[aria-pressed="true"] {
+      background: #46515b;
+      color: white;
+    }
+    .theme-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .eyebrow {
+      color: #ff9670;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 7px 0 8px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 6vw, 46px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.03;
+    }
+    .dek {
+      margin: 0;
+      color: #c0c8d0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      margin-top: 17px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .stats strong { color: white; font-size: 13px; margin-right: 3px; }
+    .view-switch {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 13px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .view-switch[hidden] { display: none; }
+    .view-buttons {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .view-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 9px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .view-button:hover { color: white; }
+    .view-button[aria-pressed="true"] {
+      background: var(--orange);
+      color: white;
+    }
+    .view-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .view-status { color: #c0c8d0; }
+    .ranking-rule {
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255, 255, 255, .09);
+      color: #9faab4;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .ranking-rule strong {
+      color: #e7eaed;
+      margin-right: 5px;
+    }
+    main { padding: 20px 0 72px; }
+    .story-list {
+      display: grid;
+      gap: 9px;
+    }
+    .story-list[data-visible-count="10"] .story:nth-child(n+11),
+    .story-list[data-visible-count="20"] .story:nth-child(n+21) {
+      display: none;
+    }
+    .story {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--card);
+      overflow: clip;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .story[open] {
+      border-color: var(--story-open-line);
+      box-shadow: 0 14px 34px var(--story-shadow);
+    }
+    .story-overview {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 13px;
+      padding: 17px 20px 15px 15px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .story-overview::-webkit-details-marker { display: none; }
+    .story-overview:focus-visible {
+      outline: 3px solid rgba(232, 93, 42, .45);
+      outline-offset: -3px;
+    }
+    .rank-number {
+      color: var(--orange);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .story-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 14px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .story-kicker .source {
+      color: var(--green);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h2 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 10px;
+      margin: 5px 0 5px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(17px, 2.3vw, 19px);
+      font-weight: 700;
+      letter-spacing: -.008em;
+      line-height: 1.28;
+    }
+    .title-link { text-decoration: none; }
+    .discussion-link {
+      color: var(--orange);
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .summary {
+      margin: 0;
+      color: var(--summary-ink);
+      font-size: 14.5px;
+      line-height: 1.72;
+      white-space: pre-line;
+    }
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--hint-ink);
+      font-size: 10px;
+      font-weight: 750;
+    }
+    .chevron {
+      display: inline-block;
+      color: var(--orange);
+      transition: transform .18s ease;
+    }
+    .story[open] .chevron { transform: rotate(180deg); }
+    .story[open] .expand-hint > span:first-child { font-size: 0; }
+    .story[open] .expand-hint > span:first-child::after {
+      content: "收起详情";
+      font-size: 10px;
+    }
+    .story-details {
+      margin-left: 80px;
+      padding: 17px 20px 24px 0;
+      border-top: 1px solid var(--line);
+    }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      color: var(--section-ink);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .detail-summary > p {
+      margin: 0;
+      color: var(--detail-ink);
+      font-size: 14px;
+      line-height: 1.78;
+    }
+    .detail-summary > p + p { margin-top: 12px; }
+    .comments-panel {
+      margin-top: 21px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+    .comments-list { display: grid; gap: 9px; }
+    .featured-comment {
+      margin: 0;
+      padding: 14px 16px;
+      border: 0;
+      border-radius: 3px;
+      background: var(--blue-soft);
+    }
+    .comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 7px;
+      font-size: 11px;
+    }
+    .comment-meta a { color: var(--comment-meta-ink); text-decoration: none; }
+    .comment-label {
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--comment-label-bg);
+      color: var(--comment-label-ink);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .05em;
+    }
+    .comment-label-humor {
+      background: var(--humor-bg);
+      color: var(--humor-ink);
+    }
+    .comment-label-wisdom {
+      background: var(--wisdom-bg);
+      color: var(--wisdom-ink);
+    }
+    .comment-label-counterpoint {
+      background: var(--counterpoint-bg);
+      color: var(--counterpoint-ink);
+    }
+    .comment-text {
+      margin: 0;
+      color: var(--comment-text-ink);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 13px;
+      line-height: 1.62;
+      white-space: pre-line;
+    }
+    .comment-reason {
+      margin: 9px 0 0;
+      color: var(--comment-reason-ink);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .comment-reason span {
+      margin-right: 7px;
+      color: var(--comment-reason-label);
+      font-weight: 850;
+    }
+    .comments-empty {
+      margin-top: 19px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      color: var(--comment-empty-ink);
+      font-size: 12px;
+    }
+    .editorial {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      align-items: start;
+      margin-top: 21px;
+      padding: 13px 15px;
+      border-left: 3px solid var(--orange);
+      background: var(--orange-soft);
+    }
+    .editorial-mark {
+      padding-top: 2px;
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+    .editorial p {
+      margin: 0;
+      color: var(--editorial-ink);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.62;
+    }
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 27px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .footer p { margin: 0; max-width: 680px; }
+    .footer a { font-weight: 800; }
+    @media (max-width: 620px) {
+      .masthead-inner, main { width: min(100% - 20px, 860px); }
+      .masthead-inner { padding-top: 18px; }
+      .topline {
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+      .top-actions {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
+      .story-overview {
+        grid-template-columns: 37px minmax(0, 1fr);
+        gap: 9px;
+        padding: 14px 13px 12px 10px;
+      }
+      .rank-number { font-size: 22px; }
+      .story-details { margin-left: 56px; padding-right: 13px; }
+      .editorial { grid-template-columns: 1fr; gap: 4px; }
+      .footer { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .masthead { background: white; color: var(--ink); border-bottom-color: var(--line); }
+      .topline, .archive-link, .expand-hint, .view-switch, .theme-switch { display: none; }
+      main { width: 100%; }
+      .story { display: block !important; break-inside: avoid; }
+      .story-details { display: block; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="topline">
+        <div class="brand"><span class="brand-mark">Y</span> Hacker News</div>
+        <div class="top-actions">
+          <div class="theme-switch" role="group" aria-label="选择页面颜色模式">
+            <button class="theme-button" type="button" data-theme-choice="auto" aria-pressed="true">自动</button>
+            <button class="theme-button" type="button" data-theme-choice="day" aria-pressed="false">日间</button>
+            <button class="theme-button" type="button" data-theme-choice="night" aria-pressed="false">夜间</button>
+          </div>
+          <a class="archive-link" href="../index.html">每日归档 →</a>
+        </div>
+      </div>
+      <div class="eyebrow">2026-08-07 · top feed · 过去 36 小时</div>
+      <h1>今天的 Hacker News</h1>
+      <p class="dek">前 20 篇已经全部准备好；默认显示前 20，也可以切换到前 10。</p>
+      <div class="stats">
+        <span><strong>20</strong>篇已准备</span>
+        <span><strong>19</strong>篇有精彩评论</span>
+        <span>更新于 2026-08-07 08:01 PDT</span>
+        <span>生成模型 <strong>gemini/gemini-3-flash-preview</strong></span>
+      </div>
+      <div class="view-switch" aria-label="选择新闻显示数量">
+        <span>显示</span>
+        <div class="view-buttons">
+          <button class="view-button" type="button" data-count="10" aria-pressed="false">前 10</button>
+          <button class="view-button" type="button" data-count="20" aria-pressed="true">前 20</button>
+        </div>
+        <span class="view-status" aria-live="polite">当前显示前 20</span>
+      </div>
+      <div class="ranking-rule">
+        <strong>排序规则</strong>HN 原始名次 + 低讨论量降权。公式：原始名次 + 0.3 × max(0, 50 − 评论数)；50 条评论以上不降权。
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="story-list" data-visible-count="20">
+      
+    <details class="story" id="story-49208314">
+      <summary class="story-overview">
+        <span class="rank-number">01</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">bbc.com</span>
+            <span>657 points</span>
+            <span>原始 #1 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.bbc.com/news/articles/c1e1vg0gjl5o" target="_blank"
+              rel="noopener noreferrer">US strikes $1.2B deal to pay German firm to halt offshore wind projects</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49208314" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 608</a>
+          </h2>
+          <p class="summary">美国政府已达成一项 12 亿美元的协议，向德国能源公司 RWE 支付赔偿金以停止其在美国的海上风电项目。此举反映了现任政府将能源重心从可再生能源转向化石燃料的政策转变。内政部长道格·伯古姆表示，美国需要一个基于“常识”而非“昂贵补贴”的能源系统。批评者指出，在 AI 数据中心导致电力需求激增的当下，花钱阻止能源生产令人费解。然而，有分析认为这些项目因最初租赁成本过高，在经济上本就难以盈利。这一决策标志着美国在应对气候变化和能源转型路径上的重大倒退。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>特朗普政府决定支付 12 亿美元给德国 RWE 公司，以终止其在美国的海上风电租赁协议。这一举动是美国能源政策剧烈转向的明确信号，旨在削弱对风能等清洁能源的依赖，转而支持天然气等传统能源。内政部长道格·伯古姆在社交媒体上辩称，美国纳税人理应拥有一个基于经济常识的能源体系，而不是一个靠高额补贴维持的体系。这笔赔偿金实际上是政府为了收回开发权并阻止项目继续进行而支付的代价。</p><p>然而，这一决策正值美国面临严峻的能源挑战之际。随着人工智能和大型数据中心的扩张，电力需求正以前所未有的速度增长，而海上风电原本被寄予厚望。尽管政府将其描述为节省开支，但反对者认为，在能源紧缺时花钱减少供应是极不理智的。不过，行业内部也有不同声音，认为这些项目最初的竞标价格过高，导致其在当前经济环境下已失去可行性。对于 RWE 来说，这笔交易可能是一次“体面退出”的机会，而对于美国能源市场，这预示着未来几年在清洁能源转型上将面临更多不确定性。由于原始文章内容有限，更多细节主要基于政府公开声明及行业讨论。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49210630" target="_blank" rel="noopener noreferrer">@gehsty</a>
+        </div>
+        <p class="comment-text">我们需要注意不要把婴儿和洗澡水一起倒掉——这些项目的租赁费用太高了，以至于项目本身在经济上根本无法生存。开发商们可能在私下里欢欣鼓舞，因为他们终于可以在没有重大财务损失的情况下退出这些头寸了。这并不意味着不应该建设可再生能源或海上风电，只是意味着授予场地的制度以及电力采购合同的制定方式需要重新设计。世界上很多地方都在为此挣扎（最近英国重新招标了 Mona 租赁区，条件比最初的第四轮租赁要优惠得多）。通常来说，我认为最好的方法是收取几乎为零或名义上的租赁费，然后围绕双向差价合约（CFD）进行竞争性拍卖——如果市场价格低于执行价格，国家补足差额；如果市场价格高于执行价格，超出部分返还给国家。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个重要的经济视角，解释了为什么这些项目在商业上可能已经失败，而不仅仅是政治干预的结果。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49208499" target="_blank" rel="noopener noreferrer">@saagarjha</a>
+        </div>
+        <p class="comment-text">&gt; 内政部长道格·伯古姆在 X 上发布的一份声明中表示，美国人理应拥有一个建立在常识基础上的能源系统，而不是一个依赖“昂贵补贴”的系统。
+我同意。这就是为什么我们要建设海上风电，而不是补贴化石燃料，对吧？</p>
+        <p class="comment-reason"><span>入选理由</span>讽刺地指出了政府在“补贴”定义上的双重标准，引发了关于化石燃料补贴的讨论。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49209863" target="_blank" rel="noopener noreferrer">@whack</a>
+        </div>
+        <p class="comment-text">永远不要把可以归因于利益的行为归咎于愚蠢。当你把美国或罗马帝国作为一个整体来看时，这确实看起来很愚蠢。但当你观察做这些“蠢事”的具体个人，以及那些支持他们的人时，这完全符合他们自己的最佳利益。</p>
+        <p class="comment-reason"><span>入选理由</span>从个人利益而非集体理性的角度解释了政策决策背后的逻辑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49208540" target="_blank" rel="noopener noreferrer">@chewbacha</a>
+        </div>
+        <p class="comment-text">世界部分地区正处于水深火热之中，但美国却在重新分配资金以停止可再生能源并转向天然气。由于 AI 数据中心的存在，能源需求比以往任何时候都高，但我猜下一个模型比一个宜居的环境更重要。</p>
+        <p class="comment-reason"><span>入选理由</span>将能源政策与当前最热门的 AI 算力需求联系起来，指出了政策与现实需求的矛盾。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这种“花钱买停工”的策略在能源需求激增的背景下显得尤为魔幻。政府一边喊着要能源独立和降低成本，一边却支付巨款让现成的发电设备胎死腹中。虽然有观点认为这些项目本身就存在经济缺陷，开发商可能正庆幸能借此“解套”，但这种通过行政手段强行逆转能源结构的举动，更像是为了兑现政治承诺而牺牲长期的基础设施建设。在 AI 竞赛对电力如饥似渴的今天，这种做法的代价可能远不止这 12 亿美元。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49209546">
+      <summary class="story-overview">
+        <span class="rank-number">02</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">nbcnews.com</span>
+            <span>218 points</span>
+            <span>原始 #2 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.nbcnews.com/business/economy/july-2026-jobs-report-rcna591138" target="_blank"
+              rel="noopener noreferrer">U.S. economy lost 23,000 jobs in July, a sudden reversal</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49209546" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 147</a>
+          </h2>
+          <p class="summary">美国经济在2026年7月意外减少了2.3万个就业岗位，打破了此前连续四个月的增长势头。失业率微降至4.1%，但3.2%的薪资增长速度已落后于3.5%的通胀率。这一疲软表现主要受地缘政治冲突导致的能源价格高企影响，休闲、零售和教育行业裁员明显。尽管就业数据不佳，股市却因预期美联储可能推迟加息而出现反弹。然而，由于前期数据被大幅下调且劳动参与率降至近年低点，劳动力市场的真实健康状况令人担忧。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>2026年7月的就业报告给美国劳动力市场泼了一盆冷水，非农就业人数减少了2.3万人，远低于经济学家此前增加8.3万人的预期。更令人不安的是，劳工统计局大幅下调了前两个月的数据，5月和6月的就业增幅合计缩减了10.3万人，显示出增长势头早已放缓。目前，薪资增长年率为3.2%，未能跑赢3.5%的通胀率，这意味着工人的实际购买力正在下降。受伊朗冲突导致的能源价格上涨影响，汽油价格已飙升至每加仑4.04美元，进一步加剧了消费者的经济压力。</p><p>从行业分布来看，教育、休闲和零售业是裁员的重灾区，其中地方政府教育部门减少了5万个岗位，休闲和餐饮业减少了4万个。虽然医疗保健、建筑和制造业仍有小幅增长，但整体势头明显疲软。市场对此反应奇特：由于就业数据低迷降低了美联储在9月加息的可能性，标普500和纳斯达克期货在报告发布后反而走高。未来需要密切关注劳动参与率的持续下滑，这可能暗示更多劳动者因就业环境恶化而彻底退出了劳动力市场。此外，能源价格的波动和地缘政治局势仍将是影响未来就业复苏的关键不确定因素。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49210082" target="_blank" rel="noopener noreferrer">@ceejayoz</a>
+        </div>
+        <p class="comment-text">另外请注意：
+&gt; 劳动力市场还有另一个令人不安的迹象，劳工统计局表示，它将前两个月的数据合计下调了 10.3 万人。5 月份的就业总数减少了 6.6 万人，降至 12.9 万人，而 6 月份的总数减少了 3.7 万人，降至 5.7 万人。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了报告中极易被忽视但至关重要的“回溯下调”数据，揭示了劳动力市场比初看更严重的疲软。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49210825" target="_blank" rel="noopener noreferrer">@GoofGarage</a>
+        </div>
+        <p class="comment-text">确实如此。值得注意的是，劳动参与率一直在下降。我们现在降到了 61.4%。2026 年 6 月是 61.5%，2025 年 6 月是 62.3%。
+我们还有 480 万兼职人员想要全职工作。这比上个月的 470 万有所增加，也高于 2025 年 6 月的 450 万和 2024 年 6 月的 420 万。
+还有 600 万人想要工作但没有就业。这与 2025 年 6 月持平，但自 2024 年 6 月以来增加了 80 万人。
+所以，如果你采用 U-3 数字（即报道的数字），然后计入另外两个指标，你实际上会发现有 10.5% 的人处于失业、灰心或就业不足状态。
+—
+另一个从未被回答的问题是：“需要创造多少就业机会才能达到平衡？”，即就业率保持稳定的水平。媒体或劳工统计局（BLS）从不谈论这一点，但实际上得到一个近似答案并不难。
+你应该查看 18-22 年前的人口增长率（因为这些人现在正进入劳动力市场），乘以劳动参与率，然后按时期进行适当划分。通常情况下，考虑到历史和当前的人口增长率，美国经济每月需要创造 14 万至 14.5 万个经季节性调整的新就业岗位，才能维持稳定的就业率。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者通过对劳动参与率和就业不足人口的深入分析，提供了一个比官方失业率更严峻的经济视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49211192" target="_blank" rel="noopener noreferrer">@astro1234</a>
+        </div>
+        <p class="comment-text">作为一名数据科学家，看到这些数字每次发布时，所有新闻报道都一贯缺乏误差线，或者完全不讨论这些数字周围的不确定性程度，这让人感到非常沮丧。</p>
+        <p class="comment-reason"><span>入选理由</span>从专业数据分析的角度指出了大众媒体在报道经济指标时普遍存在的统计严谨性缺失。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49210778" target="_blank" rel="noopener noreferrer">@debo_</a>
+        </div>
+        <p class="comment-text">与此同时，加拿大在同月增加了 7.5 万个就业岗位。
+&gt; 增长主要集中在私营部门，批发和零售贸易、金融和保险以及专业和科学服务领域表现强劲。由于官方致力于削减政府支出，公共部门就业人数减少了 14,500 人。
+https://www.theglobeandmail.com/business/economy/article-can...</p>
+        <p class="comment-reason"><span>入选理由</span>通过与邻国加拿大的就业增长对比，暗示美国当前的经济困境可能具有特定的政策或环境诱因。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这份就业报告最荒诞的地方在于，劳动力市场的“坏消息”反而成了华尔街的“好消息”。由于就业人数意外萎缩，投资者打赌美联储会投鼠忌器，降低 9 月加息的概率，导致股市在数据发布后反而跳涨。但剥开表面的数字，情况并不乐观：前几个月的数据被大幅“回溯下调”，说明之前的繁荣可能部分源于统计滞后。正如社区讨论所指出的，劳动参与率的持续走低和实际薪资的缩水，暗示着普通工人的购买力正在被通胀蚕食，这种结构性的疲软很难仅靠货币政策的微调来扭转。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49204352">
+      <summary class="story-overview">
+        <span class="rank-number">03</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">theguardian.com</span>
+            <span>479 points</span>
+            <span>原始 #4 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.theguardian.com/technology/2026/aug/06/new-mexico-court-meta" target="_blank"
+              rel="noopener noreferrer">New Mexico court orders Meta to pay $567m over harms to children’s mental health</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49204352" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 267</a>
+          </h2>
+          <p class="summary">美国新墨西哥州法院裁定 Meta 公司需支付 5.67 亿美元，用于补偿其社交平台对儿童心理健康造成的伤害。加上此前的罚金，Meta 在该州面临的总赔偿额已达 9.42 亿美元。法官认定 Meta 明知其产品具有成瘾性且存在儿童性剥削风险，却未能采取有效保护措施。这笔资金将主要用于该州青少年的心理健康治疗、预防和筛查服务。此外，法院还要求 Meta 改进年龄验证机制，并建立学校举报渠道。Meta 表示不服裁决并计划上诉，此案被视为各州利用法律手段约束科技巨头的风向标。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这项裁决源于新墨西哥州对 Meta 发起的一场具有里程碑意义的诉讼。法院认定 Meta 旗下的 Facebook 和 Instagram 违反了该州的“公共妨害法”，其产品设计不仅诱导青少年成瘾，还成为了儿童性剥削的温床。在总计 9.42 亿美元的赔偿中，约 4.2 亿美元将直接拨入一个专项基金，用于为受影响的年轻人提供心理治疗。其余资金则用于未来五年的预防教育、筛查服务及相关行政开支。法官还下达了强制性的整改令，要求 Meta 开发基于人工智能的年龄预测模型，并允许学校工作人员直接举报疑似未成年用户。</p><p>尽管 Meta 辩称其已在保护青少年方面投入巨大，但法院认为其现有的年龄验证和隐私设置远远不够。裁决要求 Meta 在检测到疑似未成年人时，必须强制其提供年龄证明，否则将默认限制其访问权限。Meta 方面对裁决表示强烈反对，认为这些指控歪曲了事实，并已准备提起上诉。此案的特殊之处在于，它绕过了陷入僵局的联邦立法，转而利用州级法律对科技巨头施压。目前，田纳西州和加利福尼亚州也在进行类似的诉讼，新墨西哥州的这一判决可能会引发连锁反应，迫使社交媒体公司从根本上改变其针对未成年人的产品逻辑。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49206604" target="_blank" rel="noopener noreferrer">@tmp10423288442</a>
+        </div>
+        <p class="comment-text">很多人看到这个新闻会发出惯常的冷嘲热讽，说这只是 Meta 全球收入中微不足道的一小部分，就像被蚊子叮了一下。这确实没错，但与欧盟不同，新墨西哥州只是一个很小的司法管辖区，人口仅 200 多万。因此，仅针对新墨西哥州就判处 9.42 亿美元的罚金其实是非常巨大的。如果按人口比例分配 Meta 在美国和加拿大的收入，Meta 过去五年在新墨西哥州的总收入大概只有 15 亿到 20 亿美元。考虑到这一点，这笔判决金占到了 Meta 在该州预期收益的一半到三分之二。如果 Meta 认为该州会持续开出这种规模的罚单，那这确实具有严重的威慑力。虽然我觉得上诉后判决很可能会被推翻或大幅削减，但即便罚金降到一半，其比例之高也是我听过的任何公司（更不用说科技公司了）判罚中罕见的。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从地域收入比例的角度分析了罚金的实际分量，反驳了“罚款太轻”的常见观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49204635" target="_blank" rel="noopener noreferrer">@tristanj</a>
+        </div>
+        <p class="comment-text">根据法院裁决，Meta 违反的具体法律是新墨西哥州的公共妨害法（NMSA 1978 § 30-8-1）。相关条款规定：公共妨害是指在没有合法授权的情况下，明知故犯地创建、执行或维护任何影响公民的事物，且该事物要么：A. 损害公众健康、安全、道德或福利；或者 B. 干扰公众权利的行使和享有。法官认定 Meta 运营 Facebook 和 Instagram 构成了损害公众健康、安全和福利的公共妨害，并加重了公立学校、医院和执法部门的负担。法官命令 Meta 向一个基金支付 5.67 亿美元，以减轻已造成的损害。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了判决的核心法律依据，解释了为何社交媒体行为会被界定为“公共妨害”。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49208161" target="_blank" rel="noopener noreferrer">@tristanj</a>
+        </div>
+        <p class="comment-text">这个分析实际上还低估了处罚的严重程度。法院的裁决仅适用于新墨西哥州 18 岁以下的未成年人。该州 18 岁以下人口约 45 万，其中 13-17 岁（Meta 官方要求的注册年龄）约 14 万。根据皮尤研究中心的数据，约 70% 的青少年使用 Instagram，30% 使用 Facebook。算上可能虚报年龄的 13 岁以下用户，受影响群体大约 13 万人。如果把 9.42 亿美元平摊到这 13 万用户身上，相当于每个用户被罚了约 7250 美元。如果这笔罚金最终落实并赔付给受影响方，这些孩子可能会因为拥有 Facebook 或 Instagram 账号而获得数千美元的奖励。这会产生一种奇怪的激励机制：未成年人反而会因为注册那些正在伤害他们的平台而获得奖励。</p>
+        <p class="comment-reason"><span>入选理由</span>通过人均罚金的计算，揭示了判决金额在微观层面的惊人程度以及潜在的奇特激励。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49207790" target="_blank" rel="noopener noreferrer">@sajithdilshan</a>
+        </div>
+        <p class="comment-text">Instagram (Reels) 和 TikTok 简直就是线上版的“海洛因”。我记得疫情期间下载 TikTok 只是想看看大家在聊什么，结果下一秒我就在漫无目的地刷了好几个小时。后来 Reels 也是一样。我打开应用时心想就看 15 分钟，结果时间过得飞快，最后浪费了好几个小时。而且评论区是最糟糕的，全是那些为了骗赞而发的重复、无脑的内容。去年我终于删掉了 TikTok，几周前也注销了 Instagram 账号。从那以后，我睡眠变好了，生活中的负面情绪和压力也减少了。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了用户层面的真实成瘾体验，佐证了法院关于“产品危害心理健康”的观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49207640" target="_blank" rel="noopener noreferrer">@dizlexic</a>
+        </div>
+        <p class="comment-text">管好你自己的孩子吧。现在有无数的服务可以屏蔽你不想要的内容，甚至有专门的 ISP 和手机运营商提供过滤服务。别再认为政府监管和实名注册是防止儿童接触不良内容的唯一途径了。强制取消互联网匿名性带来的危害远比好处多。仅仅因为现在掌权的人和你观点一致，并不保证他们会一直掌权。每当有人提到个人责任时，那些支持“保姆国家”的人就会不高兴。仅仅因为管教孩子很难，并不意味着你必须让政府（在暴力威胁下）来帮你。难道大家都忘了社交媒体并不是一项权利，也不是生存的必需品吗？你和你的家人完全可以选择不参与其中。</p>
+        <p class="comment-reason"><span>入选理由</span>代表了强调个人责任和反对政府过度干预的典型观点，为讨论提供了平衡。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>新墨西哥州的这一判决标志着美国监管科技巨头的一个策略性转折：在联邦层面保护未成年人的立法屡屡碰壁之际，各州开始尝试将社交媒体的成瘾性设计界定为“公共妨害”。这种法律武器曾被有效用于打击烟草和阿片类药物公司。正如评论指出的，虽然 9 亿美元对 Meta 全球版图看似九牛一毛，但若按该州用户人均 7000 多美元的罚金标准来看，其惩罚力度已远超“经营成本”的范畴。这种“化整为零”的州级诉讼如果形成规模，将迫使 Meta 在放弃特定州市场与彻底重构产品逻辑之间做出艰难选择。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49201970">
+      <summary class="story-overview">
+        <span class="rank-number">04</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">theregister.com</span>
+            <span>766 points</span>
+            <span>原始 #6 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.theregister.com/systems/2026/08/06/amd-acquires-ai-chip-startup-taalas-to-boost-inference-performance-by-etching-models-into-silicon/5284344" target="_blank"
+              rel="noopener noreferrer">AMD acquires Taalas to boost inference performance by etching models in silicon</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49201970" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 581</a>
+          </h2>
+          <p class="summary">AMD 宣布收购 AI 芯片初创公司 Taalas，旨在通过将 AI 模型权重直接“刻”入硅片来极大提升推理性能。这种被称为“模型专用集成电路”（MSIC）的技术，通过消除对昂贵高带宽内存（HBM）的依赖，使推理速度比传统 GPU 快出数十倍。该技术能显著降低运行大型 AI 智能体和复杂推理任务的成本与功耗。然而，其核心局限在于缺乏灵活性：一旦模型权重固化在硬件中，任何重大更新都需要重新制造芯片。这一举措标志着 AMD 正通过差异化硬件路径，在高端推理市场直接挑战英伟达的统治地位。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>AMD 收购多伦多初创公司 Taalas，标志着 AI 硬件进入了“硬核固化”阶段。Taalas 的核心技术是将 AI 模型的权重直接蚀刻在芯片的晶体管中，创造出所谓的模型专用集成电路（MSIC）。在初步测试中，其 HC1 芯片运行 Llama 3.1 8B 模型的速度达到了每秒近 1.7 万个 token，性能是传统 GPU 的 48 倍。这种架构通过“掩膜只读存储器（mask-ROM）”存储权重，并利用 SRAM 处理 KV 缓存和微调适配器，彻底解决了 token 生成过程中的内存带宽瓶颈。</p><p>AMD 计划将这种技术整合到其 Helios 机架系统中，采用一种混合架构：由 GPU 处理计算密集型的提示词（Prompt）解析，而将高速的 token 生成任务交给 Taalas 加速器。这种设计非常适合“推理时扩展（test-time scaling）”技术，即让模型在回答前进行更长时间的内部思考，而不会因 token 生成过慢导致用户等待。尽管 Taalas 声称更新模型只需更改两层金属层，成本远低于重新设计芯片，但硬件制造周期依然无法与软件迭代的速度相比。</p><p>这种技术的主要受众预计是像 OpenAI 或 Anthropic 这样的顶级实验室，以及大型推理服务商。当一个模型架构和权重达到足够的成熟度和市场规模时，将其固化为硬件可以带来无与伦比的成本优势。未来，我们可能会看到这种专用芯片被用于手机或汽车等边缘设备，提供极低功耗且响应极快的本地 AI 服务。这种从通用计算向专用计算的转变，预示着 AI 行业正试图通过硬件垂直整合来建立更深的技术护城河。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49202918" target="_blank" rel="noopener noreferrer">@LarsDu88</a>
+        </div>
+        <p class="comment-text">我很惊讶 OpenAI 或 Anthropic 竟然没有先走这一步。中国开源权重模型的崛起正在拉低它们的价值主张，使其商品化。将模型固化到硅片上本应是建立护城河的下一个逻辑步骤。谷歌已经在这么做了，他们除了拥有 TPU 之外，还有一个实验性项目，尝试将量化后的 Flash 模型塞进单个 TPU 进行推理。</p>
+        <p class="comment-reason"><span>入选理由</span>指出将模型固化为硬件是建立竞争护城河的关键手段，并提到了行业巨头的动向。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49208072" target="_blank" rel="noopener noreferrer">@TechTechTech</a>
+        </div>
+        <p class="comment-text">我认为接下来会发生的事情就像当年的 4K 视频解码一样：它最终会变成硅片上的一个模块，运行速度极快且成本几乎为零。对于汽车、家电等场景，“足够好”的 LLM 功能将直接集成在芯片上，以电池级别的功耗提供极速体验。软件工程领域可能也会如此：一个 USB 供电的 AI 加速器，运行 Kimi K3（甚至未来更好的模型），功耗低于 50W，速度超过 10k token/s，价格极低。需要更好的模型？买新硬件就行。旧硬件在很多其他场景下依然够用。我预计中国将成为这一领域的重要参与者，因为这非常符合他们的开源模型加硬件制造战略。</p>
+        <p class="comment-reason"><span>入选理由</span>通过类比视频解码技术，预言了 AI 硬件走向专用化和廉价化的必然趋势。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49203451" target="_blank" rel="noopener noreferrer">@msteffen</a>
+        </div>
+        <p class="comment-text">这很有趣，但我认为有点疯狂。在所有关于模型基准测试和 AI 突破的讨论中，我发现大家很少区分“峰值性能”和“可靠性能”。前沿模型的“峰值性能”很高：能解数学难题、分析大型代码库等。但我的主观感受是，它们的“可靠性能”充其量也就是中等水平：在我随机问的 100 个问题中，它很可能会在好几次回答中说错话或显得很蠢。我认为这两者之间存在内在矛盾：模型越是追求突破或产生幻觉，就越可能想出微妙的解决方案；但同时也越不可能生成一份得体的邮件回复。我经常用模型写代码，但我绝不会让它接管我的日常通信。如果这个想法是为了在数据中心高速运行前沿模型，那可能有用；但如果要把这种不够可靠、容易出错的东西固化到手机硬件里作为日常推理工具，我觉得这不合逻辑。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了关于模型可靠性与硬件固化之间矛盾的深刻见解，质疑了将不成熟模型硬件化的合理性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49202480" target="_blank" rel="noopener noreferrer">@syntaxing</a>
+        </div>
+        <p class="comment-text">老实说，这开始变得越来越有意义了。SOTA（最先进）模型正开始在架构和能力上趋于统一。如果最终出现“基础模型 ASIC”搭配“微调卡”（类似物理形式的 LoRA 适配器）的组合，我一点也不会感到惊讶。</p>
+        <p class="comment-reason"><span>入选理由</span>敏锐地捕捉到了模型架构收敛带来的硬件机遇，并提出了“基础 ASIC + 适配器”的务实方案。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49207278" target="_blank" rel="noopener noreferrer">@dave1010uk</a>
+        </div>
+        <p class="comment-text">我很惊讶大家没有更多地讨论这里潜在的转折点。当技术变快时，它会开启全新的 UX（用户体验）类别，而这些是很难预测的。例如，更快的网速并不意味着让你看 100 倍数量的 HTML4 网页，它带来了 SaaS、流媒体和交互性。我不擅长预测，但有一些想法：1. 所有信息都能根据个人背景实时增强。2. AI 交互看起来更像是“边输入边查找”，而不是一来一回的对话。3. AI 生成大量输出供选择，由人类、AI 或另一个系统来做决定。即使是去年的模型，只要推理速度够快，也能开启各种机会。</p>
+        <p class="comment-reason"><span>入选理由</span>探讨了推理速度实现量变到质变后，可能引发的用户交互革命。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>AMD 收购 Taalas 的举动，实际上是在赌 AI 行业的“ASIC 化”时机已经成熟。长期以来，GPU 的通用性是其核心优势，但在推理成本居高不下的今天，牺牲灵活性换取极致的能效比正成为大厂的共识。正如评论中所言，当模型架构开始收敛，将基础模型固化在硅片上，再通过 LoRA 等手段进行软件微调，可能是解决 AI 算力昂贵问题的终极方案。这种“硬核”路径虽然面临模型迭代过快的风险，但对于追求极致速度的 AI 智能体和实时交互场景来说，Taalas 提供的几十倍性能提升可能是开启下一代用户体验的钥匙。AMD 此举不仅是在追赶英伟达，更是在尝试定义 AI 硬件的下一个范式：从“万能工具”转向“专用神兵”。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49199346">
+      <summary class="story-overview">
+        <span class="rank-number">05</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">notashelf.dev</span>
+            <span>552 points</span>
+            <span>原始 #11 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://notashelf.dev/posts/taste-is-all-thats-left" target="_blank"
+              rel="noopener noreferrer">Taste Is All That&#x27;s Left</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49199346" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 417</a>
+          </h2>
+          <p class="summary">随着 AI 降低了软件开发的门槛，将创意转化为产品的“生产之墙”已经倒塌。过去，高昂的开发成本和繁琐的过程实际上起到了筛选作用，迫使开发者在实践中磨练出辨别优劣的“品味”。现在，AI 可以瞬间生成看似合理的代码或文字，但这种“足够好”的产出往往缺乏灵魂且平庸。作者认为，当生产变得廉价甚至免费时，人类唯一的稀缺价值就只剩下“品味”——即决定什么才值得存在。然而，AI 抹去了学习过程中必要的挫折和磨难，这可能导致未来的人们空有生产力却丧失了判断力。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这篇文章探讨了在 AI 时代，人类在技术创作中角色的根本转变。过去，编写软件的艰辛过程（如调试、查阅手册、处理 API 错误）虽然痛苦，但正是这些“摩擦”培养了开发者的直觉和品味。作者引用罗伯特·波西格关于“质量”的观点，将品味定义为一种在给出理由之前就能识别优劣的直觉。现在，AI 极大地缩短了从想法到成品的距离，使得生产本身变得廉价且充斥着平庸的“废料”（slop）。这种现象带来了一个悖论：虽然生产效率提高了，但由于缺乏失败带来的磨练，新一代开发者可能难以培养出深层的判断力。</p><p>在经济层面，品味面临着巨大的挑战。品味是缓慢的，它要求开发者不断推倒重来，而市场往往只看重速度和“能用就行”。这种“足够好”的逻辑正在溶解追求卓越的动力，导致大量平庸但合格的产品充斥市场。作者指出，当生产成本趋近于零时，策展（Curation）和选择就成了核心竞争力。人类的价值不再体现在“如何制造”，而在于“是否应该制造”以及“制造得是否正确”。最终，品味成了唯一无法被自动化、无法被量化，也无法被剥夺的稀缺资源，它是证明人类曾经参与创作的最后证据。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49201415" target="_blank" rel="noopener noreferrer">@hellojomp</a>
+        </div>
+        <p class="comment-text">关于品味这个话题，我经常想起苏珊·桑塔格在《关于“坎普”的札记》中的这段话：
+“因为品味支配着每一种自由的——而非机械的——人类反应。没有什么比这更具决定性了。人有人的品味，视觉有视觉的品味，情感有情感的品味——行为和道德也有品味。智力实际上也是一种品味：思想的品味。（必须承认的一个事实是，品味的发展往往非常不均衡。同一个人既拥有良好的视觉品味，又拥有良好的人际品味和思想品味，这是很罕见的。）
+品味没有体系，也没有证明。但品味有一种逻辑：即构成并产生某种品味的连贯感性。感性几乎是不可言喻的，但又不完全是。任何可以被塞进系统模具或用粗糙的证明工具处理的感性，都不再是感性了。它已经硬化成了一种思想……”</p>
+        <p class="comment-reason"><span>入选理由</span>引用苏珊·桑塔格的名言，从哲学高度深化了对“品味”本质的理解。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49204420" target="_blank" rel="noopener noreferrer">@madrox</a>
+        </div>
+        <p class="comment-text">过去一年我们一直在讨论 AI 背景下的品味，我想提出一个反面观点：如果竞争对手能在几天内复制你的功能、用户体验和视觉决策，那么你的品味其实并不是什么优势。有多少应用在某人发明了“下拉刷新”后就立刻跟进了？又有多少人还记得（或在乎）是谁的品味孕育了这种交互模式？
+AI 并没有开启一个品味时代。它正在缩短品味的半衰期，并将软件商品化。当软件功能、用户体验和视觉保真度不再是竞争优势时会发生什么？依我看，这就像 90 年代的商业模式。未来几年，我们可能会看到“百货商店式软件”的回归。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个现实的商业视角：在极速复制的时代，品味的竞争优势可能被极度稀释。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49205610" target="_blank" rel="noopener noreferrer">@ulrikrasmussen</a>
+        </div>
+        <p class="comment-text">品味的一个重要特征是人与人之间存在巨大差异，而且由于没有系统或证据来证明什么是“好品味”，我们无法客观地说一个人的品味比另一个人的更好。这正是为什么有人会用经典的面向对象语言构建大型系统，而另一个人会用类型化函数式语言构建几乎相同的系统，每个人都遵循自己内心关于“什么是好品味”的逻辑。最终我们能从中学习，也许在两个项目都工作过的人会提炼自己的品味，开始偏好介于两者之间的东西，并创造出一种有趣的新编程语言。
+我担心的是，当越来越多的人使用 LLM 进行编码时，他们会默认使用 LLM 的“平均品味”，我们将不再能看到关于如何构建事物的有趣新想法。</p>
+        <p class="comment-reason"><span>入选理由</span>指出 AI 可能导致“品味平庸化”，从而扼杀技术多样性和创新。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49201833" target="_blank" rel="noopener noreferrer">@mdwelsh</a>
+        </div>
+        <p class="comment-text">这篇文章引起了我极大的共鸣。作为一个从 20 世纪 80 年代就开始写代码的人，我不得不通过无数次的错误，以最艰难的方式培养自己的品味。每当我看到有人主要使用 Agent 构建的软件演示时，我都会怀疑它的内部质量——或者说，它的设计中是否投入了真正的直觉或判断。但从另一方面看，也许这些都不再重要了——只要它能运行，谁在乎它是怎么造出来的呢。</p>
+        <p class="comment-reason"><span>入选理由</span>来自资深开发者的感悟，揭示了内部质量与外部功能之间的矛盾。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49207667" target="_blank" rel="noopener noreferrer">@innocentoldguy</a>
+        </div>
+        <p class="comment-text">我是一名作家，有一个可能不太受欢迎的观点。我拥有创意写作的大学学位；我以技术写作和编程为生，早在 AI 出现之前，我就在发表关于 Linux、Python、Elixir 等主题的技术文章了——连破折号都用得很地道。
+作为一名作家，在面对 AI 并决定如何看待它时，我的结论是：我从未指责数学家制造“计算器垃圾”。计算器只是一个让复杂的数学工作变得更简单的工具。我现在把 AI 看作写作等领域的计算器。如果想法是好的，信息是可靠的，我不会被偶尔出现的尴尬措辞所困扰。事实是，大多数人本来就写得不太好，所以如果 AI 能帮助他们更好地沟通——即使明显是 AI 生成的——那也挺好的。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个更务实的视角，将 AI 视为提升沟通效率的工具，而非品味的敌人。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章最讽刺的地方在于，作者在文末不得不专门写一段“尸检报告”（Post-mortem），澄清这篇文章并非 AI 生成。由于作者模仿了那种短促、充满反转和戏剧性停顿的散文风格，而这恰恰是 LLM 被训练去模仿的典型风格，导致许多读者将其误认为“AI 废料”。这本身就证明了文章的观点：在 AI 泛滥的时代，人类的独特性正变得难以辨认。正如评论所言，当 AI 抹去了学习过程中的“摩擦”，我们可能会陷入一种“平均品味的陷阱”，虽然产出效率极高，却失去了那些源于错误和偏执的创新。品味确实是最后的高地，但如果通往高地的路被铲平了，未来是否还有人能爬得上去？</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49209921">
+      <summary class="story-overview">
+        <span class="rank-number">06</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">w.on-t.work</span>
+            <span>46 points</span>
+            <span>原始 #10 · 低讨论量降权 +4.5</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://w.on-t.work/web-deployment-model" target="_blank"
+              rel="noopener noreferrer">The web server deployment model breaks at hobby scale</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49209921" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 35</a>
+          </h2>
+          <p class="summary">本文探讨了 Web 服务器部署模型在“兴趣项目”规模下的失效困境。开发者在追求高性能（如将静态文件交给 Nginx）与易用性（如一键部署）之间面临两难选择。为了支持缓存、搜索扩展和服务器端渲染（SSR），部署文档往往变得极其复杂，超出了普通用户的能力。最终，开发者被迫转向“仅支持 Docker”的模式，在容器内塞入完整的技术栈。这种做法虽然解决了支持难题，却导致了请求在多层代理间反复解析的低效局面，背离了轻量级软件的初衷。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>当开发者构建一个旨在让用户自托管的 Web 应用时，往往会陷入架构设计的泥潭。如果遵循专业级的“最佳实践”，将静态文件分发、TLS 终止和缓存外包给专门的反向代理，会极大增加普通用户的配置难度，甚至引发容器间文件访问权限的冲突。反之，如果让应用自身处理所有任务，又会因为编程语言（如 Python 或 Node.js）的并发处理能力有限，导致在低端硬件上运行缓慢。这种矛盾在处理非登录用户缓存时尤为突出，开发者往往发现自己必须在应用内部重新实现一套简陋的缓存机制，以替代那些难以配置的外部工具。</p><p>随着功能需求的增加，如为了 SEO 或无障碍访问而引入的服务器端渲染（SSR），问题会进一步恶化。这通常意味着要运行额外的 Node.js 进程，并配置复杂的转发规则，甚至让主应用充当反向代理。数据库需求也带来了挑战，例如为了支持非拉丁语系的全文搜索，可能需要安装特定的数据库插件，这对于使用共享数据库实例的自托管用户来说几乎是灾难性的。最终，为了降低维护和支持成本，开发者往往会放弃手动安装支持，转而提供一个“臃肿”的 Docker 镜像。这个镜像内部运行着完整的初始化系统、私有数据库、多层缓存和反向代理。虽然用户实现了“一键运行”，但代价是极高的抽象开销：一个简单的请求可能要在容器内外经过四五次 HTTP 解析，仅仅是为了服务一个可能毫无意义的爬虫机器人。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49211434" target="_blank" rel="noopener noreferrer">@SlavikCA</a>
+        </div>
+        <p class="comment-text">我家里有 5Gbps 的光纤，局域网大多是 10Gbps。我托管了几个公共兴趣网站，其中一个是赞美诗和歌曲库，主要是 PDF、MP3 和 MIDI 文件。架构是：OpnSense 路由器 -&gt; Traefik -&gt; Docker 容器。那个容器运行在通过 1Gbps 端口连接的 NAS 上。上周突然收到了超过 1000 RPS 的请求，占用了约 1Gbps 带宽，来自许多不同的 IP。如果我用 AWS 或 Azure 托管，带宽费用每小时会超过 40 美元（除非用 CDN）。我的路由器 CPU 飙升但扛住了，NAS CPU 也飙升但还行。Traefik 的负载非常重：它必须同时接收和发送 1Gbps 的数据，并记录所有请求的访问日志。我的 Alloy &amp; Loki 日志系统也过载了。NAS 本身有缓存，我尝试开启 Traefik 的缓存，结果 2 分钟就 OOM（内存溢出）了。查了一下发现 Traefik 只有企业版才有完善的内存处理缓存功能。最后我通过把网站放在 Cloudflare 代理后面并开启防机器人功能解决了问题。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个真实的“兴趣项目”遭遇大规模流量冲击的案例，展示了自托管架构在极端情况下的脆弱性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49210663" target="_blank" rel="noopener noreferrer">@smashed</a>
+        </div>
+        <p class="comment-text">我对 TLS 终止的问题深有感触。提供一个带有合理 TLS 设置的自托管 Web 应用确实很难。最好的办法几乎就是根本不去处理它。只需让 Docker 镜像提供 http/1.1 服务，并说明需要反向代理来暴露服务。因为实现方式太多了，每个系统管理员或爱好者都有自己的偏好。对于作者提到的匿名和认证缓存问题，我认为对于自托管来说也是徒劳。只需嵌入一个像 Nginx 这样预配置好服务静态文件的性能出色的 Web 服务器即可。使用正确的 Header 和简单可预测的路径。自托管版本通常流量较低，只要能跑通就行。可以提供高级设置，但默认要保持简单，开箱即用且依赖最少。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了另一种务实的开发策略，即在保持简单的同时将复杂性留给有经验的用户。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49210161" target="_blank" rel="noopener noreferrer">@sam_lowry_</a>
+        </div>
+        <p class="comment-text">这只是略微相关，但我对 Immich 真是又爱又恨。爱它的所有功能，但极其讨厌它那个不允许在非 HTTPS 环境下分享相册的“Bug 级功能”。我可以在开发者工具里修改页面内容让它工作，但坦白说，这太离谱了，尤其是 Immich 期望用户自己设置反向代理来实现 HTTPS 访问，却不提供任何帮助（比如在他们的 compose.yaml 中提供一个预配置好的 Caddy 之类的）。</p>
+        <p class="comment-reason"><span>入选理由</span>反映了自托管软件在易用性与安全性要求之间的尴尬平衡点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49210025" target="_blank" rel="noopener noreferrer">@ComputerPerson</a>
+        </div>
+        <p class="comment-text">我以托管 Web 服务器为生，所以可能离这个问题有点远；我不觉得有什么问题是利用 AI 工具进行不到 10 分钟的交互无法安全解决的。只要有像样的 README 和项目结构，Codex/CC/Pi 就能搞定。即使是自托管领域技术最差的人也能做到。我想这可能破坏了“即插即用”的特性，但你不能指望面向互联网的东西是完全即插即用的。（也许这才是真正的悲剧所在。）</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个现代视角，即 AI 工具可能已经降低了配置复杂软件的门槛。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>现在的自托管软件正陷入一种“Docker 依赖症”。为了逃避 Linux 环境配置的复杂性，开发者选择在每个应用里塞进一个微型操作系统。这虽然让部署变得傻瓜化，但也让“轻量级”成了一个笑话。正如评论中所言，当一个兴趣项目需要面对 1000 RPS 的冲击时，这种层层嵌套的架构往往会成为性能瓶颈。我们似乎在用过度的抽象来掩盖 Web 协议栈在分发上的原始缺陷：我们至今没有一种优雅的方式，能让一个简单的二进制文件在不依赖复杂外部配置的情况下，安全且高效地暴露给互联网。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49202716">
+      <summary class="story-overview">
+        <span class="rank-number">07</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">sciencedaily.com</span>
+            <span>173 points</span>
+            <span>原始 #16 · 低讨论量降权 +0.3</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.sciencedaily.com/releases/2026/08/260803080917.htm" target="_blank"
+              rel="noopener noreferrer">Bioengineered chewing gum may offer a way to fight HPV and other microbes</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49202716" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 49</a>
+          </h2>
+          <p class="summary">宾夕法尼亚大学的研究人员开发出一种生物工程咀嚼胶，能显著降低与头颈癌相关的 HPV 病毒和有害细菌水平。这种口香糖利用扁豆中的天然抗病毒蛋白和抗菌肽，精准打击病原体。实验显示，它能将唾液中的 HPV 病毒量减少高达 93%，并几乎清除两种加重病情的细菌。与放疗不同，该疗法在杀灭病菌的同时不会破坏口腔内的益生菌群。这种低成本方案有望成为癌症辅助治疗或预防病毒传播的新手段。目前该研究仍处于实验室阶段，尚需通过临床试验验证其在人体中的实际疗效。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>头颈部鳞状细胞癌（HNSCC）是一种侵略性极强的癌症，常与人乳头瘤病毒（HPV）感染及口腔内特定细菌的滋生密切相关。宾夕法尼亚大学 Henry Daniell 教授团队开发的这种新型口香糖，旨在通过生物工程手段在口腔这一“前线”拦截病原体。其核心成分包括从扁豆（lablab beans）中提取的 FRIL 蛋白（具有广谱抗病毒特性）以及人工合成的抗菌肽 protegrin。在针对患者样本的测试中，该口香糖提取物表现惊人：唾液中的 HPV 载量下降了 93%，口腔冲洗样本中的病毒量下降了 80%，而与癌症恶化相关的牙龈卟啉单胞菌（Pg）和具核梭杆菌（Fn）几乎被完全清除。</p><p>相比传统的放射治疗，这种生物工程口香糖具有显著的选择性优势。放疗在杀灭癌细胞的同时往往会无差别攻击口腔菌群，导致益生菌减少并引发念珠菌感染等副作用；而这种口香糖则能保护健康的口腔微生态。研究人员指出，这种疗法不仅可以作为现有癌症治疗的辅助手段，提高患者的生存率，还可能作为一种预防性工具，阻断 HPV 等病毒的传播。尽管实验室数据令人振奋，但未来的挑战在于如何在大规模临床应用中保持生物活性成分的稳定性，并确保长期使用的安全性。此外，这种基于植物蛋白的生产方式成本较低，有望为全球公共卫生提供一种更具可及性的干预方案。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49204503" target="_blank" rel="noopener noreferrer">@fernly</a>
+        </div>
+        <p class="comment-text">文中提到，“涉及由扁豆（lablab beans）制成的咀嚼胶”。
+https://en.wikipedia.org/wiki/Lablab --
+台湾研究人员发现，扁豆中的一种碳水化合物结合蛋白（即豆类凝集素）能有效阻断流感病毒和 SARS-CoV-2 的感染。芬兰和美国的研究人员发现，由扁豆种子制成的口香糖提取物具有广谱抗病毒特性，这可能是由于 Flt3 受体相互作用凝集素 (FRIL) 对病毒的结合作用；其抗病毒效果与纯化的 FRIL 相似。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论补充了扁豆提取物（FRIL）在抗病毒方面的科学背景和先前的研究基础。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49205028" target="_blank" rel="noopener noreferrer">@mdasen</a>
+        </div>
+        <p class="comment-text">木糖醇在这方面真的很酷。细菌会浪费能量试图将其转化为它们可以利用的形式，但最终只会陷入木糖醇-5-磷酸的死胡同。一旦它们意识到需要摆脱它，就会将其转化回木糖醇（这样它更容易穿过细胞膜，可能也是为了保留磷酸盐）。当然，这意味着木糖醇又回来欺骗附近的其他细菌浪费能量了。它们最终把能量浪费在无法帮助它们繁殖的工作上，并且还需要浪费更多能量来清除它。</p>
+        <p class="comment-reason"><span>入选理由</span>深入浅出地解释了现有功能性口香糖成分（木糖醇）的抑菌机制，具有科普价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49207391" target="_blank" rel="noopener noreferrer">@colordrops</a>
+        </div>
+        <p class="comment-text">难道所有的口香糖基质基本上都是塑料吗？包括天然的那些？所以咀嚼任何口香糖都会让身体充满微塑料，对吧？我想知道这种风险抵消是否值得。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个关于口香糖基质安全性的重要视角，即微塑料摄入与治疗收益之间的权衡。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49205406" target="_blank" rel="noopener noreferrer">@grokcodec</a>
+        </div>
+        <p class="comment-text">在证明有净健康益处之前，不值得为其浪费时间。预防原则（Precautionary Principle）胜过一切。</p>
+        <p class="comment-reason"><span>入选理由</span>表达了对新技术临床转化前应持有的谨慎态度。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这种生物工程口香糖的出现，标志着口腔护理从单纯的“清洁”向“精准医疗”迈进。长期以来，我们对口香糖的认知大多停留在清新口气或通过木糖醇预防龋齿，而这项研究将其转化为一种低成本、高可及性的抗癌工具。特别值得关注的是它对口腔微生态的保护——在抗生素耐药性和菌群失调日益严重的今天，这种“外科手术式”的精准打击比传统的“地毯式轰炸”更具医学价值。如果临床转化成功，它或许能成为对抗 HPV 传播和头颈癌的一种简便且强力的补充手段。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49198302">
+      <summary class="story-overview">
+        <span class="rank-number">08</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">githubstatus.com</span>
+            <span>450 points</span>
+            <span>原始 #19 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.githubstatus.com/incidents/qcvjkzcs7j74" target="_blank"
+              rel="noopener noreferrer">GitHub Actions and Pages are experiencing degraded availability</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49198302" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 374</a>
+          </h2>
+          <p class="summary">GitHub Actions 和 Pages 服务近期遭遇可用性下降，导致全球大量开发者的自动化部署和网页托管受到影响。此次故障延续了 GitHub 过去一年中频繁宕机的趋势，其服务稳定性已从行业领先水平显著下滑。核心原因被认为与 AI 辅助编程导致的负载激增有关：AI 代理生成的代码提交量和触发的工作流远超人类极限。尽管 GitHub 正在紧急扩展硬件资源，但系统架构在极端负载下暴露出了难以通过单纯扩容解决的瓶颈。目前最严重的问题在于，即使是用户自托管的运行器，也因 GitHub 调度 API 的失效而无法正常工作。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>GitHub 官方状态页确认其 Actions 和 Pages 服务出现可用性下降，这已成为该平台近期一系列频繁宕机事件中的最新一起。社区观察发现，GitHub 的可用性在过去一年中显著恶化，这与 AI 辅助编程工具（如 Copilot）的普及时间线高度吻合。根据 GitHub 内部人员透露的数据，平台活动正在疯狂激增：2025 年全年提交量为 10 亿次，而现在仅一周就达到 2.75 亿次；Actions 的使用时长也从 2023 年的每周 5 亿分钟飙升至现在的每周 21 亿分钟。这种爆发式增长将系统推向了“临界点”，传统的水平扩展方案在隐藏的架构瓶颈面前显得力不从心。</p><p>开发者对这种不稳定性表示了强烈不满，尤其是当 GitHub 的调度 API 宕机时，连用户为了规避风险而设置的自托管运行器（Self-hosted runners）也会一并瘫痪，导致整个 CI/CD 流程彻底锁死。这种“全家桶式”的故障让许多企业开始重新评估 GitHub 的可靠性。目前，一些团队已经开始尝试将工作流迁移至 Hugging Face Jobs 或 Cloudflare CI 等替代方案。未来值得关注的是，GitHub 是否能通过架构重构来消化 AI 时代带来的海量自动化负载，还是会因为这种“成长的烦恼”而失去其作为开发者基础设施的统治地位。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49201458" target="_blank" rel="noopener noreferrer">@zehaeva</a>
+        </div>
+        <p class="comment-text">我不认为这对整个软件行业是个好兆头。我们把所有依赖的主要软件都交给 LLM 处理已经一年多了，而 GitHub 现在的可用性竟然掉到了只有“一个九”（90%）。我用 GitHub 很久了，最早的提交可以追溯到 2009 年 8 月！老实说，我不记得 GitHub 在过去一年里有像现在这样频繁宕机过。我确信后台肯定发生了其他事情，但我禁不住认为这与 LLM 使用量的增加直接相关。我很想听听别人的理论：一个互联网的基石是如何从“四个九”以上的可用性掉到可能只有“一个九”的。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地指出了 GitHub 稳定性下降与 AI 普及在时间线上的高度相关性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49203868" target="_blank" rel="noopener noreferrer">@__initbrian__</a>
+        </div>
+        <p class="comment-text">所有的宕机在我看来都是扩展性问题。GitHub 每个月收到的提交量相当于以前一年的量，而且还在增长。平台活动正在激增：2025 年有 10 亿次提交，而现在是每周 2.75 亿次，如果保持线性增长，今年将达到 140 亿次（剧透：不会是线性的）。GitHub Actions 已从 2023 年的每周 5 亿分钟增长到 2025 年的 10 亿分钟，而本周到目前为止已经是 21 亿分钟了。所以我们正在疯狂增加 CPU、扩展服务并强化 GitHub 的核心功能。作为多年来“手工打造烂代码”的资深人士，我就不对代码质量发表评论了。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了来自 GitHub 内部人员（引用自 X）的具体增长数据，解释了负载压力的量级。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49201721" target="_blank" rel="noopener noreferrer">@cortesoft</a>
+        </div>
+        <p class="comment-text">这些故障是由新引入的 Bug 引起的，还是负载问题？作为一个在搞高负载环境工作多年的人，这种模式并不罕见。你设计了一个系统，它运行良好，能处理故障和负载峰值，具备水平扩展能力，一切都很棒。你觉得自己搞定了。然后负载持续增加，你突然达到了一个临界点，所有东西都开始崩溃，你跟不上节奏了。那些你认为可以完美水平扩展的东西，在真正的大规模下暴露出了你从未想过的瓶颈。系统突然失去了处理负载峰值或追赶进度的冗余容量，任何故障都会引发级联反应，恢复变得越来越困难。你无法通过增加硬件来解决问题，你那完美的扩展设计实际上已经无法再扩展了。这不一定是因为 GitHub 在代码中使用了 LLM，但也可能与 LLM 有关：因为 LLM 的存在，GitHub 现在的提交量和读取量都大得多。可能正是这些额外的开销将他们推过了容量阈值。</p>
+        <p class="comment-reason"><span>入选理由</span>从系统架构的角度深入分析了为什么简单的水平扩展无法解决极高负载下的级联故障。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49199319" target="_blank" rel="noopener noreferrer">@arandomhuman</a>
+        </div>
+        <p class="comment-text">我最“喜欢”的是，在这些宕机期间，连自托管的工人（workers）都无法工作。在他们的基础设施上运行任务不稳定勉强还能接受，但仅仅是调度工作流的 API 都有这种可用性问题，简直令人匪夷所思。GitHub 看起来已经不再像是一家严肃的公司了。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了一个关键的技术痛点：GitHub 的中心化调度机制导致自托管方案在宕机时也无法幸免。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49204473" target="_blank" rel="noopener noreferrer">@shados</a>
+        </div>
+        <p class="comment-text">这整件事让我意识到 AI 世界里的“护城河”是多么脆弱。大家都在谈论你可以直接通过提示词生成一个新的 CRM，而不是付钱给 Salesforce。在这个案例中，我利用 Fable 和 Sol 竞赛的时间，亲手构建了一个功能齐全的 CI/CD 工作流系统。它拥有 GitHub Actions 的大部分功能（当然不包括生态系统），每分钟运行成本比 GitHub 运行器还低，而且能扩展到数百万个工作流……在宕机解决之前，我就已经让它端到端运行起来，并开始通过它部署我的应用了。在一家有官僚作风且对 GitHub 生态投入较多的公司，这可能需要更长时间，而且它只取代了 Actions。但它确实有效。这里没有护城河。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个激进但有趣的观点：在 AI 辅助下，构建 GitHub 核心功能的替代品变得前所未有的简单，平台的垄断地位正在动摇。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>GitHub 正在经历一场由 AI 驱动的“基础设施危机”。讽刺的是，作为 Copilot 的创造者，GitHub 可能是第一个被“代理时代”拖垮的大型平台。当 AI 编写代码的速度比人类快百倍时，传统的 CI/CD 架构就像是在马车道上跑超跑，崩溃只是时间问题。正如评论中所指出的，GitHub 的提交量和 Actions 使用时长呈指数级增长，这已经超出了单纯增加服务器能解决的范畴。更糟糕的是，GitHub 过于中心化的设计——连自托管运行器都依赖其中心 API 调度——使得开发者在故障面前毫无还手之力。如果 GitHub 不能迅速解决这种架构上的“脆性”，它引以为傲的开发者生态护城河可能会在 AI 辅助开发的浪潮中被迅速填平。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49211386">
+      <summary class="story-overview">
+        <span class="rank-number">09</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">patronview.com</span>
+            <span>3 points</span>
+            <span>原始 #5 · 低讨论量降权 +14.7</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://patronview.com/news/99-percent-of-my-website-traffic-is-bots/" target="_blank"
+              rel="noopener noreferrer">99% of My Website Traffic Is Bots</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49211386" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 1</a>
+          </h2>
+          <p class="summary">PatronView 创始人 Nick Gray 发现，其网站 99% 的流量实际上来自各种机器人，而非真实人类用户。他指出，传统的 JavaScript 统计工具（如 Google Analytics）无法捕捉到这些不运行脚本的爬虫，导致开发者严重低估了服务器压力。文章详细记录了他与 AI 训练爬虫、SEO 机器人以及来自特定地区的僵尸网络进行的长期斗争。他通过 Cloudflare 实施了封禁特定国家、挑战数据中心 IP 以及限制旧版浏览器等防御策略。尽管这些措施有效降低了负载，但也揭示了防御成本与爬虫低廉成本之间的严重不对称。最重要的教训是：防御措施本身可能严重拖慢网站速度，开发者需要在安全与性能间取得平衡。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>在运营慈善捐赠数据库 PatronView 的一年里，作者发现服务器日志显示的请求量与前端统计工具之间存在巨大鸿沟。例如，某周服务器处理了 250 万次请求，但分析工具仅记录到不到 6000 次人类访问，这意味着每 214 次页面加载中只有 1 次来自真人。作者发现 AI 公司的爬虫效率极低且极具侵略性：Anthropic 的 Claude 爬虫每抓取 35,000 个页面才带来 1 个真实访客，而亚马逊的 AI 搜索爬虫每天抓取 11.7 万个页面却从未贡献过任何流量。这种不对称的资源消耗不仅推高了服务器成本，还严重污染了业务数据，让开发者无法准确判断真实用户的需求。</p><p>为了应对这一局面，作者在 Cloudflare 上构建了一套复杂的 WAF 规则。他采取了“挑战而非直接封禁”的策略，针对 AWS、Azure 等数据中心 ASN 以及版本过旧的浏览器（常被僵尸网络使用）强制执行验证码。他发现 99% 以上的验证码从未被尝试破解，证明了这些流量的非人属性。然而，防御也伴随着代价：Cloudflare 默认的 JavaScript 检测脚本曾让他的移动端 Lighthouse 评分降至 58 分，移除该脚本后评分立即恢复到 99 分。作者总结认为，爬虫泛滥的根源在于抓取成本远低于防御成本，他建议开发者应关注服务器原始日志而非仅依赖 JS 统计，并期待未来能出现“按次付费抓取”的经济模型来解决这种利益冲突。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>1 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49211435" target="_blank" rel="noopener noreferrer">@lazerg</a>
+        </div>
+        <p class="comment-text">甚至这篇文章都是 AI 写的。所以你为什么要对访问你网站的机器人感到愤怒呢？</p>
+        <p class="comment-reason"><span>入选理由</span>这句评论讽刺地指出了当前互联网生态中“AI 生成内容”与“AI 抓取内容”之间循环往复的矛盾关系。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章揭示了现代 Web 开发中一个荒诞的现实：互联网流量的绝大部分已沦为机器之间的“暗战”。作者 Nick Gray 坦诚自己也是一名爬虫使用者（通过抓取 IRS 表单获取数据），这种“爬虫防爬虫”的姿态反映了数据获取成本的极度失衡。最令人警醒的细节是，为了防御机器人而引入的验证码脚本，其性能损耗竟然远超网站本身的业务逻辑。在 AI 大模型疯狂吞噬数据的今天，开发者不仅要支付高昂的带宽账单，还要在“被抓取”与“用户体验”之间进行痛苦的权衡。正如作者所言，如果 AI 公司不能带来流量，那么封禁它们就是唯一的经济选择。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49199357">
+      <summary class="story-overview">
+        <span class="rank-number">10</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">openai.com</span>
+            <span>275 points</span>
+            <span>原始 #21 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://openai.com/index/improving-gpt-5-6-sol-in-chatgpt/" target="_blank"
+              rel="noopener noreferrer">Improving GPT‑5.6 Sol in ChatGPT, expanding GPT‑5.6 Luna access for free users</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49199357" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 224</a>
+          </h2>
+          <p class="summary">OpenAI 宣布对 ChatGPT 进行重大更新，将 GPT-5.6 Luna 设为免费用户的默认模型，并提供无限次文本对话。付费用户则迎来改进后的 GPT-5.6 Sol，其事实准确性显著提升，在法律和医疗等领域的错误率降低了约 68%。此次更新引入了“思考”按钮和滑块，允许用户手动控制模型的推理深度。OpenAI 旨在统一不同推理模式下的语气，使其更像同一个模型在“花时间思考”。然而，这种将推理成本转嫁给用户决策的设计也引发了关于产品易用性的讨论。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>OpenAI 近期调整了 ChatGPT 的产品矩阵，旨在通过提升模型性能和放宽访问限制来应对日益激烈的市场竞争。免费用户现在可以默认使用 GPT-5.6 Luna 模型，并享受无限制的文本聊天功能，这标志着 OpenAI 在获客策略上的重大转变。对于 Plus 和 Pro 付费用户，GPT-5.6 Sol 得到了针对性优化，重点提升了事实可靠性和回答的简洁度。根据内部评估，新模型在处理涉及日期、数字和专业知识的复杂问题时，事实错误率比旧版 Instant 模型降低了 60% 以上。</p><p>此次更新最显著的 UI 变化是引入了推理控制功能：付费用户可以使用滑块调节“思考”程度，而免费用户则拥有一个“思考”按钮。OpenAI 表示，这一设计的初衷是让模型在不同推理强度下保持一致的语气和行为，避免用户感觉在切换不同的模型。此外，针对 18 岁以下用户，OpenAI 强化了安全防护，严禁模型参与浪漫角色扮演或提供有害建议。尽管功能增强，但用户必须自行判断任务是否需要“深度思考”，这种手动干预的模式在社区中引发了关于 AI 应当自动化还是工具化的争议。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49201467" target="_blank" rel="noopener noreferrer">@ilaksh</a>
+        </div>
+        <p class="comment-text">“我们的使命是确保通用人工智能（AGI）造福全人类。我们正在对 ChatGPT 进行更新……”这显然暗示了他们认为 ChatGPT 模型就是 AGI，并且现在愿意公开这么说了。我认为这是对该术语的一种合理解释。它们是通用智能，因为你几乎可以从它们那里获得任何方面的帮助。它们不像那些狭隘的单一用途 AI 模型。我不认为这个词必须意味着“能完全模拟人类”或“能像地球上任何人一样完成每一项任务”。它也需要与拥有远超人类的神级力量的 ASI（超级人工智能）区分开来。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地捕捉到了 OpenAI 官方文案中对 AGI 定义的微妙转变。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49201031" target="_blank" rel="noopener noreferrer">@colingauvin</a>
+        </div>
+        <p class="comment-text">他们肯定感受到了商品化（commoditization）的压力。我不确定出路在哪里，ChatGPT 和 Claude 仍然是好产品，但它们不再必然是高端溢价产品了。我预计明年会发生几件事：1) 独家 MCP 服务器交易/API 集成；2) 显著转向 B2B 营销，API 接口收费，而聊天客户端界面变得越来越免费，限制可能更多地体现在集成或数据可视化/分析上；3) 美国对与非美国托管模型签订 B2B 合同的限制。显然还有很多我没预见到的。但感觉市场的底层正在向免费塌陷。我猜 OpenAI 和 Anthropic 认为他们的下一代模型将恢复光环地位，现在的烧钱是为了到达那里，但这肯定会打乱 IPO 计划。</p>
+        <p class="comment-reason"><span>入选理由</span>从市场竞争和商业模式的角度分析了 OpenAI 此次扩大免费权限背后的深层动机。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49205928" target="_blank" rel="noopener noreferrer">@aryehof</a>
+        </div>
+        <p class="comment-text">对于我这个付费用户来说，努力程度指示器被隐藏了，默认模型是 5.5 instant。我必须按下“+”按钮选择“加大思考力度”，然后才会显示允许选择 Sol 中等或高等的拨盘。这让我怀疑有多少付费订阅者意识到他们默认使用的是和免费用户一样的 5.5 instant 模型。这是一种暗黑模式（dark pattern）还是疏忽？</p>
+        <p class="comment-reason"><span>入选理由</span>反映了付费用户在实际操作中遇到的 UI 引导问题，质疑了产品设计的透明度。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49205887" target="_blank" rel="noopener noreferrer">@iJohnDoe</a>
+        </div>
+        <p class="comment-text">我对 5.6 并不感冒，这正好印证了原因。此外，现在到处都是这种“即时、中等、高等”的滑块，简直是疯了。这是技术上的重大倒退。我敢打赌，收入上会有意外惊喜，因为用户根本不知道该选哪个，所以他们会一直选“高等”，因为他们不想冒得到不准确答案的风险。如果这是暗黑模式部门故意设计的，那确实高明。但我猜 Anthropic 和 OpenAI 只是不知道该如何部署他们的模型。而且，模型本身已经很棒了。他们需要慢下来，一年发布一次模型，只做极小的迭代。在这个过程中，虽然成就了一些了不起的事情，但人们真正想要使用模型的方式每次都被搞得一团糟。</p>
+        <p class="comment-reason"><span>入选理由</span>对新引入的“滑块”交互模式提出了强烈批评，认为这增加了用户的认知负担。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49201215" target="_blank" rel="noopener noreferrer">@ElijahLynn</a>
+        </div>
+        <p class="comment-text">我迫不及待地想再也不要看到那个“推理”按钮了。为什么我还要去推理该用哪个推理级别？</p>
+        <p class="comment-reason"><span>入选理由</span>用幽默的方式指出了让用户手动选择推理深度的逻辑悖论。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>OpenAI 此次更新 GPT-5.6 系列，表面上是慷慨地向免费用户开放了更强的模型和无限对话，实则反映了 AI 行业正陷入激烈的“商品化”泥潭。当 Anthropic 和 Google 步步紧逼时，OpenAI 不得不通过下放旗舰功能来保住其 10 亿周活用户的流量池。最值得玩味的是新引入的“推理滑块”和“思考按钮”：这标志着 AI 交互从“全自动”向“手动挡”的倒退。正如社区讨论所指出的，让用户去“推理”该用多少推理资源，不仅是一种认知负担，更像是一种将计算成本压力转嫁给用户的策略。如果用户因为担心准确性而盲目选择最高档位，这究竟是技术的进步，还是另一种诱导消费的“暗黑模式”？</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49210240">
+      <summary class="story-overview">
+        <span class="rank-number">11</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">wsj.com</span>
+            <span>43 points</span>
+            <span>原始 #7 · 低讨论量降权 +14.4</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.wsj.com/economy/jobs/july-jobs-report-unemployment-0d7c08a7" target="_blank"
+              rel="noopener noreferrer">U.S. Lost 23,000 Jobs in July, While Unemployment Ticked Lower</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49210240" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 2</a>
+          </h2>
+          <p class="summary">2026年7月的美国就业报告显示出矛盾的信号：全美在该月减少了2.3万个工作岗位，但失业率却意外下降。这种背离通常意味着劳动力市场的统计数据出现了复杂波动，例如寻找工作的人数减少导致失业率分母缩小。虽然岗位减少通常预示经济放缓，但失业率的走低又提供了某种程度的心理安慰。由于原始文章内容受限，目前无法确定哪些行业受影响最大，也无法得知薪资增长等关键细节。这一数据将使美联储未来的政策走向变得更加难以预测。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>根据《华尔街日报》的标题报道，美国2026年7月的劳动力市场表现出乎意料，非农就业人数减少了2.3万人。然而，失业率并未如预期般上升，反而有所下降。这种现象在经济统计中并不罕见，往往是因为家庭调查和企业调查这两个不同的统计口径产生了分歧，或者是劳动力参与率发生了变化。如果更多的人选择停止找工作，他们将不再被计入失业人口，从而推低失业率。</p><p>这种岗位的净流失可能反映了企业在面对高利率或需求疲软时的招聘收缩。与此同时，失业率的下降可能掩盖了劳动力市场的真实疲态，使得政策制定者在评估经济是否过热或过冷时面临挑战。由于无法获取文章全文，我们尚不清楚这一数据是否受到了季节性调整的影响，或者是否存在大规模的行业性裁员。接下来的几个月，市场将密切关注这一趋势是否会演变成持续的就业萎缩，以及它将如何影响通胀和利率路径。</p></div>
+        
+        <div class="comments-empty">
+          这条讨论暂未选出真正值得占用你注意力的评论。
+        </div>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>岗位减少与失业率下降并存，这通常是经济周期转折点的典型特征。这种数据冲突让市场难以判断这究竟是经济“软着陆”的信号，还是衰退开始的征兆。由于无法查阅详细的行业细分和修正数据，我们只能从标题中窥见劳动力市场的复杂性，这种不确定性往往比单纯的坏消息更令市场感到不安。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49208393">
+      <summary class="story-overview">
+        <span class="rank-number">12</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">blog.cloudflare.com</span>
+            <span>36 points</span>
+            <span>原始 #9 · 低讨论量降权 +12.9</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://blog.cloudflare.com/kitesurf/" target="_blank"
+              rel="noopener noreferrer">Kitesurf: Agent-first browser that runs in V8 isolates</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49208393" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 7</a>
+          </h2>
+          <p class="summary">Cloudflare 推出了专为 AI 智能体（Agents）设计的浏览器 Kitesurf，它直接运行在 Cloudflare Workers 的 V8 隔离环境中。与传统的 Chromium 不同，Kitesurf 舍弃了标签页、主题等人类用户功能，专注于降低 AI 任务（如网页抓取和截图）的资源消耗。该浏览器利用 Rust 编写的 Blitz 引擎和 Stylo 解析器，通过 WebAssembly 在边缘侧运行。实验显示，其内存和 CPU 占用仅为 Chromium 的几分之一，极大地降低了大规模运行 AI 代理的成本。不过，由于采用软件渲染且缺乏即时编译（JIT），其渲染速度目前仍慢于传统浏览器，且不追求视觉上的绝对完美。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Kitesurf 的诞生源于 Cloudflare 对 AI 智能体日益增长的浏览器需求与传统浏览器高昂成本之间矛盾的洞察。传统的 Chromium 引擎为人类设计，包含大量 AI 并不需要的冗余功能，且内存占用极高，限制了大规模 AI 代理的部署。Kitesurf 采用模块化架构，核心组件包括处理 CDP 协议的 Engine、负责 DOM 逻辑的 PageScript 以及生成图像的 PageRenderer。它大量使用了 Rust 编写的开源组件（如 Blitz 渲染引擎和 Stylo CSS 解析器），并将其编译为 WebAssembly 以在 Workers 隔离区中高效运行。</p><p>在技术实现上，Kitesurf 强调无状态和强隔离，每个页面加载都被视为不可信输入，运行在独立的动态 Worker 中。为了解决 Workers 环境不支持原生 `eval` 的安全限制，它甚至在 Worker 内部运行了一个名为 Boa 的 JS 引擎。虽然在渲染“墙钟时间”上比 Chromium 慢约 1.7 倍，但其内存和 CPU 效率提升了 3 到 7 倍。这意味着开发者可以用更低的成本部署更多的 AI 代理。目前 Kitesurf 已通过超过 21.5 万项 Web 平台测试（WPT），并支持 Puppeteer 和 Playwright 等主流自动化工具，用户可以通过 Cloudflare 的 Browser Run 平台进行测试。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49210548" target="_blank" rel="noopener noreferrer">@nicoburns</a>
+        </div>
+        <p class="comment-text">这是建立在 Blitz (https://github.com/dioxuslabs/blitz) 之上的：这是一个我已经开发了两年半的新型模块化（开源）浏览器引擎。（我没有参与 Kitesurf 的开发，但我获悉他们打算开源并向上游提交他们的补丁）</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了 Kitesurf 的核心技术来源，并确认了其与开源社区的互动意向。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49210248" target="_blank" rel="noopener noreferrer">@QuantumNomad_</a>
+        </div>
+        <p class="comment-text">从本文链接的页面 https://developers.cloudflare.com/browser-run/ 来看：
+&gt; 在 Cloudflare 的全球网络上运行无头 Chrome，用于浏览器自动化、网页抓取、测试和内容生成。
+Cloudflare 作为 CDN，会允许这些浏览器实例绕过他们自己的反爬虫机制吗？还是说 Cloudflare CDN 会像对待其他供应商的抓取机器人一样拦截它们？
+在 Cloudflare Workers 中运行的 Kitesurf 是否会获得访问受 Cloudflare CDN 保护内容的特殊绕过权限？</p>
+        <p class="comment-reason"><span>入选理由</span>评论提出了一个非常关键的利益冲突问题：Cloudflare 既是反爬虫服务的提供者，现在又提供了强大的抓取工具。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49211186" target="_blank" rel="noopener noreferrer">@hugs</a>
+        </div>
+        <p class="comment-text">有计划支持用于自动化的 WebDriver BiDi 吗？（我很乐意帮忙！）
+[编辑：给那些通常不钻研浏览器自动化协议的读者：WebDriver BiDi 是受 CDP 启发的新型 W3C 跨浏览器标准——其核心魔力在于升级到了 WebSockets，并标准化了网络层流量的捕获。虽然目前 CDP 和 BiDi 之间仍存在功能差距（在规范和实现上都是），但从长远来看，我认为我们应该押注于 Web 标准，而不是由一家公司控制的私有协议。
+（披露：我发起了 Selenium 和 Appium 项目。）]</p>
+        <p class="comment-reason"><span>入选理由</span>由行业资深人士提出的关于标准与私有协议之争的深刻见解。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49210276" target="_blank" rel="noopener noreferrer">@buremba</a>
+        </div>
+        <p class="comment-text">不，它不会绕过，而且这根本没用。他们一直试图让出版商能够向抓取者收费，这就是为什么他们如此卖力地推行这条路径。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个关于 Cloudflare 商业动机的怀疑论视角。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Cloudflare 走了一条“反向进化”的道路：既然 AI 不需要漂亮的 UI 和流畅的滚动，那就把浏览器拆解到只剩核心。Kitesurf 的意义在于它将浏览器从一个沉重的桌面应用转变为一种轻量级的云端原语，这种“Agent-first”的思路可能会重塑网页抓取和自动化测试的经济模型。然而，正如评论区所担心的，当一家既提供 CDN 防护又提供抓取工具的公司推出这种产品时，如何平衡“反爬虫”与“自动化”的利益冲突将是一个微妙的挑战。此外，押注于私有的 CDP 协议而非 W3C 标准（如 WebDriver BiDi），也反映了云厂商在标准制定与快速落地之间的权衡。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49210589">
+      <summary class="story-overview">
+        <span class="rank-number">13</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">niemanlab.org</span>
+            <span>54 points</span>
+            <span>原始 #12 · 低讨论量降权 +10.5</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.niemanlab.org/2026/08/americas-largest-newspaper-chain-usa-today-co-partners-with-palantir-to-analyze-audience-data/" target="_blank"
+              rel="noopener noreferrer">US&#x27;s largest newspaper chain partners with Palantir to analyze audience data</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49210589" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 15</a>
+          </h2>
+          <p class="summary">美国最大的报业连锁集团 USA Today Co.（原 Gannett）宣布与大数据分析公司 Palantir 达成合作，旨在通过 AI 技术分析读者行为并提升变现能力。随着来自传统搜索引擎的流量大幅下滑，该集团计划将匿名访问者转化为“已知关系”，利用用户留下的每一个点击和停留信号来优化广告和订阅推荐。首席执行官 Mike Reed 强调，所有数据仍归报社所有，Palantir 仅提供处理数据的软件工具。此举反映了媒体行业在“搜索终结”时代对第一手数据主权的极度渴望。然而，考虑到 Palantir 与政府监控的深厚背景及其创始人彼得·蒂尔与媒体界的过往恩怨，这一合作也引发了关于隐私和道德的广泛争议。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>面对搜索引擎推荐流量的持续萎缩，拥有 200 多家地方报纸及《今日美国》的 USA Today Co. 决定引入 Palantir 的 AI 平台来挖掘受众价值。财报显示，该集团的月独立访客数已从第一季度的 1.8 亿降至 1.58 亿，这种断崖式下跌迫使管理层寻求更高效的变现手段。通过 Palantir 的技术，报社试图捕捉用户在网页上的每一次互动信号，构建精细的“第一方关系”画像，从而实现更精准的广告投放和订阅转化。首席执行官 Mike Reed 表示，这种“编排好的”数据关系是实现可持续收入的关键，甚至不排除未来为了谈判筹码而屏蔽谷歌爬虫。</p><p>然而，这项合作在舆论中极具争议。Palantir 因长期为美国移民海关执法局（ICE）和国防部提供监控技术而备受批评，其联合创始人彼得·蒂尔曾资助针对 Gawker 的诉讼并导致其破产，这让媒体机构与其合作显得尤为讽刺。尽管报社高层保证数据主权完整且编辑独立性不受影响，但技术专家指出，在美国法律框架下，所谓的“数据隐私”在政府调证面前可能非常脆弱。此外，Palantir 昂贵的服务费用也让外界质疑，这究竟是技术驱动的转型，还是管理层对 AI 流行语的盲目追逐。未来值得关注的是，这种深度数据挖掘是否会改变新闻编辑的导向，使其过度向算法偏好倾斜。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49210959" target="_blank" rel="noopener noreferrer">@bpodgursky</a>
+        </div>
+        <p class="comment-text">“需要注意的是，我们所有的数据仍然是我们的数据，”尽管关于“Palantir 拿走你的数据”有很多负面关注，但这种数据隐私保护实际上正是许多机构选择 Palantir 而非大型 AI 供应商的原因。Palantir 使用开源 AI 模型，这些模型不会反馈到大型实验室的训练数据中，并为每个客户设置防火墙实例，以赋予他们完全的数据主权。（声明：我与 Palantir 没有经济利益关系）</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从技术架构角度解释了为什么企业会选择 Palantir，为理解其商业吸引力提供了不同视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49211064" target="_blank" rel="noopener noreferrer">@hannesfur</a>
+        </div>
+        <p class="comment-text">看到这种现状，很难想象曾经有一段时间，报纸出版商几乎完全不知道到底是什么在支撑报纸的销量。由于报纸是成捆出售的，且大多通过订阅销售，他们几乎只能靠猜。他们大致知道读者期望的方向，也能从零星的“致编辑信”中获得反馈，但你得真的非常愤怒才会去写一封实体信、贴上邮票并走到邮筒前投诉。我认为，这反而有助于新闻事业，因为记者们可能会假设他们的读者会用同样的高标准来要求他们，就像要求其他报纸的作者一样。</p>
+        <p class="comment-reason"><span>入选理由</span>评论对比了过去与现在的反馈机制，反思了数据驱动对新闻质量可能产生的负面影响。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49211099" target="_blank" rel="noopener noreferrer">@kevin_thibedeau</a>
+        </div>
+        <p class="comment-text">如果存储是在美国领土上，他们的合同隐私声明就是毫无意义的。他们要么会被迫交出数据，要么会被植入后门在不知情的情况下被窃取。他们正在成为数字生活模式领域的 Cloudflare，对于那些想要这些数据的权力机构来说，这是一个极具诱惑力的目标。</p>
+        <p class="comment-reason"><span>入选理由</span>针对“数据主权”的说法提出了有力的法律和安全层面的质疑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49211331" target="_blank" rel="noopener noreferrer">@mint5</a>
+        </div>
+        <p class="comment-text">撇开道德问题不谈，Palantir 贵得离谱，而且似乎专注于推销流行语而非实际价值和技术。它就像是非技术背景高管们的“毒品”。</p>
+        <p class="comment-reason"><span>入选理由</span>从成本和企业管理的角度对 Palantir 的实际价值提出了批判性看法。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>USA Today Co. 与 Palantir 的联姻充满了讽刺意味：一家新闻机构竟然求助于由“媒体杀手”彼得·蒂尔（Peter Thiel）创立的公司来寻求救赎。随着谷歌搜索流量的红利消失，传统媒体正陷入一种集体焦虑，试图通过更深度的用户监控来榨取剩余价值。正如评论区所指出的，这种对“第一方数据”的执着，本质上是将读者从“公众”降级为“可挖掘的信号源”。虽然 Palantir 标榜的数据主权在技术上具有吸引力，但在一个新闻自由与数据监控界限日益模糊的时代，这种合作无疑是在饮鸩止渴——为了短期的广告转化率，报社可能正在透支其最宝贵的资产：读者的信任。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49198464">
+      <summary class="story-overview">
+        <span class="rank-number">14</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">provenmetal.com</span>
+            <span>214 points</span>
+            <span>原始 #23 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://provenmetal.com" target="_blank"
+              rel="noopener noreferrer">Launch HN: ProvenMetal (YC S26) delivers circuit boards in days instead of weeks</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49198464" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 151</a>
+          </h2>
+          <p class="summary">ProvenMetal 是一家由 YC 孵化的初创公司，旨在通过自动化流程将美国本土电路板（PCB）的交付周期从数周缩短至几天。他们发现，制约交付速度的真正瓶颈不在于焊接组装，而在于前期的报价、设计审查和元器件采购。为此，他们开发了深度集成到设计软件的插件，允许工程师在布局完成前就提前锁定长交期零件。公司通过在旧金山总部集中采购和配料，再分发给合作的代工厂进行生产。虽然这种模式试图重振美国电子制造，但其成本仍远高于中国，且面临技术细节披露不足的质疑。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>美国在全球 PCB 生产中的份额已从 2000 年的 30% 骤降至如今的 4%，导致本土供应链碎片化且效率低下。ProvenMetal 的创始人最初尝试在车库里用半专业设备自行组装电路板，但很快发现手工组装极其耗时，且无法解决真正的行业痛点。他们意识到，传统代工厂（CM）在报价、可制造性检查（DFM）和零件采购等“前台”环节存在严重的沟通冗余。为了解决这些瓶颈，他们开发了 KiCAD 和 Altium 插件，使系统能在设计阶段就自动识别并预订长交期元器件，避免了因缺件导致的数周延误。</p><p>在运营模式上，ProvenMetal 并不追求拥有所有生产线，而是充当智能调度中心。他们在旧金山总部进行元器件仓储和配料（Kitting），然后将订单路由至其合作的代工厂网络，并自动适配不同工厂的工艺要求。这种做法消除了海量的往返邮件，显著提升了周转速度。目前，该服务主要针对对速度和本土化有极高要求的无人机和国防工业。然而，社区用户指出，其网站目前缺乏关键的技术参数说明，如层数限制、最小线宽或高密度互连（HDI）能力，这对于专业硬件工程师来说是决策的关键。此外，如何与中国极低成本的成熟供应链竞争，以及如何应对 MacroFab 等已在市场深耕的对手，仍是其面临的重大挑战。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49199297" target="_blank" rel="noopener noreferrer">@seizethecheese</a>
+        </div>
+        <p class="comment-text">我经营了一家硬件初创公司大约十年。我们最终把所有的 PCB 组装都放在了中国。我们也曾尝试在美国寻找供应商，但确实太慢且太贵了。组装 PCB 的瓶颈通常在于元器件采购。我的产品并不算最复杂，即便如此，在深圳组装也往往需要几周时间才能集齐所有零件。核心问题在于延迟是由“离群值”决定的：在所有零件到齐之前组装无法开始，而最难采购的那个零件就是瓶颈！对我来说，这里的核心创新是接入设计软件，提前采购这些长尾零件。有趣的是，通常在设计 PCB 时，设计者对供应链并无感知。他们可能会在不知情的情况下选入一个交期长达 4 周的芯片，而实际上只需多花一美分就能换成一个交期快得多的类似组件。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从资深从业者角度验证了元器件采购是行业核心痛点，并肯定了该项目在软件集成方面的创新价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49198954" target="_blank" rel="noopener noreferrer">@ac29</a>
+        </div>
+        <p class="comment-text">知道定价大概是多少吗？你在页面上点名了无人机和国防工业，这让我觉得价格会极其昂贵。我最近询价了在中国做 PCB 的价格，便宜得惊人。我的设计不复杂，几个 IC、几个连接器和十几个无源元件。PCB 制造、零件和焊接组装总计每块板子大约 10-20 美元，而且这还是在没有任何批量折扣的情况下。在美国，光是零件可能就要这么多钱，而且我怀疑你外包的那些公司对微型订单不感兴趣，可能会报出巨额的启动费（看起来你们目前的平均订单额约为 7000 美元）。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了最现实的成本挑战，对比了中美制造在价格上的巨大鸿沟。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49205624" target="_blank" rel="noopener noreferrer">@codehero</a>
+        </div>
+        <p class="comment-text">我很欣赏这种干劲，但我很难相信“Proven Metals”这个名字，因为你们的网站经不起基本的推敲：1) 第一个问题：我不知道你们 PCB 制造的约束条件是什么……层数没有记录，我甚至不知道你们是否支持柔性电路板（FlexPCB）。2) 我想如果我玩一下你们的上传游戏，或许能搞清楚你们是否能在 7 天内做出我的板子……但我本不该非得这么做。即使是那些 UI 很笨重的网站，也会明确说明能做什么、不能做什么。3) 你们说发货的是“经过测试”的板子，但这具体指什么？固件测试？辐射测试？如果最终由你们选择 MPN（制造商零件编号），那么如果板子无法启动，你们是否对失败负责？4) 不清楚你们是否接受客户提供的零件（consigned parts）。甚至不清楚你们在配料时是否按照 MSL、ESD 等标准妥善存储零件。5) 归根结底，你们与典型的经纪商（如 Millenium Circuits Limited）有什么区别？</p>
+        <p class="comment-reason"><span>入选理由</span>从专业硬件工程师的角度提出了非常具体的技术质疑，指出了初创公司在专业性展示上的不足。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49200691" target="_blank" rel="noopener noreferrer">@amirhirsch</a>
+        </div>
+        <p class="comment-text">祝好运！你能提供的一个有价值的差异化服务是信用额度。如果你无法在价格上取胜，你可以帮助客户在现金周转周期上取胜。我做硬件已经 20 年了。我产量最高的产品是 Flybrix（乐高无人机套件），由中国的 Seeed 和 UniPrecision 以及加州弗里蒙特的 Sparqtron 制造。我很乐意与你们合作开发 v2 重启版。除此之外，我也与许多国内供应商合作过，并制造过受 ITAR 限制的产品。即使不拥有生产能力，如果你能提供 90 天的账期并为元器件提供信用额度（超出 DigiKey、Mouser 等现有额度），那么我就可以在不预先投入全部资本的情况下制造产品并获得报酬。保理融资很贵，尤其是针对采购订单而非发票时。我还没见过有人仅凭 SBIR 奖项就提供营运资金信用额度的。信用才是让生意流转起来的“香料”。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个独特的商业视角，即通过金融工具（账期/信用）而非单纯的技术或价格来吸引硬件初创公司。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>ProvenMetal 的故事反映了 YC 典型的“软件定义硬件”思路：通过优化信息流来解决物理世界的低效。创始人敏锐地捕捉到了美国本土制造中“前台”流程（报价、采购、沟通）的崩坏，这比焊接电路板本身更令人头疼。然而，硬件行业的护城河往往在于那些“脏活累活”——如评论区所指出的，对 MSL/ESD 存储标准的遵循、具体的工艺参数透明度以及极端的成本控制。如果 ProvenMetal 仅仅是一个拥有漂亮 UI 的订单中转站，它将很难在 MacroFab 等成熟对手和中国强大的供应链生态之间建立持久的竞争力。其真正的考验在于，能否通过软件自动化带来的效率提升，真正抵消美国本土高昂的人工成本，并建立起让专业工程师信赖的质量控制体系。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49201003">
+      <summary class="story-overview">
+        <span class="rank-number">15</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">herdr.dev</span>
+            <span>249 points</span>
+            <span>原始 #25 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://herdr.dev/blog/herdr-is-joining-y-combinator/" target="_blank"
+              rel="noopener noreferrer">Herdr is joining Y Combinator. The runtime stays open</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49201003" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 175</a>
+          </h2>
+          <p class="summary">Herdr 是一款专为管理 AI 编程智能体（Agents）设计的终端复用器，近日宣布加入 Y Combinator 孵化器。该项目在短短四个月内获得了 2.5 万颗 GitHub 星标，促使开发者 Can 决定将其从个人项目转型为商业公司。Herdr 的核心“运行时”将保持开源，并从 AGPL 协议切换到了更宽松的 Apache-2.0 协议。它解决了开发者在不同项目间切换和监控长时间运行的 AI 智能体的痛点。未来，Herdr 计划在保持核心精简的同时，探索多端连接和云端沙箱等商业化功能。这一转型也引发了社区关于开源开发工具在风投资本介入后能否保持纯粹的讨论。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Herdr 的诞生源于创始人 Can 对现有 AI 智能体管理工具的不满，他认为开发者不应为了管理 Agent 而被迫学习复杂的全新工具。Herdr 的核心理念是将终端窗格作为智能体的第一类公民，提供持久化的运行环境，使 Agent 能在后台持续工作数天而不中断。它通过 TUI（终端用户界面）将智能体按项目分组，并仅在需要人工干预时发出提醒。目前，Herdr 已拥有活跃的插件生态，包括 Raycast 扩展和 iOS 远程控制应用。</p><p>加入 YC 标志着 Herdr 正式开启商业化进程。为了消除企业使用的法律顾虑，创始人将核心运行时的授权协议从 AGPL 更改为 Apache-2.0。未来的开发重点将放在“连接性”上，旨在打通本地笔记本、远程 VPS 和安全沙箱之间的壁垒，实现智能体状态的无缝同步。这种模式试图在保持核心工具轻量化的同时，通过增值服务实现盈利。然而，面对 YC 内部及外部众多竞品的压力，Herdr 需要在快速迭代和维持社区信任之间找到平衡，避免重蹈一些工具在融资后走向臃肿的老路。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49203107" target="_blank" rel="noopener noreferrer">@ahmadyan</a>
+        </div>
+        <p class="comment-text">祝贺 Can 获得种子前融资。终端复用器/多智能体编程领域正变得非常拥挤。单是 YC 就资助了许多竞争对手：herdr、Superset、cmux、Emdash、Orca、Bullet、Conductor 等。这还没算上 YC 之外的公司。我发现特别有趣的一点是开源在这个市场中的角色。很多产品最初都是开源的（我猜是作为获取流量和建立社区的策略），但在获得早期关注或融资后，激励机制似乎发生了变化。在这个市场中，开源本身并不是产品差异化的核心。强大的定位所需的特性（编排、云端、自定义智能体、企业功能、托管基础设施等）往往最终要么闭源，要么仅通过托管产品提供。这让我好奇开发者在这个类别中到底有多看重开源？</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了 AI 智能体管理工具领域的激烈竞争现状，并深刻质疑了开源在该领域作为商业模式的持久性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49201599" target="_blank" rel="noopener noreferrer">@nlh</a>
+        </div>
+        <p class="comment-text">我是 Herdr 的超级粉丝——几个月前发现它后，它完全符合我的工作流。对此我心情很复杂：YC 意味着风险投资，意味着商业化，往往也意味着“屎化”（enshitification）。我真心希望这次会有所不同……（注：我通常是 YC 的粉丝！我不是反 YC 或反资本主义。但涉及到低层级的核心开发工具时，我永远忘不了 Warp 的遭遇，它起初是一个非常简洁的终端项目，最后变成了绝对的金钱追逐游戏。）</p>
+        <p class="comment-reason"><span>入选理由</span>表达了开发者社区对优秀开源工具被风投“收编”后可能导致产品质量下降的普遍担忧。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49201901" target="_blank" rel="noopener noreferrer">@hx8</a>
+        </div>
+        <p class="comment-text">大约六周前，我从 tmux 切换到了 Herdr。这是一款非常棒的软件，UI 专注于快速切换多个智能体。我运行 Herdr 来管理我的 opencode 实例，它在终端旁边开启几个智能体窗口的效果非常好。我发现自己保持会话开启的时间变长了，这对于需要回顾上下文进行后续工作非常有帮助。如果你担心产品变烂，我觉得没必要。它是一个相对基础的本地运行开源软件，如果基础应用开始退化，它将是分叉（fork）的绝佳候选对象。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了真实用户的迁移经验，并从开源软件可分叉的角度缓解了对商业化的担忧。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49201743" target="_blank" rel="noopener noreferrer">@rvz</a>
+        </div>
+        <p class="comment-text">快速问个问题：如果 Herdr 寻求捐赠，你们真的会捐款吗？除非另有说明，否则我觉得你们谁都不会。这就是为什么开发者不为工具买单，而工具开发者最终只能去找风投的另一个原因。这不是作者的错，而是大多数用户（开发者自己）总想以 0 美元的价格免费使用工具。你必须付费支持你使用的工具，否则风投会替你付钱，到那时当这种场景不断发生时，你就没资格抱怨了。</p>
+        <p class="comment-reason"><span>入选理由</span>从经济角度提出了一个尖锐的反向观点，解释了开源工具走向风投融资的必然性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49203920" target="_blank" rel="noopener noreferrer">@giodamelio</a>
+        </div>
+        <p class="comment-text">开源对我来说超级重要。我每天都用 Herdr，并维护着一堆自己的改动。从微小的偏好调整到大型改动（如增加 jj 工作区支持和开发中的 Web 视图）。LLM 使得对开发工具进行个人定制变得毫不费力，以至于我现在非常犹豫是否要使用任何非源码可用的软件。我一直在思考源码可用软件（source available）是否存在更大的市场。我并不在乎软件的许可证是什么，因为我并不打算分享它或用于商业用途。如果有人开发了很棒的软件并出售源代码，我肯定会考虑。我知道这在商业实践上有很多问题，但撇开这些不谈，我很好奇其他人是否也有同感？</p>
+        <p class="comment-reason"><span>入选理由</span>探讨了在 AI 辅助编程时代，开源/源码可用性对于开发者定制化工具的新价值。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Herdr 的崛起是 AI 编程智能体爆发式增长的缩影。当开发者不再满足于简单的聊天窗口，而是需要 Agent 像 tmux 窗口一样持久、可管理时，Herdr 填补了这个生态位。然而，正如评论区所指出的，这个赛道已经极度拥挤，YC 内部就有多个类似项目在混战。Herdr 选择加入 YC 并将协议从 AGPL 切换为 Apache-2.0，显然是在为企业级市场铺路。开发者们对“Warp 式屎化”的担忧并非空穴来风，但 rvz 的评论也揭示了一个残酷的现实：如果用户不愿为工具买单，风投就是开发者唯一的退路。Herdr 未来的看点在于，它能否在保持“运行时”开源这一承诺的同时，通过解决多端同步等痛点，构建出一个让开发者心甘情愿付费的商业闭环。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49209572">
+      <summary class="story-overview">
+        <span class="rank-number">16</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">sciencealert.com</span>
+            <span>29 points</span>
+            <span>原始 #20 · 低讨论量降权 +5.7</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.sciencealert.com/radical-study-suggests-life-on-earth-arose-from-non-living-matter-twice" target="_blank"
+              rel="noopener noreferrer">Radical Study Suggests Life on Earth Arose Twice</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49209572" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 31</a>
+          </h2>
+          <p class="summary">一项发表在《科学进展》上的新研究提出，地球生命可能经历了两次独立的“生命化”过程。研究人员分析了细菌和古菌的代谢酶，发现它们的共同祖先（LUCA）仅拥有一半的代谢酶，另一半反应则依赖深海热液喷口中的金属催化。这意味着细菌和古菌在分化之后，才各自独立进化出了补全代谢链的酶，从而摆脱对环境金属的依赖。如果将“生命”定义为能够独立生存的细胞，那么这两个谱系是分别跨越这一门槛的。这一发现挑战了传统的生命之树模型，暗示生命的核心代谢系统是在分化后平行演化的。不过，这一结论很大程度上取决于对“生命”定义的界定，且两者仍共享同一套遗传密码。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>长期以来，科学家认为所有地球生命都源于一个共同的祖先（LUCA）。然而，杜塞尔多夫大学的研究团队通过对细菌和古菌基因组中核心代谢酶的结构分析，发现了一个惊人的现象：虽然两者共享遗传密码，但许多关键的代谢酶在结构上完全不同。研究表明，LUCA 并不是一个完全独立的生命体，它大约 50% 的代谢反应需要依靠环境中的无机金属（如热液喷口中的金属）作为催化剂。这意味着在那个阶段，所谓的“生命”还必须依附于特定的矿物表面才能完成基本的生化反应。</p><p>随着演化的进行，细菌和古菌在尚未完全摆脱环境依赖时就已分道扬镳。随后，这两个谱系各自独立地进化出了不同的酶，来取代原本由金属催化的反应。这一过程被称为“平行发明”，使得它们最终都能作为“自由生活”的细胞独立存在。因此，研究者认为，虽然遗传起源是唯一的，但作为独立生命形式的起源却是两次。此外，研究还发现亚磷酸盐在早期可能替代了 ATP 的能量功能，这为理解前生物化学提供了新线索。</p><p>尽管这项研究提供了强有力的基因组证据，但它也引发了关于“生命”定义的争论。批评者指出，如果 LUCA 已经拥有遗传密码和部分代谢能力，将其排除在“生命”之外可能更多是分类学上的考量。这种“两次起源”的说法更像是在描述生命如何两次独立地“断奶”并离开矿物基质。未来，科学家需要更多实验证据来验证这些古老酶的演化路径，以及这种平行演化在宇宙其他地方发生的可能性。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49210788" target="_blank" rel="noopener noreferrer">@randomImmigrant</a>
+        </div>
+        <p class="comment-text">代谢科学部分真的很酷。但“生命起源了两次”这个结论，需要你接受那些生长在热液喷口、依赖金属表面生存的“原细胞”不被算作“生命”。然后，细菌和古菌这些自由生活的细胞，因为独立填补了代谢中的空白，才被认为具有独立的路径。它们拥有相同的 DNA/RNA，相同的蛋白质，以及相同的广义代谢规则，只是通过化学空间的不同路径填补了代谢缺口，从而脱离了金属表面。在我看来，这显然不是两条独立的路径，而是“原生命”分支成了生命的两大界。把这称为两次起源而不是一次分支，有点牵强。几亿年后，其中一个吞噬了另一个，它们没有互相毁灭，而是开启了共生关系，于是我们进入了真核生物的赛道。这都是同一个生命网，而不是两条独立的流。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深入分析了研究的生物学逻辑，并对“两次起源”这一说法提出了合理的质疑，认为这更像是生命树的分支而非独立起源。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49210730" target="_blank" rel="noopener noreferrer">@MarkusQ</a>
+        </div>
+        <p class="comment-text">标题党。标题应该叫“生命至少两次脱离了矿物基质”之类的。研究本身很有趣，但他们在叙述中玩了文字游戏，说所有生命的最近共同祖先不算生命（因为它依赖矿物表面），而它的两个后代演化出了算作生命的谱系。</p>
+        <p class="comment-reason"><span>入选理由</span>评论敏锐地指出了研究结论在定义上的“文字游戏”，为读者提供了更客观的视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49210399" target="_blank" rel="noopener noreferrer">@lanstin</a>
+        </div>
+        <p class="comment-text">他们并不是在说两次完全独立的生命创造事件，而是说最早的生命在某些代谢环节上依赖外部化学物质，而生命之树在这些代谢路径进化到生物体内部之前就已经分叉了。所以这不完全是生命出现了两次，而是某些能够繁殖和进化的东西在当时还不符合现代生命的定义。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论简洁地解释了研究中关于“分化”与“代谢独立”的时间先后关系，有助于理解核心论点。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这项研究最激进的地方不在于发现了新的生命形式，而在于它重新划定了“生命”的起跑线。如果我们将生命定义为“脱离环境支架独立生存的能力”，那么细菌和古菌确实是分别完成这一跃迁的。正如评论所指出的，这更像是一场关于“断奶”的演化史：LUCA 像是一个依赖矿物热液“母乳”的婴儿，而它的两个后代在分家后，各自发明了不同的工具来自己觅食。这种“平行发明”解释了为什么这两大类生物在膜结构和某些核心酶上存在根本差异。虽然“两次起源”的说法带有一定的标题党色彩，但它揭示了一个深刻的可能性：生命的核心代谢系统可能比我们想象的更具灵活性，在相同的化学压力下，演化可以殊途同归。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49200439">
+      <summary class="story-overview">
+        <span class="rank-number">17</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">mastodon.gamedev.place</span>
+            <span>174 points</span>
+            <span>原始 #27 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://mastodon.gamedev.place/@rygorous/117047697255584965" target="_blank"
+              rel="noopener noreferrer">My phone detects going on a run as “someone snatching my phone and running off”</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49200439" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 304</a>
+          </h2>
+          <p class="summary">最近，一名 Android 用户发现手机更新后，其内置的防盗功能会将他正常的跑步锻炼误判为“手机被抢后逃跑”，并自动锁定设备。这一名为“盗窃检测锁定”的功能利用 AI 和传感器监测手机是否被突然夺走并伴随快速逃离动作。虽然该功能初衷是防止小偷在手机解锁状态下窃取数据，但在实际使用中却给运动爱好者带来了不便。这种误判凸显了自动化安全机制在区分犯罪行为与正常生活场景时的局限性。目前，受影响的用户只能通过在系统设置中手动关闭该选项来解决这一问题。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>谷歌最近为 Android 系统引入了基于人工智能的“盗窃检测锁定”（Theft Detection Lock）功能，旨在应对日益严重的手机抢劫问题。该功能利用加速度计和陀螺仪等传感器，实时监测手机是否经历了从手中被夺走并紧接着出现快速奔跑、骑行或驾车逃离的典型动作。一旦触发，手机会立即锁定屏幕，防止犯罪分子访问银行应用或个人隐私。然而，开发者 Fabian Giesen 的经历表明，该算法在处理高强度运动时存在明显的误报。每当他开始跑步，手机就会因为检测到剧烈位移而误以为发生了抢劫，导致他在运动过程中不得不频繁解锁手机。</p><p>这种“过于敏感”的算法引发了用户对“智能”功能实际效用的质疑。在 Hacker News 的讨论中，许多用户分享了类似的挫败感：例如 Apple Watch 在用户进行极高强度但低速的陡峭爬坡时会自动暂停，即便此时用户的心率已达 150 BPM。这些案例表明，许多所谓的智能功能在设计时往往基于理想化的实验室模型，未能充分考虑人类行为的多样性。对于受此困扰的用户，可以通过“设置 &gt; 安全与隐私 &gt; 丢失设备保护”路径找到相关选项并将其关闭。未来，这类功能可能需要结合更多上下文信息（如是否连接了用户的智能手表或耳机）来降低误报率。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49200749" target="_blank" rel="noopener noreferrer">@rsynnott</a>
+        </div>
+        <p class="comment-text">看来“跑步”也被列入了谷歌工程师显然不会去做的事情清单里了。之前清单上还有“步行”。谷歌地图为了让你少走点路，经常会给出一些极其离谱的公共交通建议。我最喜欢的例子是：从我家到公司，除非天气特别糟糕，否则最合理的方案是坐 6 分钟火车加步行 15 分钟。但谷歌地图通常更倾向于让我坐 15 分钟反方向的火车，再换乘 15 分钟电车，最后走 5 分钟。它甚至会考虑让你走 10 分钟（这是谷歌认为体力可及的极限），再加上一段漫长且缓慢的公交车。相比之下，苹果地图和 Transit 在这方面做得更好。</p>
+        <p class="comment-reason"><span>入选理由</span>这条评论以幽默的方式指出了科技公司工程师在设计产品时往往带有自身生活方式的偏见，忽略了普通用户的真实需求。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49204039" target="_blank" rel="noopener noreferrer">@freetime2</a>
+        </div>
+        <p class="comment-text">与此类似，我发现用 Apple Watch 记录徒步时，如果我在陡峭的坡段缓慢攀爬，它经常会自动暂停或询问我是不是结束了。这让我非常恼火，因为那通常是我运动最卖力的时候。手表明明也在监测我的心率——我认为完全可以合理假设，如果我的心率稳定在 150 BPM，那我肯定没停下来休息。或者至少给我一个选项，让我可以只针对徒步关闭“自动暂停/自动结束”功能，但现在我必须针对所有运动类型关闭它。不过我猜这种程度的自定义非常“不苹果”。家电领域也充斥着这些所谓的“智能”功能，号称让生活更便利，但实现得如此粗糙，以至于带来的麻烦比解决的问题还多。</p>
+        <p class="comment-reason"><span>入选理由</span>用户分享了其他智能设备在类似场景下的失败案例，增强了文章关于“智能功能不智能”的论点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49207101" target="_blank" rel="noopener noreferrer">@gucci-on-fleek</a>
+        </div>
+        <p class="comment-text">我用的是最新版本的 Pixel 7a（Android 17，2026年7月版），我可以关闭这个功能。如果你想按部就班地找，点击以下屏幕：
+设置 &gt; 安全与隐私 &gt; 丢失设备保护 &gt; 盗窃保护 &gt; 盗窃检测锁定 &gt; (关闭)
+或者如果你想快点，打开设置应用，搜索“theft”（盗窃），点击第一个结果然后关闭它即可。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了实用的操作指南，帮助受此问题困扰的用户直接解决问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49201090" target="_blank" rel="noopener noreferrer">@kbrannigan</a>
+        </div>
+        <p class="comment-text">即将出现在你身边：
+- 跑步前的热身：可能被视为焦躁不安的瘾君子，疑似处于危机状态
+- 午夜后跑步：天黑后规避性的单独行动
+- 冲刺跑完回家前的最后一段路：符合入室盗窃后的逃跑行为
+- 雨中戴着兜帽跑步：刻意规避生物识别监测
+- 两名跑者在街角相遇后朝相反方向离开：短暂接触事件，疑似进行手对手交易
+肤色越深，评分越高。</p>
+        <p class="comment-reason"><span>入选理由</span>这条评论深刻地揭示了这种基于行为模式的自动化监控可能带来的社会偏见和“过度执法”风险。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这种“防盗锁”功能是典型的“办公室设计”产物。工程师们在恒温的实验室里模拟抢劫，却忘了现实中人们也会为了赶公交、健身或者单纯因为开心而奔跑。当安全功能开始惩罚正常生活方式时，它就从保护者变成了干扰者。正如评论区所言，如果算法不能理解心率 150 时的缓慢爬坡，或者无法区分晨跑与逃命，那么这种所谓的“智能”其实还相当原始，甚至可能在未来演变成一种基于偏见的自动化监控。在 AI 真正理解“上下文”之前，这种一刀切的逻辑只会让用户在安全与便利之间被迫选择后者。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49195231">
+      <summary class="story-overview">
+        <span class="rank-number">18</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">mayerowitz.io</span>
+            <span>1104 points</span>
+            <span>原始 #28 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.mayerowitz.io/blog/mario-meets-pareto" target="_blank"
+              rel="noopener noreferrer">Mario Meets Pareto</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49195231" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 162</a>
+          </h2>
+          <p class="summary">本文通过《马里奥赛车 8 豪华版》的赛车配置，生动地解释了“帕累托前沿”（Pareto Frontier）这一多目标优化概念。在游戏中超过 70 万种角色与赛车组合中，绝大多数都是“被支配”的次优选，即总能找到另一个组合在不牺牲任何属性的前提下表现更好。帕累托前沿则是那些无法在不削弱一项属性（如加速度）的情况下提升另一项属性（如最高时速）的最优组合集合。研究发现，职业选手的常用配置几乎全部落在这一数学边界上，证明了群体智慧与数学最优解的合流。这一理论同样适用于现实中金钱、时间和质量之间的权衡，帮助我们在复杂决策中剔除那些客观上的“烂选项”。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>《马里奥赛车 8 豪华版》拥有 42 名角色、40 辆赛车、21 种轮胎和 14 种滑翔机，组合总数惊人。作者利用帕累托效率分析发现，虽然组合成千上万，但真正值得选择的“帕累托最优”组合仅占极小比例。所谓帕累托最优，是指在多维度评价中，你无法在不让某个维度变差的情况下，让另一个维度变得更好。例如，如果你想要更快的最高速度，就必须接受更慢的加速度，那么这个组合就位于帕累托前沿上。反之，如果一个组合在所有维度上都被另一个组合超越，它就是“被支配”的，理应被排除。</p><p>文章通过交互式图表展示了数据，发现顶级玩家和竞速专家所青睐的“主流配置”与数学计算出的帕累托前沿高度吻合。这说明即便玩家不了解复杂的数学模型，长期的实践竞争也会引导他们找到效率最高的平衡点。除了游戏，这种分析方法在现实生活中也极具价值，比如在寻找“高薪、轻松且有成就感”的工作，或者在投资中平衡风险与收益时，帕累托前沿能帮我们识别出哪些是真正的权衡，哪些只是单纯的低效。不过，该分析也存在局限性：它假设“属性越多越好”，忽略了某些属性可能存在过犹不及的“甜点位”，且为了简化计算，作者对游戏内复杂的隐藏属性进行了平均化处理。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49196294" target="_blank" rel="noopener noreferrer">@jerf</a>
+        </div>
+        <p class="comment-text">这对开发者来说是一个非常重要的概念。我经常听到开发者断言：“如果不牺牲 Y，我们就无法拥有 X”，最常见的就是“如果不牺牲用户体验，我们就无法提高安全性”。基于帕累托思想，我们可以发现这种说法只有在你已经处于安全性和用户体验的帕累托前沿时才成立。然而，很多时候这些自信的声明是在所讨论的系统显然还没达到帕累托前沿时做出的，实际上你完全可以在不牺牲另一方的情况下提升其中一方。更复杂的是，在商业中你永远无法抛弃“金钱”这个维度，除非你把它包含在原始比较中，否则它总会偷偷溜进来。在我看来，我们经常在还没确认自己是否达到帕累托前沿之前，就盲目地进行所谓的“权衡”。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论将游戏理论延伸至软件开发中的实际决策，指出人们常在未达最优边界时就误以为必须做权衡。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49199611" target="_blank" rel="noopener noreferrer">@cortesoft</a>
+        </div>
+        <p class="comment-text">这里讨论帕累托前沿时有几个假设，但它们并不总是成立。第一，假设某样东西越多越好，比如速度。但如果速度太快导致你冲出赛道、表现变差呢？效用函数可能在速度增加到一定程度后反而下降。此外，属性之间可能存在重要的关联，使得确定帕累托前沿变得困难。例如，某些属性对只有在特定比例下才效果最好，除非同时增加另一个属性，否则单独增加其中一个反而会降低效用。</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了模型中“越多越好”这一简化假设的潜在缺陷，增加了讨论的深度。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49200529" target="_blank" rel="noopener noreferrer">@uzerfcwn</a>
+        </div>
+        <p class="comment-text">几年前我也针对《魔兽世界》经典版的装备构建做过类似的分析。难点在于魔兽有 15 个左右的装备位，每个位置有数百种选择，总组合数超过 100^15。我最终采用了一种分治法：1) 剪掉每个部位非帕累托最优的单件；2) 选取剩余数量最少的两个部位 X 和 Y 进行组合；3) 对组合后的结果再次进行帕累托剪枝；4) 重复此过程直到只剩下一组完整的帕累托最优装备构建。这种方法运行只需几秒钟，而我尝试的其他方案则需要几分钟甚至几年。缺点是把套装奖励纳入模型需要额外的工作。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了将帕累托优化应用于其他复杂游戏系统的实战算法经验。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49196460" target="_blank" rel="noopener noreferrer">@__s</a>
+        </div>
+        <p class="comment-text">&gt; 你可能不会选择处于前沿边缘的角色，因为你想要在速度和加速度之间取得某种平衡
+
+对于《超级马里奥赛车》的速通（speedrun）来说，大家都会选库巴（Bowser）或大金刚（DK）。在《马里奥赛车 8》中，选择处于帕累托前沿边缘的库巴似乎也成立。需要加速度说明技术还不到位（skill issue）。</p>
+        <p class="comment-reason"><span>入选理由</span>从硬核玩家和速通者的视角提供了不同于普通玩家的“极端”优化策略。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>帕累托前沿最迷人的地方在于，它并不试图告诉你“什么是最好的”，而是客观地告诉你“什么是浪费的”。在《马里奥赛车》的例子中，它揭示了一个残酷的数学事实：如果你选了某些角色组合，你就是在纯粹地浪费属性点。正如评论区 jerf 所言，我们在工作中常挂在嘴边的“权衡”往往是个伪命题——如果你还没达到效率的极限，你完全可以做到“既要又要”。这篇文章不仅是给游戏玩家的攻略，更是给决策者的一剂清醒剂：在纠结如何取舍之前，先看看你是否已经站在了那个无法再白嫖进步的边界上。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49203105">
+      <summary class="story-overview">
+        <span class="rank-number">19</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">troyhunt.com</span>
+            <span>190 points</span>
+            <span>原始 #22 · 低讨论量降权 +6.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.troyhunt.com/welcoming-the-nepalese-government-to-have-i-been-pwned/" target="_blank"
+              rel="noopener noreferrer">Welcoming the Nepalese Government to Have I Been Pwned</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49203105" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 28</a>
+          </h2>
+          <p class="summary">尼泊尔国家网络安全中心正式加入 Have I Been Pwned (HIBP) 的免费政府服务，成为全球第 47 个加入的国家。该服务允许尼泊尔政府监控其官方域名，在发生数据泄露时及时发现受损的政府邮箱凭据。通过这种方式，政府可以更快速地响应安全威胁，降低攻击者利用泄露账户发起攻击的风险。考虑到尼泊尔政府 IT 服务目前面临的诸多技术挑战，这一举措具有重要的现实意义。然而，该服务的核心价值在于政府能否根据预警信息采取有效的后续补救措施。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>网络安全专家 Troy Hunt 宣布，尼泊尔国家网络安全中心（NCSC）已正式启用 HIBP 的政府专用服务。作为全球第 47 个加入的政府实体，尼泊尔现在可以免费访问一个专用仪表盘，实时监控其所有政府域名在已知数据泄露事件中的暴露情况。这项服务的初衷是为各国网络安全团队提供“可见性”，让他们在黑客利用泄露的用户名和密码发起攻击之前，就能识别并重置受影响的政府账户。</p><p>此次合作对尼泊尔而言尤为关键，因为当地用户反映其政府 IT 基础设施存在不少基础性缺陷，例如护照预约系统的时间区设置问题以及缺乏基本的输入过滤。HIBP 提供的自动化监测能显著提升其应对凭据填充攻击的能力。不过，这种外部监控工具只是安全防御的一环，其最终成效取决于尼泊尔政府如何将这些警报整合进其应急响应流程中。此外，社区中也有声音讨论 HIBP 这种商业模式的伦理边界，即在提供公共服务的同时，是否也存在变相“转售”泄露数据的嫌疑，以及这种服务是否更应该由具备严格监管的公共机构来承担。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49203328" target="_blank" rel="noopener noreferrer">@amritananda</a>
+        </div>
+        <p class="comment-text">考虑到尼泊尔政府运行的 IT 服务现状，这确实是个好消息（比如办理护照预约的页面竟然要求你修改本地时区或覆盖 TZ 变量为 Asia/Kathmandu，这足以说明这些服务的水平）。在与尼泊尔政府网站打交道的过程中，我发现有些接口甚至连基本的输入过滤都不做，允许你对生物识别数据运行任意查询。向科技界打听后发现，这种情况非常普遍。甚至有人发现了一个显然是故意不修补的漏洞，极有可能是为了助长腐败。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于尼泊尔政府 IT 现状的第一手观察，解释了为什么这项服务对该国尤为重要。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49205244" target="_blank" rel="noopener noreferrer">@subscribed</a>
+        </div>
+        <p class="comment-text">警官提供帮助是免费的。如果他们在调查中发现你是犯罪受害者，他们会告诉你数据是在哪里发现的，以及里面具体有什么。而 Troy 呢？他基本上是在把你被盗的数据再卖回给你，因为只有付费才能知道泄露的密码是 20 年前的还是 1 个月前的，以及具体涉及哪些服务。如果你在信息窃取程序的转储中被泄露了，警察会告诉你这个转储中与你邮箱关联的具体内容，这样你就知道是 Firefox 里空的密码库泄露了，还是会导致倾家荡产的财务数据泄露了。Troy 也能告诉你这些，但得付钱。他是在卖回你的个人数据。（我找了很久，似乎没有任何办法在不支付 API 访问费用的情况下，列出哪怕是邮箱/密码转储的域名列表）</p>
+        <p class="comment-reason"><span>入选理由</span>对 HIBP 的商业模式提出了尖锐的批评，为读者提供了不同的审视视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49205447" target="_blank" rel="noopener noreferrer">@Nail2680</a>
+        </div>
+        <p class="comment-text">我挺喜欢 Have I Been Pwned 背后的理念。老实说，如果由政府接管它，并能提供某些保障，那可能会很不错。感觉这应该是一项公共服务，并配有极其严格的特别监管，以防止被执法部门滥用（因为发送任何信息本质上都是有风险的）。</p>
+        <p class="comment-reason"><span>入选理由</span>探讨了此类安全服务作为公共基础设施的潜在可能性和监管必要性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>尼泊尔的加入再次证明了 HIBP 在全球网络安全基础设施中扮演的独特角色。虽然 Troy Hunt 提供的政府服务是免费的，但评论区中关于其商业模式的争议（如 [49205244] 提到的 API 收费问题）反映了公众对这类“数据中介”角色的复杂心态。对于尼泊尔这样 IT 基础尚不稳固的国家来说，这种外部预警机制是低成本提升安全性的捷径，但正如 [49203328] 所指出的，解决系统内部的低级漏洞和潜在的腐败问题，可能比监控外部泄露更为紧迫。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49210077">
+      <summary class="story-overview">
+        <span class="rank-number">20</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">fastcompany.com</span>
+            <span>113 points</span>
+            <span>原始 #31 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.fastcompany.com/91576086/ai-psychosis-is-the-new-leadership-blind-spot-ai-leadership-blind-spots" target="_blank"
+              rel="noopener noreferrer">AI psychosis is the new leadership blind spot</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49210077" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 62</a>
+          </h2>
+          <p class="summary">所谓“AI 精神病”正成为企业领导层的新盲点，表现为管理者过度依赖 AI 建议而忽视人类同事的专业判断。研究显示，高达 74% 的高管更信任 AI 的建议而非同事，甚至有 44% 的人会优先听从 AI 的推理而非自己的直觉。这种现象反映了领导者在面对复杂决策时，倾向于寻找“一键式”的简单答案，而非深入了解业务现状。然而，这种行为会导致员工对领导的信任度和智力评价大幅下降。最核心的局限在于，目前尚不清楚这究竟是 AI 诱发的心理问题，还是平庸领导力在技术浪潮下的集中暴露。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>由于原文章链接无法直接访问，本总结基于 Hacker News 的元数据及深度讨论。所谓“AI 精神病”描述了一种高管层出现的认知偏差：他们开始盲目崇拜大模型的输出，将其视为比资深员工更可靠的真理来源。数据显示，近四分之三的高管在决策时更倾向于听取 AI 的意见，这种“认知投降”现象在技术管理中尤为突出。许多领导者宁愿相信 Claude 对代码库 2% 片段的分析，也不愿听取拥有多年经验、了解系统底层“屎山”和技术债的工程师的建议。这种脱离现实的决策模式，往往是因为 AI 提供的答案符合某种“理想化”的逻辑，而现实业务却充满了琐碎的权衡。此外，心理学上的“确认偏误”也在起作用：当领导者通过提示词引导 AI 时，AI 的回答往往成了他们自身想法的延伸，让他们误以为是在听取客观建议，实则是在自我肯定。这种行为的副作用显而易见，员工在收到 AI 撰写的邮件或指令时，会显著降低对领导者智力和诚信的评价。未来值得关注的是，这种趋势是否会引发企业内部的“智力空心化”，即领导层彻底丧失批判性思维，沦为 AI 输出的肉身代理人。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49210907" target="_blank" rel="noopener noreferrer">@paimapi</a>
+        </div>
+        <p class="comment-text">“74% 的高管表示他们对 AI 建议的信心超过了对同事或朋友的信心，44% 的人表示他们会听从 AI 的推理而非自己的见解。” 令人悲哀的是，C 级高管竟然更相信 LLM 针对某种“柏拉图式理想软件栈”给出的建议（而这种理想状态与实际实现完全不符），也不愿相信自己的个人贡献者（IC）。这进一步证明了 LLM 比起取代其他人，其实更适合取代领导层。我一直无法理解，为什么有人会相信 Claude 在只读了 2% 的代码片段后给出的见解，而不去听取那些拥有多年经验、了解所有为了快速上线而留下的临时补丁和怪异缺陷、做过风险评估并掌握所有架构决策记录（ADR）的人的建议。我认为平庸的领导者随着时间的推移往往会脱离业务现实，尤其是在他们不懂得培养良好的工作规范、反而青睐谄媚者的情况下。有了 LLM，这种趋势似乎只会变得越来越糟。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论引用了关键数据，并深刻揭示了领导层信任 AI 胜过信任一线专家的荒谬现状。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49211482" target="_blank" rel="noopener noreferrer">@hellojomp</a>
+        </div>
+        <p class="comment-text">起初我想说，如果一个人更喜欢 AI 的回答而不是你的，那反映的是你自己的理解、表达或沟通能力不足。但后来我想起了 Voss 在《谈判天才》（Never Split The Difference）中的一段话，大意是：如果你能让对方说出“你是对的”，你其实什么也没达成；但如果你能让他们说出“那是对的”，你就击中了要害。当你给 AI 下提示词时，你已经根据自己的想法对答案进行了预设。这其中有一种微妙的机制，把通常的“你（LLM）是对的”变成了“那是对的”，而这种转变背后隐含着一种“我是对的”的渴望。顺便提一下：《万物的黎明》中有一段很有趣，讲的是私有财产的概念源于这样一种想法：将你的一部分（劳动）注入某个事物（土地），使该事物成为你自身的延伸（财产）。这种逻辑难道不也适用于这种“精神病”吗？C 级高管们并不是在听从 AI，他们是在通过 AI 听从他们自己。</p>
+        <p class="comment-reason"><span>入选理由</span>从心理学角度解释了领导者为何迷恋 AI 建议，即 AI 成为了他们自我意志的延伸。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49210762" target="_blank" rel="noopener noreferrer">@rockbruno</a>
+        </div>
+        <p class="comment-text">我不喜欢“AI 精神病”这个词，因为我觉得它描述得不准确。我认为“认知投降”是一个更好的词。因为并不是人们因为 AI 变得“疯狂”了，而是这些人竟然完全接受了丧失批判性思维的状态，盲目相信 AI 吐出的任何垃圾。我的很多同事甚至不再有自己的观点，他们只是此时此刻正在使用的任何 AI 的肉身代理。这纯粹是关于懒惰和/或无知，而不是一种医疗状况。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个更有力的术语“认知投降”，并指出问题的本质是懒惰而非病理。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49210880" target="_blank" rel="noopener noreferrer">@bonoboTP</a>
+        </div>
+        <p class="comment-text">&gt; 事实上，研究人员发现，在收到 AI 撰写的邮件的员工中，近一半的人因此认为发件人不太可靠，超过三分之一的人认为发件人不太聪明。AI 提升我们的愿景落空了。
+也许 AI 确实提升了他们，但同时上述评估也是正确的。AI 对工作质量的影响并非单一，这取决于使用方式和投入程度。用得好，效果就好；如果几乎不花心思去用，你得到的东西确实比你手动折腾出来的要好，但人们会发现你确实没花心思，而且他们还会注意到你甚至没去清理 AI 的痕迹，因为你可能根本察觉不到或者一窍不通，从而正确地得出你不太聪明的结论。对于那些缺乏品味、判断力、智力或经验的人来说，可能还存在一种误判：虽然产出变得更容易了，所需精力减少了，但他们预期的精力减少程度超过了实际应减少的程度，导致他们用力过猛却没察觉。而正确的使用方式应该是保持原有的努力水平，或者只稍微降低一点，从而产出更好的东西。</p>
+        <p class="comment-reason"><span>入选理由</span>分析了 AI 使用中的“努力程度”与“产出质量”之间的错位，以及这种错位如何损害个人声誉。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>所谓的“AI 精神病”与其说是技术引发的新病症，不如说是平庸领导力在 AI 时代的“现形记”。当高管们宁愿相信一个只读了局部代码的黑盒模型，也不愿听取深耕业务多年的工程师建议时，他们实际上是在进行一种“认知投降”。这种现象最讽刺的地方在于，领导者以为 AI 让他们变得更高效、更睿智，但在员工眼中，这种对“易用按钮”的依赖反而暴露了他们判断力的缺失和对业务的无知。正如评论所言，这往往是领导者在通过 AI 寻求自我肯定——他们并不是在听取客观意见，而是在消费一个能以完美逻辑包装他们自身偏见的“回音壁”。这种趋势如果持续下去，企业领导层将面临严重的信任危机和智力退化。</p>
+        </div>
+      </div>
+    </details>
+    </section>
+    <footer class="footer">
+      <p>新闻只按 HN 原始名次和讨论度排序后取前 20，不做主题挑选。评论来自有界采样，
+        只是观点，不作为新闻事实来源。</p>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const themeButtons = [
+        ...document.querySelectorAll(".theme-button[data-theme-choice]")
+      ];
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      const applyThemeChoice = (requestedChoice, persist = true) => {
+        const choice = ["auto", "day", "night"].includes(requestedChoice)
+          ? requestedChoice
+          : "auto";
+        const theme = choice === "auto" ? themeForLocalTime() : choice;
+        document.documentElement.dataset.themeChoice = choice;
+        document.documentElement.dataset.theme = theme;
+        themeButtons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.themeChoice === choice)
+          );
+        });
+        if (persist) {
+          try {
+            localStorage.setItem("hnDigestThemeChoice", choice);
+          } catch (_) {
+            // The switch still works when report sandboxing blocks storage.
+          }
+        }
+      };
+      const refreshAutomaticTheme = () => {
+        if (document.documentElement.dataset.themeChoice === "auto") {
+          applyThemeChoice("auto", false);
+        }
+      };
+      applyThemeChoice(document.documentElement.dataset.themeChoice, false);
+      themeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyThemeChoice(button.dataset.themeChoice);
+        });
+      });
+      window.setInterval(refreshAutomaticTheme, 60 * 1000);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) refreshAutomaticTheme();
+      });
+
+      const list = document.querySelector(".story-list");
+      const controls = document.querySelector(".view-switch");
+      const buttons = [...document.querySelectorAll(".view-button")];
+      const status = document.querySelector(".view-status");
+      const total = list ? list.children.length : 0;
+      if (!list || !controls || total <= 10) {
+        if (controls) controls.hidden = true;
+        return;
+      }
+
+      const visibleCountStorageKey = "hnDigestVisibleCountV3";
+      const applyVisibleCount = (requestedCount, persist = true) => {
+        const count = requestedCount === 20 ? 20 : 10;
+        const shown = Math.min(count, total);
+        list.dataset.visibleCount = String(count);
+        buttons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(Number(button.dataset.count) === count)
+          );
+        });
+        status.textContent = `当前显示前 ${shown}`;
+        if (persist) {
+          try {
+            localStorage.setItem(visibleCountStorageKey, String(count));
+          } catch (_) {
+            // The switch still works when local privacy settings block storage.
+          }
+        }
+      };
+
+      let initialCount = 20;
+      try {
+        const storedCount = Number(localStorage.getItem(visibleCountStorageKey));
+        if ([10, 20].includes(storedCount)) initialCount = storedCount;
+      } catch (_) {
+        // Keep the all-20 default.
+      }
+      applyVisibleCount(initialCount, false);
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyVisibleCount(Number(button.dataset.count));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
