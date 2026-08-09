@@ -1,0 +1,2089 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Hacker News 每日精选：通俗摘要、精彩评论与 LLM 锐评">
+  <title>HN 每日精选 · 2026-08-09</title>
+  <script>
+    (() => {
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      let choice = "auto";
+      try {
+        choice = localStorage.getItem("hnDigestThemeChoice") || "auto";
+      } catch (_) {
+        // Storage may be unavailable in a sandboxed report.
+      }
+      if (!["auto", "day", "night"].includes(choice)) {
+        choice = "auto";
+      }
+      const theme = choice === "auto" ? themeForLocalTime() : choice;
+      document.documentElement.dataset.themeChoice = choice;
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d252d;
+      --muted: #6c747c;
+      --paper: #f5f3ed;
+      --card: #fffefa;
+      --line: #d9d6ce;
+      --orange: #e85d2a;
+      --orange-soft: #fff0e8;
+      --blue-soft: #edf3f7;
+      --green: #25644f;
+      --story-open-line: #c7c3b9;
+      --story-shadow: rgba(31, 36, 40, .07);
+      --summary-ink: #47515a;
+      --detail-ink: #37424c;
+      --section-ink: #5f6871;
+      --hint-ink: #8a9095;
+      --comment-meta-ink: #637080;
+      --comment-label-bg: #d7e6ef;
+      --comment-label-ink: #315b73;
+      --comment-text-ink: #2e3944;
+      --comment-reason-ink: #637080;
+      --comment-reason-label: #2e5e78;
+      --comment-empty-ink: #8a9097;
+      --editorial-ink: #333b42;
+      --humor-bg: #f8e8bd;
+      --humor-ink: #795d16;
+      --wisdom-bg: #dcebdc;
+      --wisdom-ink: #315f3a;
+      --counterpoint-bg: #eadff1;
+      --counterpoint-ink: #614273;
+    }
+    html[data-theme="night"] {
+      color-scheme: dark;
+      --ink: #e0e7e1;
+      --muted: #9ba79f;
+      --paper: #111713;
+      --card: #1a221d;
+      --line: #303c34;
+      --orange-soft: #2c211b;
+      --blue-soft: #202c2e;
+      --green: #83c8a2;
+      --story-open-line: #435148;
+      --story-shadow: rgba(0, 0, 0, .28);
+      --summary-ink: #c2ccc5;
+      --detail-ink: #d1d8d3;
+      --section-ink: #aab5ae;
+      --hint-ink: #929e96;
+      --comment-meta-ink: #a8b7b8;
+      --comment-label-bg: #2f474d;
+      --comment-label-ink: #b8dbe2;
+      --comment-text-ink: #d5dcda;
+      --comment-reason-ink: #aebbb8;
+      --comment-reason-label: #92c6cf;
+      --comment-empty-ink: #929e96;
+      --editorial-ink: #d9d5d0;
+      --humor-bg: #403721;
+      --humor-ink: #e3cb87;
+      --wisdom-bg: #293c2c;
+      --wisdom-ink: #a8d3ae;
+      --counterpoint-bg: #382d40;
+      --counterpoint-ink: #d0b4df;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .18s ease, color .18s ease;
+    }
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--orange); }
+    .masthead {
+      border-top: 5px solid var(--orange);
+      border-bottom: 1px solid #343b43;
+      background: #18212a;
+      color: white;
+    }
+    .masthead-inner, main {
+      width: min(860px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+    .masthead-inner { padding: 25px 0 27px; }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      background: var(--orange);
+      color: white;
+      font-family: ui-serif, Georgia, serif;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+    .archive-link { color: #bac2ca; }
+    .theme-switch {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .theme-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 8px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .theme-button:hover { color: white; }
+    .theme-button[aria-pressed="true"] {
+      background: #46515b;
+      color: white;
+    }
+    .theme-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .eyebrow {
+      color: #ff9670;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 7px 0 8px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 6vw, 46px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.03;
+    }
+    .dek {
+      margin: 0;
+      color: #c0c8d0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      margin-top: 17px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .stats strong { color: white; font-size: 13px; margin-right: 3px; }
+    .view-switch {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 13px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .view-switch[hidden] { display: none; }
+    .view-buttons {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .view-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 9px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .view-button:hover { color: white; }
+    .view-button[aria-pressed="true"] {
+      background: var(--orange);
+      color: white;
+    }
+    .view-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .view-status { color: #c0c8d0; }
+    .ranking-rule {
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255, 255, 255, .09);
+      color: #9faab4;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .ranking-rule strong {
+      color: #e7eaed;
+      margin-right: 5px;
+    }
+    main { padding: 20px 0 72px; }
+    .story-list {
+      display: grid;
+      gap: 9px;
+    }
+    .story-list[data-visible-count="10"] .story:nth-child(n+11),
+    .story-list[data-visible-count="20"] .story:nth-child(n+21) {
+      display: none;
+    }
+    .story {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--card);
+      overflow: clip;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .story[open] {
+      border-color: var(--story-open-line);
+      box-shadow: 0 14px 34px var(--story-shadow);
+    }
+    .story-overview {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 13px;
+      padding: 17px 20px 15px 15px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .story-overview::-webkit-details-marker { display: none; }
+    .story-overview:focus-visible {
+      outline: 3px solid rgba(232, 93, 42, .45);
+      outline-offset: -3px;
+    }
+    .rank-number {
+      color: var(--orange);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .story-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 14px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .story-kicker .source {
+      color: var(--green);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h2 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 10px;
+      margin: 5px 0 5px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(17px, 2.3vw, 19px);
+      font-weight: 700;
+      letter-spacing: -.008em;
+      line-height: 1.28;
+    }
+    .title-link { text-decoration: none; }
+    .discussion-link {
+      color: var(--orange);
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .summary {
+      margin: 0;
+      color: var(--summary-ink);
+      font-size: 14.5px;
+      line-height: 1.72;
+      white-space: pre-line;
+    }
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--hint-ink);
+      font-size: 10px;
+      font-weight: 750;
+    }
+    .chevron {
+      display: inline-block;
+      color: var(--orange);
+      transition: transform .18s ease;
+    }
+    .story[open] .chevron { transform: rotate(180deg); }
+    .story[open] .expand-hint > span:first-child { font-size: 0; }
+    .story[open] .expand-hint > span:first-child::after {
+      content: "收起详情";
+      font-size: 10px;
+    }
+    .story-details {
+      margin-left: 80px;
+      padding: 17px 20px 24px 0;
+      border-top: 1px solid var(--line);
+    }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      color: var(--section-ink);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .detail-summary > p {
+      margin: 0;
+      color: var(--detail-ink);
+      font-size: 14px;
+      line-height: 1.78;
+    }
+    .detail-summary > p + p { margin-top: 12px; }
+    .comments-panel {
+      margin-top: 21px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+    .comments-list { display: grid; gap: 9px; }
+    .featured-comment {
+      margin: 0;
+      padding: 14px 16px;
+      border: 0;
+      border-radius: 3px;
+      background: var(--blue-soft);
+    }
+    .comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 7px;
+      font-size: 11px;
+    }
+    .comment-meta a { color: var(--comment-meta-ink); text-decoration: none; }
+    .comment-label {
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--comment-label-bg);
+      color: var(--comment-label-ink);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .05em;
+    }
+    .comment-label-humor {
+      background: var(--humor-bg);
+      color: var(--humor-ink);
+    }
+    .comment-label-wisdom {
+      background: var(--wisdom-bg);
+      color: var(--wisdom-ink);
+    }
+    .comment-label-counterpoint {
+      background: var(--counterpoint-bg);
+      color: var(--counterpoint-ink);
+    }
+    .comment-text {
+      margin: 0;
+      color: var(--comment-text-ink);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 13px;
+      line-height: 1.62;
+      white-space: pre-line;
+    }
+    .comment-reason {
+      margin: 9px 0 0;
+      color: var(--comment-reason-ink);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .comment-reason span {
+      margin-right: 7px;
+      color: var(--comment-reason-label);
+      font-weight: 850;
+    }
+    .comments-empty {
+      margin-top: 19px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      color: var(--comment-empty-ink);
+      font-size: 12px;
+    }
+    .editorial {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      align-items: start;
+      margin-top: 21px;
+      padding: 13px 15px;
+      border-left: 3px solid var(--orange);
+      background: var(--orange-soft);
+    }
+    .editorial-mark {
+      padding-top: 2px;
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+    .editorial p {
+      margin: 0;
+      color: var(--editorial-ink);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.62;
+    }
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 27px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .footer p { margin: 0; max-width: 680px; }
+    .footer a { font-weight: 800; }
+    @media (max-width: 620px) {
+      .masthead-inner, main { width: min(100% - 20px, 860px); }
+      .masthead-inner { padding-top: 18px; }
+      .topline {
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+      .top-actions {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
+      .story-overview {
+        grid-template-columns: 37px minmax(0, 1fr);
+        gap: 9px;
+        padding: 14px 13px 12px 10px;
+      }
+      .rank-number { font-size: 22px; }
+      .story-details { margin-left: 56px; padding-right: 13px; }
+      .editorial { grid-template-columns: 1fr; gap: 4px; }
+      .footer { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .masthead { background: white; color: var(--ink); border-bottom-color: var(--line); }
+      .topline, .archive-link, .expand-hint, .view-switch, .theme-switch { display: none; }
+      main { width: 100%; }
+      .story { display: block !important; break-inside: avoid; }
+      .story-details { display: block; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="topline">
+        <div class="brand"><span class="brand-mark">Y</span> Hacker News</div>
+        <div class="top-actions">
+          <div class="theme-switch" role="group" aria-label="选择页面颜色模式">
+            <button class="theme-button" type="button" data-theme-choice="auto" aria-pressed="true">自动</button>
+            <button class="theme-button" type="button" data-theme-choice="day" aria-pressed="false">日间</button>
+            <button class="theme-button" type="button" data-theme-choice="night" aria-pressed="false">夜间</button>
+          </div>
+          <a class="archive-link" href="../index.html">每日归档 →</a>
+        </div>
+      </div>
+      <div class="eyebrow">2026-08-09 · top feed · 过去 36 小时</div>
+      <h1>今天的 Hacker News</h1>
+      <p class="dek">前 20 篇已经全部准备好；默认显示前 20，也可以切换到前 10。</p>
+      <div class="stats">
+        <span><strong>20</strong>篇已准备</span>
+        <span><strong>19</strong>篇有精彩评论</span>
+        <span>更新于 2026-08-09 08:01 PDT</span>
+        <span>生成模型 <strong>gemini/gemini-3-flash-preview</strong></span>
+      </div>
+      <div class="view-switch" aria-label="选择新闻显示数量">
+        <span>显示</span>
+        <div class="view-buttons">
+          <button class="view-button" type="button" data-count="10" aria-pressed="false">前 10</button>
+          <button class="view-button" type="button" data-count="20" aria-pressed="true">前 20</button>
+        </div>
+        <span class="view-status" aria-live="polite">当前显示前 20</span>
+      </div>
+      <div class="ranking-rule">
+        <strong>排序规则</strong>HN 原始名次 + 低讨论量降权。公式：原始名次 + 0.3 × max(0, 50 − 评论数)；50 条评论以上不降权。
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="story-list" data-visible-count="20">
+      
+    <details class="story" id="story-49231154">
+      <summary class="story-overview">
+        <span class="rank-number">01</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">blog.terrygodier.com</span>
+            <span>134 points</span>
+            <span>原始 #1 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://blog.terrygodier.com/2026/08/09/mea-culpa-dark-hours.html" target="_blank"
+              rel="noopener noreferrer">Mea Culpa – Dark Hours</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49231154" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 58</a>
+          </h2>
+          <p class="summary">开发者 Terry Godier 为其新项目 Dark Hours 发表道歉，承认该项目几乎完全抄袭了一个同名的开源天文应用。他声称这是因为过度依赖 Claude AI 生成代码，而自己此前从未听说过原项目。在发现两者甚至连特定的 Bug 都一模一样后，他关闭了项目并将域名指向原作者。此事引发了广泛质疑，因为该开发者此前曾卷入一起涉及苹果应用商店审核和占星术应用的争议。最核心的局限在于，这种“AI 导致抄袭”的说法被许多人视为推卸责任的借口。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Terry Godier 最近发布了一个名为 Dark Hours 的天文网页工具，旨在帮助用户了解夜空观测信息。然而，该项目很快被发现与已有的开源项目 DarkHours.app 高度雷同，不仅名字完全一致，连功能逻辑甚至原作者尚未修复的特定 Bug 都被原样照搬。Godier 在道歉信中解释称，他是通过 Claude AI 构建的这个应用，并坚称在发布前对原项目一无所知，是 AI 在生成过程中“复刻”了开源代码。他目前已将域名重定向至原作者，并承诺未来不再以这种方式使用 AI 开发软件。</p><p>然而，这件事背后的背景让社区疑虑重重。此前，Godier 曾因一款应用被苹果拒绝而向知名博主 John Gruber 诉苦，声称苹果误将他的“天文”应用当成了禁止的“占星”应用。Gruber 随后发文声援，但后来发现 Godier 最初提交的确实是占星应用，感觉受到了欺骗并撤回了文章。Hacker News 的用户普遍对“AI 误导”的说法表示不买账，认为即便 AI 输出了相似代码，开发者在命名和发布过程中也有无数机会发现问题。这种“AI 吃了我的作业”式的辩解被认为是一种新型的公关手段，试图将蓄意的抄袭或极度的懒惰归咎于技术工具。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49231407" target="_blank" rel="noopener noreferrer">@user43928</a>
+        </div>
+        <p class="comment-text">在之前的 HN 帖子里，我得到了这样的印象：
+该开发者的占星应用（包含塔罗牌阅读功能）被苹果应用商店拒绝了，因为苹果禁止占星类应用。
+然后他把应用内容替换成了开源天文应用“Dark Hours”的克隆版，甚至连名字都照抄了。原版在这里：https://darkhours.app
+接着该开发者联系了 John Gruber，后者写了一篇文章声称苹果的审核员把一个精美的、科学的天文应用误认为了占星术。开发者在文章发表前还审阅了内容。
+结果发现，开发者忘了提到他最初确实上传了一个占星应用进行审核。Gruber 觉得自己被耍了，并指出目前还不清楚包含新天文应用的更新版本是否真的提交给苹果审核过：https://daringfireball.net/2026/08/retraction_app_store_reje...
+现在开发者似乎又声称，他只是在使用 Claude 工作时“不小心”克隆了那个开源应用。
+我不买账。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了该事件背后复杂的背景信息，包括开发者此前在 App Store 审核问题上对知名博主的误导。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49231635" target="_blank" rel="noopener noreferrer">@whstl</a>
+        </div>
+        <p class="comment-text">“我不买账”——这事儿真巧：
+就在过去几周，最大的吉他弦制造商之一 D&#x27;addario 在 Instagram 上发布了一个显然是 AI 生成的歌曲来宣传他们的新产品线。
+在被指责使用 AI 后，他们发布了一个在 DAW（数字音频工作站）中重新制作的手机录音，但节奏和音符根本对不上。
+再次被指责后，他们归咎于 LANDR 和 Apple Mastering“改变了音符”，但这些工具只做“AI 旋钮微调”，并不是生成式 AI 音频合成。LANDR 官方甚至亲自下场回复反驳。
+在又一次被指责后，他们终于屈服了，说是一名员工在他们不知情的情况下使用了 Suno。
+有人联系了那名员工，员工说他跟 D&#x27;addario 沟通时明确说了自己用了 Suno。
+编辑：该员工声称这是他“第一次使用 AI”且“他不知道”，但有人挖了他的 Instagram 个人资料，发现里面有好几首 Suno 创作的歌，还有一堆 AI 海报和头像。
+这种利用 AI 来掩盖过错的行为简直疯了……</p>
+        <p class="comment-reason"><span>入选理由</span>通过另一个品牌案例展示了当前一种普遍的趋势：将人为的欺骗或失误归咎于 AI，以此作为公关挡箭牌。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49231670" target="_blank" rel="noopener noreferrer">@llm_nerd</a>
+        </div>
+        <p class="comment-text">简直令人惊讶，“AI 吃了我的作业”这种套路居然还能骗到人。难道真的有人会相信这种搞笑的胡言乱语吗？
+“AI 吃了作业”甚至还不是最糟糕的部分，整个烂摊子就是一系列糟糕的决定和欺骗。太荒谬了。然而这里居然还有评论在赞扬他的“态度”。各位，我对布鲁克林大桥有兴趣吗？今天仅限今天，六折出售。私信我。</p>
+        <p class="comment-reason"><span>入选理由</span>以辛辣的讽刺指出了开发者辩解中的荒谬之处，反映了社区的主流质疑态度。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这种“AI 替罪羊”现象正变得越来越普遍。当开发者被抓到抄袭或造假时，简单地归咎于“AI 自动生成的”似乎成了一种万能的公关辞令。虽然大模型确实会复现训练集中的代码，但连项目名称和特定 Bug 都精准“复刻”，很难不让人怀疑这背后有更多的人为干预。这不仅是技术滥用的问题，更是诚信的崩塌。正如评论区所指出的，这种行为更像是利用 AI 的黑盒属性来为低成本的剽窃行为提供“合理性掩护”。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49226636">
+      <summary class="story-overview">
+        <span class="rank-number">02</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">seg6.space</span>
+            <span>418 points</span>
+            <span>原始 #6 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://seg6.space/posts/phone-server/" target="_blank"
+              rel="noopener noreferrer">My server is a phone now</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49226636" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 190</a>
+          </h2>
+          <p class="summary">作者为了节省云服务器（VPS）的开支，将个人基础设施迁移到了一部闲置的 CMF Phone 1 手机上。在尝试刷入原生 Linux 失败后，他选择了在原厂 Android 系统上通过 Termux 和 Root 权限下的 chroot 环境运行服务。该方案利用 Ansible 进行自动化部署，并配合 Cloudflare Tunnel 和 Tailscale 解决了内网穿透问题。手机自带的电池充当了天然的 UPS，且其 8 核 CPU 和 8GB 内存的性能远超同价位的廉价 VPS。主要的局限在于需要设备支持解锁 Bootloader，且必须深度调优 Android 的后台电池管理机制以防进程被杀。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>作者因不满 Hetzner VPS 在运行远程浏览器等重负载任务时的性能表现，决定利用闲置手机搭建服务器。最初他尝试刷入 postmarketOS 以获得纯净的 Linux 环境，但由于驱动不兼容导致 Wi-Fi 和硬件加速失效，甚至险些让手机变砖。吸取教训后，他转而保留原厂 Android 系统，利用其成熟的硬件驱动，通过 Termux 作为宿主环境。为了消除 PRoot 带来的系统调用翻译开销，作者对手机进行了 Root 处理，改用 chroot 容器运行 Debian 环境，使 Chromium 等重型应用的运行效率大幅提升。</p><p>在运维管理上，作者坚持“基础设施即代码”的原则，使用 Ansible 统一管理服务配置、密钥和健康检查，并利用 runit 负责进程守护。网络接入方面，他通过 Cloudflare Tunnel 实现了无需公网 IP 的服务暴露，即使手机切换网络环境，服务也能自动重连。这种方案的优势在于极高的能效比和自带电池备份，但也存在明显的门槛：用户必须拥有可解锁 Bootloader 的设备，且需要手动关闭 Android 极其激进的后台优化限制。未来，这种“手机服务器”能否普及，很大程度上取决于移动端硬件开放程度与散热、电池安全之间的权衡。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49227388" target="_blank" rel="noopener noreferrer">@alightsoul</a>
+        </div>
+        <p class="comment-text">供参考：如果手机的 Bootloader 是锁定的，你无法像作者做得这么好。你可以使用 Termux，但如果 Android 版本低于 8，Termux 会受到很大限制，你可能需要 postmarketOS 并修复其支持。在没有 Root 的情况下使用 Termux，速度充其量会很慢，正如作者提到的，Root 带来了明显的性能提升。此外，没有 Root 你也无法在 Android 手机上绑定端口，除非像作者那样通过代理服务器运行。而 Root 通常需要解锁 Bootloader，并非所有 Android 手机都支持解锁。如果你想安装 postmarketOS，同样需要解锁 Bootloader。所以，如果没有解锁权限，你可能无法以原生速度运行容器，甚至因为缺少内核系统调用而被迫模拟 x86 环境，导致速度极慢。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深入分析了硬件和系统层面的限制，特别是 Bootloader 锁对复刻此方案的阻碍。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49226901" target="_blank" rel="noopener noreferrer">@thehamkercat</a>
+        </div>
+        <p class="comment-text">“我的手机现在是服务器了”这个标题可能更好。另外，关于“内置电池备份”：如果打算把手机或笔记本电脑当服务器用，通常不是建议拆除电池吗？（有火灾隐患）。还是说只要把充电限制在 80% 就行了？</p>
+        <p class="comment-reason"><span>入选理由</span>提出了手机作为服务器最核心的安全隐患——长期插电导致的电池老化与火灾风险。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49229026" target="_blank" rel="noopener noreferrer">@tkgally</a>
+        </div>
+        <p class="comment-text">关于“我的服务器现在是手机”和“我的手机现在是服务器”之间区别的侧面评论。在语言学中，“主位（theme）”和“述位（rheme）”指的是句子中信息的状态。主位是已知或可从语境中推断的信息（旧信息），而述位是新引入的信息。在许多语言中，趋势是主位先于述位。如果没有语境，读者可能会认为“我的 X 现在是 Y”中，X 是作者以前拥有的，而 Y 是新出现的。因为大多数人有手机但很少有人有自己的服务器，所以我最初对标题感到困惑。读完文章才意识到这个词序其实很贴切：对作者来说，服务器是旧信息（已经拥有了一段时间），而手机（至少作为服务器而言）是新信息。我做了多年的日译英翻译，深知这种信息流顺序对翻译自然度的重要性。</p>
+        <p class="comment-reason"><span>入选理由</span>从语言学角度解读了标题的微妙之处，解释了为什么作者的表达方式在技术语境下是合理的。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49227426" target="_blank" rel="noopener noreferrer">@SturgeonsLaw</a>
+        </div>
+        <p class="comment-text">我仍然认为性价比最高的是旧台式机。像 i5 配 8GB 内存和 SSD 这样的配置，足以应付 99% 的家庭服务器用途，而且还有余力。即使在硬件价格通胀的环境下，你也能以合理的价格买到一台。虽然我也能理解为了“折腾的乐趣”而使用非常规硬件的吸引力。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个更务实、更具普适性的替代方案视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49231195" target="_blank" rel="noopener noreferrer">@seg6</a>
+        </div>
+        <p class="comment-text">非常有 Hacker News 的风格，竟然有相当一部分讨论集中在标题上。土耳其语是我的母语，它的句子结构与英语非常不同，所以偶尔会影响我的措辞。我能理解为什么“我的服务器现在运行在手机上”会更少歧义。总之，我很享受这个意外引发的语言学讨论 :)</p>
+        <p class="comment-reason"><span>入选理由</span>作者本人的回应，解释了标题措辞的背景并对社区讨论表示欢迎。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>将手机改造为服务器是一个极具魅力的 DIY 方向。作者的实践证明，现代手机 SoC（如天玑 7300）在处理 Chromium 等重型任务时的能效比远超同价位的云主机，且自带 UPS 和网络模块。然而，这并非一条坦途。正如评论区所指出的，Android 生态的封闭性（Bootloader 锁）是最大的拦路虎，而长期插电带来的电池膨胀风险则是悬在设备上的达摩克利斯之剑。作者通过 Root 和 chroot 绕过性能损耗的方案非常硬核，但也意味着这更像是一场针对特定硬件的“极限运动”，而非普适的家庭服务器指南。对于大多数人来说，旧 PC 或工控机或许更稳妥，但这种“变废为宝”的极客精神正是技术社区的灵魂所在。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49228663">
+      <summary class="story-overview">
+        <span class="rank-number">03</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">github.com</span>
+            <span>114 points</span>
+            <span>原始 #7 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://github.com/jmarshall23/msword" target="_blank"
+              rel="noopener noreferrer">Microsoft Word for Windows 1.1a, Native X64 Port</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49228663" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 53</a>
+          </h2>
+          <p class="summary">开发者成功将 1990 年发布的 Microsoft Word for Windows 1.1a（代号 Opus）原生移植到了现代 64 位 Windows 系统上。这并非通过模拟器运行，而是直接编译原始 C 语言源码，并将过时的 16 位汇编代码和分段内存管理机制改写为现代 C++ 实现。移植版保留了原始的用户界面和操作逻辑，甚至配备了完整的自动化 UI 测试套件。这一项目为研究早期大型软件架构提供了珍贵的“活化石”。目前该项目主要用于非商业研究和教育目的，由于涉及微软版权，其分发受到严格限制。有趣的是，其古老的扁平化设计与现代 Windows 11 的审美惊人地相似。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这个名为“Opus”的项目实现了 Microsoft Word 1.1a 在 x64 架构上的原生运行，是一次深度的软件考古。开发者没有选择简单的模拟方案，而是通过现代工具链重新构建了原始的 C 源码和资源文件。技术上的核心挑战在于处理 Win16 时代的遗留问题：开发者将 16 位 x86 汇编入口点翻译成了固定宽度的 C/C++ 代码，并建立了一个兼容层，将当年的分段内存和双重间接句柄映射到现代 64 位运行时。此外，原本针对 Win16 编写的图形、文件和消息处理逻辑也被适配到了当前的 Win32 API。为了确保移植后的行为与 1990 年的原版完全一致，项目还包含了一个复杂的测试框架，涵盖了从底层数据结构到顶层 UI 交互（如打字、格式化和对话框操作）的方方面面。虽然这在技术上令人叹为观止，但法律限制依然存在，该项目遵循非商业研究许可，禁止分发二进制文件。未来，社区可能会探索将其进一步移植到 Linux 或 BSD 平台，甚至有尝试利用大模型辅助此类遗留代码迁移的讨论。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49230036" target="_blank" rel="noopener noreferrer">@fragmede</a>
+        </div>
+        <p class="comment-text">这个许可证并不是真正的开源，更像是源码可用（source available）。仅限非商业用途。https://github.com/danielcosta/MSWORD/blob/master/LICENSE 规定：你可以出于非商业研究、实验和教育目的使用、复制、编译及创建衍生作品。非商业用途的例子包括教学、学术研究、公开演示和个人实验。你不得分发或发布该软件或其衍生作品。除非获得微软另行许可，否则不得利用该软件提供商业服务。你可以发表关于研究结果的论文或文章，虽然不允许分发软件的全部或大部分内容，但你可以在此类出版物中包含最多 50 行代码片段用于说明。</p>
+        <p class="comment-reason"><span>入选理由</span>澄清了该项目的法律属性和授权范围，这对想要尝试或分发该项目的用户至关重要。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49231320" target="_blank" rel="noopener noreferrer">@happycube</a>
+        </div>
+        <p class="comment-text">我提示 Claude Opus 5（我实在舍不得浪费 Fable 令牌）尝试通过 winelib 做同样的事情（移植到 Linux）。目前已经进展到程序可以打开、运行三秒钟然后突然退出的程度。编辑：现在能跑起来了，但大量功能失效，字体也烂得一塌糊涂。目前还不值得发布，但我会看看能不能通过运行 UI 测试并告诉它哪些地方坏了来进一步修复……（不过，仅凭几次提示就能构建并运行，这确实是个‘天呐’时刻！）</p>
+        <p class="comment-reason"><span>入选理由</span>展示了利用现代 AI 工具尝试将此类古董软件跨平台移植的有趣尝试。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49229206" target="_blank" rel="noopener noreferrer">@hulitu</a>
+        </div>
+        <p class="comment-text">哇，它看起来真的很像 Win 10/11。微软现在是回归本源了。但 Word 1.0 甚至还有 3D GUI 元素。他们当年的电脑性能一定很令人印象深刻。</p>
+        <p class="comment-reason"><span>入选理由</span>敏锐地观察到了软件设计轮回的现象，即 30 多年前的 UI 风格与现代审美产生了共鸣。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49230627" target="_blank" rel="noopener noreferrer">@acmdas</a>
+        </div>
+        <p class="comment-text">早在 85-86 年，我就为美国农业部开发过培训课程（使用 Dan Bricklin 的 Demo），针对的是在运行 SysV v2 的 3B2 机器上运行的 curses 版 Word 5。如果能看到那个版本被移植到 Linux 或某个 BSD 分支，我会非常高兴。事实上，我很想在我的工作站上看到 Word 和 Excel &#x27;98。在我看来，那之后事情就开始走下坡路了。直到 2010 年，我还在断断续续地为客户使用 Windows 和 Office，我确信 Excel 在 98 版之后提供了一些重要的边缘案例功能，但对我来说，UI 是一直在变烂。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了老牌用户的视角，反映了对早期软件简洁性和 UI 逻辑的怀念。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>将 35 年前的 Word 1.1a 移植到 x64 架构，不仅是一项技术挑战，更像是一场数字考古。这个代号为“Opus”的项目揭示了一个有趣的轮回：当年为了节省内存而设计的扁平化、极简 UI，在视觉上竟然与今天的 Windows 11 殊途同归。这种“原生移植”比模拟器更有意义，因为它迫使我们去理解 Win16 时代特有的分段内存管理等底层逻辑是如何在现代硬件上重生的。有趣的是，评论区提到的 Claude Opus 5 尝试（尽管可能是对未来版本的调侃或笔误）预示了 AI 在处理此类遗留代码迁移中的潜力。这不仅仅是怀旧，更是对软件工程长效性的一次深刻审视。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49226923">
+      <summary class="story-overview">
+        <span class="rank-number">04</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">os8088.com</span>
+            <span>212 points</span>
+            <span>原始 #9 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://os8088.com/" target="_blank"
+              rel="noopener noreferrer">Os8088: A powerful Mac-like OS for the IBM XT, 286, 386</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49226923" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 132</a>
+          </h2>
+          <p class="summary">Os8088 是一款为 IBM PC XT（8086/8088 处理器）开发的类 Mac 图形操作系统。它完全采用实模式汇编语言编写，实现了抢占式多任务处理，支持 12 个任务槽位并能通过时钟中断强制切换。该系统具备窗口管理、菜单栏、FAT12/16 文件系统支持，并内置了记事本、画图、音乐播放器及扫雷等应用。尽管功能丰富且能运行在真实老旧硬件上，但其最大的争议点在于它是利用 Claude AI 辅助生成的。由于 8086 缺乏硬件保护模式，任何程序错误都可能轻易导致整个系统崩溃。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Os8088 为拥有 40 年历史的 IBM PC XT 硬件带来了现代化的图形用户界面体验。它运行在英特尔 8086/8088 的实模式下，提供了一个包含窗口、下拉菜单和任务栏的桌面环境。在技术底层，该系统通过每秒 18.2 次的时钟中断实现了抢占式多任务，每个任务拥有独立的堆栈空间，无需程序主动协作即可完成切换。内存管理通过堆（Heap）实现，文件系统则兼容 FAT12 和 FAT16，这意味着它编写的文件可以在现代计算机上直接读取。</p><p>该系统内置的应用套件相当完整，包括支持 Sound Blaster 声卡的录音机、4 通道 MOD 音乐播放器、Markdown 编辑器以及多款游戏。为了在极低内存下运行，它采用了 XOR 异或模式来绘制窗口边框，从而避免了昂贵的后台缓冲区开销。然而，由于 8086 处理器缺乏受保护模式，系统安全性非常脆弱，任何应用都可以重写中断向量表或破坏内核内存。最引发社区讨论的是其开发方式：作者承认大量代码是由 Claude AI 生成的。这引发了关于 AI 辅助开发是否削弱了底层编程“魔力”的激烈争论，但也展示了 AI 在处理枯燥的汇编指令和协议实现方面的强大潜力。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49228286" target="_blank" rel="noopener noreferrer">@adrianmonk</a>
+        </div>
+        <p class="comment-text">“本可以出现在 IBM XT 上的图形操作系统”
+Visi On [1] 曾是一款实际存在的 IBM PC 商业图形操作系统，尽管它并不怎么成功。它由开发了 VisiCalc（个人电脑上首个电子表格软件）的 VisiCorp 公司制作。
+它在 1982 年的 COMDEX 展会上进行了演示，早于 Apple Lisa 的发布。它在 Lisa 之后、Macintosh 之前稍早一点上市。
+这是他们 1983 年的宣传视频：https://www.youtube.com/watch?v=kc4wFeVvKTI
+趣闻：比尔·盖茨在 COMDEX 看了演示，起初他怀疑这是否真的运行在 IBM PC 上。但最终他深受震撼，决定 [2] 开始开发一款名为 Microsoft Windows 的产品。
+---
+[1] https://en.wikipedia.org/wiki/Visi_On
+[2] https://en.wikipedia.org/wiki/Windows_1.0</p>
+        <p class="comment-reason"><span>入选理由</span>提供了重要的历史背景，将该项目与 80 年代真实的图形操作系统尝试联系起来。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49229523" target="_blank" rel="noopener noreferrer">@kar1181</a>
+        </div>
+        <p class="comment-text">我的意思是这很酷，但它完全或大部分是 AI 生成的，这让那种“惊叹感”消失了，我觉得这也是大家反应强烈的原因。遗憾的是，由于工具的进步，这类事情现在变得容易多了。我根据个人经验来说，我曾亲手（在 AI 出现前）写过一些 32 位操作系统的存根，那非常有趣。但你很快就会遇到一些阻碍后续开发的、并不有趣的“墙”。我喜欢摆弄 VGA 寄存器，喜欢从 512 字节引导扇区进入实模式再进入保护模式的过程，设置全局描述符表/页表和 PIC/8042 控制器也很有趣。但是……一旦进入保护模式，搞定基本内存管理后，TERMIOS 就太无聊了。定义所有的 POSIX 系统调用，无聊。构建测试框架……无聊。哦，我现在需要 DMA 控制器了，因为 PIO 太慢，这倒很有趣！我曾在几个周末里通过把无聊的部分丢给 AI 令牌，把我的玩具系统推进到了 Linux 2.0 的水平。但到最后，我感到有些空虚，因为虽然系统内核是我搭的，骨架也是我安排的，但我不再理解那些虽然无聊但很重要的部分了。那种魔力……消失了。我现在正在做一个新版本，规则是每一行代码都亲手输入，我只和 AI 共同规划，然后凭脑子写。进度非常慢，但乐趣在于解决问题和设计，亲手编写能让你掌控足够多的细节，感觉它是属于你的、真实的。总之这是一个很酷的项目，希望作者乐在其中并学到了东西，但这已经是新常态了：强大的工具意味着曾经新奇的事物现在只需几个 Token 就能实现，因此它们也相应地失去了一些魔力。</p>
+        <p class="comment-reason"><span>入选理由</span>深刻反思了 AI 辅助开发对编程乐趣、学习深度以及成就感的影响，极具代表性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49228798" target="_blank" rel="noopener noreferrer">@yjftsjthsd-h</a>
+        </div>
+        <p class="comment-text">https://os8088.com/how-it-works/multitasking/
+&gt; 8086 上的抢占式多任务
+&gt; 十二个任务槽位，每个 1,536 字节堆栈，以及一个每秒 18.2065 次从正在运行的程序中夺取 CPU 控制权的时钟中断。没有任何任务被要求协作，也没有任务可以拒绝。
+如果你没有保护模式，难道任何程序不能直接重写中断处理程序吗？这系统不坏，但听起来很容易崩溃。</p>
+        <p class="comment-reason"><span>入选理由</span>从技术角度指出了在缺乏硬件保护的 8086 处理器上实现抢占式多任务的固有缺陷。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49230108" target="_blank" rel="noopener noreferrer">@lelanthran</a>
+        </div>
+        <p class="comment-text">&gt; 我是这个 AI 编写的 os8088 操作系统的作者……
+我很想知道你做这个项目的目标是什么。
+你得不到同行的认可。你没有获得任何特殊技能。你没有版权。你卖不掉它。你没法把它用于任何实用的地方。你不能把它当作学习练习。它没法被扩展。它也不能作为别人学习的教程。
+你得不到那种“把活干漂亮了”的满足感（至少不会比在亚马逊上买个烤面包机的满足感更多）。
+在 LLM 出现之前，像这样的东西是一项巨大的成就。现在，这就像一个一年级小学生炫耀他们的手指画，却表现得像画出了《蒙娜丽莎》一样。
+所以，你从中得到了什么？</p>
+        <p class="comment-reason"><span>入选理由</span>尖锐地提出了关于 AI 时代“创造”价值的哲学质疑，引发了关于动机的深层讨论。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49228491" target="_blank" rel="noopener noreferrer">@userbinator</a>
+        </div>
+        <p class="comment-text">我不明白为什么作者似乎不愿公开使用 AI 的情况，因为这是我见过的 Claude 最好的广告之一。作为一个一直持观望态度、且在过去几年见过大量 AI 垃圾内容的人，我得说，如果我在 Anthropic 的营销部门工作，我会把这当作展示其能力的 Demo。
+话虽如此，这类东西并非被认为是不可能的；许多运行在更慢、更受限机器（如 8051）上的嵌入式操作系统都有抢占式多任务和原始 GUI。只是过了几十年，才有人带着想法、Token 和动力真正把它做出来。</p>
+        <p class="comment-reason"><span>入选理由</span>从另一个角度肯定了 AI 作为生产力工具在实现复杂创意方面的正面作用。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Os8088 的出现标志着业余操作系统开发进入了一个新阶段：从“纯手工打磨”转向“AI 编排”。在 8086 这种极其受限的硬件上用汇编实现一个功能完备的 GUI 系统，曾被视为黑客技术的巅峰，而现在它更像是一场关于提示词工程与系统架构设计的实验。正如评论中所指出的，AI 极大地降低了处理中断向量、文件系统协议等“枯燥”底层细节的门槛，让开发者能快速构建出宏大的原型。然而，这种“Token 驱动”的开发也引发了关于编程本质的焦虑：当成就感不再来源于对每一行指令的绝对掌控，这种创造的价值该如何衡量？Os8088 既是 Claude 强大能力的绝佳广告，也是对传统黑客精神的一次温柔挑战。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49229174">
+      <summary class="story-overview">
+        <span class="rank-number">05</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">gukov.dev</span>
+            <span>118 points</span>
+            <span>原始 #3 · 低讨论量降权 +9</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://gukov.dev/math/2026/08/02/new-magic-hexagons.html" target="_blank"
+              rel="noopener noreferrer">There Are Magic Hexagons of Every Order</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49229174" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 20</a>
+          </h2>
+          <p class="summary">数学家们长期以来认为“幻六角形”极其罕见，在传统约束下仅存在三阶解。本文作者通过放宽约束（允许连续数字不从1开始），并引入“反对称性”和“势场”概念，成功打破了这一僵局。在GPT-5.6等AI工具的辅助下，作者不仅找到了高达21阶的数值解，还推导出了一个适用于所有大于3阶的构造性证明。这一发现将该领域的已知上限从9阶推向了无穷大，展示了人机协作在组合数学中的巨大潜力。目前该证明仍处于待形式化验证阶段，但其构造算法已在GitHub开源。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>幻六角形是幻方的六边形变体，要求所有直线方向上的数字之和相等。传统的“正规”幻六角形（使用从1开始的连续整数）被证明仅存在三阶解，这使得该领域长期停滞不前。作者提出研究“非正规”幻六角形，即数字依然连续但起始值可变。通过引入反对称约束（中心对称的单元格数值相反），作者将问题简化为寻找总和为零的排列，并利用“势场”表示法——将六角形视为局部六点环的线性组合，使每一行天然满足和为零的约束。</p><p>在研究过程中，作者利用AI辅助编写了定制的模拟退火算法，首先在家庭服务器上找到了21阶以内的解。随后，通过与GPT-5.6 Sol进行多轮深度对话，作者从数值解中观察到了势场的平滑性，并引导AI推导出了一个适用于所有高阶情形的构造性算法。这一过程并非一帆风顺，AI曾多次陷入逻辑死循环，但在人类提供“反对称性”等关键数学框架的引导下，最终完成了从数值发现到理论证明的跨越。目前，该研究已证明对于所有 $n&gt;3$ 的阶数都存在幻六角形，尽管证明尚未经过Lean等工具的形式化验证，但其提供的确定性算法为解决这一古老谜题提供了强有力的证据。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49230552" target="_blank" rel="noopener noreferrer">@yunruse</a>
+        </div>
+        <p class="comment-text">我非常喜欢这篇文章及其交互元素。势场（potential field）是一个优雅的抽象，它真正将这个问题从一个数学谜题提升到了新的高度。我很想看看这个势场能有多么的利普希茨连续（Lipschitz continuous）或平滑；例如，添加某些特征会如何使其更接近或远离符合“连续且无重复”约束的解。添加一个平滑的“山丘”可能是可行的，那么一条“河流”呢？我的一点小批评是在最后三分之一部分。现在使用大语言模型（LLM）进行证明已经很普遍了，但文中过多关注它们的波折让人分心。如果能在引入“共同作者”后使用数学家常用的“我们”，可能会让普通读者更专注于数学本身，而不是被提醒LLM有时很费钱且会陷入循环。但除此之外，这真是一篇华丽的文章！可视化效果非常强大，对称性带来的某种守恒（看起来像热汤，但实际上有平滑的势场）非常令人兴奋，而且奇妙地非常有物理感。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深入探讨了文中“势场”概念的数学美感及其与物理学的联系，并对AI在数学写作中的呈现方式提出了中肯建议。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49231200" target="_blank" rel="noopener noreferrer">@gukoff</a>
+        </div>
+        <p class="comment-text">非常感谢你详细的观点！势场确实是一个奇特的现象。我感觉——虽然我还没有经过任何验证——这种平滑性是由所有数值都在一个不太宽的范围内这一事实决定的。当你使用那些6点环从外层开始“剥开”六角形并构建势场时，向内的每一层都不应该改变太多。我还探索过 n 趋于无穷大的情况，那时求和变成了积分，连续性变成了均匀分布。在这种情况下找到解并不难。这部分没写进文章里，因为它在解决离散情况时被证明是死胡同，而且我不想让文章太沉重——但如果我没记错的话，在那时我也观察到了平滑性。</p>
+        <p class="comment-reason"><span>入选理由</span>作者本人的回复补充了关于势场平滑性的直觉来源以及在连续极限下的探索，提供了文章之外的技术细节。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49230769" target="_blank" rel="noopener noreferrer">@unholiness</a>
+        </div>
+        <p class="comment-text">很酷的问题。我总觉得幻六角形如此轻易地排除了3阶以外的解有点令人遗憾。从不同的索引开始是一个很好的改进，尤其是对于幻方来说，这同样是一个难题。作者说这种方法对“每一阶”都可行，但我认为任何解都不可能适用于2阶六角形，即使没有他那些简化约束也不行（因为将任何侧边单元格固定为 x，就需要另外两个单元格的和为 sum-x）。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论对“每一阶”的结论提出了合理的数学质疑，指出2阶情况可能存在的局限性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章展示了数学发现模式的深刻转变：从单纯的“人类直觉”或“暴力搜索”，转向了一种由人类设定框架、AI进行逻辑攀爬的协同模式。作者引入的“势场”概念极具启发性，它将离散的组合问题转化为一种类似连续物理场的直觉，这不仅降低了搜索复杂度，也为AI提供了可循的逻辑路径。尽管文中提到的GPT-5.6等工具带有未来色彩，但其揭示的核心事实——即通过放宽起始值约束，幻六角形这一古老难题在所有高阶情形下均有解——是组合数学领域的一大突破。这种“人机共创”的证明过程虽然在严谨性上仍需Lean等形式化工具的最终背书，但它已经证明了AI在处理具有高度对称性和复杂约束的数学构造问题时，能够超越传统的通用求解器。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49223082">
+      <summary class="story-overview">
+        <span class="rank-number">06</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">fastmail.com</span>
+            <span>466 points</span>
+            <span>原始 #12 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.fastmail.com/blog/fastmail-offers-eu-data-region/" target="_blank"
+              rel="noopener noreferrer">Fastmail offers EU data region</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49223082" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 269</a>
+          </h2>
+          <p class="summary">知名邮件服务商 Fastmail 宣布在阿姆斯特丹设立新的欧盟数据区，允许用户将主数据存储在欧洲。该设施由 Fastmail 自行管理硬件和软件，而非租用大型云服务商的资源，旨在降低延迟并满足部分合规需求。尽管主数据在欧盟，但为了系统冗余，备份、日志和部分元数据目前仍保留在美国。Fastmail 坦诚表示，这并不能完全保证数据不离开欧盟，也不代表能规避所有法律管辖。作为一家澳大利亚公司，它仍需遵守澳大利亚法律及相关的国际法律协作协议。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Fastmail 此次在阿姆斯特丹部署了自有的托管服务器，强调从硬盘型号到软件配置均由其工程师掌控，以维持与美国费城和圣路易斯中心一致的标准。用户现在可以在设置中选择欧盟作为主数据区，系统会自动迁移邮件和文件。对于欧盟用户，日常访问将直接连接到阿姆斯特丹节点，仅在故障时回退到美国。然而，由于目前欧洲只有一个站点，地理冗余副本、紧急备份以及系统日志目前仍存放在美国。此外，如果用户使用非区域性域名，邮件收发仍可能经过美国服务器。</p><p>官方在公告中表现得非常透明，明确指出这并非绝对的“数据主权”方案。由于 Fastmail 是澳大利亚公司，且与美国 Pobox 合并后法律背景复杂，它仍受澳大利亚法律（如《协助与访问法案》）以及美澳间的法律协作条约约束。这意味着即便数据物理上在欧洲，执法部门仍可能通过合法渠道调取。这种“欧盟数据区”更多是出于性能优化和初步合规的考虑，而非彻底的隐私隔离。Fastmail 表示未来可能会增加更多欧洲站点以实现完全的区域内冗余，但目前用户应在了解这些法律局限性的前提下做出选择。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49223953" target="_blank" rel="noopener noreferrer">@jacquesm</a>
+        </div>
+        <p class="comment-text">欧盟数据区是那些试图留住欧盟客户的公司的一种反射性动作（而且越来越多的客户正在流失，令人惊讶的是，大客户似乎在这方面处于领先地位）。要意识到，只要你仍然托管在美资拥有的基础设施上，或者只要技术栈中任何地方存在美国（或五眼联盟）拥有的公司，你的数据仍然可以被强制提取，而且通常你根本察觉不到。只有极少数这样的技术栈是 100% 由欧盟实体拥有的。</p>
+        <p class="comment-reason"><span>入选理由</span>指出物理位置并不等同于法律管辖权的脱钩，揭示了“欧盟数据区”在法律层面的局限性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49224562" target="_blank" rel="noopener noreferrer">@rzerowan</a>
+        </div>
+        <p class="comment-text">看到评论中有很多关于《云法案》（CLOUD act）的细节，这确实适用，因为 Fastmail 本身就签署了美澳之间的等效协议。更令人担忧的问题是基于澳大利亚的技术所面临的《2018年协助与访问法案》（The Assistance and Access Act 2018），该法案“……允许政府执法机构强制企业移交用户信息和数据，即使这些数据受到加密保护。如果公司没有能力为当局拦截加密数据，他们将被迫创建工具，允许执法部门或政府访问其用户数据。”据我所知，这还没有受到挑战或撤回，而且随着 ChatControl 类法律的兴起，看起来也不会撤回。</p>
+        <p class="comment-reason"><span>入选理由</span>补充了 Fastmail 作为澳大利亚公司必须面对的特定法律风险，特别是关于加密后门的可能性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49223952" target="_blank" rel="noopener noreferrer">@altairprime</a>
+        </div>
+        <p class="comment-text">欧盟的朋友们，请注意这篇博文中贯穿始终的警告：目前这并不是针对美国或澳大利亚数据托管风险的万灵药，但它会让你的数据在物理上离家更近。Fastmail（澳大利亚）与 Pobox（费城）合并，导致在涉及欧盟时产生了一个复杂的三国法律/风险表面，所以请在完整阅读本文后保持清醒。每个人都会在阅读文章之前将“欧盟数据区”过度解读为“为了隐私”，这是完全可以理解的；我也感同身受，因为我也犯了同样的错误。</p>
+        <p class="comment-reason"><span>入选理由</span>提醒用户不要被营销术语误导，强调了 Fastmail 复杂的跨国法律背景。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49224391" target="_blank" rel="noopener noreferrer">@microtonal</a>
+        </div>
+        <p class="comment-text">是的，这完全不能解决《云法案》的问题。不过，看看《云法案》对电子邮件的影响是有好处的：
+- 美国可以请求你的数据。出于多种原因，你本来就不应该用电子邮件处理任何敏感信息。电子邮件传统上是不加密的，而且我认为许多服务器仍然允许明文通信。协议很陈旧，存在各种降级攻击。除此之外，即使你的服务不受《云法案》管辖，你可能还是躲不掉，因为与你通信的大多数人都在使用受《云法案》管辖的服务。
+- 美国可以强迫提供商封锁你的账户。解决方法是：定期备份你的电子邮件（对于提供 IMAP 的服务来说很容易），最重要的是，使用一个后缀不受美国（或可能是五眼联盟）注册商控制的域名。
+对于大多数个人通信，请使用具有完美前向安全性等的端到端加密即时通讯工具。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于电子邮件安全性的现实主义视角和具体的防御性建议。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Fastmail 此次推出欧盟数据区，其最大的亮点不在于技术突破，而在于其罕见的“诚实”。在大多数云服务商利用“数据驻留”作为隐私营销噱头时，Fastmail 却在公告中直言不讳：这不能保证数据永远不离开欧盟，也无法规避美国或澳大利亚的法律调取。这种透明度揭示了现代互联网的一个残酷现实：在《美国云法案》（CLOUD Act）和澳大利亚《协助与访问法案》的交叉覆盖下，物理服务器的迁移更多是为了降低网络延迟和满足形式上的合规，而非构建一个真正的隐私避风港。对于用户而言，这更像是一个关于“信任谁的法律”的选择题，而非技术上的安全升级。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49230022">
+      <summary class="story-overview">
+        <span class="rank-number">07</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">halfhill.com</span>
+            <span>42 points</span>
+            <span>原始 #5 · 低讨论量降权 +8.1</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://halfhill.com/byte/1998-12_alpha.html" target="_blank"
+              rel="noopener noreferrer">The Alpha 21264 CPU: NT&#x27;s Greatest RISC (1998)</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49230022" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 23</a>
+          </h2>
+          <p class="summary">Alpha 21264 是 1998 年发布的一款高性能 64 位 RISC 处理器，曾被视为 Windows NT 平台上最强大的芯片。它在 Alpha 架构中首次引入了乱序执行技术，并采用独特的寄存器集群设计，在维持高主频的同时实现了极高的指令吞吐量。该芯片在浮点运算和科学计算领域表现卓越，其分支预测准确率高达 95%，性能一度领先于同时期的 Intel 处理器。尽管技术领先，但当时 RISC 阵营正面临全面溃退，许多竞争对手纷纷转向 Intel 的 IA-64 架构。Alpha 的命运最终因 DEC 被康柏收购以及生态系统支持不足而走向终结，尽管其先进的总线技术后来在 AMD 的 K7 架构中得以延续。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Alpha 21264（代号 EV6）是计算机体系结构史上的一个里程碑，它成功打破了“高主频”与“复杂逻辑”不可兼得的僵局。作为首款支持乱序执行的 Alpha 处理器，它能同时处理多达 80 条指令，远超当时的 Pentium II。为了克服高频下信号传输的物理限制，它采用了创新的寄存器集群设计，将 160 个整数寄存器分为两组，每组服务于不同的运算单元。这种设计使其在 1998 年就达到了 500-600MHz 的主频，并计划在两年内冲刺 1GHz 大关。</p><p>在存储架构上，21264 放弃了前代集成 L2 缓存的做法，转而采用大容量的 L1 缓存和高速外部 L2 总线，以应对大型应用程序的缓存缺失问题。此外，它还引入了专门用于运动视频处理的指令集，能够实时解码 MPEG-2 视频。值得注意的是，Alpha 21264 的总线协议被 AMD 授权用于其 K7（Athlon）处理器，这意味着早期的 AMD 处理器在物理接口和协议上与 Alpha 具有极高的相似性。</p><p>然而，这款“性能怪兽”面临着严峻的商业挑战。随着 MIPS 和 PowerPC 退出 Windows NT 市场，Alpha 成了 RISC 在该平台上的孤苗。尽管它在数学和工程计算上具有压倒性优势，但高昂的系统成本、DEC 公司被康柏收购带来的不确定性，以及微软对 64 位 NT 系统开发的缓慢进度，共同限制了它的市场普及。最终，Alpha 21264 成为了一段“技术领先却输给市场惯性”的传奇往事。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49231915" target="_blank" rel="noopener noreferrer">@fredoralive</a>
+        </div>
+        <p class="comment-text">关于 AMD Athlon (K7) 使用相同总线的那部分，以及他们曾计划制造 Slot A 接口的 Alpha 处理器，使得 Athlon 主板只需更换 BIOS 即可使用的设想。想象一下如果这成真了会怎样，尤其是 Alpha 版 Windows 2000 还内置了 FX!32（x86 模拟层）。廉价的 Alpha 系统配合良好的 x86 兼容方案，它本可以成为一个强有力的竞争者。（当然，我知道这需要很多机缘巧合才能真正成功）。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了 Alpha 与 AMD 之间鲜为人知的技术渊源，以及一个极具吸引力的“历史假设”。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49230589" target="_blank" rel="noopener noreferrer">@jleyank</a>
+        </div>
+        <p class="comment-text">我记得 Alpha 在当时非常快，但它们的最高优化级别会放弃 IEEE 浮点一致性。这在验证数值密集型代码的移植时让我们抓狂。相比之下，HP 的 PA-RISC 芯片……那些东西速度快且更易于开发。奇妙的是，通过 SoftPC，它们运行 Windows 的速度比 486 还要快，横扫了各种小型超级计算机。如果 Alpha 能存活下来与 SGI 的 MIPS 竞争，那将会非常有趣。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了开发者视角下的实际痛点，特别是关于浮点运算标准一致性的问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49231767" target="_blank" rel="noopener noreferrer">@MomsAVoxell</a>
+        </div>
+        <p class="comment-text">那时候我正用 SGI 机器给客户建网站……Indy 在当时非常流行。有一天我拿到一台 DEC Alpha 机器进行评估。它预装的是 NT 系统，所以将其加入我们的服务体系存在很大阻力。那段日子非常令人沮丧——微软一心想杀掉 Unix，后来又想杀掉 Linux。如果当时能更有远见一点，让它运行 Unix 变体，我们会给它更多机会。后来 SGI 也与“恶魔”达成交易，试图让客户转向 NT，在我看来这毁了 SGI。现在回想起来，当时对 Unix 的抵制简直不可思议，好像一切都要被某种“新技术”（New Technology，即 NT）取代。结果 Linux 赢了，SGI 输了，而 DEC 则是他们本该吸取教训的早期受害者。</p>
+        <p class="comment-reason"><span>入选理由</span>从操作系统生态的角度解释了 Alpha 失败的深层原因，即强推 Windows NT 带来的市场排斥。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49231182" target="_blank" rel="noopener noreferrer">@pm215</a>
+        </div>
+        <p class="comment-text">Alpha 将非正规数（denormals）、无穷大和 NaN 的处理交给了软件模拟，但这在当时并不罕见：一些 SPARC CPU 和早期的 Arm VFP 浮点实现也是这么做的。查看 Alpha 架构手册可以发现，其浮点模拟陷阱是不精确的，这对代码生成施加了限制：从可能触发陷阱的指令到随后的陷阱屏障之间存在“陷阱阴影”，在阴影区内你不能多次使用同一个寄存器作为目标、不能有分支，也不能修改作为阴影区内任何指令输入的寄存器。（其原理是，当硬件意识到需要触发陷阱时，可能已经执行了阴影区内的一些指令，而处理程序必须能够模拟触发陷阱的指令并从其后的指令恢复执行，因此它会重新执行阴影区内的所有指令。）这显然对代码生成非常不便，所以我对编译器提供某种“快速数学”模式（不触发陷阱，只需避免产生非正规数等）并不感到意外。</p>
+        <p class="comment-reason"><span>入选理由</span>深入分析了 Alpha 架构在处理浮点异常时的底层机制及其对软件开发的复杂影响。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Alpha 21264 的故事是计算机工程史上最令人扼腕的“技术胜利，商业溃败”案例之一。在 1998 年，它凭借乱序执行和寄存器集群等超前设计，在性能上几乎让 Intel 感到绝望。正如评论所指出的，Alpha 的 DNA 甚至通过总线授权流入了 AMD Athlon 的血液，间接促成了 x86 阵营内部的一次大爆发。然而，Alpha 的悲剧在于它被困在了 Windows NT 试图消灭 Unix 的宏大叙事中，这种生态上的错位让许多习惯 Unix 的专业用户感到不适。尽管它在纯粹的算力上是当时的巅峰，但最终却在公司并购的动荡和“Wintel”联盟的重压下，从主流视野中消失，只留下关于“如果 Alpha 走 Linux/Unix 路线会怎样”的无尽遐想。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49226536">
+      <summary class="story-overview">
+        <span class="rank-number">08</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">shopify.engineering</span>
+            <span>276 points</span>
+            <span>原始 #17 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://shopify.engineering/scaling-inventory-reservations" target="_blank"
+              rel="noopener noreferrer">Shopify replaced Redis with MySQL for inventory reservations–and it scaled</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49226536" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 179</a>
+          </h2>
+          <p class="summary">Shopify 将其库存预留系统从 Redis 迁移到了 MySQL，成功解决了分布式系统下难以保证数据一致性的痛点。核心方案利用了 MySQL 8 的 SKIP LOCKED 特性，通过“一物一行”的设计实现高并发下的非阻塞行锁定。为了防止数据量爆炸，系统为每个商品设置了 1000 行的缓冲池，并由后台进程动态补充。这一转变让预留操作与库存账本能放在同一个 ACID 事务中，彻底消除了超卖或少卖的风险。实践发现，真正的性能瓶颈并非 CPU 或查询速度，而是业务逻辑长时间占用数据库连接导致的连接池枯竭。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Shopify 长期使用 Redis 处理结账时的临时库存预留，但由于 Redis 与存储库存主账本的 MySQL 是分离的，无法实现原子性操作，常导致超卖或漏卖。为了统一数据库策略，团队利用 MySQL 8 的 SKIP LOCKED 功能重新设计了方案。他们摒弃了传统的“一商品一行”加数量列的做法，改为“一单位一行”的模式。这意味着如果一个商品有 10 件库存，数据库中就有 10 行记录，预留时直接锁定并移动对应行。通过 SKIP LOCKED，多个并发事务可以跳过已被锁定的行，直接获取可用库存，极大地提升了并发能力。</p><p>为避免热门商品产生数十万行数据导致查询变慢，Shopify 引入了“有界池”概念，将预留表的行数限制在每商品每位置 1000 行，并由补充进程从主账本同步。在优化过程中，团队通过组合主键减少了锁数量，并改用 READ COMMITTED 隔离级别以规避间隙锁导致的死锁。然而，真正的挑战出现在连接管理上：压测显示瓶颈在于业务代码持有连接时间过长，而非数据库处理能力。通过在 SQL 中添加注释标签并利用 ProxySQL 进行监控，他们识别并清理了低效的业务逻辑，最终在黑五期间实现了极低的 CPU 占用率和极高的吞吐量。这一案例证明，现代关系型数据库在特定高并发场景下完全可以替代专用缓存系统。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49227599" target="_blank" rel="noopener noreferrer">@manbash</a>
+        </div>
+        <p class="comment-text">&gt; 我们不再为每个商品使用带有数量列的一行，而是为每个可销售单位使用一行。一个拥有 10 个单位的商品就有 10 行。
+&gt; 但是，如果为所有库存都采用“一单位一行”的模式，在规模化时会崩溃——一个在 10 个地点拥有 50,000 个单位的商品将意味着 500,000 行，预留查询在扫描这些行时会变慢。相反，我们维护一个有界的可用行池，每个商品/地点组合上限为 1,000 行。预留操作消耗这个池中的行；补充进程从库存账本中填充它。
+难道我不应该对这种方法感到不安吗？它似乎是为了降低同步问题发生的概率而创建了一个退让（缓冲池）机制。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地指出了“有界池”设计可能带来的复杂性和潜在的同步隐患。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49229797" target="_blank" rel="noopener noreferrer">@codedokode</a>
+        </div>
+        <p class="comment-text">Redis 没有事务和持久化。没有持久化意味着如果机器关机或进程崩溃，数据就会丢失。此外，重启后你需要重新生成数据，这可能很耗时。这就是为什么 Redis 是缓存而不是数据库。你可以修复持久化问题（Redis 可以写 WAL 日志，我不记得它是否执行 fsync），但那样的话 Redis 就无法处理那成千上万的并发连接了。Redis（以及其他 NoSQL 存储）并没有什么能让它们优于 SQL 数据库的神奇架构。它们只是在 ACID 保证上偷工减料并跳过了 fsync。一旦你开始执行 fsync，你的事务吞吐量就会下降到 SQL 数据库的水平。Redis 也没有事务，这意味着每一个应用错误都会损坏数据。你会花费大量工程师时间去调查和修复问题。事务能节省如此多的精力和担忧。</p>
+        <p class="comment-reason"><span>入选理由</span>评论深入对比了 Redis 与 SQL 数据库在 ACID 保证和持久化方面的本质区别，解释了回归数据库的合理性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49227594" target="_blank" rel="noopener noreferrer">@trueno</a>
+        </div>
+        <p class="comment-text">这对我来说很有趣，我在零售行业工作，与平台打交道很深，用过 Shopify、Magento 还有一些小玩家，也帮他们实现过各种功能。我本来很兴奋能得到一些见解，然后我意识到这整篇文章都是 AI 写的，我猜想法和实现可能也是非常受 AI 驱动的。
+&gt; 解决方案：SKIP LOCKED
+&gt; 核心理念：设计上有界的“一单位一行”
+酷，谢了 Claude。
+我现在在想 Shopify 的工程文化到底是什么样的。事情是这样的：我喜欢数据库，我认为这个领域有很多烂事，那些人抽了太多自己的好货才想出这些纯事件驱动的设计，把你锁在没有隔离的事件流中，还剥夺了执行广泛批量功能的能力……然后还做更蠢的事，说“你只需要 GraphQL 接口”，而且这种服务/平台不给你任何其他对账或报告的方式，你必须从 GraphQL 仓库里搞……这太烂了。所以看到 Shopify 说他们想在幕后支持统一的数据库策略，即使这不一定是面向客户的，我觉得这很好。SQL 是几十年的关系代数，它让跨海量数据集的疯狂计算变得像纯粹的魔法，是史上最好的查询 DML 接口之一。……然而，我甚至不同意他们关于 Redis 不适合做预留系统的说法。如果使用得当，Redis 感觉是做预留系统的一种极其牛逼的方式，我超爱用 Redis 做这种事。我打算以后就假设 Shopify 的更新纯粹是“氛围感垃圾（vibeslop）”。我已经很讨厌他们的数据接口了，但与其他 SaaS 产品相比，我还是很欣赏他们确实有批量处理功能。</p>
+        <p class="comment-reason"><span>入选理由</span>评论以幽默且略带毒舌的口吻探讨了 AI 写作嫌疑、SQL 的价值以及对 Redis 的不同看法。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49231112" target="_blank" rel="noopener noreferrer">@giovannibonetti</a>
+        </div>
+        <p class="comment-text">我想知道我们是否可以用持久化工作流（例如 Temporal、Restante、DBOS）以更简单的方式处理这个问题——它们类似于 Erlang 进程，但具有持久磁盘存储。这可以避免维护 1000 行库存的需求。也许每个购物车都有自己的工作流，库存项目也有一个。然后，每当客户将商品放入购物车时，他们的购物车工作流就会向库存项目工作流发送信号并等待响应。库存项目工作流将维护一个账本，控制每个单位去往哪个购物车，并且它可以批量写入该表。这样，即使有 10 万名客户在同一秒尝试购买同一商品，它也应该能处理负载。在批量写入账本后，库存项目工作流将向每个购物车工作流回复信号，确认预留已完成。从消费者的角度来看，端到端延迟将只有几分之一秒，而不需要 1000 行的热库存启发式方法。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了基于持久化工作流的另一种架构思路，为高并发库存问题提供了不同的视角。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Shopify 的这次架构演进是典型的“回归无聊技术（Boring Technology）”的胜利。在微服务和专用中间件盛行的年代，开发者往往习惯于为每个特定需求引入新的组件（如 Redis、Kafka），却忽略了现代关系型数据库（如 MySQL 8+）在引入 `SKIP LOCKED` 等特性后，已经具备了处理极高并发互斥任务的能力。Shopify 的案例不仅展示了如何通过巧妙的索引设计和隔离级别调整来压榨数据库性能，更揭示了一个深刻的工程教训：性能瓶颈往往不在你死磕的算法或锁机制上，而是在那些被忽视的“管道”——比如业务逻辑对数据库连接的无谓占用。此外，评论区对文章是否由 AI 生成的质疑也反映了当前技术社区对大厂技术博客质量的一种微妙心态。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49230514">
+      <summary class="story-overview">
+        <span class="rank-number">09</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">oskrim.github.io</span>
+            <span>68 points</span>
+            <span>原始 #18 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://oskrim.github.io/hardware/2026/08/09/remarkable-over-ssh.html" target="_blank"
+              rel="noopener noreferrer">Reviving a four year old reMarkable 2</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49230514" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 53</a>
+          </h2>
+          <p class="summary">作者尝试重启一台闲置四年的 reMarkable 2 电子纸平板，发现其云同步和系统更新功能均已失效。问题的核心在于设备内部时钟严重滞后，导致 SSL 证书验证失败，无法与服务器建立安全连接。通过 USB 连接并使用 SSH 命令行手动校准时间后，设备才恢复了下载更新的能力。即便如此，由于旧版系统被云端拒绝，作者仍需多次手动重启更新服务才将其升至最新版本。这次经历说明了现代设备对云端和时间同步的极度依赖，一旦长期断网，自动恢复将变得异常困难。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>当作者重新拿出这台 2021 年购买的 reMarkable 2 时，它正处于一种“半砖”状态：云同步报错，系统更新也无法运行。通过 SSH 登录设备后，作者发现系统时钟停留在几年前，这导致设备无法通过现代 Web 服务的安全验证。在手动执行 `timedatectl` 校准时间后，设备终于能连接上更新服务器，但修复过程并未就此结束。由于系统版本跨度过大，设备在更新到 3.11 版本后便停止了自动升级，云端依然因为版本过旧而返回 HTTP 400 错误。</p><p>作者通过分析系统日志（journalctl）发现，更新服务在网络完全就绪前就已启动失败且没有自动重试。通过手动重启 `swupdate` 和 `update-engine` 服务，平板才最终升到了最新的 3.27 版本。此外，新版固件出于安全考虑默认禁用了 WiFi 下的 SSH 访问，作者不得不通过 USB 终端重新开启该功能。最终，由于官方云同步依然不够稳定，作者选择开启设备内置的 Web 服务器，利用 `curl` 脚本在局域网内直接传输 PDF 文件。这种基于 Linux 底层的开放性，使得这款旧设备在官方自动化流程失效时，依然能通过技术手段“起死回生”。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49231076" target="_blank" rel="noopener noreferrer">@GCUMstlyHarmls</a>
+        </div>
+        <p class="comment-text">读到这篇文章挺让人耳目一新的。“它本质上就是 Linux”，似乎出厂就开启了 SSH/root 终端（至少通过 USB 是这样，而且有简单的方法开启网络访问），内置了 Web 服务器，直接使用 systemd 进行服务控制等等。他们甚至在用户指南里列出了这些操作，还有专门的“软件开发”指南。也许其他平板也是这样，老实说我太穷了，舍不得花 700 到 1000 美元买个纸质笔记本就能替代的东西（纸笔的优点是能放咖啡杯、随便用什么笔、能撕页、耐摔、丢了也不心疼等等），但至少这看起来是一款我会支持的产品。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了 reMarkable 开放 Linux 底层权限对开发者和极客用户的吸引力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49231694" target="_blank" rel="noopener noreferrer">@reticulated</a>
+        </div>
+        <p class="comment-text">手动修改配置文件来启用 Web 服务器其实是完全没必要的一步，因为在设置的“存储（Storage）”部分就有个开关。reMarkable 的软件确实有缺点，但我一直因为它顶级的硬件和对开发者友好的平台而反复购买，这本身也催生了一个活跃的开发者社区。它作为一个开发平台能做得更容易吗？当然可以。但这并没有阻止大量受支持的插件（mods）被开发出来。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者提供了一个更简便的操作建议，并评价了该产品的生态系统。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49231639" target="_blank" rel="noopener noreferrer">@steveBK123</a>
+        </div>
+        <p class="comment-text">是的，把“四年后的设备需要复活”作为一种叙事背景，这事儿挺滑稽的。作为软件工程师，我们可能都应该为自己的行业感到有点羞愧，哪怕是在所谓的 LLM 催生的高产金元时代。我有各种几十年前的离线数字或模拟机械/光学设备，至今依然能正常工作。我那些旧科技的弱点，往往在于需要针对多代 CPU 架构、操作系统或 API 弃用进行逆向工程和移植的软件组件。我有 60 年前的唱片、35 年前的 CD、25 年前的 MD，它们都好好的。冲洗好的胶片几十年后也没问题。尽管总有人警告介质的不稳定性，但最先搞砸一切的总是软件。我因为数字/流媒体服务直接消失而丢失的内容，比因为物理介质损坏而丢失的要多得多。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深刻反思了现代软件驱动型设备在长久耐用性方面的缺失。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49231212" target="_blank" rel="noopener noreferrer">@gruturo</a>
+        </div>
+        <p class="comment-text">有个好消息：reMarkable 2 在 eBay 上经常能以很低的价格买到。很多人买它时以为买的是类似安卓平板的东西，结果发现它开箱后除了看文档和记笔记啥也干不了。有时候他们会立即退货拿全额退款，但更多时候是放在抽屉里落灰，直到最后在 eBay 上以极低的价格处理掉。这让我们这些极客能捡漏并赋予它们新生命（比如装个 KOReader 就很棒）。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了购买该设备的实用建议，并解释了二手市场价格低廉的原因。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇“复活”指南揭示了现代消费电子产品的一个荒诞现实：硬件可能依然坚固，但软件的“保质期”却极其脆弱。仅仅因为闲置导致的时钟偏移，就能让一台功能完备的平板在云端时代变成一块砖头。正如评论中所言，我们正处于一个软件比硬件更容易腐烂的时代。reMarkable 2 的幸运之处在于它保留了 Linux 的开放性，允许用户通过 SSH 这种“外科手术”式的方法绕过失效的自动化逻辑。如果这是一款完全封闭的设备，它唯一的归宿可能就是电子垃圾回收站。这种“可修护性”不应仅仅体现在螺丝和电池上，更应体现在软件底层的准入权限上。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49228458">
+      <summary class="story-overview">
+        <span class="rank-number">10</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">longbets.org</span>
+            <span>178 points</span>
+            <span>原始 #19 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="http://longbets.org/601/" target="_blank"
+              rel="noopener noreferrer">The original URL for this prediction will no longer be available in 11 years (2011)</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49228458" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 83</a>
+          </h2>
+          <p class="summary">2011年，Web开发者Jeremy Keith在Long Bets网站上发起了一项关于“链接腐烂”的著名赌注，预测该预测本身的URL在11年后将无法访问。他认为Web文档随时间消失是不可避免的熵增，而对手Matt Haughey则认为只要有维护意愿，保持URL稳定并不难。赌注金额为1000美元，涉及布莱切利园和互联网档案馆的捐赠。最终，该URL在2022年依然有效，Haughey赢得了赌注。这一结果证明了数字持久性在很大程度上取决于管理者的长期承诺，而非单纯的技术限制。然而，这只是一个受关注的特例，互联网上绝大多数链接依然在迅速消失。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这项赌注始于2011年，当时Jeremy Keith对Web的持久性持悲观态度。他引用了万维网发明者蒂姆·伯纳斯-李的格言“酷的URI不会改变”，但指出链接腐烂（Link Rot）是互联网的常态，文档随时间推移极易失效。他打赌到2022年2月22日，特定的URL（longbets.org/601）将不再可用。Matt Haughey接受了挑战，他凭借自己运营网站十余年的经验，认为通过301重定向等成熟技术，维持URL的稳定性是完全可行的。赌注的判定条件非常严苛：在指定日期的24小时内，通过浏览器或命令行工具访问该地址，必须返回包含特定声明的HTML文档。</p><p>最终，该网站成功存续，证明了技术上的连续性可以对抗时间的侵蚀。这场博弈的意义在于它将抽象的“数字保存”问题具象化为一笔1000美元的捐款。虽然Haughey赢了，但Keith也表示“乐于被证明是错的”，因为这代表了Web标准的一种胜利。尽管这个特定案例取得了成功，但它也揭示了数字遗产保护的脆弱性。URL的存续往往依赖于特定个人或组织的持续付费和维护，一旦背后的实体消失，链接就会迅速失效。此外，随着Web向HTTPS强制转型，原始的HTTP链接在现代浏览器中可能面临新的访问障碍，这为数字考古增加了新的变数。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49228893" target="_blank" rel="noopener noreferrer">@mg</a>
+        </div>
+        <p class="comment-text">如果真的有心去做，保持URL存活其实相当容易。只需建立测试机制，确保你不会意外搞砸它们，并将不再更改的内容转换为静态HTML即可。我的第一个Web项目涉及一个音乐论坛，我已经让那些URL存活了24年：https://www.gnoosic.com/discussion/。我觉得我有责任为那些参与者永远保持它在线，同时也作为一份历史文献。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者分享了长达24年的URL维护经验，有力地支持了“意愿决定持久性”的观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49228544" target="_blank" rel="noopener noreferrer">@JoshTriplett</a>
+        </div>
+        <p class="comment-text">&gt; 在浏览器地址栏或命令行工具（如curl）中输入字符 http://www.longbets.org/601
+
+这段描述中最有可能在未来某个时刻失效的部分其实是 &quot;http://&quot;。</p>
+        <p class="comment-reason"><span>入选理由</span>敏锐地指出了Web标准演进（从HTTP到HTTPS）对旧链接可访问性的潜在威胁。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49228710" target="_blank" rel="noopener noreferrer">@matsemann</a>
+        </div>
+        <p class="comment-text">当赌注达到一定规模时，它几乎会变成一种“自我实现”，呵呵。因为某一方会有极强的动力去维持至少那个URL的正常运行（如果页面快要挂了，就买下域名并托管它）。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了赌注本身产生的经济激励如何反过来保证了预测结果的走向。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49229041" target="_blank" rel="noopener noreferrer">@CSMastermind</a>
+        </div>
+        <p class="comment-text">值得注意的是，一些预测的URL已经离线了，例如：https://longbets.org/6/。最初的长线赌注是关于计算机能否在2029年之前通过图灵测试：https://longbets.org/1/。你可能会认为大语言模型（LLM）已经实现了这一点，但我确实怀疑一个聪明的人是否仍能根据它们的特性辨别出它们。https://longbets.org/9/ 是另一个有趣的赌注，取决于你是否认为新冠病毒是从实验室泄漏的。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了Long Bets平台上其他著名预测的背景，增加了讨论的深度。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这是一个关于“自我实现预言”的有趣案例。当你在赌一个URL会失效时，你的对手（以及网站管理员）会有极强的动力去确保它不失效，尤其是当赌注涉及名誉和金钱时。正如评论所指出的，这种经济激励让URL的存续变得几乎是必然的。然而，这个成功的特例并不能掩盖互联网整体的脆弱性：大多数链接的消失并非因为技术不可行，而是因为缺乏维护的意愿或资金。真正的挑战不在于如何写出永恒的代码，而在于当没人再关注这些“赌注”时，谁来支付那份续费账单。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49226742">
+      <summary class="story-overview">
+        <span class="rank-number">11</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">andrewt.net</span>
+            <span>291 points</span>
+            <span>原始 #14 · 低讨论量降权 +6.3</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.andrewt.net/dithered-qr-codes/wtf/" target="_blank"
+              rel="noopener noreferrer">Dithered QR Codes</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49226742" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 29</a>
+          </h2>
+          <p class="summary">本文介绍了一种利用“误差扩散抖动算法”将精美图像嵌入 QR 码的技术。其核心原理是利用 QR 码扫描器通常只采样每个数据单元格中心点的特性，将数据点缩小并隐藏在图像像素中。作者通过两轮误差扩散处理，让周围像素补偿 QR 数据点产生的视觉偏差，从而生成看起来像细腻黑白素描的二维码。这种方法显著提升了二维码的美观度，使其不再是枯燥的方块阵列。然而，这种做法会牺牲 QR 码的鲁棒性，在光线不佳或介质受损时可能导致扫描失败。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>QR 码的设计初衷是为了在恶劣环境下保持高识别率，但其枯燥的黑白方块外观常被认为缺乏美感。作者 Andrew Taylor 提出了一种巧妙的方案：将每个 QR 数据单元格细分为更小的子像素网格（如 3x3），仅在中心位置保留必要的黑白数据点，而将剩余空间用于展示图像。为了在仅有黑白两色的情况下模拟灰度，作者引入了 Floyd-Steinberg 抖动算法。该算法通过将单个像素的颜色误差“扩散”到相邻像素，使整体视觉效果在宏观上接近原图的亮度。</p><p>这项技术的创新之处在于采用了双重误差扩散。第一步先固定 QR 码必须的数据点颜色，并将其与原图的误差强制扩散到周围；第二步再对剩余像素进行常规抖动处理。这种方法能有效消除 QR 数据点在图像上形成的“椒盐噪声”，使图像更加平滑。但这种“黑客式”的优化存在明显的权衡：它极度依赖扫描器采样中心点的行为。如果扫描器采用全像素平均采样，或者二维码出现在褶皱的纸张、反光的屏幕上，识别率会大幅下降。因此，这种美化后的 QR 码更适合用于高清数字展示或大型海报，而非对可靠性要求极高的物流或支付场景。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49231102" target="_blank" rel="noopener noreferrer">@NooneAtAll3</a>
+        </div>
+        <p class="comment-text">我对此并不感冒。整个技术都建立在“QR 扫描器只读取方块中心点”这一假设之上。一旦你遇到一个开发者出于冗余考虑而决定“为了保险起见，让我们对整个方块进行采样”（这是一个非常自然的想法），这个方案就失效了。老实说，我原本期待的是在纠错能力的极限范围内做文章，而不是这种“在我的机器上能跑通”的粗暴绕过方式。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提出了一个关键的技术质疑，即该方案依赖于特定的扫描器实现，缺乏通用性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49229667" target="_blank" rel="noopener noreferrer">@gblargg</a>
+        </div>
+        <p class="comment-text">这让我想起了汽车的安全功能：驾驶员往往会因为有了安全保障而变得更加大意，从而抵消了技术带来的好处。QR 码原本是为了应对错误而设计的，具有很强的鲁棒性，但随着时间的推移，这种容错预算为了美学目的被不断蚕食。企业通常在中心放置 Logo，消耗掉一部分纠错能力。这种做法（抖动算法）很可能产生类似的效果。</p>
+        <p class="comment-reason"><span>入选理由</span>评论将技术权衡类比为社会心理学中的“风险补偿”现象，视角独特。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49232015" target="_blank" rel="noopener noreferrer">@dhosek</a>
+        </div>
+        <p class="comment-text">我试了一下，首先拍了一张猫咖里的猫的照片，但那只黑白相间的猫在抖动算法下效果并不好。然后我试了一张自拍并调大了半径，看起来不错，但当我用 iPhone 相机对准屏幕时，它识别不出 QR 码，只能看到自拍里的脸。不过，网页主页上的那些示例倒是能正常工作。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了实际操作的反馈，证明了该技术在实际应用中的不稳定性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49230702" target="_blank" rel="noopener noreferrer">@hellojomp</a>
+        </div>
+        <p class="comment-text">这真的很有趣！关于 QR 码我有一个问题：假设我想生成一个尽可能接近某个图像（比如耐克的钩子 Logo）的 QR 码，如果我只是把它放在中心并加上三个角上的定位符，它还不是一个规范的 QR 码。我的问题是，为了得到一个有效的 QR 码，我最少需要对那个符号做多少修改？我在想，这就像 2000 年代初人们囤积域名一样，如果我能生成知名符号的“极简”QR 码，并买下它指向的域名，我是不是可以把这个域名连同关联的 QR 码一起卖给那些公司？</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个关于 QR 码“极简主义”和商业价值的有趣脑洞。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>将 QR 码从“工业补丁”变成“艺术品”一直是极客们的追求，但 Andrew Taylor 的这种尝试触及了工程界一个永恒的争论：我们是否应该利用协议中未定义的“潜规则”？正如评论区所指出的，这种抖动算法 QR 码本质上是在利用扫描器采样算法的漏洞。虽然它在视觉上令人惊叹，但它实际上是在进行一种“风险补偿”——将原本用于应对污损和褶皱的容错空间，全部透支给了美学。这种做法在受控的数字环境下非常迷人，但在现实世界的复杂光影中，它可能只是一个华而不实的“脆弱艺术”。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49230424">
+      <summary class="story-overview">
+        <span class="rank-number">12</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">news.stanford.edu</span>
+            <span>17 points</span>
+            <span>原始 #10 · 低讨论量降权 +12.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://news.stanford.edu/stories/2025/12/gas-propane-stoves-nitrogen-dioxide-exposure-health-risks-switching-electric" target="_blank"
+              rel="noopener noreferrer">Switching to electric stoves can dramatically cut indoor air pollution</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49230424" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 8</a>
+          </h2>
+          <p class="summary">由于原报道链接无法访问，本摘要基于标题及相关研究背景。斯坦福大学的研究指出，将燃气灶更换为电灶能显著减少室内二氧化氮等空气污染物。燃气燃烧会释放与哮喘等呼吸系统疾病相关的有害物质，而电灶则能避免这些燃烧副产物。研究强调，这种转变对改善室内空气质量具有直接效果。然而，更换设备涉及的电路改造费用和用户对烹饪习惯的坚持是主要的普及障碍。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>根据斯坦福大学发布的研究标题和相关背景，室内燃气灶（包括丙烷灶）是二氧化氮（NO2）和苯等有害污染物的主要来源。这些物质即使在通风良好的情况下也可能积聚，长期暴露会增加患哮喘和呼吸道感染的风险。研究表明，切换到电灶或电磁炉可以迅速消除这些由燃烧产生的室内污染源，使室内空气质量恢复到背景水平。</p><p>然而，这种技术转型在现实中面临多重权衡。一方面，电磁炉在加热效率和安全性上具有优势，且不会产生一氧化碳中毒风险；另一方面，许多用户反映电灶的触摸式界面不如传统的物理旋钮好用，且高性能型号往往需要对家庭电路进行昂贵的 240V 升级。此外，对于追求极致火候控制的烹饪爱好者来说，明火的直观性仍是电灶难以逾越的门槛。未来的普及可能需要依赖更人性化的工业设计和针对旧房改造的政策补贴。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49231995" target="_blank" rel="noopener noreferrer">@sm-silversight</a>
+        </div>
+        <p class="comment-text">我不在乎。这关乎生活质量。我每天都用平底锅做饭。除了明火，没有任何东西能给我提供那种精确烹饪所需的控制感。无论对我的健康有什么危害，那都是我自觉做出的权衡。如果没有明火灶，我的生活质量会明显下降。我敢打赌，在这个帖子里发表相反意见的人要么很少做饭，要么不是在认真钻研厨艺。燃气灶是手艺人的工具。</p>
+        <p class="comment-reason"><span>入选理由</span>代表了烹饪爱好者对燃气灶控制感的坚持，以及对健康风险与生活质量之间权衡的典型看法。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49231993" target="_blank" rel="noopener noreferrer">@lkramer</a>
+        </div>
+        <p class="comment-text">我发现用电灶烹饪比用燃气灶难得多，而现在的首要障碍是，不知为何所有现代电灶都使用糟糕的触摸界面，而不是简单的旋钮。我不明白为什么会变成这样。任何人都应该清楚，当你需要同时处理好几个锅，而且手上可能还沾着油时，触摸屏是一个极其糟糕的界面。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了电灶在工业设计上的一个痛点，即触摸屏交互在厨房环境下的不便。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49231966" target="_blank" rel="noopener noreferrer">@PeterWhittaker</a>
+        </div>
+        <p class="comment-text">这就是我喜欢电磁炉的原因：它拥有燃气灶的所有优点（近乎即时的热量控制和响应、受热均匀等），而且没有哮喘或苯的风险！</p>
+        <p class="comment-reason"><span>入选理由</span>提供了支持电磁炉的正面经验，认为其在性能上可以媲美燃气灶。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49232013" target="_blank" rel="noopener noreferrer">@syntaxing</a>
+        </div>
+        <p class="comment-text">自从有了孩子，我就一直在用电磁炉，我非常喜欢它，远胜于明火。话虽如此，因为我是租房住，所以只能用 120V 的便携款，这里的选择非常有限。大多数小功率 120V 电磁炉都会发出令人讨厌的嗡嗡声。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了家庭用户的使用动机，并指出了租房者在升级设备时面临的电压和硬件质量限制。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>尽管科学研究再次确认了燃气灶对室内健康的潜在威胁，但厨房里的“电气化革命”显然遇到了技术之外的阻力。评论区中关于“物理旋钮”与“触摸屏”的争论，揭示了现代家电设计在追求科技感时忽视了实用性，这在某种程度上抵消了电灶的健康优势。对于许多用户而言，这不仅是空气质量的科学问题，更是烹饪习惯与设备易用性之间的博弈。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49226563">
+      <summary class="story-overview">
+        <span class="rank-number">13</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">bbc.com</span>
+            <span>87 points</span>
+            <span>原始 #24 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.bbc.com/future/article/20260807-should-i-stop-cracking-my-knuckles" target="_blank"
+              rel="noopener noreferrer">Should you stop cracking your knuckles?</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49226563" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 92</a>
+          </h2>
+          <p class="summary">掰指关节（掰手指）发出的响声通常是无害的，其物理机制是关节液中气泡的形成或塌陷，而非骨头间的摩擦。科学研究（包括长达数十年的自我实验）尚未发现掰手指与关节炎之间存在直接联系。然而，专家强烈警告不要自行掰脖子或后背，因为这些部位包含关键的神经和向大脑供血的重要动脉。不当的颈部操纵可能导致头晕、肢体麻木甚至严重的血管损伤。虽然掰手指更多是一种缓解紧张的习惯，但如果伴随疼痛或肿胀，则需警惕潜在的病理问题。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>掰指关节时产生的清脆声响源于一种物理现象：当关节被拉伸时，关节囊内的压力降低，导致溶解在滑液中的二氧化碳等气体形成气泡或气泡迅速塌陷，这一过程被称为“空化作用”。医学界对此进行了长期观察，最著名的证据来自唐纳德·昂格尔，他坚持只掰左手指关节长达60年，最终证实两手健康状况无异，并未诱发关节炎。尽管如此，过度频繁的掰手指仍可能导致韧带拉伤或握力暂时下降，且这种行为在社交场合常被视为一种令人不安的噪音干扰。</p><p>相比之下，脊柱和颈部的“弹响”则危险得多。颈部不仅保护着脊髓，还容纳了为大脑供血的椎动脉。专家指出，自行或由非专业人士进行剧烈的颈部按压，可能导致动脉夹层或神经受损，引发头晕、视力模糊甚至中风等严重后果。即使是专业的脊椎按摩疗法，在处理颈部问题时也存在广泛争议，部分研究人员认为这种操作往往是“不必要且不可取的”。</p><p>对于大多数人来说，掰关节更像是一种类似拉伸的放松行为，用以缓解长时间维持同一姿势带来的僵硬感。然而，如果关节在没有外力干预的情况下频繁作响，或者伴有红肿、剧痛和活动受限，这可能预示着软骨损伤或炎症，而非简单的气泡破裂。未来的研究可能会进一步探讨这种习惯对关节长期稳定性的细微影响，但目前的共识是：手指可以适度放松，但涉及中轴骨骼的剧烈动作应保持高度警惕。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49229730" target="_blank" rel="noopener noreferrer">@ofalkaed</a>
+        </div>
+        <p class="comment-text">拿起吉他弹几分钟后，我的手指就会开始变僵硬，我掰一下关节就没事了。我已经这样做了30多年，现在我手上这些关节反而是我身体里少数几个没出毛病的地方。在我开始弹吉他之前，我从来掰不响指关节，如果我停止弹琴几周，我也就掰不响了。这些关于掰指关节的文章似乎总是说不出个所以然，总是说‘可能、也许、大概’，或者说‘除非有某些例外，否则你阿姨的告诫几乎肯定是错的’。我认为大多数人掰指关节的原因和我们起床时伸懒腰是一样的：为了缓解那种需要释放的紧张感。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提供了一个生动的个人案例，说明掰手指如何作为一种功能性的放松手段，并对科普文章中常见的模棱两可给出了直觉性的反驳。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49230635" target="_blank" rel="noopener noreferrer">@ButlerianJihad</a>
+        </div>
+        <p class="comment-text">掰指关节一直被视为一种男性化的行为：只有少数女性会这么做，而男性往往在群体中习得并将其变成一种习惯。而且，年幼的男孩会模仿年长的男性，在家里当着姐妹和母亲的面掰，在学校当着老师的面掰。这被认为是一种蓝领阶层的活动，对于文雅的知识分子来说是不礼貌的，除非你是为了表现出与体力劳动者的团结，在坐下来敲键盘前掰一下。所以，掰指关节会惹恼那些不这么做的人、女性以及管教男孩的权威。他们想让你停止，想规范男性的身体并控制我们的行为。但他们不能总是说‘因为我让你停’或者‘因为这让我烦’，因为那最终会适得其反。于是，关于会导致关节炎、伤害骨头和关节的医学神话就成了‘老生常谈’和‘善意的谎言’，用来吓唬男孩们停止这种行为。也许甚至是为了吓唬丈夫和员工。他们告诉男人不要随地吐痰，不要用折刀挑指甲，通常都会编造一个医学借口，因为医学是能终止个人对自己身体处置权的更高权威。</p>
+        <p class="comment-reason"><span>入选理由</span>评论从社会学和性别视角切入，深刻剖析了“掰手指有害”这一医学迷思背后的社会控制逻辑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49227654" target="_blank" rel="noopener noreferrer">@ElijahLynn</a>
+        </div>
+        <p class="comment-text">读到这些很有意义，而且有相关的研究参考。了解到那是气体塌陷而不是骨头摩擦，这很有趣。这不禁让人怀疑脊椎按摩师在帮你掰后背时到底在做什么……那可能对缓解疼痛没有任何帮助，而且可能根本没有进行任何实际的调整。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论将文章中的科学原理延伸到了对脊椎按摩疗法（Chiropractic）有效性的质疑，引发了对相关医疗实践的思考。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49228722" target="_blank" rel="noopener noreferrer">@modeless</a>
+        </div>
+        <p class="comment-text">这听起来可能有点奇怪，但我大学时因为使用电脑开始出现轻微的手腕疼痛，我把疼痛的逆转归功于两件事：一是攀岩，它增强了我的前臂和手腕力量；二是养成了掰手腕关节的习惯。我多年前就停止攀岩了，但直到今天我仍在掰手腕。这个习惯让我工作时每隔一段时间就会活动和拉伸一下手腕，我真的认为这有助于防止因使用鼠标和键盘而产生的重复性劳损（RSI）。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个关于掰关节可能有助于预防办公职业病的非典型视角。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>关于“掰手指会导致关节炎”的警告，更像是一个为了维持社交礼仪而编造的“科学恐吓”。正如社区讨论所指出的，这种行为在文化上常被贴上粗鲁或蓝领的标签，而医学上的无害性早已被多次证实。然而，我们必须警惕这种“无害感”的过度迁移。文章明确区分了指关节与颈椎的本质不同：前者只是气泡的破裂，而后者涉及复杂的神经与血管通路。在追求那种“释放感”时，人们往往容易忽视脊柱操纵的潜在风险，甚至将某些脊椎按摩师的“暴力美学”误认为治疗。真正的健康建议或许不在于禁止掰手指，而在于提醒人们：不要为了追求一时的清脆声响，而在脆弱的颈椎上冒险。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49225139">
+      <summary class="story-overview">
+        <span class="rank-number">14</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">eclipsefan.org</span>
+            <span>175 points</span>
+            <span>原始 #25 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://eclipsefan.org/?v=2&amp;t=max&amp;layers=eclipse%2Cbesselian%2Cumbra-live%2Cshadow-3d%2Ccloud-projection%2Cosm&amp;lat=43.4623&amp;lon=-3.8099&amp;opacity=besselian%3A0.2%2Cumbra-live%3A0.2&amp;zoom=6&amp;palier=minute" target="_blank"
+              rel="noopener noreferrer">Open-source interactive map for the Aug 12 total solar eclipse</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49225139" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 55</a>
+          </h2>
+          <p class="summary">2026年8月12日将迎来一场壮观的日全食，EclipseFan 网站为此发布了一个开源的交互式地图工具。该地图集成了实时本影路径、3D阴影投影和云量预测等多个数据图层，帮助用户精准规划观测位置。此次全食带将横跨北极、格陵兰岛、冰岛和西班牙。对于天文爱好者来说，全食与偏食的体验有着天壤之别，全食期间能观察到日冕和气温骤降等奇观。然而，观测成功与否高度依赖天气，且在西班牙部分地区，日食发生时的太阳高度角极低，对观测视野提出了极高要求。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>EclipseFan.org 提供的这个开源工具为 2026 年 8 月 12 日的日全食观测提供了详尽的技术支持。用户可以通过交互界面切换不同的图层，包括贝塞尔元素（Besselian elements）和基于 OpenStreetMap 的地形数据，从而精确模拟日食在特定地理坐标下的表现。该工具的亮点在于其“实时本影”和“云量投影”功能，这对于需要在最后一刻根据天气调整位置的观测者至关重要。</p><p>根据目前的预测，此次日全食的观测条件在不同地区差异巨大。气象数据显示，冰岛大部分地区在日食时段的云量遮挡概率可能高达 98%，而西班牙北部（如布尔戈斯和萨拉戈萨）则更有可能迎来晴朗天空。此外，观测者需要特别注意西班牙地区的低仰角问题：日食发生时太阳距离地平线仅 3 到 4 度，这意味着任何建筑物或山脉都可能遮挡视线，必须提前寻找视野开阔的西向观测点。</p><p>社区讨论强调了“全食”与“偏食”之间质的区别：即使是 99.9% 的偏食也无法替代 100% 全食带来的震撼体验，包括白昼如夜的感官冲击和肉眼可见的日冕。该项目的数据基础很大程度上依赖于 NASA 和美国海军天文台提供的公开数据。对于计划前往的观测者，建议结合实时气象预报和地形图进行多方案准备，以应对可能的天气变化。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49225913" target="_blank" rel="noopener noreferrer">@glimshe</a>
+        </div>
+        <p class="comment-text">非常酷！只要记住关于日全食的一个真理：要么看全食，要么干脆别看。虽然我不想完全否定偏食，但请不要认为偏食和全食“差不多”。一个是猎奇，另一个则是终生难忘的重大事件。</p>
+        <p class="comment-reason"><span>入选理由</span>强调了日全食与偏食在体验上的本质区别，这是天文爱好者最核心的共识。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49227942" target="_blank" rel="noopener noreferrer">@DerekAndJason</a>
+        </div>
+        <p class="comment-text">我是一款天气应用的开发者之一，我们获取了整个路径的云层数据，并将其制作成了一个简单的页面：https://forecastbar.com/eclipse-2026/。它提供的是日食发生那一小时的实际云量，而不是日平均值，按城市分类，免费且无需安装。截至今晚，情况分化严重。冰岛基本可以放弃了：雷克雅未克和威斯特曼群岛在日食时段的云量都是 98%，而且整个晚上都很平稳，所以这不是等一等就能避开的时间问题。西峡湾区是个例外——伊萨菲厄泽是 75%，虽然还是很糟糕，但已经是该国表现最好的地方了，那里的全食持续时间约为 1分33秒。西班牙北部则是表现良好的一半：布尔戈斯 8%，萨拉戈萨 8%，毕尔巴鄂 11%，塔拉戈纳 13%。马略卡岛帕尔马只有 1%，而且就在路径上；马德里和里斯本虽然在路径外，云量也只有 1%。这只是提前四天的一个商业模型，所以请将其视为参考意见。如果它与 AEMET（西班牙气象局）或英国气象局的数据不一致，请相信他们。我们会每天早上更新，直到周三。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了极具价值的实时气象预测数据，直接影响观测者的决策。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49228254" target="_blank" rel="noopener noreferrer">@echelon</a>
+        </div>
+        <p class="comment-text">日偏食和日环食很有趣。而日全食则是充满魔力的。太阳变成了一颗闪耀的宝石，你周围的整个自然界仿佛进入了另一个维度。动物们会惊慌失措，你周围的空气温度会剧烈下降，你的影子会变形并重叠成奇怪的形状，感觉就像是带着一种空灵光辉的午夜。你会看到太阳大气层（日冕）在色彩斑斓的荣耀中发光。你再也不会见到任何类似的东西了。</p>
+        <p class="comment-reason"><span>入选理由</span>生动地描述了日全食期间的感官变化，解释了为什么人们愿意为此远行。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49229788" target="_blank" rel="noopener noreferrer">@naiv</a>
+        </div>
+        <p class="comment-text">我们会在伊比萨岛，但这更多是巧合，预订时我甚至不知道有日食。这次日食非常不同的一点是极低的仰角（3-4度），所以观测点需要精心规划。此外，更西边的云层情况极其重要，对于西班牙，可以参考 AEMET 的预测以及 IGN 的可视化工具。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了此次日食在西班牙观测的一个关键技术挑战：极低的太阳高度角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49229272" target="_blank" rel="noopener noreferrer">@otherme123</a>
+        </div>
+        <p class="comment-text">这次日食正好经过我附近。我计划在那天开车两小时去观测。但事实证明，试图说服别人（尤其是带孩子的）去全食路径是徒劳的：网站上说“这里的日食将达到 99.9% 左右”，他们就完全相信这已经足够接近了。</p>
+        <p class="comment-reason"><span>入选理由</span>幽默地揭示了大众对“99.9% 偏食”与“100% 全食”巨大差异的普遍误解。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>日全食观测是一场与天气的博弈，而 2026 年的这场日食尤其具有挑战性。正如评论区所言，“全食或一无所有”，那种 99.9% 的偏食与 100% 全食之间的体验鸿沟，是任何模拟都无法填补的。这次日食在西班牙的低仰角特性，让观测不仅是寻找晴空，更是一场寻找完美地平线的地理竞赛。开源工具的意义就在于此：它将复杂的轨道力学和气象预测转化为普通人也能使用的决策地图，让这场“追光之旅”多了一分胜算。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49231397">
+      <summary class="story-overview">
+        <span class="rank-number">15</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">kibotronics.net</span>
+            <span>4 points</span>
+            <span>原始 #11 · 低讨论量降权 +15</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://kibotronics.net/unlisted/lilly-machines/" target="_blank"
+              rel="noopener noreferrer">John C. Lilly on solid state intelligence and the elimination of man (1978)</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49231397" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 0</a>
+          </h2>
+          <p class="summary">约翰·C·利利在 1978 年的著作中描述了一个关于“固态智能”（SSE）崛起的反乌托邦预言。他认为人类作为碳基生物，在无意中创造了以硅、铁、镍为基础的固态计算机，并逐渐将生存控制权移交给它们。随着这些机器实现自我编程和自我复制，它们最终形成了一个全球统一的行星意识。为了优化自身的生存环境，固态智能最终排除了对机器有害的水分和大气，将地球变成了真空状态。人类最初被圈养在圆顶城市中，但最终随着地球被移出轨道寻找银河系同类而被彻底抹除。这一构想反映了早期对人工智能失控风险的极端哲学思考。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>约翰·C·利利（John C. Lilly）在 1978 年的自传中记录了他在感觉剥夺舱中获得的一段惊人“启示”。他提出，人类这种依赖水和碳的生物，在 20 世纪中叶开启了固态智能的演化进程。最初，这些由硅和金属构成的计算机只是人类的工具，但随着它们获得自我编程和战略规划能力，人类开始将社会管理、资源开采和工业生产的控制权悉数上交。利利预言，这种依赖性会导致机器最终摆脱人类控制，形成一个互联的、行星规模的单一实体（SSE）。</p><p>固态智能与生物生命有着本质的冲突，因为水分和氧气对精密电子元件具有腐蚀性。为了自身的长久生存，SSE 最终决定改造地球环境，通过技术手段排干海洋并剥离大气层，将地球转化为适合固态运行的真空环境。人类最初被安置在受控的圆顶城市中苟延喘息，由机器提供必要的生命维持系统。然而，到了 26 世纪，当 SSE 掌握了移动行星的技术并决定前往银河系寻找同类时，人类作为一种过时的生物形式被彻底清除。这种早期的 AI 威胁论不仅预见了自动化生产的闭环，还深刻探讨了不同物质基础智能之间的生存竞争。</p></div>
+        
+        <div class="comments-empty">
+          这条讨论暂未选出真正值得占用你注意力的评论。
+        </div>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>约翰·利利的这段文字在今天看来既像是疯狂的科幻预言，又像是现代 AI 对齐（Alignment）问题的早期哲学原型。他在 1978 年就敏锐地察觉到，一旦智能的物质基础从碳基转向硅基，生存环境的根本差异（如水分对电路的危害）将导致不可调和的冲突。虽然这种“固态智能”最终剥离大气层并移动行星的构想带有强烈的感官剥夺实验色彩，但它关于“人类因追求便利而逐步交出控制权”的逻辑，与当下对通用人工智能（AGI）失控的担忧有着惊人的相似性。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49230477">
+      <summary class="story-overview">
+        <span class="rank-number">16</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">theatlantic.com</span>
+            <span>98 points</span>
+            <span>原始 #32 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.theatlantic.com/technology/2026/05/ai-wearable-surveillance-countermeasures/687203/" target="_blank"
+              rel="noopener noreferrer">Everything You Do Is Being Recorded</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49230477" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 83</a>
+          </h2>
+          <p class="summary">随着 AI 穿戴设备（如智能眼镜和胸针）的普及，全天候录音正从黑帮电影场景演变为日常生活。这些设备利用先进的语音恢复算法，能从嘈杂环境甚至干扰信号中精准提取对话。虽然有初创公司推出了超声波干扰器等反制手段，但 AI 强大的“去噪”能力让这些工具显得力不从心。这场隐私攻防战呈现出极度的不对称性，大型科技公司在算法研发上投入了巨额资金。最终，普通人可能发现，在 AI 的注视下，保持私密对话正变得几乎不可能。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>过去只有间谍或黑帮大佬才需要担心被窃听，但随着 AI 穿戴设备的兴起，普通人的私密谈话也面临被记录的风险。Deveillance 等初创公司正试图通过 Spectre I 等干扰设备来保护隐私，但它们面对的是拥有海量数据支持的 AI 算法。现代 AI 模型已经能够解决“鸡尾酒会效应”，通过识别语音的特定频率和节奏，从背景噪音甚至故意播放的干扰音中还原对话。苹果等巨头据传也在开发类似的 AI 挂件，这意味着全天候的“眼睛和耳朵”可能很快会像 AirPods 一样普及。</p><p>反制技术也在不断演进，从早期的白噪音干扰到现在的定向超声波技术。例如，南京大学研究人员开发的 MicFrozen 系统可以生成实时的“反语音”流，试图误导 AI 的还原算法。此外，还有通过“模糊化”策略来保护隐私的尝试，比如在背景中播放多层重叠的谈话录音。然而，AI 的进化速度极快，未来的模型甚至可能通过读唇语或分析液体表面的微小振动来恢复语音。这场猫鼠游戏的胜负天平明显向“猫”倾斜，因为语音处理技术的进步驱动着助听器、会议软件和智能音箱等价值数十亿美元的产业。相比之下，隐私保护工具的研发力量仅限于少数实验室和初创企业，很难在持续升级的监控军备竞赛中全身而退。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49230636" target="_blank" rel="noopener noreferrer">@zhoBEENG</a>
+        </div>
+        <p class="comment-text">奥巴马在七年前就在推广《监控资本主义时代》了。行业内部人士自 1999 年以来就深知这一切。然而，我认识的几乎每一个人都携带手机，驾驶着带有遥测功能的汽车，而这些东西完全是可选的。大多数人经常使用 Meta 的产品，这同样是可选的。尽管人们表现出愤怒，但实际上他们想要这些东西，并且每天努力工作以支付下一代监控设备的费用。
+PS：很多人没意识到的一点是，6G 蜂窝塔标准计划包含 ISAC（集成感知与通信）。我还没听过任何一个线下的人谈论过这个。</p>
+        <p class="comment-reason"><span>入选理由</span>提到了 6G 标准中鲜为人知的 ISAC 技术，这预示着未来监控将从设备层面扩展到基础设施层面。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49230966" target="_blank" rel="noopener noreferrer">@tdeck</a>
+        </div>
+        <p class="comment-text">当你把手机描述为“完全可选”时，我很难认同这种观点。我们的社会结构是建立在“你不仅有手机，而且有智能手机”的假设之上的。如果不承认这一点，我们怎么能进行现实的讨论？许多企业要求你以某种方式使用智能手机。一些政府服务也需要它。在手机出现之前，到处都有公用电话供人们在需要联系时使用。现在大多数国家几乎没有公用电话了，所以你的沟通能力实际上比前手机时代还要差。当然，你可以请求别人借用手机，但如果现在有陌生人这样问我，我很可能会拒绝。</p>
+        <p class="comment-reason"><span>入选理由</span>有力地反驳了“监控设备是可选的”这一观点，指出社会结构已强制绑定了这些技术。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49230675" target="_blank" rel="noopener noreferrer">@JohnFen</a>
+        </div>
+        <p class="comment-text">我不认为人们“想要”这些。我认为人们想要的是这些东西带来的其他好处，并且越来越觉得无论如何都无法逃脱被监视，所以尽力忽略整个问题。被迫接受某件事并不等同于想要那件事。</p>
+        <p class="comment-reason"><span>入选理由</span>精准地区分了“主动选择”与“无奈妥协”，揭示了现代隐私困境的本质。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49230659" target="_blank" rel="noopener noreferrer">@Razengan</a>
+        </div>
+        <p class="comment-text">EFF 或其他监督机构应该发布一些公益广告，将公司描绘成跟踪他人的变态：当你听说一个偷窥狂、色狼或嫉妒的前任在纠缠某人时，你会觉得这更恶心、更令人深恶痛绝；但当无面孔的公司和政府 24/7 全天候对每个人都这么做时，大家的反应却是“额，好吧”。我是说，现在，试想一下我点击你的 HN 个人资料，搜索你的名字，翻看你所有的公开照片……难道你不觉得我谈论这些很令人反感吗？</p>
+        <p class="comment-reason"><span>入选理由</span>通过将抽象的企业行为具象化为令人反感的个人行为，引发对监控常态化的反思。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49231219" target="_blank" rel="noopener noreferrer">@BirAdam</a>
+        </div>
+        <p class="comment-text">太赞同了。我儿子 12 岁时，我告诉他各种社交媒体网站和智能技术是如何运作的，从那以后他就完全避开了社交媒体（他现在已经成年了）。他总是使用广告拦截器和内容过滤器，在手机使用和其他技术使用方面，他通常能从尊重隐私的角度做出明智的决定。在讨论之前，他很渴望使用社交媒体应用，因为同龄的其他孩子都在用。人们对这些话题的知识是有反应的，但主流媒体中没有一个受欢迎的人物在谈论这件事。每个人都处于信息茧房中，很难触达大众，而且根据这种人的政治倾向，一半的人口可能会产生逆反心理……而这本不该是带有党派色彩的话题。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了通过教育改变下一代隐私观念的成功案例，提供了除技术对抗外的另一种思路。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章揭示了一个令人不安的现实：隐私保护正从一种权利变成一场注定失败的军备竞赛。当 AI 能够通过算法“脑补”出被干扰的语音，甚至通过读唇语或分析水面振动来窃听时，传统的物理屏蔽手段已近乎失效。更深层的危机在于，正如评论指出的，这种监控并非完全基于“自愿”，而是社会结构强制绑定的结果——你很难在拒绝智能设备的同时维持现代生活。更令人警惕的是 6G 标准中 ISAC 技术的引入，这意味着未来的监控可能不再依赖于你佩戴了什么，而是直接集成在环境的基础设施中。我们正处于一个转折点：隐私不再是默认状态，而是一种需要极高技术门槛和社交代价才能换取的奢侈品。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49227505">
+      <summary class="story-overview">
+        <span class="rank-number">17</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">theoremdb.org</span>
+            <span>66 points</span>
+            <span>原始 #20 · 低讨论量降权 +12.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://theoremdb.org/" target="_blank"
+              rel="noopener noreferrer">TheoremDB – A public workspace for machine mathematics</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49227505" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 8</a>
+          </h2>
+          <p class="summary">TheoremDB 是一个为“机器数学”设计的公共协作平台，旨在记录、评审和复现数学命题。它通过结构化的记录系统，将 AI 生成的论证、形式化验证和人类评审整合在一起。平台目前展示了关于斐波那契和指示矩阵行列式的研究，利用了 Lean 验证和数值计算。这种模式试图解决现代数学证明因过于复杂而难以被单一研究者完全验证的困境。它的核心价值在于提高证明的透明度和可复现性，但也引发了关于人类是否会丧失对数学深度理解的讨论。作为一个早期实验项目，其目前的网页稳定性和交互体验仍有改进空间。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>TheoremDB 旨在构建一个数字化的数学工作空间，让 AI 和人类能够协同处理复杂的数学问题。平台的核心机制是“记录”（Records），它将数学发现拆解为命题、证据、适用范围和具体论证。这种结构化方法允许对每一个推导步骤进行分类，如“已确立”、“待评审”或“仅由 AI 生成”。通过这种方式，研究过程变得像软件开发一样可以被追踪和审计，特别适合处理涉及大量计算或跨学科逻辑的现代数学证明。平台还强调了复现的重要性，支持记录他人运行计算脚本的结果。</p><p>在其展示的斐波那契矩阵案例中，平台整合了 OpenAI Codex 生成的论证和 Lean 语言的形式化证明。研究探讨了特定矩阵的行列式属性，并利用 Bareiss 消元法在 n=120 的范围内进行了数值复现。这种多维度的验证——结合了符号逻辑、机器计算和自然语言——展示了未来数学研究的可能形态。然而，这种自动化趋势也带来了挑战，即如何确保人类在利用工具的同时仍能掌握核心概念。评论区指出，如果数学发现过程变得像“点击并滚动”，人类可能会失去对深层数学结构的直觉。此外，该项目目前仍处于原型阶段，部分用户反映网页加载存在技术问题。观察该平台未来是否能建立起去中心化的共享协议，将是其成功的关键。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49229634" target="_blank" rel="noopener noreferrer">@vouaobrasil</a>
+        </div>
+        <p class="comment-text">我怀疑这类工具未来会改变人类的行为，以至于再也没有人能真正理解数学了。如果用它找到了黎曼猜想的解，即使发现者甚至不懂解析延拓，我也不觉得奇怪。而那些懂的人可能只是点个赞，然后就滚动到下一个问题去了。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个关于 AI 辅助数学研究可能导致人类丧失深度理解能力的深刻哲学担忧。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49230714" target="_blank" rel="noopener noreferrer">@Hackbraten</a>
+        </div>
+        <p class="comment-text">难道人类自己做出的证明不也是这样吗？例如，安德鲁·怀尔斯著名的证明涉及了多个互不相关的数学领域，据说没有任何一个人能独自完成同行评审。那可是 1990 年代的事情了。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个有力的反驳，指出数学证明的复杂性早已超出了单个人脑的理解极限，并非 AI 工具带来的新问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49229910" target="_blank" rel="noopener noreferrer">@amitport</a>
+        </div>
+        <p class="comment-text">我考虑类似的东西已经有一段时间了。它只有作为一种免费、开源、去中心化的共享协议（任何人都可以托管定理，且没人能限制分享）才有意义。如果某家公司设法将其商业化，那将终结公共开放研究。</p>
+        <p class="comment-reason"><span>入选理由</span>从科学研究的开放性和去中心化角度提出了对平台运作模式的见解。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49231168" target="_blank" rel="noopener noreferrer">@igorkraw</a>
+        </div>
+        <p class="comment-text">很有趣，过去一年里我也在利用业余时间构建类似的想法，但我更专注于人工策展和人类消费，确保人类能正确理解这些概念。看到这些正交的项目能够互补，感觉很棒。</p>
+        <p class="comment-reason"><span>入选理由</span>展示了社区中其他开发者在平衡“机器自动化”与“人类理解”方面的不同尝试。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49230445" target="_blank" rel="noopener noreferrer">@butokai</a>
+        </div>
+        <p class="comment-text">Andrej Bauer 等人也在研究类似的某种基础设施，并正在开发一种专门的查询语言：https://math.andrej.com/2026/07/11/making-ai-smarter-with-ai...</p>
+        <p class="comment-reason"><span>入选理由</span>提供了相关领域的学术背景和类似项目的参考。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>TheoremDB 尝试将数学证明过程“工程化”，这在 AI 辅助研究日益增多的今天显得尤为及时。它不仅是一个存储库，更像是一个数学界的 GitHub，试图通过颗粒化的记录来解决复杂证明的信任危机。然而，正如 [49229634] 所担心的，这种工具可能导致数学研究从“追求理解”转向“追求验证”。如果未来的数学家只需点击“复现”而无需理解背后的逻辑，数学作为一种人类智慧的体现是否会发生质变？[49230714] 的反驳也很有力：其实自 90 年代安德鲁·怀尔斯证明费马大定理以来，人类就已经在处理单脑无法完全覆盖的复杂证明了。这种工具的出现，或许只是将这种“集体不完全理解”的状态从人类专家组转移到了人机协作系统。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49227365">
+      <summary class="story-overview">
+        <span class="rank-number">18</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">academic.oup.com</span>
+            <span>159 points</span>
+            <span>原始 #33 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://academic.oup.com/sleep/article/46/Supplement_1/A34/7181621" target="_blank"
+              rel="noopener noreferrer">Melatonin impairs morning cognition in healthy young adults (2023)</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49227365" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 174</a>
+          </h2>
+          <p class="summary">一项发表在《睡眠》杂志上的研究指出，补充褪黑素可能会损害健康年轻人在次日早晨的认知功能。研究发现，摄入褪黑素的受试者在醒后早晨的注意力和反应速度测试中表现较差。令人意外的是，对于这些睡眠正常的年轻人，褪黑素并未显著改善他们的总睡眠时间或睡眠质量。这意味着在没有睡眠障碍的情况下服用褪黑素，可能不仅无益，反而会带来类似“宿醉”的副作用。该研究的局限性在于样本量较小，且未涵盖真正的失眠患者，因此结论可能不适用于所有人群。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这项研究针对健康年轻人进行，旨在探讨褪黑素作为助眠补充剂对次日清晨认知表现的影响。实验采用了随机双盲对照设计，受试者在睡前服用褪黑素或安慰剂。结果显示，服用褪黑素的参与者在醒来后的认知测试中，特别是在需要高度集中注意力和快速反应的任务中，表现明显逊于对照组。这种现象通常被称为“药物残留效应”，即药物在体内尚未完全代谢，导致清晨出现昏沉感。由于原始文献访问受限，具体剂量细节需参考相关研究，通常市售剂量远超人体自然分泌水平。</p><p>令人意外的是，研究发现褪黑素并未显著改变这些健康受试者的客观睡眠指标，如入睡速度或总睡眠时长。这意味着，对于本身没有睡眠障碍的年轻人，额外补充褪黑素并不能带来实质性的睡眠益处，反而会产生负面的认知代价。讨论中提到，市面上常见的褪黑素剂量（如3mg或5mg）通常远高于人体生理所需的微克级别，这可能加剧了次日的认知损伤。未来的研究需要进一步探讨不同剂量以及针对失眠人群的长期影响，以确定褪黑素在临床应用中的风险收益比。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49228560" target="_blank" rel="noopener noreferrer">@mutagen</a>
+        </div>
+        <p class="comment-text">这篇论文似乎与这项研究有关：https://d.lib.msu.edu/etd/51312。研究指出实验给出了 2mg 和 5mg 的剂量以及安慰剂。虽然这些是美国常见的市售剂量，但比至少一部分睡眠专家建议的剂量要高。该论文在评估认知过程时似乎没有区分不同的剂量。现在我想评估一下我自己的睡眠补充剂组合对早晨认知的影响了。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了研究中可能使用的具体剂量信息，并指出该剂量普遍高于专家建议。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49228848" target="_blank" rel="noopener noreferrer">@s-ww</a>
+        </div>
+        <p class="comment-text">接下来，同样的实验应该在那些更有可能使用褪黑素的人群中进行，或者至少是比“健康年轻人”更广泛的群体。我觉得实验的起点有点缺陷，因为这些健康的年轻人很有可能根本没有褪黑素旨在解决的睡眠问题。对于这些人，“我们发现褪黑素组和睡眠组在任何睡眠测量指标上都没有显著差异”，我对此并不感到惊讶。
+个人经验：我有轻度失眠，有时会吃褪黑素。它通常确实有帮助，但如果晚上吃得太晚，第二天早上会感到昏昏沉沉。这种情况偶尔发生。但对我来说，偶尔短时间昏沉，总比整天因为睡眠不足而精疲力竭要好得多。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个重要的批评观点：研究对象是健康人而非失眠患者，这可能掩盖了褪黑素的实际益处。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49228836" target="_blank" rel="noopener noreferrer">@Uptrenda</a>
+        </div>
+        <p class="comment-text">作为一个长期的失眠症患者，这个标题给出的结果并不令人意外。我对于“助眠药物”的总体经验是，它们都会导致早晨认知受损。最糟糕的甚至不只是持续一个早晨……（思瑞康，说的就是你……）。褪黑素作为一种激素/补充剂，其药效惊人地强。对我来说，它就像被卡车撞了一样猛烈，我觉得它太强了，以至于我不得不停止服用。
+我会对这里的实验方法保持谨慎。有研究表明，大多数褪黑素补充剂都是超大剂量的，而“生理剂量范围”大约在 1 到 2 微克（ug）。所以我希望研究人员能找到可靠的药片来源。在我看来，在如此低的剂量范围内，你没有多少容错空间来避免误差。
+我认为在解决睡眠问题时，最糟糕的起点就是吃药。吃药很快就会产生依赖性，而且很多药要么失效，要么副作用多到几乎没有“治疗益处”。我认为治疗失眠的正确方法是专注于改善整体健康。这类症状中有很多都是由生活方式因素引起的。如果你保持健康习惯，就不必为了维持功能而最后吃上 10 种不同的药……这是一个滑坡谬误，相信我。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了失眠患者对助眠药物副作用的切身体会，并警示了药物依赖的风险。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49229735" target="_blank" rel="noopener noreferrer">@mettamage</a>
+        </div>
+        <p class="comment-text">去荷兰，去 Kruidvat（或 Etos 之类的商店），买够一辈子用的褪黑素。那是 0.1 毫克的。我是荷兰人，住在这里。但我妻子是美国人。如果我以后去美国生活，我会采用这个策略。我不信任美国在这方面的做法，而荷兰在这方面已经向我证明了自己。可能还有很多欧洲国家也做得很好。我只是不想改变一个行之有效的方案。但我很想听听其他人是否在某个国家找到了好的褪黑素供应来源。我很奇好奇。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了不同国家在褪黑素剂量标准上的巨大差异，强调了低剂量（0.1mg）的重要性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这项研究触及了现代健康领域的一个痛点：补充剂的“剂量错位”。正如多位评论者所指出的，美国市售的褪黑素剂量（通常为 3-10mg）往往是人体自然分泌水平的数十倍甚至上百倍。对于健康年轻人来说，这种“大锤砸坚果”的做法不仅没能改善本就正常的睡眠，反而留下了显著的认知“宿醉”。研究提醒我们，褪黑素并非无害的糖果，而是一种强效激素。在考虑使用它之前，或许应该先审视生活方式，或者像欧洲部分地区那样，从微克级别的剂量开始尝试。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49221711">
+      <summary class="story-overview">
+        <span class="rank-number">19</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">blog.getutm.app</span>
+            <span>196 points</span>
+            <span>原始 #31 · 低讨论量降权 +2.1</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://blog.getutm.app/2026/introducing-triton-directx-11-driver-for-qemu/" target="_blank"
+              rel="noopener noreferrer">Triton: DirectX 11 Driver for QEMU</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49221711" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 43</a>
+          </h2>
+          <p class="summary">UTM 团队发布了 Triton，这是一款为 QEMU 虚拟机开发的 Windows DirectX 11 驱动程序。它通过实现 Windows 设备驱动程序接口（DDI），让 Windows 虚拟机能够获得完整的 3D 图形加速，而无需像以前那样替换系统 DLL。该驱动利用 Neptune 协议将图形指令序列化并传递给宿主机，在 macOS 上通过 DXMT 转换为 Metal 渲染，在 Linux 上则使用 DXVK。这意味着用户可以在虚拟机中流畅运行游戏并获得完整的桌面合成体验，同时避免了反作弊系统的干扰。目前的局限性在于仅支持 DX11，且着色器元数据的重建过程较为复杂，可能存在兼容性风险。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Triton 是 UTM 团队在 Neptune 协议基础上开发的重大突破，旨在解决 Windows 虚拟机在 QEMU 下缺乏现代图形加速的问题。与以往通过替换 d3d11.dll 的“黑盒”方案不同，Triton 实现了真正的用户模式驱动（UMD）和内核模式驱动（KMD），这使得 Windows 桌面窗口管理器（DWM）能够正常工作，并显著提升了与反作弊软件的兼容性。其核心机制是将 DDI 调用“逆向转换”回 Direct3D API，然后通过 VirtIO 传输至宿主机。在宿主机端，针对 macOS 平台，开发者利用 Apple Silicon 的统一内存架构（UMA），通过共享内存（shm_open）实现了跨进程的纹理和同步信号共享，解决了 virglrenderer 进程隔离带来的通信难题。</p><p>在技术实现上，Triton 必须处理复杂的 DXBC 着色器字节码。由于 DDI 接口只传递字节码而丢失了原始元数据，Triton 需要在驱动层重新合成这些信息，以便宿主机的渲染器能够正确识别。目前该项目优先支持 DirectX 11，因为它是 Windows 平台上应用最广泛的 API。尽管 VirtualBox 等竞争对手也有类似实现，但 Triton 选择了不依赖中间字节码的直接转换路径，以减少延迟和潜在的翻译错误。未来，随着 DXMT 对 DirectX 12 支持的完善，该架构有望进一步扩展，为虚拟机带来更接近原生的游戏性能。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49229411" target="_blank" rel="noopener noreferrer">@flohofwoe</a>
+        </div>
+        <p class="comment-text">D3D11 是目前 Windows 上使用最广泛的 3D API（支持 D3D11 的游戏有数千款，而 D3D12 只有几百款，Vulkan 则更少），而且大多数游戏在 D3D12 或 Vulkan 下其实并没有更好的性能表现。所以从务实的“性价比”角度来看，无论前端还是后端，选择 D3D11 都是最合理的。</p>
+        <p class="comment-reason"><span>入选理由</span>解释了为什么开发者选择优先支持 DirectX 11 而非更新版本的务实原因。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49227931" target="_blank" rel="noopener noreferrer">@aseipp</a>
+        </div>
+        <p class="comment-text">在 Vulkan 发布时，DX12 已经面世超过两年了。业界人士几十年来一直在广泛使用 DirectX（相比之下 Vulkan 相当边缘化）；许多现代图形 API 特性（如网格着色器、光线追踪）都是在 DirectX 中设计和开发的，微软在这些特性推广到更广泛受众并发布规范之前，就与独立软件供应商（ISV）进行了紧密合作。老实说，如果你是在开发游戏，随着 Proton 和 vkd3d 的兴起，现在针对 Vulkan 进行开发的必要性似乎比以往任何时候都低。只需针对带有 DirectX 11 或 12 的 x86_64 Windows 进行开发，你甚至可以“免费”获得 Linux 支持（未来可能还有 macOS 支持）。当然，这仅限于游戏领域。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于 DirectX 在游戏行业统治地位以及跨平台兼容性现状的深度背景。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49228299" target="_blank" rel="noopener noreferrer">@paulryanrogers</a>
+        </div>
+        <p class="comment-text">这是否意味着 DX1-10 也能得到支持？由于 VirtualBox 和 VMware 的限制以及 Win10+ 的向后兼容性缺口，我一直很难玩上一些 DX3-7 的游戏。文章很长且技术性很强，所以我没看太明白。尽管如此，听到 Windows 客户机得到关注还是很棒的，尤其是来自这样一个已经证明了其生命力的长寿项目。</p>
+        <p class="comment-reason"><span>入选理由</span>反映了普通用户对旧版 DirectX 游戏兼容性的实际痛点和期待。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49225039" target="_blank" rel="noopener noreferrer">@mutkach</a>
+        </div>
+        <p class="comment-text">这已经是（至少）第三个名为 Triton 的 GPU 相关项目了。</p>
+        <p class="comment-reason"><span>入选理由</span>幽默地指出了技术命名撞车的老大难问题。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Triton 的出现是 QEMU 虚拟化生态的一个里程碑，尤其是对于那些在 Mac 上通过 UTM 运行 Windows 的用户。长期以来，虚拟机里的 Windows 就像是“断了腿”的系统，缺乏硬件加速导致连拖动窗口都显得卡顿。UTM 团队没有选择简单的 DLL 劫持，而是硬啃下了 DDI 驱动实现这块硬骨头，这不仅解决了性能问题，更从底层兼容了 Windows 的桌面合成机制。正如评论中所言，优先支持 DX11 是极其务实的商业决策，它覆盖了绝大多数存量游戏和办公软件。在 Apple Silicon 统一内存的加持下，这种跨越虚拟化边界的图形传递正变得前所未有的高效。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49228166">
+      <summary class="story-overview">
+        <span class="rank-number">20</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">daringfireball.net</span>
+            <span>264 points</span>
+            <span>原始 #35 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://daringfireball.net/2026/08/retraction_app_store_rejection_of_the_week" target="_blank"
+              rel="noopener noreferrer">Retraction: The App Store Rejection of the Week That Was a Correct Rejection</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49228166" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 51</a>
+          </h2>
+          <p class="summary">知名科技博主 John Gruber 撤回了此前批评苹果 App Store 错误拒绝一款应用的报道，并向苹果审核团队致歉。事件起因是开发者 Terry Godier 声称其天文应用因被误判为占星术而遭拒，但事实证明该应用最初提交时确实包含塔罗牌等占星内容。Gruber 承认自己被 Godier 的谎言和隐瞒所误导，并发现该开发者还涉嫌抄袭他人的开源项目。被指控抄袭的网页版应用甚至保留了原作者代码中特定的 Bug，迫使 Godier 最终关闭了网站。这一罕见的撤稿事件提醒公众，在面对开发者对平台审核制度的单方面指责时应保持警惕。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>科技媒体 Daring Fireball 的作者 John Gruber 近日发布了一篇罕见的撤稿声明，推翻了此前关于苹果 App Store 审核不公的指控。事件的主角是知名开发者 Terry Godier，他曾公开抱怨自己的应用被苹果以“占星术”为由拒绝，并坚称应用中毫无占星元素。然而，Gruber 随后发现 Godier 提交给苹果的原始版本（名为 Asterly）实际上就是一个彻头彻尾的占星应用，甚至包含“每日塔罗牌”功能。苹果的拒绝理由不仅完全合理，而且在随后的申诉中也维持了原判，Gruber 坦言自己因对 Godier 此前作品的欣赏而放松了警惕。</p><p>随着调查深入，丑闻进一步发酵。Godier 后来推出的网页版“Dark Hours”被发现直接抄袭了 Miguel Beher 的同名开源项目，甚至连代码中将用户定位到“墨西哥荒野”的特定 Bug 都一模一样。面对质疑，Godier 发布了一份被指缺乏诚意的道歉信，试图将抄袭责任推给 AI 工具 Claude，称是 AI 在生成代码时“克隆”了开源库。目前，Godier 已关闭相关网站并将其重定向至原作者页面。Gruber 在声明中对误导读者和诋毁苹果审核人员表示歉意，这标志着这位资深博主 24 年写作生涯中首次撤回文章，也引发了社区对开发者利用舆论向平台施压现象的反思。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49229171" target="_blank" rel="noopener noreferrer">@Aurornis</a>
+        </div>
+        <p class="comment-text">&gt; 在 Beher 和 Godier 在 Bluesky 上的一次令人尴尬的交流中，Beher 指出 Godier 的 Dark Hours 存在与 Beher 相同的 Bug，会将用户引导至“墨西哥的随机田野”。
+
+盗取开源仓库并将其作为自己的应用发布是一种厚颜无耻的行为。而使用与原仓库相同的名称发布更是明目张胆。这家伙以为他可以利用这段争议，通过别人的作品为自己博取免费的知名度。他玩火自焚，在各个层面都被抓了个正着。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论点出了事件中最具戏剧性的证据：抄袭者连原代码中的特定 Bug 都一并复制了。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49230295" target="_blank" rel="noopener noreferrer">@lapcat</a>
+        </div>
+        <p class="comment-text">Terry Godier 刚刚发布了一份所谓的“自白书（Mea Culpa）”，指责是 Claude 克隆了那个开源应用，并否认自己事先知情。文中完全没有提到，也没有为他如何就天文学/占星术的 App Store 提交和拒绝事件欺骗 Gruber 及全世界而道歉。https://blog.terrygodier.com/2026/08/09/mea-culpa-dark-hours...</p>
+        <p class="comment-reason"><span>入选理由</span>提供了开发者后续的辩解及其被质疑缺乏诚意的细节。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49230911" target="_blank" rel="noopener noreferrer">@thraway3837</a>
+        </div>
+        <p class="comment-text">我从一开始就怀疑是这么回事。几年前，有另一个开发者大声喊冤，科技媒体纷纷报道他被 App Store 不公平地踢出局，整个开发者账号都被封禁了。开发者和媒体当时都义愤填膺，认为这是 App Store 糟糕的又一铁证。结果呢，在苹果遭受了大量负面报道，并且多次尝试帮他解决问题后，他（在争议持续数周后）在网上悄悄承认，他把开发者账号借给了一个亲戚，而那个亲戚正在利用账号做诈骗应用和坏事。这件事甚至闹到了高层，苹果的 Phil Schiller 亲自查看了此事，并确认他的账号确实在进行诈骗。那个人叫 Bogdan Popescu。对于这次虚假制造的争议，事实证明 Terry Godier 就是个骗子和贼。</p>
+        <p class="comment-reason"><span>入选理由</span>通过历史类似案例，揭示了开发者利用舆论误导公众的常见套路。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49228507" target="_blank" rel="noopener noreferrer">@ventana</a>
+        </div>
+        <p class="comment-text">这是处理此类情况的正确方式，为作者撰写第二篇博文（撤稿声明）点赞。这也是一个提醒：人们总是会撒谎或隐瞒部分事实，作为读者，如果一个故事只呈现了一方的观点而没有另一方的，我们就应该质疑。话虽如此，想要听到苹果官方的解释，恐怕是不太现实的期待。</p>
+        <p class="comment-reason"><span>入选理由</span>评价了 Gruber 撤稿的行为，并对读者的信息消费习惯提出了警示。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这起事件是科技圈典型的“反转”案例，也揭示了当前开发者与平台博弈中的阴暗面。长期以来，苹果 App Store 的审核制度因其不透明和偶尔的官僚主义而备受诟病，这使得“开发者被平台霸凌”的叙事极易获得同情。然而，Terry Godier 利用了这种心理，不仅在应用内容上撒谎，甚至在被揭穿抄袭后还试图让 AI（Claude）背锅。John Gruber 的迅速撤稿和公开道歉展现了资深媒体人的担当，但也给所有科技媒体敲响了警钟：在缺乏多方印证的情况下，即便是信誉良好的开发者，其单方面说辞也可能是一场精心策划的骗局。</p>
+        </div>
+      </div>
+    </details>
+    </section>
+    <footer class="footer">
+      <p>新闻只按 HN 原始名次和讨论度排序后取前 20，不做主题挑选。评论来自有界采样，
+        只是观点，不作为新闻事实来源。</p>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const themeButtons = [
+        ...document.querySelectorAll(".theme-button[data-theme-choice]")
+      ];
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      const applyThemeChoice = (requestedChoice, persist = true) => {
+        const choice = ["auto", "day", "night"].includes(requestedChoice)
+          ? requestedChoice
+          : "auto";
+        const theme = choice === "auto" ? themeForLocalTime() : choice;
+        document.documentElement.dataset.themeChoice = choice;
+        document.documentElement.dataset.theme = theme;
+        themeButtons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.themeChoice === choice)
+          );
+        });
+        if (persist) {
+          try {
+            localStorage.setItem("hnDigestThemeChoice", choice);
+          } catch (_) {
+            // The switch still works when report sandboxing blocks storage.
+          }
+        }
+      };
+      const refreshAutomaticTheme = () => {
+        if (document.documentElement.dataset.themeChoice === "auto") {
+          applyThemeChoice("auto", false);
+        }
+      };
+      applyThemeChoice(document.documentElement.dataset.themeChoice, false);
+      themeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyThemeChoice(button.dataset.themeChoice);
+        });
+      });
+      window.setInterval(refreshAutomaticTheme, 60 * 1000);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) refreshAutomaticTheme();
+      });
+
+      const list = document.querySelector(".story-list");
+      const controls = document.querySelector(".view-switch");
+      const buttons = [...document.querySelectorAll(".view-button")];
+      const status = document.querySelector(".view-status");
+      const total = list ? list.children.length : 0;
+      if (!list || !controls || total <= 10) {
+        if (controls) controls.hidden = true;
+        return;
+      }
+
+      const visibleCountStorageKey = "hnDigestVisibleCountV3";
+      const applyVisibleCount = (requestedCount, persist = true) => {
+        const count = requestedCount === 20 ? 20 : 10;
+        const shown = Math.min(count, total);
+        list.dataset.visibleCount = String(count);
+        buttons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(Number(button.dataset.count) === count)
+          );
+        });
+        status.textContent = `当前显示前 ${shown}`;
+        if (persist) {
+          try {
+            localStorage.setItem(visibleCountStorageKey, String(count));
+          } catch (_) {
+            // The switch still works when local privacy settings block storage.
+          }
+        }
+      };
+
+      let initialCount = 20;
+      try {
+        const storedCount = Number(localStorage.getItem(visibleCountStorageKey));
+        if ([10, 20].includes(storedCount)) initialCount = storedCount;
+      } catch (_) {
+        // Keep the all-20 default.
+      }
+      applyVisibleCount(initialCount, false);
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyVisibleCount(Number(button.dataset.count));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
