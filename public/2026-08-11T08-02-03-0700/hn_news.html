@@ -1,0 +1,2076 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Hacker News 每日精选：通俗摘要、精彩评论与 LLM 锐评">
+  <title>HN 每日精选 · 2026-08-11</title>
+  <script>
+    (() => {
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      let choice = "auto";
+      try {
+        choice = localStorage.getItem("hnDigestThemeChoice") || "auto";
+      } catch (_) {
+        // Storage may be unavailable in a sandboxed report.
+      }
+      if (!["auto", "day", "night"].includes(choice)) {
+        choice = "auto";
+      }
+      const theme = choice === "auto" ? themeForLocalTime() : choice;
+      document.documentElement.dataset.themeChoice = choice;
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d252d;
+      --muted: #6c747c;
+      --paper: #f5f3ed;
+      --card: #fffefa;
+      --line: #d9d6ce;
+      --orange: #e85d2a;
+      --orange-soft: #fff0e8;
+      --blue-soft: #edf3f7;
+      --green: #25644f;
+      --story-open-line: #c7c3b9;
+      --story-shadow: rgba(31, 36, 40, .07);
+      --summary-ink: #47515a;
+      --detail-ink: #37424c;
+      --section-ink: #5f6871;
+      --hint-ink: #8a9095;
+      --comment-meta-ink: #637080;
+      --comment-label-bg: #d7e6ef;
+      --comment-label-ink: #315b73;
+      --comment-text-ink: #2e3944;
+      --comment-reason-ink: #637080;
+      --comment-reason-label: #2e5e78;
+      --comment-empty-ink: #8a9097;
+      --editorial-ink: #333b42;
+      --humor-bg: #f8e8bd;
+      --humor-ink: #795d16;
+      --wisdom-bg: #dcebdc;
+      --wisdom-ink: #315f3a;
+      --counterpoint-bg: #eadff1;
+      --counterpoint-ink: #614273;
+    }
+    html[data-theme="night"] {
+      color-scheme: dark;
+      --ink: #e0e7e1;
+      --muted: #9ba79f;
+      --paper: #111713;
+      --card: #1a221d;
+      --line: #303c34;
+      --orange-soft: #2c211b;
+      --blue-soft: #202c2e;
+      --green: #83c8a2;
+      --story-open-line: #435148;
+      --story-shadow: rgba(0, 0, 0, .28);
+      --summary-ink: #c2ccc5;
+      --detail-ink: #d1d8d3;
+      --section-ink: #aab5ae;
+      --hint-ink: #929e96;
+      --comment-meta-ink: #a8b7b8;
+      --comment-label-bg: #2f474d;
+      --comment-label-ink: #b8dbe2;
+      --comment-text-ink: #d5dcda;
+      --comment-reason-ink: #aebbb8;
+      --comment-reason-label: #92c6cf;
+      --comment-empty-ink: #929e96;
+      --editorial-ink: #d9d5d0;
+      --humor-bg: #403721;
+      --humor-ink: #e3cb87;
+      --wisdom-bg: #293c2c;
+      --wisdom-ink: #a8d3ae;
+      --counterpoint-bg: #382d40;
+      --counterpoint-ink: #d0b4df;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .18s ease, color .18s ease;
+    }
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--orange); }
+    .masthead {
+      border-top: 5px solid var(--orange);
+      border-bottom: 1px solid #343b43;
+      background: #18212a;
+      color: white;
+    }
+    .masthead-inner, main {
+      width: min(860px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+    .masthead-inner { padding: 25px 0 27px; }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      background: var(--orange);
+      color: white;
+      font-family: ui-serif, Georgia, serif;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+    .archive-link { color: #bac2ca; }
+    .theme-switch {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .theme-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 8px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .theme-button:hover { color: white; }
+    .theme-button[aria-pressed="true"] {
+      background: #46515b;
+      color: white;
+    }
+    .theme-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .eyebrow {
+      color: #ff9670;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 7px 0 8px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 6vw, 46px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.03;
+    }
+    .dek {
+      margin: 0;
+      color: #c0c8d0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      margin-top: 17px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .stats strong { color: white; font-size: 13px; margin-right: 3px; }
+    .view-switch {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 13px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .view-switch[hidden] { display: none; }
+    .view-buttons {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .view-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 9px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .view-button:hover { color: white; }
+    .view-button[aria-pressed="true"] {
+      background: var(--orange);
+      color: white;
+    }
+    .view-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .view-status { color: #c0c8d0; }
+    .ranking-rule {
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255, 255, 255, .09);
+      color: #9faab4;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .ranking-rule strong {
+      color: #e7eaed;
+      margin-right: 5px;
+    }
+    main { padding: 20px 0 72px; }
+    .story-list {
+      display: grid;
+      gap: 9px;
+    }
+    .story-list[data-visible-count="10"] .story:nth-child(n+11),
+    .story-list[data-visible-count="20"] .story:nth-child(n+21) {
+      display: none;
+    }
+    .story {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--card);
+      overflow: clip;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .story[open] {
+      border-color: var(--story-open-line);
+      box-shadow: 0 14px 34px var(--story-shadow);
+    }
+    .story-overview {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 13px;
+      padding: 17px 20px 15px 15px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .story-overview::-webkit-details-marker { display: none; }
+    .story-overview:focus-visible {
+      outline: 3px solid rgba(232, 93, 42, .45);
+      outline-offset: -3px;
+    }
+    .rank-number {
+      color: var(--orange);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .story-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 14px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .story-kicker .source {
+      color: var(--green);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h2 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 10px;
+      margin: 5px 0 5px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(17px, 2.3vw, 19px);
+      font-weight: 700;
+      letter-spacing: -.008em;
+      line-height: 1.28;
+    }
+    .title-link { text-decoration: none; }
+    .discussion-link {
+      color: var(--orange);
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .summary {
+      margin: 0;
+      color: var(--summary-ink);
+      font-size: 14.5px;
+      line-height: 1.72;
+      white-space: pre-line;
+    }
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--hint-ink);
+      font-size: 10px;
+      font-weight: 750;
+    }
+    .chevron {
+      display: inline-block;
+      color: var(--orange);
+      transition: transform .18s ease;
+    }
+    .story[open] .chevron { transform: rotate(180deg); }
+    .story[open] .expand-hint > span:first-child { font-size: 0; }
+    .story[open] .expand-hint > span:first-child::after {
+      content: "收起详情";
+      font-size: 10px;
+    }
+    .story-details {
+      margin-left: 80px;
+      padding: 17px 20px 24px 0;
+      border-top: 1px solid var(--line);
+    }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      color: var(--section-ink);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .detail-summary > p {
+      margin: 0;
+      color: var(--detail-ink);
+      font-size: 14px;
+      line-height: 1.78;
+    }
+    .detail-summary > p + p { margin-top: 12px; }
+    .comments-panel {
+      margin-top: 21px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+    .comments-list { display: grid; gap: 9px; }
+    .featured-comment {
+      margin: 0;
+      padding: 14px 16px;
+      border: 0;
+      border-radius: 3px;
+      background: var(--blue-soft);
+    }
+    .comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 7px;
+      font-size: 11px;
+    }
+    .comment-meta a { color: var(--comment-meta-ink); text-decoration: none; }
+    .comment-label {
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--comment-label-bg);
+      color: var(--comment-label-ink);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .05em;
+    }
+    .comment-label-humor {
+      background: var(--humor-bg);
+      color: var(--humor-ink);
+    }
+    .comment-label-wisdom {
+      background: var(--wisdom-bg);
+      color: var(--wisdom-ink);
+    }
+    .comment-label-counterpoint {
+      background: var(--counterpoint-bg);
+      color: var(--counterpoint-ink);
+    }
+    .comment-text {
+      margin: 0;
+      color: var(--comment-text-ink);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 13px;
+      line-height: 1.62;
+      white-space: pre-line;
+    }
+    .comment-reason {
+      margin: 9px 0 0;
+      color: var(--comment-reason-ink);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .comment-reason span {
+      margin-right: 7px;
+      color: var(--comment-reason-label);
+      font-weight: 850;
+    }
+    .comments-empty {
+      margin-top: 19px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      color: var(--comment-empty-ink);
+      font-size: 12px;
+    }
+    .editorial {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      align-items: start;
+      margin-top: 21px;
+      padding: 13px 15px;
+      border-left: 3px solid var(--orange);
+      background: var(--orange-soft);
+    }
+    .editorial-mark {
+      padding-top: 2px;
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+    .editorial p {
+      margin: 0;
+      color: var(--editorial-ink);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.62;
+    }
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 27px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .footer p { margin: 0; max-width: 680px; }
+    .footer a { font-weight: 800; }
+    @media (max-width: 620px) {
+      .masthead-inner, main { width: min(100% - 20px, 860px); }
+      .masthead-inner { padding-top: 18px; }
+      .topline {
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+      .top-actions {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
+      .story-overview {
+        grid-template-columns: 37px minmax(0, 1fr);
+        gap: 9px;
+        padding: 14px 13px 12px 10px;
+      }
+      .rank-number { font-size: 22px; }
+      .story-details { margin-left: 56px; padding-right: 13px; }
+      .editorial { grid-template-columns: 1fr; gap: 4px; }
+      .footer { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .masthead { background: white; color: var(--ink); border-bottom-color: var(--line); }
+      .topline, .archive-link, .expand-hint, .view-switch, .theme-switch { display: none; }
+      main { width: 100%; }
+      .story { display: block !important; break-inside: avoid; }
+      .story-details { display: block; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="topline">
+        <div class="brand"><span class="brand-mark">Y</span> Hacker News</div>
+        <div class="top-actions">
+          <div class="theme-switch" role="group" aria-label="选择页面颜色模式">
+            <button class="theme-button" type="button" data-theme-choice="auto" aria-pressed="true">自动</button>
+            <button class="theme-button" type="button" data-theme-choice="day" aria-pressed="false">日间</button>
+            <button class="theme-button" type="button" data-theme-choice="night" aria-pressed="false">夜间</button>
+          </div>
+          <a class="archive-link" href="../index.html">每日归档 →</a>
+        </div>
+      </div>
+      <div class="eyebrow">2026-08-11 · top feed · 过去 36 小时</div>
+      <h1>今天的 Hacker News</h1>
+      <p class="dek">前 20 篇已经全部准备好；默认显示前 20，也可以切换到前 10。</p>
+      <div class="stats">
+        <span><strong>20</strong>篇已准备</span>
+        <span><strong>20</strong>篇有精彩评论</span>
+        <span>更新于 2026-08-11 08:02 PDT</span>
+        <span>生成模型 <strong>gemini/gemini-3-flash-preview</strong></span>
+      </div>
+      <div class="view-switch" aria-label="选择新闻显示数量">
+        <span>显示</span>
+        <div class="view-buttons">
+          <button class="view-button" type="button" data-count="10" aria-pressed="false">前 10</button>
+          <button class="view-button" type="button" data-count="20" aria-pressed="true">前 20</button>
+        </div>
+        <span class="view-status" aria-live="polite">当前显示前 20</span>
+      </div>
+      <div class="ranking-rule">
+        <strong>排序规则</strong>HN 原始名次 + 低讨论量降权。公式：原始名次 + 0.3 × max(0, 50 − 评论数)；50 条评论以上不降权。
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="story-list" data-visible-count="20">
+      
+    <details class="story" id="story-49257377">
+      <summary class="story-overview">
+        <span class="rank-number">01</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">bbc.com</span>
+            <span>163 points</span>
+            <span>原始 #1 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.bbc.com/news/articles/c75gk620r22o" target="_blank"
+              rel="noopener noreferrer">England set to be one of the first countries to eliminate hepatitis C</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49257377" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 90</a>
+          </h2>
+          <p class="summary">英格兰有望成为全球首批消除丙型肝炎的国家之一，甚至可能提前完成世卫组织设定的2030年目标。这一进展主要归功于国民保健署（NHS）的大规模筛查和治疗计划，自2015年以来已有超过10万人接受治疗。该计划通过为期8至12周的口服抗病毒药物，实现了超过95%的治愈率。目前，英格兰已达到治疗80%已知病例的目标，相关死亡人数在过去十年中下降了36%。目前的重点是寻找剩余的隐性感染者，特别是曾接触过不洁医疗器械的高风险人群。尽管前景乐观，但如何持续覆盖边缘群体并彻底切断传播链仍是最后阶段的挑战。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>英格兰在消除丙型肝炎方面取得了显著进展，目前正处于全球领先地位。NHS通过主动出击，在监狱、药物滥用服务机构以及特定社区开展筛查，成功识别并治疗了大量患者。治疗手段的进步是关键：现在的抗病毒药物不仅免费，而且只需每天服药一次，持续两三个月即可治愈绝大多数患者，且副作用极小。这与过去依赖干扰素、疗程长且副作用大的治疗方式形成了鲜明对比，极大地提高了患者的依从性。</p><p>为了实现世卫组织的消除目标，英国政府特别呼吁1991年前在乌克兰、罗马尼亚、波兰等东欧和巴尔干国家接受过医疗或牙科手术的成年人进行检测。这是因为当时这些地区的医疗器械消毒标准可能导致病毒传播。虽然统计数据令人振奋，但挑战依然存在，例如如何确保流动性强的群体（如无家可归者）完成整个疗程。此外，公众对丙肝的认知仍有待提高，许多人并不知道这种病毒可以通过简单的口服药彻底根除，且常规体检往往会漏掉这一项。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49258607" target="_blank" rel="noopener noreferrer">@thex10</a>
+        </div>
+        <p class="comment-text">我很高兴他们在进行筛查。我出生时母亲就携带病毒，但我直到参加了一次极其彻底的性传播感染（STI）筛查后才知道自己也患有丙肝。我说“极其彻底”，是因为我在大学和成年早期做的常规检查恰好都不包含这项特定检测。所以我觉得自己很幸运，能在20多岁时得到诊断和治疗，赶在疾病造成严重损害之前。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了丙肝诊断中容易被常规检查忽视的现实问题，具有很强的参考价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49258508" target="_blank" rel="noopener noreferrer">@ck2</a>
+        </div>
+        <p class="comment-text">这篇文章里居然没有一句话提到它是如何治疗的。如果需要疫苗，你可以确信在美国的MAHA（让美国再次健康）运动下，丙肝会一直存在。好吧，这里有一篇更好的文章：https://www.england.nhs.uk/2026/08/100000-people-receive-tre... “治疗包括为期8到12周的免费抗病毒片剂疗程，治愈率超过95%。” 有一个真正关心公民健康的政府一定很棒，我们还在为共和党的医疗计划等上几十年（除了“静静地死去”之外）。</p>
+        <p class="comment-reason"><span>入选理由</span>补充了文章缺失的关键治疗信息，并对比了不同国家的医疗现状。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49258063" target="_blank" rel="noopener noreferrer">@iLoveOncall</a>
+        </div>
+        <p class="comment-text">文章中没有任何内容表明它正在被消除，只是达到了诊断90%病例的目标。当大量病例来自可能根本不在乎此事的吸毒者时，仅仅达到目标并不能消除疾病。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了对“消除”定义的质疑，指出了针对边缘群体防疫的实际困难。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49258007" target="_blank" rel="noopener noreferrer">@alistairSH</a>
+        </div>
+        <p class="comment-text">有趣的是，这仅指英格兰（不包括苏格兰、威尔士或北爱尔兰）。我知道他们都有独立的NHS系统，但我仍以为像这样的计划会在所有组成国中推广。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了英国医疗系统在地域行政划分上的特殊性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>丙型肝炎的消除不仅是医学上的胜利，更是公共卫生系统动员能力的体现。从“终身服药”到“彻底治愈”的转变，让这种曾经致命的慢性病变得像普通感染一样可控。然而，正如评论区所提醒的，常规的性传播疾病（STI）检查往往不包含丙肝检测，这导致许多非高危人群在不知情的情况下长期携带病毒。英格兰的经验告诉我们，消除疾病不仅需要特效药，更需要打破偏见、精准覆盖高风险群体的社会治理能力。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49254880">
+      <summary class="story-overview">
+        <span class="rank-number">02</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">lemonde.fr</span>
+            <span>703 points</span>
+            <span>原始 #2 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.lemonde.fr/en/france/article/2026/08/06/france-to-ban-unsolicited-telemarketing-calls-from-august-11_6756208_7.html" target="_blank"
+              rel="noopener noreferrer">France to ban unsolicited telemarketing calls</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49254880" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 362</a>
+          </h2>
+          <p class="summary">法国宣布从2026年8月11日起禁止未经请求的电话营销，旨在解决长期困扰民众的骚扰电话问题。由于推销电话泛滥，许多用户已养成不接陌生号码的习惯，导致重要通话常被漏掉。该禁令不仅影响法国国内，还对摩洛哥等国的呼叫中心产业构成巨大冲击，预计有数万个工作岗位面临风险。然而，法律的实际执行效果仍存疑，尤其是如何应对跨境诈骗和来电显示伪造技术。批评者指出，若无电信层面的技术拦截配合，单纯的法律条文可能难以彻底根除顽疾。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>法国政府正式出台禁令，严厉打击未经消费者同意的电话推销行为。这一政策背景是电信骚扰已严重破坏了电话网络的信誉，许多人为了躲避推销而拒绝接听所有未知来电，导致电话作为即时通讯工具的效用大打折扣。新规要求企业在拨打电话前必须获得明确授权，否则将面临高额罚款。这被视为保护公民隐私和恢复电话通讯正常功能的重要一步。</p><p>禁令的连锁反应已波及北非，特别是摩洛哥的呼叫中心行业。摩洛哥官员指出，该国约有4到5万个就业岗位依赖于法国的电话营销市场，法国市场的收入占比超过80%，禁令可能导致该行业面临灭顶之灾。这种跨国经济依赖性使得法国的消费者保护政策演变成了一场区域性的经济挑战。与此同时，合法企业可能会遵守规则，但那些游走在法律边缘的诈骗团伙是否会收敛仍是未知数。</p><p>许多技术专家对禁令的最终效果持保留意见，认为技术手段才是关键。目前的电信协议允许发件人伪造来电显示（Spoofing），使得追踪和拦截变得异常困难。虽然西班牙和瑞典等国已有类似的“罗宾逊名单”登记制度，但诈骗者往往通过境外拨号绕过监管。未来观察的重点在于法国是否会强制电信运营商采用更严格的身份验证协议（如STIR/SHAKEN），以及如何在全球化的电信网络中实现有效的跨境执法。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49255290" target="_blank" rel="noopener noreferrer">@Kon5ole</a>
+        </div>
+        <p class="comment-text">好主意！电话营销人员毁掉了我的电话网络。过去10年我从不接听陌生电话，这有时意味着我会错过重要的电话。99.9%的电话都是为了骗钱，而那0.1%的牙医预约、朋友换号之类的电话则成了附带损害。禁令是个好主意，但我怀疑他们在物流层面如何处理。我认为需要一个技术解决方案。比如建立一个全国性的“白名单”，医院、医生、公用事业公司等可以注册，再配合手机上的设置，拦截所有非白名单号码。每个国家可以维护自己的白名单，而那些向诈骗者出售白名单地位的腐败国家至少会被其他国家屏蔽。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论反映了普通用户对电话网络失去信任的普遍现状，并提出了技术层面的改进建议。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49256715" target="_blank" rel="noopener noreferrer">@timoth3y</a>
+        </div>
+        <p class="comment-text">法国这一举措很棒，但世界上大部分地区并没有像美国人那样遭受电话营销诈骗的地狱。我是一名居住在海外的美国公民。我有一个美国手机号，仅用于美国金融机构的二次验证（2FA），没有其他人知道这个号码。但我那个美国号码每天收到的诈骗电话比我当地号码一年收到的还要多。这太疯狂了。世界上大部分地区通过简单地禁止来电显示伪造，并像ISP封锁恶意IP那样封锁恶意行为者，就解决了最严重的问题。美国已经有了STIR/SHAKEN认证协议，但电信运营商似乎感受不到任何财务或监管压力去打击诈骗者使用的那些可疑中间运营商。也许正是美国对“市场化解决方案”的热爱阻止了我们像其他国家那样解决问题？美国不愿通过监管真正解决问题，反而更愿意将其转化为商业机会，让电信运营商出售效果平平的拦截服务，并创造一个平庸拦截应用的生态系统，以此让情况稍微不那么糟糕一点。</p>
+        <p class="comment-reason"><span>入选理由</span>评论对比了美国与其他国家在处理骚扰电话上的政策差异，指出了监管缺失与商业利益的冲突。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49256412" target="_blank" rel="noopener noreferrer">@embedding-shape</a>
+        </div>
+        <p class="comment-text">在西班牙，我们有一种叫作“Lista Robinson”的东西（瑞典也有类似的，叫“NIX-registret”），基本上是你可以输入电话号码的选择性加入名单。一旦新名单分发下去，如果电话营销公司操作规范，就不能给你打电话。如果他们还是打了，你只需提到你在名单上，他们就会挂断并从名单中删除你的号码，最终你就不再收到电话了。我认为这两个国家的这些方法都有实际法律支持。在西班牙和瑞典，我以前每周都会收到好几次垃圾电话，但一旦加入这些名单，电话就消失了。现在我收到的唯一营销电话来自已有业务往来的公司，大约每月一次。如果你深受垃圾电话困扰，可以看看你所在国家是否有类似的退出名单，它们可能需要一两个月才能生效，但确实有用。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了欧洲其他国家已有的成功经验，证明了类似制度在合规企业中的有效性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49257763" target="_blank" rel="noopener noreferrer">@gwbas1c</a>
+        </div>
+        <p class="comment-text">“另一方面，法国的新法律在摩洛哥引起了担忧。摩洛哥就业部长尤尼斯·塞库里在3月份表示，该国呼叫中心有4万到5万个工作岗位面临风险。塞库里称，法国市场占该行业收入的80%以上。”
+永远不要把生意建立在骚扰他人之上。这种生意总是面临法律突然变更并摧毁你生计的风险；因为英明的领导层会意识到，处理你们的最佳方式就是把你们排除在谈判桌外，并突然切断联系。这对某些人来说可能很意外，但没人喜欢自己的手机变成一个在一天中随机时间强迫他们听广告的设备。</p>
+        <p class="comment-reason"><span>入选理由</span>评论深刻指出了电话营销行业的道德风险及其商业模式的脆弱性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49259450" target="_blank" rel="noopener noreferrer">@amoshebb</a>
+        </div>
+        <p class="comment-text">正确的解决方案是让人们可以选择向打电话的人收费。假设最低工资是每小时12欧元，拒绝一个电话大约占用你一分钟的注意力，所以这至少值20欧分。除了“接听”和“挂断”，应该有一个政府强制要求的“向拨打者收取20欧分”的选项。这对“真实”通话没有影响，没人会向自己的母亲收费，如果有人俗气到向全科医生或修理工收费，那也可以直接计入账单。诈骗者为了收集20欧分而去偷手机打电话也不划算，但这将彻底摧毁垃圾电话的经济模型。电子邮件也应该采用同样的机制。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个新颖的经济学视角来解决骚扰电话问题，即通过增加骚扰成本来破坏其商业逻辑。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>法国这次“重拳出击”虽然大快人心，但法律能否跑赢技术和利益驱动的诈骗链条仍要打个问号。正如评论区所言，合规公司会因法律威慑而收手，但真正的骚扰大户往往躲在监管触角之外，利用来电伪造技术跨境作案。更有趣的是，这种保护隐私的举措竟然成了摩洛哥的经济危机，这提醒我们，在全球化的今天，一个国家的“清净”可能是以另一个国家的“饭碗”为代价的。要真正解决问题，或许需要像评论中建议的那样，从电信底层协议或经济激励模型上进行彻底改革。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49250836">
+      <summary class="story-overview">
+        <span class="rank-number">03</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">thewalrus.ca</span>
+            <span>585 points</span>
+            <span>原始 #4 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://thewalrus.ca/google-search-is-dying/" target="_blank"
+              rel="noopener noreferrer">As AI eats the web, the internet’s collective memory is disappearing</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49250836" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 665</a>
+          </h2>
+          <p class="summary">谷歌搜索正因 AI 摘要的幻觉和“全网垃圾化”而走向衰落，互联网的集体记忆正在迅速消失。除了链接失效等自然损耗，企业主动删除历史存档以及 AI 对维基百科等公益平台的流量侵蚀，正让数字记录变得支离破碎。为了操纵 AI 答案，一些公司甚至开始在 Reddit 等源头投放虚假内容，造成了严重的“上游污染”。这种退化促使法国等国家开始寻求数字主权，尝试建立不依赖硅谷巨头的公共数字基础设施。目前最严峻的问题在于，我们尚未找到一种可持续的模式来替代正在崩塌的旧搜索生态。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这篇文章探讨了谷歌搜索质量下降背后的深层危机：互联网正从一个可检索的知识库变成一个由 AI 生成的、真假难辨的“合成空间”。谷歌为了竞争而强推 AI 摘要，不仅经常在日落时间等基本事实。上出错，还切断了用户访问原始来源的路径。更糟糕的是，互联网的档案功能正在瓦解。例如，迪士尼在关闭旗下媒体 FiveThirtyEight 时直接删除了其全部历史文章，而维基百科则因 AI 直接抓取内容导致访问量和捐款锐减，面临生存威胁。此外，公关公司开始在社交媒体上植入特定内容以误导 AI 训练模型，这种“上游污染”让真相变得更加难以捉摸。</p><p>数字抹除比传统的禁书更隐蔽，因为被删掉的网页往往消失得无影无踪，甚至连“互联网档案馆”也因版权诉讼和技术压力而摇摇欲坠。面对这种困境，欧洲国家如法国开始转向 Qwant 等隐私保护型搜索，并推动国产通讯软件，试图夺回数字主权。文章认为，我们不能再指望志愿者或以广告为导向的私营公司来维护公共知识。未来的挑战在于，社会是否能像建设道路和电力系统一样，将数字基础设施视为一种非营利性的公共资产，从而保护我们的集体记忆不被 AI 彻底吞噬。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49256469" target="_blank" rel="noopener noreferrer">@sertraline</a>
+        </div>
+        <p class="comment-text">我觉得很有讽刺意味的是，人们在高谈阔论“谷歌正在死去”、“互联网正在消亡”和“AI 正在吞噬一切”，结果我打开他们的网站，却被迫浪费 10 秒钟等 Cloudflare “检查”我的浏览器，然后页面重载，再检查一次，最后终于进去了，却发现因为 JavaScript 的原因滚动条是坏的。这类网站才是没人再愿意读网页的真正原因。一个 AI 机器人能在 5 秒内给我答案。以前的网页加载只要 1 秒，现在要 10 到 15 秒，有时甚至超过 30 秒。用 Cloudflare 防爬虫甚至都算不上正当理由，因为只要肯付钱，Cloudflare 会直接把抓取到的内容卖给任何人。这些网站浪费了惊人的时间。大家都默认用 AI，是因为没人愿意应付烦人的浏览器检查、Cookie 弹窗、订阅邀请、验证码，尤其是那种劫持滚动条的行为。我可能不是个好人，我也不是亲 AI 派，但如果“thewalrus”下线了，我一点都不会想念它，因为我后悔在它那破烂的导航上浪费了时间。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提供了一个尖锐的反向视角，指出网页本身糟糕的用户体验（验证码、加载慢、脚本错误）才是迫使人们转向 AI 的推手。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49251293" target="_blank" rel="noopener noreferrer">@umvi</a>
+        </div>
+        <p class="comment-text">我觉得收集、整理和保护高质量的“真相”语料库对于高质量的 AI 将变得越来越重要。很快就会有那么一天，“在公开互联网上训练”（Reddit 等）会给你的模型带来成吨的企业污染、政治毒药和其他为了各种目的（企业利益、地缘政治信息战等）而故意制造的对抗性内容，用来误导 AI。这基本上就是 AI 时代的 SEO（搜索引擎优化）。</p>
+        <p class="comment-reason"><span>入选理由</span>评论深刻地指出了“上游污染”对 AI 模型长期质量的潜在威胁，预言了高质量语料库的稀缺性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49256156" target="_blank" rel="noopener noreferrer">@ghm2199</a>
+        </div>
+        <p class="comment-text">我妹妹是一名记者，她告诉我她只用谷歌搜索，因为她学会了如何获取那些通常只有谷歌索引、且不会出现在聊天机器人里的信息。她经常需要搜索一些特定的信息，比如以固定格式扫描成 PDF 并被谷歌索引的旧政府表格，这些内容往往出现在搜索结果的第二页及以后。但它们确实在那儿。她知道那些表格长什么样，知道搜索哪些特定的词组能匹配表格的某一部分，而谷歌搜索能找到这些。比如一份已经不在政府官网上的招标公告，能让她找到官员的名字，进而追踪到联系人……ChatGPT 和其他机器人根本没有这些。这些政府文件是她开展工作的关键。我真心希望谷歌不要仅仅因为某个产品经理为了“重新排列”排名，就停止索引这些长尾内容。</p>
+        <p class="comment-reason"><span>入选理由</span>通过记者的具体案例，展示了传统搜索引擎在处理“长尾”和深度专业信息方面仍具有 AI 无法替代的价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49252034" target="_blank" rel="noopener noreferrer">@ilamont</a>
+        </div>
+        <p class="comment-text">“在出版商成功起诉互联网档案馆（Internet Archive）的数字借阅计划，称其为未经授权的复制之后……”
+不，法院明确裁定互联网档案馆犯有未经授权的复制罪。这不仅仅是一个未经证实或未被证明的指控。美国作家协会、全国作家联盟、欧洲作家理事会和英国作家协会都站出来反对互联网档案馆，并支持这项诉讼。
+“每一次新的限制都削弱了档案馆作为全面后盾的能力。”
+这种对 Wayback Machine 造成的自残式伤害才是整个事件真正的悲剧。当互联网档案馆被多次要求停止受控数字借阅（CDL）时，创始人 Brewster Kahle 依然固执己见。全国作家联盟早在 2010 年就试图开启对话，但被无视了。互联网档案馆表示，他们宁愿与作家个人交谈，也不愿与作家联盟或其他作家组织交谈。但成员们提出的交谈或会面请求都被无视或拒绝了。当停止 CDL 的请求变成要求时，Kahle 变本加厉。当不可避免的诉讼随之而来且档案馆败诉时，他坚持认为自己是对的，并继续推进上诉。于是我们就落到了今天这个地步。</p>
+        <p class="comment-reason"><span>入选理由</span>针对文中提到的互联网档案馆困境，该评论提供了法律和版权视角的补充，指出其危机部分源于自身的策略失误。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49255973" target="_blank" rel="noopener noreferrer">@figassis</a>
+        </div>
+        <p class="comment-text">我大概三年前就预料到了这一点，我想每个清醒的人也都预料到了。诚然，我们从 AI 中获得了巨大的价值，但不分青红皂白地将这种我们明知不可靠（其不可靠程度甚至超过了我们解雇员工的标准）的东西注入到一切事物中，这可能是像谷歌这样的公司对互联网信息民主化遗产最大的破坏。这简直是在亲手摧毁自己民主化信息的功绩。这将造成的直接和间接伤害，以及回归基准线的成本将是巨大的，然而我们却无法指明根本原因。那些公司也不会在那儿承担责任。</p>
+        <p class="comment-reason"><span>入选理由</span>评论从宏观角度反思了 AI 对信息民主化这一互联网核心价值的破坏，具有深刻的批判性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>我们正处于一个荒诞的转折点：曾经为了“组织全球信息”而生的工具，现在正通过生成式 AI 制造信息迷雾。正如评论 [49256469] 所讽刺的，现代网页充斥着弹窗和验证码，用户转向 AI 往往是出于对“破烂网页”的无奈。然而，这种便利的代价是巨大的——当 AI 成为唯一的入口，它不仅在消耗维基百科等公共资产，还在抹除那些藏在搜索结果第二页之后的真实历史 [49256156]。如果信息检索不再是公共服务，而仅仅是广告公司的副产品，那么我们的集体记忆将变得极其脆弱。正如 [49255973] 所言，这种对信息民主化的破坏可能是不可逆的，而我们甚至难以追究那些巨头的责任。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49252179">
+      <summary class="story-overview">
+        <span class="rank-number">04</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">github.com</span>
+            <span>367 points</span>
+            <span>原始 #6 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://github.com/antirez/h3.c" target="_blank"
+              rel="noopener noreferrer">H3-metal – Native MiniMax-H3 inference for Apple Silicon</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49252179" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 78</a>
+          </h2>
+          <p class="summary">Redis 创始人 Salvatore Sanfilippo（antirez）发布了 h3.c，这是一个专为 Apple Silicon 优化的 MiniMax-H3 视频生成模型原生推理引擎。该项目利用 Metal 框架实现了高效的视频和音频合成，支持文本转视频、首尾帧控制及多模态参考。为了解决视频扩散模型巨大的显存压力，它引入了 SSD 串流技术，将模型运行时的显存占用从 36GB 降至约 2GB。此外，它还提供层缩减和令牌减少等多种优化手段，试图在 Mac 上平衡生成质量与推理速度。尽管如此，本地生成长视频在当前硬件上仍需数分钟甚至更久，且对散热和计算资源有极高要求。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>h3.c 是由 antirez 开发的 MiniMax-H3 模型原生推理引擎，旨在让 Apple Silicon 用户能够高效运行这一先进的视频生成模型。该引擎完全基于 C 语言和 Metal 编写，避免了沉重的依赖库，目前已实现从提示词到视频/音频的完整端到端生成。其核心亮点在于针对 M3/M5 Max 芯片的深度优化，包括融合算子以减少内存读写，以及支持“SSD 串流”模式。在串流模式下，引擎仅在内存中保留少量模型块，其余部分从硬盘实时读取，使得显存受限的 Mac 也能运行原本需要 128GB 统一内存的大型模型。</p><p>为了提升实用性，h3.c 提供了丰富的速度与质量权衡选项。用户可以通过减少 Transformer 层数（如 50 层减至 45 层）、降低去噪步数或开启令牌减少（Token Reduction）来显著缩短生成时间。项目还支持复杂的参考模式，如 Ref2VA，允许用户通过图片、静音视频甚至独立音频文件来引导生成过程。尽管这些优化大幅降低了门槛，但视频扩散任务的计算密度依然极高。在 M5 Max 上，生成一个 10 秒左右的短片仍需数分钟，且在高负载下容易触发硬件的热节流（Thermal Throttling），这反映了移动端 SoC 在处理顶级生成式视频模型时面临的持续挑战。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49252931" target="_blank" rel="noopener noreferrer">@Meleagris</a>
+        </div>
+        <p class="comment-text">我一直在我的 M5 Pro 64GB MacBook Pro 上通过 ComfyUI 使用 MiniMax H3，效果非常好。我不得不修改默认的 ComfyUI 工作流，改用 GGUF 量化版本（使用了 city96 的 ComfyUI-GGUF 自定义节点，用 UnetLoaderGGUF 替换了官方加载器）。我使用的是标注为 Q5_K_M 的模型。虽然也有 Q8_0 版本（大小为 34GB），如果分辨率保持适中，64GB 的统一内存完全放得下。主要问题是速度，一段约 9 秒、480x864 分辨率、20 步采样的视频，在我这儿要跑一个多小时。所以仅仅为了提速，这个原生引擎就很值得一试。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了在当前主流工具（ComfyUI）下运行该模型的真实性能基准和内存占用参考。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49255458" target="_blank" rel="noopener noreferrer">@embedding-shape</a>
+        </div>
+        <p class="comment-text">（回复关于 Mac 生成视频需一个半小时的评论）：这太疯狂了，一块 RTX Pro 6000 大约只需 2 到 3 分钟就能完成（取决于具体设置）。在大语言模型（LLM）上，独立显卡与“统一内存+CPU”的差距还没那么大，但在扩散模型上，这种性能鸿沟表现得非常明显。</p>
+        <p class="comment-reason"><span>入选理由</span>对比了 Mac 统一内存架构与顶级 NVIDIA 显卡在视频扩散任务上的巨大效率差异。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49253985" target="_blank" rel="noopener noreferrer">@antirez</a>
+        </div>
+        <p class="comment-text">在 AMA 中，Minimax 提到 H3 可以支持稀疏注意力（sparse attention），那将带来巨大的提速！我想知道这方面是否有新进展。H3 真的很酷。编辑：我正在根据他们在 Reddit 帖子中的说法，测试一个可选的 --sparse-attention 模式。</p>
+        <p class="comment-reason"><span>入选理由</span>作者本人分享了关于模型潜在优化方向的技术细节。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>当 Redis 创始人 antirez 转向 AI 领域时，他一如既往地带来了极简且高性能的 C 代码风格。h3.c 的出现不仅是 Apple Silicon 生态的一个补充，更是对“统一内存”优势的一次极限测试。视频生成模型因其庞大的参数量和计算量，一直是本地硬件的“性能杀手”。正如评论区所指出的，目前在 Mac 上通过通用框架生成视频的速度慢得令人沮丧。antirez 通过 SSD 串流和层缩减等底层优化，试图证明即便没有顶级 H100 集群，开发者也能在笔记本上探索视频生成的边界。这种对底层性能的极致压榨，正是目前臃肿的 AI 软件栈所稀缺的。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49243880">
+      <summary class="story-overview">
+        <span class="rank-number">05</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">ft.com</span>
+            <span>568 points</span>
+            <span>原始 #10 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.ft.com/content/4e3957f8-ea7c-4c46-a3de-cdce8e526878" target="_blank"
+              rel="noopener noreferrer">Mark Zuckerberg attacks &#x27;closed&#x27; AI rivals as Meta returns to open models</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49243880" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 545</a>
+          </h2>
+          <p class="summary">Meta 首席执行官马克·扎克伯格公开抨击 OpenAI 和谷歌等竞争对手，指责其“封闭”的 AI 模式是在追求权力集中。他认为，竞争对手宣扬的“AI 末日论”实际上是为限制技术获取、建立垄断地位寻找借口。扎克伯格宣布 Meta 将通过新成立的“超人工智能实验室”恢复发布开源模型，主张只有技术普惠才能防止社会不公。然而，Meta 的承诺也存在模糊性，仅表示将发布“部分”模型，且并未明确具体的开源程度。此举被视为 Meta 试图通过开源生态系统削弱对手的商业护城河，并争取监管机构的支持。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>扎克伯格在最新的声明中对 AI 行业的现状提出了尖锐批评，认为封闭源代码的巨头们正在利用恐惧心理来巩固自己的地位。他指出，所谓的“AI 风险”被夸大了，目的是为了证明将技术控制在少数几家公司手中是合理的。扎克伯格认为，历史证明，寄希望于绝对权力的“仁慈”从未带来过安全或积极的结果。相反，他提倡一种去中心化的路径，通过开源让开发者和企业能够自主构建和部署 AI，从而打破技术垄断。由于原报道受限于访问权限，核心信息主要源自 Meta 发布的《未来属于每一个人》公开信。</p><p>随着 Meta 内部“超人工智能实验室”的正式运行，公司计划在近期恢复发布开源模型。扎克伯格用“超级智能律师”做类比，认为如果只有少数人拥有这种工具，社会将变得更加不公；但如果人人都有，正义将得到更有效的伸张。然而，这种愿景也面临现实挑战：运行尖端模型需要庞大的算力成本，这使得“开源”在某种程度上仍是巨头的游戏。此外，Meta 的表态被部分观察者解读为一种商业策略，即在自己处于追赶地位时，通过开源来破坏对手的利润空间，并利用社区力量加速自身技术迭代。未来值得关注的是 Meta 是否会真正开源其最核心的尖端模型，还是仅提供阉割版的“开放权重”版本。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49245325" target="_blank" rel="noopener noreferrer">@blueSky1989</a>
+        </div>
+        <p class="comment-text">我最喜欢扎克伯格文章中的这一段：
+“……令人惊讶的是，许多开发 AI 的人的言论中充满了末日论。我不明白，为什么任何相信 AI 会消除大多数工作并抹杀人类大部分意义的人，会急于构建那样的未来。认为 AI 如此危险，以至于唯一的安全路径是权力的高度集中，这种观念本身就存在问题。从历史上看，寄希望于绝对权力在获得足够启迪后会仁慈地造福人类，并没有带来安全或积极的结果。”</p>
+        <p class="comment-reason"><span>入选理由</span>这段话揭示了扎克伯格对竞争对手“末日叙事”背后权力逻辑的深刻批判。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49244697" target="_blank" rel="noopener noreferrer">@moomin</a>
+        </div>
+        <p class="comment-text">事实是，所有前沿模型都是封闭的。这甚至不是开源与开放权重之争的问题。即使你接受开放权重就是“开放”，运行你自己的 Kimi 3 模型所需的资本投入也是巨大的。它不像 gcc，二进制文件在随便什么硬件上都能跑得很好。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了 AI 开源在硬件成本上的现实局限性，打破了纯粹的技术理想主义。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49249096" target="_blank" rel="noopener noreferrer">@echelon</a>
+        </div>
+        <p class="comment-text">“开放权重”策略对大多数玩家来说是这样的：当你不是第一名时，就搞开源。利用生态系统来毒化对手的利润空间，并在分发上赶超。在西方，这往往还有另一个钩子：“在你的年收入达到 100 万美元之前，权重是共享软件，之后你必须获得许可。” 看看 Flux、K2 等。让开放权重在财务上合理的唯一方法是，你拥有另一个收入流，并且正在向市场倾销以摧毁竞争，或者能让人们使用你的推理基础设施/产品生态/工具。目前还没有人真正破解这个难题。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者从商业竞争的角度分析了 Meta 拥抱开源的深层动机，即通过“倾销”技术来破坏对手的商业模式。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49251720" target="_blank" rel="noopener noreferrer">@aabhay</a>
+        </div>
+        <p class="comment-text">关于 Meta 对开源承诺的相关段落在这里，其表态远没有新闻报道的那么自信：
+&gt; • 开源是赋能人民、防止对安全和经济都有害的中心化的积极且重要的力量。Meta 继续强烈支持开源，包括开源 AI 模型。目前的开源生态系统很强大，我们认为限制它将是一个错误。既然 Meta 超人工智能实验室已经启动并运行，我们很快将恢复发布**一些**开源模型。
+“很快将恢复发布一些开源模型”？？？这基本上是有史以来最含糊的非承诺。即使在法务团队淡化处理之前，我也无法想象这里的意图是什么。我们可能或者可能不会发布一些东西？完全没有定力。而且，这明确地将开源生态系统框定为 Meta 并非其中一部分的东西。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地捕捉到了 Meta 官方措辞中的模糊性，提醒读者警惕其承诺的含金量。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>扎克伯格此次高调回归开源，本质上是一场关于“定义权”的战争。通过将 OpenAI 等对手贴上“封闭”和“权力集中”的标签，Meta 试图把自己塑造成技术民主化的捍卫者。然而，正如评论所指出的，这种“开源”往往是落后者用来瓦解领先者护城河的商业武器。当运行前沿模型所需的算力门槛依然高不可攀时，所谓的“开放”对普通开发者而言更像是一种昂贵的馈赠，而非真正的平等。Meta 的措辞中充满了“恢复发布一些模型”的模糊性，这暗示了其在核心利益面前的犹豫。我们应当欢迎更多的开源选择，但也必须清醒地认识到，这更多是巨头博弈的副产品，而非纯粹的公益行为。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49251702">
+      <summary class="story-overview">
+        <span class="rank-number">06</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">code.call-cc.org</span>
+            <span>244 points</span>
+            <span>原始 #9 · 低讨论量降权 +3.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://code.call-cc.org/releases/6.0.0/NEWS" target="_blank"
+              rel="noopener noreferrer">Chicken Scheme 6.0</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49251702" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 38</a>
+          </h2>
+          <p class="summary">Chicken Scheme 发布了 6.0.0 重大版本更新，全面支持 R7RS small 标准。该版本最显著的变化是将内部字符串表示转换为 UTF-8，实现了完整的 Unicode 支持。在性能方面，新引入了闭包合并优化以减少内存分配，并改进了外部函数接口（FFI），允许直接传递字符串和符号而无需复制。此外，构建系统引入了 configure 脚本，并支持使用 zig cc 进行编译。虽然功能大幅增强，但从 5.x 版本迁移时需注意 bytevector 替代 blob 等破坏性变更。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Chicken Scheme 6.0.0 是该项目的一个里程碑式版本，其核心目标是实现与 R7RS small 语言标准的深度兼容。现在，R7RS 指定的所有模块都已内置于核心系统中，这显著提升了代码的可移植性。最核心的技术改进之一是内部字符串表示全面转向 UTF-8，这意味着开发者可以更自然地处理多语言文本，而无需像旧版本那样依赖额外的库。此外，原有的 blob 模块被符合 R7RS 规范的 bytevector 模块取代，虽然这带来了破坏性变更，但统一了字节数组的操作接口。</p><p>在底层优化和互操作性方面，6.0 版本引入了 `-merge-reusable-closures` 等编译选项，通过在优化级别 1 和 2 中自动启用闭包共享来降低内存压力。FFI 接口也得到了增强，字符串和符号在传递给 C 代码时不再进行复制，而是直接传递指针，这在提升性能的同时也要求开发者更谨慎地处理外部代码对数据的修改。构建系统方面，项目现在采用标准的 configure 脚本流程，简化了跨平台编译，并正式支持 zig cc 作为编译器替代方案。对于 Windows 用户，新版本推荐使用 w64devkit 工具链，并要求具备 POSIX shell 环境。尽管核心功能更加精简（如调试器被移出核心转为扩展包），但通过其丰富的“Eggs”生态系统，Chicken 依然保持着极强的实用性。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49253688" target="_blank" rel="noopener noreferrer">@hellcow</a>
+        </div>
+        <p class="comment-text">Eggs（扩展包）非常棒。例如，我可以很快地搭建起一个 SDL2 游戏或 Web 服务器。它通过 geiser-chicken 对 Emacs 有很好的支持。因为它会编译成 C，所以 FFI 提供了比 Chez Scheme 更好的易用性。错误信息带有堆栈跟踪，真的非常有用，这一点怎么强调都不为过。它支持可选的类型定义，减少了我需要的测试数量。文档还算够用，不过我经常在搜索查询中加上“MIT scheme”。我没能在 NixOS 上配置好 chicken-doc，而且文档网站最近经常宕机。我希望 Chicken 能提供包括 Eggs 在内的完整离线文档，比如 PDF 格式。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从实际开发者角度总结了 Chicken Scheme 的核心优势，如 FFI 易用性、生态系统和错误调试体验。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49255171" target="_blank" rel="noopener noreferrer">@anthk</a>
+        </div>
+        <p class="comment-text">嗯，我很纠结。Common Lisp 就像那个古怪的表亲，起初看起来很臃肿，但最后你用上 SBCL、ECL 或 CCL 时，几乎所有东西都能以同样的方式运行。而对于 Scheme，你需要安装各种 SRFI 才能完成 SICP 的练习，然后还有 R5RS 和 R7RS 之分的困扰。你没法在 Guile 下运行 Hypergiant。但在 Common Lisp 中，QuickLisp/UltraLisp 的大量包可以轻松运行在 SBCL、CCL 和 ECL 上。最后，Scheme 加上依赖项可能比 Common Lisp 的子集还要复杂（比如你不需要的话可以避开 CLOS）。</p>
+        <p class="comment-reason"><span>入选理由</span>评论提出了 Scheme 社区长期存在的碎片化问题，并将其与 Common Lisp 的统一性进行了对比，具有启发性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49252127" target="_blank" rel="noopener noreferrer">@DASD</a>
+        </div>
+        <p class="comment-text">大家可能也会感兴趣，这个 6.0 版本支持 Crunch（尽管 Crunch 本身尚未宣布 1.0 状态，目前是 0.993），这是一个针对 Scheme R7RS 静态类型子集的编译器。(https://wiki.call-cc.org/eggref/6/crunch)</p>
+        <p class="comment-reason"><span>入选理由</span>补充了关于静态类型子集编译器 Crunch 的信息，展示了 Chicken 生态在类型安全方面的探索。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49257101" target="_blank" rel="noopener noreferrer">@hajile</a>
+        </div>
+        <p class="comment-text">Scheme 的 SRFI 让它变成了一种庞大得多的语言，同时也让使用变得痛苦，因为你必须研究你的 Scheme 变体实现了哪些 SRFI，然后把那些 SRFI 编号映射到它们实际的功能上，通常你还得去读原始的 SRFI 文档，因为那是唯一的文档。R7RS 已经发布 14 年了，至今还没有 R7RS-large。他们真的应该直接把关键的 SRFI 拿出来，给它们起个名字并提供完善的文档，称之为 R7RS-large，然后把当前的工作移交给未来的 R8RS。</p>
+        <p class="comment-reason"><span>入选理由</span>深刻指出了 Scheme 标准化进程中的痛点，解释了为什么 SRFI 机制对开发者来说是一种负担。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Chicken Scheme 一直是 Lisp 家族中走“实用主义”路线的代表，它通过将 Scheme 编译为 C 代码，巧妙地借用了 C 语言的生态和移植性。6.0 版本的发布标志着它在现代化道路上迈出了一大步，尤其是 Unicode 的原生支持解决了长期以来的痛点。然而，正如评论 [49255171] 和 [49257101] 所指出的，Scheme 社区依然在“极简核心+碎片化 SRFI”与“开箱即用”的矛盾中挣扎。Chicken 6.0 对 R7RS small 的全面拥抱是一种标准化的努力，但对于追求生产力的开发者来说，如何从繁杂的“Eggs”和 SRFI 编号中解脱出来，依然是比编译器优化更现实的挑战。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49255710">
+      <summary class="story-overview">
+        <span class="rank-number">07</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">stratechery.com</span>
+            <span>77 points</span>
+            <span>原始 #5 · 低讨论量降权 +10.5</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://stratechery.com/2026/nvidias-risky-business/" target="_blank"
+              rel="noopener noreferrer">Nvidia&#x27;s Risky Business</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49255710" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 15</a>
+          </h2>
+          <p class="summary">英伟达（Nvidia）正试图通过与贝莱德、阿波罗等私募巨头合作，将 AI 基础设施转变为一种“可投资资产类别”，旨在动员超过 5000 亿美元的第三方资金。这一举措旨在绕过传统的企业债券市场，为那些无法获得大规模廉价融资的公司提供建设“AI 工厂”的资金。文章将此举与 1873 年美国铁路融资泡沫进行了类比，当时过度杠杆化的扩张最终导致了长达数年的经济大萧条。与此同时，谷歌正利用其 TPU 的成本优势，从追求前沿模型转向主导 AI 基础设施，甚至向竞争对手出租算力。核心风险在于，如果市场对算力“增长”的预期（而非需求本身）放缓，这种复杂的金融结构可能会崩塌。这标志着 AI 产业正从技术研发阶段转向资本密集型的工业公用事业阶段。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>英伟达 CEO 黄仁勋近期宣布了一项重大战略，通过与贝莱德（BlackRock）、黑石（Blackstone）和高盛等顶级资产管理机构合作，建立独立的融资平台。该计划的核心是将基于英伟达芯片的 AI 数据中心定义为“AI 工厂”，并将其视为类似于收费公路或电站的生产性基础设施资产。这种金融工程手段允许英伟达在传统债务市场收紧的情况下，继续推动其硬件的大规模部署。文章作者 Ben Thompson 指出，这与 1870 年代杰·库克（Jay Cooke）利用零售债券融资建设北太平洋铁路的做法惊人地相似，后者曾引发了 1873 年的金融恐慌。</p><p>在超大规模云厂商中，微软目前主要依靠现金流支撑资本支出，而谷歌、Meta 和亚马逊则在大量举债。谷歌的策略尤为独特：它通过向伯克希尔·哈撒韦发行股权筹资，并利用自研 TPU 的成本优势，将自己定位为 AI 时代的“铁路运营商”，甚至向 Anthropic 等竞争对手提供算力。相比之下，英伟达的风险在于它必须维持极高的增长预期。如果算力需求仅仅是保持稳定而非每年翻倍增长，那么这些由第三方资本支撑的“可投资资产”可能会面临严重的流动性危机。目前，AI 产业的竞争焦点已从单纯的模型能力转向了谁能调动更多资金、拥有更优的成本结构，以及如何通过金融手段转嫁基础设施建设的巨大风险。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49259342" target="_blank" rel="noopener noreferrer">@jcfrei</a>
+        </div>
+        <p class="comment-text">在许多投资论点中——比如英伟达关于计算需求将持续增长的赌注——第一阶假设通常是正确的。是的，对更多计算、芯片和基础设施的需求是巨大的，每年都会建造一些额外的模型中心。这类投资赌注通常失败的地方在于第二阶假设：即对需求“增长率”的预期。这正是目前预期很可能被夸大的地方。也就是说：需求很可能在可预见的未来持续存在，但不会每年都增加。而这足以颠覆整个投资故事。这最终可能使这些债券成为英伟达的沉重负担。不是因为人们停止购买更多计算资源，而是因为他们停止了每年“买得更多”。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深刻指出了英伟达金融模型中的核心风险点：需求持续存在并不等同于需求持续增长。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49257828" target="_blank" rel="noopener noreferrer">@tolugenius</a>
+        </div>
+        <p class="comment-text">关于英伟达地位的一个比我以前见过的更有趣的观点。有一点需要注意：1) 英伟达已经在机器人领域布局，所以即使他们在 AI（尤其是大语言模型）领域的地位削弱，他们肯定还有另一个更难进入的大领域（尽管我不确定谷歌在机器人 TPU 方面做了什么努力）。另一点是，英伟达仍然是西方的主要玩家，也就是说，中国肯定可以而且将会创建自己的全栈体系，而不依赖美国公司。这让欧洲和其他国家处于一个有趣的境地：你是为了安全还是因为它是唯一选择而购买英伟达？我想说，我认为英伟达的地位依赖于许多不同的事情同时成立，而我们正走向一个这些事情（大致）同时受到挑战的环境。</p>
+        <p class="comment-reason"><span>入选理由</span>评论扩展了讨论的维度，涉及了机器人领域的第二增长曲线以及地缘政治对英伟达市场地位的影响。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49258244" target="_blank" rel="noopener noreferrer">@wongarsu</a>
+        </div>
+        <p class="comment-text">即使在西方，英伟达的主导地位也注定会减弱。HN 上关于人们在 AMD 硬件上运行大型模型的文章显著增加。虽然我不知道官方销售数据，但我知道我们订购的 AMD 系统在交付上遇到了困难。AMD 的软件生态仍然比英伟达差得多。但是，修补 vllm 以便在 AMD 硬件上运行你关心的那一两个模型，比在 AI 的大多数其他领域使用它们要容易得多。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于竞争对手 AMD 在实际应用层逐渐追赶的实战观察，挑战了英伟达的绝对垄断地位。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49258334" target="_blank" rel="noopener noreferrer">@moralestapia</a>
+        </div>
+        <p class="comment-text">英伟达将在估值达到 8 万亿美元并供应全球 80% 的硬件后立即倒闭！相信我，伙计们，全完了！</p>
+        <p class="comment-reason"><span>入选理由</span>用反讽的方式表达了对“英伟达崩溃论”的不屑，反映了市场中多头方的典型心态。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>英伟达正在进行的不仅是硅片的革命，更是一场金融工程的豪赌。通过将 AI 算力包装成“可投资资产”，黄仁勋试图将英伟达从一家周期性的半导体公司转型为 AI 时代的中央银行。然而，正如 1873 年的铁路危机所揭示的，当基础设施的建设速度超过了其产生实际经济效益的速度，且这种扩张完全依赖于复杂的债务结构时，风险就会呈指数级增长。正如评论 [49259342] 所言，真正的危机往往不在于需求消失，而在于增长率的放缓。如果 AI 工厂的投资回报率无法支撑起这 5000 亿美元的第三方资本，英伟达所构建的金融大厦将面临严峻考验。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49250109">
+      <summary class="story-overview">
+        <span class="rank-number">08</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">support.claude.com</span>
+            <span>304 points</span>
+            <span>原始 #17 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content" target="_blank"
+              rel="noopener noreferrer">How Claude marks AI-generated content</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49250109" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 265</a>
+          </h2>
+          <p class="summary">Anthropic 披露了 Claude 如何在其生成的内容中添加不可见的数字水印。该技术通过在文本生成过程中嵌入特定的统计模式，在不改变文字含义或可读性的前提下实现可追踪性。除了文本水印，Claude 还使用加密签名的元数据来标记内容来源。这种做法旨在提高 AI 透明度，并符合欧盟 AI 法案等监管要求。然而，水印并非万无一失：过短的文本可能无法携带有效信号，而对 AI 生成内容的二次编辑也可能导致水印失效。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Anthropic 最近详细介绍了 Claude 标记 AI 生成内容的两大核心机制：嵌入式文本水印和签名元数据。文本水印并非通过插入特殊字符实现，而是在模型预测下一个词（token）的概率分布时，通过微小的统计偏差嵌入特定模式。这种方法对人类读者是不可见的，不会影响文本的质量或逻辑，但可以被专门的检测工具识别。此外，对于文件或特定格式的输出，Claude 会附加加密签名的元数据，以证明内容的来源和完整性。</p><p>尽管这项技术在推动 AI 透明度方面迈出了一大步，但它仍面临显著的局限性。如果生成的文本非常短，或者用户对输出内容进行了大幅度的手动修改、改写或翻译，水印信号可能会变得微弱甚至消失。一个关键的副作用是，如果用户仅使用 Claude 来润色或翻译原创的人类文本，最终产出的内容也可能被标记为 AI 生成。目前，Anthropic 主要通过其 API 和检测工具提供识别服务，旨在帮助机构识别自动化生成的“垃圾内容”或验证信息来源，但这种“猫鼠游戏”在技术上仍难以达到百分之百的准确率。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49250761" target="_blank" rel="noopener noreferrer">@benrow</a>
+        </div>
+        <p class="comment-text">我听说这种水印处理过程是通过在每个位置将统计采样偏向于可能出现的下一个标记集（红集和绿集）的一个分区来实现的。每次可能只是轻微的推动，但在一段标记序列中，偶然重复这种偏差的可能性会变得越来越低。这种偏差在每个位置都不同，并遵循某种以可预测方式播种的特定随机数生成器（RNG）。这可以是一个开放算法，也可以不是。如果不是开放的，那么可以提供一个 API 来确定文本是否带有水印。至于它如何应用于代码——也许是对符号名称等的微妙改动，我只是在推测（我最近才顺便读到过这个）。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从技术角度解释了文本水印可能的实现原理（统计采样偏差），有助于读者理解“不可见水印”的运作方式。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49255085" target="_blank" rel="noopener noreferrer">@Dilettante_</a>
+        </div>
+        <p class="comment-text">我注意到“局限性”部分谈到了仅在某些环节被 Claude 处理过的内容可能会返回阳性结果，而返回阴性结果的内容仍可能是 Claude 生成的。但我真的很希望他们能明确指出，完全由人类撰写的内容仍可能被标记为 AI 生成（即完全的误报），因为有太多拥有“毁掉某人生活”权力的机构很难理解这个概念。</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了 AI 检测工具在社会应用中的重大风险，即误报可能对个人（如学生）造成的严重后果。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49250569" target="_blank" rel="noopener noreferrer">@simonw</a>
+        </div>
+        <p class="comment-text">“当受支持的 Claude 模型生成文本时，它会将一种不可见的水印直接编织进文本本身。你看不见它，它也不会改变 Claude 回复的含义、质量或可读性。”
+我想更多地了解它是如何运作的。我与 Claude 的很多交互都会返回非常精确的文本。如果我要求它编辑一个项目并重构几个地方的特定函数，我确切地知道我想要发生什么，如果这些重构为了充当水印而在文本中嵌入了某种奇怪的模式，那我是绝对不能接受的。我猜这可能被这一条覆盖了：
+“如果出现以下情况，Claude 生成的内容可能不携带可检测的标记：[...] 段落非常短，留下的文本太少，无法形成可靠信号。”</p>
+        <p class="comment-reason"><span>入选理由</span>从开发者实际使用场景出发，表达了对水印技术是否会干扰代码精确性的担忧。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49255555" target="_blank" rel="noopener noreferrer">@JohnKemeny</a>
+        </div>
+        <p class="comment-text">没错，但你能做的是一种单向保证。如果它带有标记，那么它很可能是生成的（或者有人故意让它看起来像生成的）。因此，如果新闻文章、研究论文、书籍、学生提交的作业、博客文章、HN 评论等带有标记，就可以自动将其标记出来。这有助于检测低质量的垃圾内容。—— 警告：如果你写了自己的创意作品并发送给 Claude 进行“语法润色”，它可能会插入水印。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论冷静地分析了水印作为“单向证明”的实际用途，并提醒了润色场景下的潜在陷阱。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Anthropic 此次公开 Claude 的水印机制，很大程度上是为了应对《欧盟 AI 法案》等日益严格的监管要求。这种基于统计偏差的水印技术虽然比早期的“关键词特征”更隐蔽，但本质上仍是一场技术博弈。正如评论所指出的，这种“单向保证”在处理低成本垃圾内容时非常有效，但在学术诚信或代码重构等高精度场景下，误报和对文本微调的担忧依然存在。特别是当 AI 深度参与人类的协作流程（如润色和翻译）时，界定“原创”与“生成”的界限将变得更加模糊。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49254881">
+      <summary class="story-overview">
+        <span class="rank-number">09</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">rapha.land</span>
+            <span>34 points</span>
+            <span>原始 #14 · 低讨论量降权 +3.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://rapha.land/closing-canario-terminal-source-code/" target="_blank"
+              rel="noopener noreferrer">Closing Canario Terminal source code</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49254881" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 38</a>
+          </h2>
+          <p class="summary">知名开发者 Raphael Amorim 宣布将其开发的 Canario Terminal 转为闭源项目。他表示，维护开源项目的行政成本被严重低估，除了编写代码，还要应对大量无休止的免费功能需求和讨论。特别是在 AI 时代，低质量的 AI 生成垃圾 Issue 和 PR 让维护者的精力被极度摊薄。Canario 最初是他为解决个人需求而开发的工具，闭源是为了能按自己的节奏开发，摆脱社交压力。他强调该软件不含遥测代码，且其核心代码在旧版 Rio 项目中仍可追溯。这一决定反映了独立开发者在自动化噪音泛滥的当下，为保护个人创造力而做出的权衡。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Raphael Amorim 是一位有着丰富开源经验的开发者，曾主导过 Rio 和 react-tv 等项目。他最近决定停止 Canario Terminal 的开源模式，转为闭源开发，主要原因是开源维护带来的“隐形成本”已让他精疲力竭。他指出，开源不仅仅是分享代码，更意味着要处理大量的 Issue、Pull Request 以及来自用户的各种索取。随着 AI 工具的普及，维护者现在面临着海量低成本生成的垃圾信息，虽然这些内容质量极低，但仍需维护者投入时间去审阅和拒绝，这极大地消耗了开发者的热情。</p><p>Amorim 明确表示，Canario 是他为了解决自己在智能体编程（Agentic code）中的痛点而开发的个人工具，并没有融资或商业化的压力。通过闭源，他可以彻底切断外部干扰，不再需要回复那些“理所当然”的免费请求，从而专注于产品本身的迭代。他向用户保证，Canario 依然保持纯净，除了检查更新外没有任何遥测行为。对于那些对闭源敏感的用户，他提到 Canario 的早期代码仍保留在 Rio 项目的历史记录中可供参考。这一举动引发了关于“开源”与“开放贡献”界限的讨论，也揭示了在 AI 时代，独立开发者为了维持心理健康和开发动力，不得不采取更保守的发布策略。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49256158" target="_blank" rel="noopener noreferrer">@kasajian</a>
+        </div>
+        <p class="comment-text">他有权对自己的源码做任何想做的事，但“开源”仅仅是一种许可协议。在 GitHub 出现之前我们就有 GPL 2 了。你只需要在发布软件时附带源码，或者根据请求提供源码（哪怕是通过平邮）即可。我唯一不认同的是文中关于“维护成本”的部分。他说被 Issue 和 PR 淹没了，但这其实是自找的。你可以不接受 Issue，不接受 PR，把仓库设为只读。除非你打算把源码只留在自己电脑上从不推送，否则这根本不需要额外精力。所以如果你不想处理那些杂事，完全没问题，但没必要假装闭源是唯一的出路。</p>
+        <p class="comment-reason"><span>入选理由</span>指出“开源”与“社区维护”是两回事，提供了关于开源定义的深刻见解。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49256254" target="_blank" rel="noopener noreferrer">@jicea</a>
+        </div>
+        <p class="comment-text">我认为 SQLite 的贡献模型“开源但不开放贡献”是一个很好的折中方案，既能保持代码透明，又能维护开发者的精神健康。正如其官网所述：“SQLite 是开源的，意味着你可以不受限制地复制和使用它。但 SQLite 不接受开放贡献。为了保持代码在公有领域且不被专利或授权内容污染，该项目不接受未经宣誓授权的补丁。”</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个成功的中间路线案例，即只公开代码而不接受外部干扰。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49256450" target="_blank" rel="noopener noreferrer">@rvz</a>
+        </div>
+        <p class="comment-text">作者准确地指出了在 2026 年做“开源”或“公开构建”的问题所在。现在全职做开源（靠捐赠维持）已经毫无意义，而且这本身就是一件费力不讨好的事。AI 的出现让情况变得更糟。但最核心的现实是：开发者几乎从不为自己的工具付费，他们总是自己造轮子，然后指望卖给同样不愿付钱的同行，这根本行不通。所以我们会看到更多项目转为闭源，作者完全有权这么做。</p>
+        <p class="comment-reason"><span>入选理由</span>从市场和 AI 现状的角度分析了开源模式在当下的困境。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49257780" target="_blank" rel="noopener noreferrer">@ddlsmurf</a>
+        </div>
+        <p class="comment-text">我大部分同意，但根据经验，当你把仓库设为只读时，会催生出一堆分支（fork），然后人们会根据 git blame 信息在那些分支里艾特你，或者通过其他渠道联系你。我觉得这种干扰是躲不掉的。另外，终端是关键软件，你会往里输入密码，它能看到所有输出，你必须信任它。虽然我今天才听说这个项目，但闭源对我来说确实是个一票否决的因素。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了闭源对终端这类敏感工具带来的信任挑战，并反驳了“只读仓库就能清静”的观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49257881" target="_blank" rel="noopener noreferrer">@hmokiguess</a>
+        </div>
+        <p class="comment-text">看到这里的评论真是讽刺，大家正在施加那种他正试图逃离的压力。粗略看了一下帖子，大多数人都在教他“应该”怎么做，而不是尊重他的选择。这家伙可能只是累了需要休息，无论他以后是否回来，我都感谢他的工作，并祝他生活愉快。</p>
+        <p class="comment-reason"><span>入选理由</span>敏锐地捕捉到了评论区行为与作者初衷之间的戏剧性矛盾。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Raphael Amorim 的决定是当下开源生态中“维护者倦怠”的一个缩影，但在 AI 泛滥的 2026 年背景下，这种倦怠有了新的催化剂。正如评论区所指出的，开源（Open Source）本质上是一种授权协议，并不等同于开放贡献（Open Contribution）。然而，在 GitHub 统治的社交化编程时代，这两者的界限被模糊了。开发者往往发现，只要代码公开，就默认背负了回复 Issue 和审核 PR 的道德枷锁。当 AI 让制造噪音的成本降至零，而过滤噪音的成本依然高昂时，闭源或“只读式开源”将成为独立开发者保护个人热情和心理健康的最后防线。对于终端这种涉及高度信任的工具，闭源确实会流失部分核心用户，但对作者而言，找回开发的纯粹乐趣显然比维持一个“完美的开源形象”更重要。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49257876">
+      <summary class="story-overview">
+        <span class="rank-number">10</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">stolen-thoughts.com</span>
+            <span>16 points</span>
+            <span>原始 #3 · 低讨论量降权 +14.7</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://stolen-thoughts.com/" target="_blank"
+              rel="noopener noreferrer">Stealing Reasoning Traces from Proprietary LLM APIs</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49257876" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 1</a>
+          </h2>
+          <p class="summary">研究人员展示了如何从闭源大语言模型（LLM）的API中窃取其内部推理链（Reasoning Traces）。通过利用模型在处理特定任务时泄露的中间思考过程，攻击者可以重建原本被隐藏的逻辑步骤。这种攻击揭示了即使是受保护的专有模型，其核心的“思考”机制也可能被逆向工程。实验表明，这种方法在多种复杂任务中均具有较高的成功率。然而，该研究目前主要针对特定类型的推理模型，且需要大量的API调用作为支撑。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>该研究提出了一种针对专有大语言模型（如GPT-5系列）的新型攻击方式，旨在窃取其受保护的推理过程。攻击者通过精心设计的提示词和对API响应的细致分析，能够诱导模型泄露其在生成最终答案之前的中间推理步骤。这些推理链通常被认为是模型提供商的核心知识产权，因为它们包含了模型解决复杂问题的逻辑路径和知识调用方式。</p><p>实验过程中，研究人员利用了模型在处理代码清理、逻辑推理等任务时的行为特征，成功从API返回的加密或隐藏内容中提取了关键信息。这种攻击不仅威胁到模型的商业机密，还可能被用于训练更廉价的开源模型以模仿顶级闭源模型的性能。目前，这种攻击的局限性在于其对API调用频率的依赖，以及在面对更严格的输出过滤机制时可能失效。未来，模型提供商可能需要重新评估其推理过程的隔离策略，以防止此类敏感逻辑外泄。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>1 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49259456" target="_blank" rel="noopener noreferrer">@fractorial</a>
+        </div>
+        <p class="comment-text">这个方法非常迷人；但是，在手机上滚动阅读简直是场噩梦。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论反映了用户对该研究展示页面（stolen-thoughts.com）移动端适配问题的直观反馈。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这项研究揭示了AI安全领域一个极具挑战性的新前沿：推理过程的隐私性。随着模型开始具备更强的“思考”能力，如何保护这些中间逻辑不被窃取成为了厂商的新难题。文章中展示的从代码清理任务中提取API密钥和令牌的过程，生动地说明了推理链中可能包含的敏感信息。这不仅是技术上的博弈，更是关于AI透明度与商业机密保护之间平衡的深刻讨论。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49258581">
+      <summary class="story-overview">
+        <span class="rank-number">11</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">aimagazine.com</span>
+            <span>21 points</span>
+            <span>原始 #7 · 低讨论量降权 +11.4</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://aimagazine.com/news/why-did-openai-head-of-ethics-chloe-bakalar-leave" target="_blank"
+              rel="noopener noreferrer">Why Did OpenAI&#x27;s Head of Ethics Chloé Bakalar Leave?</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49258581" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 12</a>
+          </h2>
+          <p class="summary">OpenAI 的伦理负责人 Chloé Bakalar 已离职，她是该公司唯一专门从事伦理工作的员工。OpenAI 表示不会设立继任者，并声称伦理考量已“深度嵌入”到各个研究团队的开发流程中，而非由单一团队负责。此前，OpenAI 已有多名负责安全和系统的主管相继离开，引发了外界对公司内部监督机制的担忧。Bakalar 曾任 Meta 首席伦理学家，拥有深厚的政治学学术背景。这次离职再次凸显了 AI 巨头在追求技术突破与维持伦理约束之间的紧张关系。尽管文章标题提出了疑问，但文中并未给出她离职的具体个人动机。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Chloé Bakalar 在 OpenAI 任职约一年后宣布离开，她此前的职责涵盖了模型开发的伦理方法、人机交互以及关于机器意识的讨论。据知情人士透露，她是公司内部唯一一位专职伦理学家。OpenAI 在回应中感谢了她的贡献，但明确表示伦理责任不应由单一团队或个人承担，而是应该分散在所有模型构建团队中。这种“去中心化”的策略意味着公司目前没有招聘继任者的计划，这在外界看来可能削弱了伦理审查的独立性。</p><p>此次变动并非孤立事件，近期 OpenAI 的安全系统负责人 Johannes Heidecke 和首席未来学家 Joshua Achiam 也已离职。Bakalar 拥有宾夕法尼亚大学政治学博士学位，并曾在 Meta 担任首席伦理学家，其学术背景深厚。批评者认为，当公司将伦理职能分散化时，往往会导致缺乏强有力的内部制衡力量。随着 OpenAI 竞争压力的增大，如何确保这些“嵌入式”的伦理考量在实际开发中不被进度和性能指标所掩盖，将是未来观察该公司走向的关键。目前，Bakalar 仍担任普林斯顿大学和伦敦大学学院的学术职务。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49259358" target="_blank" rel="noopener noreferrer">@forestrywat</a>
+        </div>
+        <p class="comment-text">根据我的经验，公司聘请伦理团队只是为了对外宣称他们有这么个团队。伦理团队没有支配权，没有影响力，永远无法左右业务。他们会尝试并提出合理的建议，但公司会说“那太花钱了……”，然后拒不采纳。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从企业治理的现实角度解释了伦理团队往往只是“花瓶”的现象。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49259408" target="_blank" rel="noopener noreferrer">@fwipsy</a>
+        </div>
+        <p class="comment-text">&gt; 最近，OpenAI 安全系统团队负责人 Johannes Heidecke 也离开了公司，首席未来学家 Joshua Achiam 同样如此。
+没关系的，他们不需要伦理团队，因为 OpenAI 的每个人都很讲伦理：
+&gt; “在 OpenAI，AI 伦理并不属于某个单一的所有者或团队，伦理考量已深度嵌入到由多个研究团队驱动的模型构建过程中。”</p>
+        <p class="comment-reason"><span>入选理由</span>评论敏锐地指出了 OpenAI 官方辞令与高管密集离职现状之间的讽刺对比。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49259297" target="_blank" rel="noopener noreferrer">@ai-x</a>
+        </div>
+        <p class="comment-text">从战略上讲，公司能雇佣到的最好的伦理沙皇是那种不相信这些虚无缥缈、随意定义的伦理的人。伦理部门百分之百会吸引活动家，而这百分之百会给公司的未来带来麻烦。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个从公司管理层视角出发的反对设立专门伦理部门的观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49258707" target="_blank" rel="noopener noreferrer">@KptMarchewa</a>
+        </div>
+        <p class="comment-text">&gt; 在去年 8 月加入 OpenAI 之前，她从 2021 年 11 月到 2025 年 8 月一直担任 Meta 的首席伦理学家。
+听起来这履历简直完美（注：讽刺 Meta 的伦理记录）。</p>
+        <p class="comment-reason"><span>入选理由</span>通过讽刺 Bakalar 在 Meta 的背景，暗示了这类职位的尴尬处境。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>硅谷大厂的“伦理负责人”往往是个尴尬的角色：既要为公司的技术风险背书，又常常在商业冲刺面前缺乏实权。OpenAI 称伦理已“深度嵌入”各团队，这听起来很像一种公关辞令——当每个人都负责时，往往意味着没有人真正负责。从 Meta 到 OpenAI，Bakalar 的职业轨迹反映了顶级 AI 企业在伦理治理上的某种循环：先设立职位以示重视，再在架构调整中将其边缘化，最终让路于更激进的开发节奏。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49252462">
+      <summary class="story-overview">
+        <span class="rank-number">12</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">floppydisk.com</span>
+            <span>95 points</span>
+            <span>原始 #19 · 低讨论量降权 +3</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.floppydisk.com/recycle" target="_blank"
+              rel="noopener noreferrer">Recycle – Floppydisks</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49252462" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 40</a>
+          </h2>
+          <p class="summary">Floppydisk.com 正在运行一个 3.5 英寸软盘回收计划，接受来自全球的旧盘捐赠。对于寄送超过 200 张的用户，他们会提供一定的运费补贴。该计划的本质是“再利用”，即通过重新格式化这些旧盘并以折扣价转售给需要的人。这为处理阁楼里的电子垃圾提供了一个环保渠道，同时也支持了那些仍依赖软盘的复古爱好者或工业系统。不过，这种方式更侧重于二手流转，而非将材料彻底拆解回收。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Floppydisk.com 提供的这项服务为处理过时的 3.5 英寸软盘提供了一个实用的去处。用户可以将闲置的软盘寄往其位于加州拉古纳海滩的地址，如果数量超过 200 张，还可以通过填写表格申请运费报销。该机构会对收到的软盘进行检测和重新格式化，然后以新盘价格的约三分之一进行转售。这种模式在延长产品寿命的同时，也满足了某些特定领域（如老式数控机床、缝纫机或航空电子设备）对这种稀缺媒介的持续需求。</p><p>在社区讨论中，许多人对软盘的耐用性表示惊讶，有人分享了存放 30 年的 QBASIC 程序依然能正常读取的经历。然而，这种“回收”也面临挑战，比如塑料老化导致的化学物质挥发，以及这种模式究竟属于“环保回收”还是“二手贸易”的争议。有趣的是，软盘正在经历某种形式的文化复兴，甚至有现代乐队开始尝试用软盘发布单曲。尽管如此，对于大多数人来说，这更多是一种情怀的寄托，而非主流的存储方案，且该网站的购买功能似乎存在一些技术故障。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49253029" target="_blank" rel="noopener noreferrer">@vunderba</a>
+        </div>
+        <p class="comment-text">说到这个，我最近在老家的阁楼里翻找，发现了一张 3.5 英寸磁盘，里面存着我 90 年代初写的一堆 QBASIC 程序。尽管在没有空调的阁楼里放了几十年，当我把它插进 USB 软驱时，它居然还能正常读取。说实话，回头看 30 多年前的代码感觉就像是一场考古探险。
+另外，还有多少孩子也曾像拿着奇怪的枪一样挥舞着 3.5 英寸软盘，通过拉开滑盖再松手，发出那种令人满足的“啪”的一声来“上膛”？</p>
+        <p class="comment-reason"><span>入选理由</span>这段评论生动地描述了软盘的耐用性以及那个时代特有的童年记忆。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49256613" target="_blank" rel="noopener noreferrer">@rbtms</a>
+        </div>
+        <p class="comment-text">浏览他们的网站后，我发现他们并不是通常意义上的“回收”，而是“再利用”。也就是说，他们会对软盘进行重新格式化，并以新盘 66% 的折扣价格转售。如果你家里正好有闲置的软盘，这当然没问题，但这并不像通常意义上的回收那样用原材料制造新东西。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了该计划在术语定义上的关键差异，即它是二手再利用而非材料回收。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49253914" target="_blank" rel="noopener noreferrer">@grahamburger</a>
+        </div>
+        <p class="comment-text">我儿子今天告诉我，他想买一个软盘驱动器，因为他喜欢的一个乐队开始用 3.5 英寸软盘发布单曲了。
+这真是一个神奇的时代。</p>
+        <p class="comment-reason"><span>入选理由</span>展示了软盘在现代亚文化中的意外复兴。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49254060" target="_blank" rel="noopener noreferrer">@hs586</a>
+        </div>
+        <p class="comment-text">这绝对是不推荐的做法，但我小时候我们也用软盘里的磁片来看日食。那远不是我们在 90 年代后苏联国家做过的最危险的事情。
+直到今天，当我读到或想到日食时，我脑海中都会浮现出软盘的画面！我今天在 HN 上看到这个的第一反应是：“这是因为明天有日食吗？”</p>
+        <p class="comment-reason"><span>入选理由</span>分享了一个极具时代特色的（虽然危险）软盘另类用途。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49253677" target="_blank" rel="noopener noreferrer">@fuzzfactor</a>
+        </div>
+        <p class="comment-text">现在我有一包旧软盘正在“放气” :0
+我没有别的解释了。
+这是一个几乎装满的杂物软盘盒，装在 Office Depot 原装的 30 片装纸托盘里。
+我在不同的壁橱里还有好几公斤软盘，但这盒是我几年前挑选出来的、全部通过了 SCANDISK 检测的优等品。
+现在这小盒软盘装在办公室的一个旧密封袋里，它一直在自动膨胀。起初我以为是哪天大气压异常低，但我不管是晴是雨，只要把空气挤出来，它就会自己再鼓起来。
+这真是我完全没料到的事情。
+如果我现在还拥有自己的实验室，我肯定已经能告诉你那是什么气体了 ;)</p>
+        <p class="comment-reason"><span>入选理由</span>描述了一个有趣的物理/化学现象，反映了旧存储媒介在老化过程中的不可预测性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>软盘在今天看来像是一种“数字考古”的遗迹，但 Floppydisk.com 的存在提醒我们，旧技术往往有着比预期更长的生命周期。这种“回收”计划实际上是在经营一个日益萎缩但依然坚挺的利基市场，将原本会被丢弃的塑料垃圾转化为复古爱好者或特定工业维护者的宝贵资源。虽然有评论指出这本质上是二手转售而非原材料回收，但在电子垃圾泛滥的今天，能让旧物重新转动起来，本身就是一种务实的环保。这种对旧媒介的坚持，也意外地催生了诸如乐队发行软盘单曲等奇特的文化回响。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49247477">
+      <summary class="story-overview">
+        <span class="rank-number">13</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">vectorware.com</span>
+            <span>207 points</span>
+            <span>原始 #24 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.vectorware.com/blog/simd-on-gpu/" target="_blank"
+              rel="noopener noreferrer">Rust SIMD on the GPU</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49247477" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 102</a>
+          </h2>
+          <p class="summary">VectorWare 宣布成功在 GPU 上实现了对 Rust 可移植 SIMD（core::simd）库的支持。该技术通过将 Rust 线程映射为 GPU 的 Warp，并将 SIMD 通道直接对应到 Warp 的硬件执行通道，使标准 Rust 向量代码能直接在 GPU 上运行。这种方法利用了 GPU 的 SIMT 架构，将元素级运算、掩码选择和跨通道洗牌等操作转换为原生的 GPU 指令。这意味着开发者可以编写一套代码，同时在 CPU 和 GPU 上实现高性能向量化运算。目前的主要限制在于性能高度依赖向量宽度与硬件 Warp 宽度的匹配，且该功能仍需 Rust Nightly 版本支持。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>VectorWare 的核心愿景是让 GPU 编程像普通 Rust 开发一样自然。继之前将 Rust 标准库和线程模型引入 GPU 后，他们现在实现了对 `core::simd` 的支持。在他们的模型中，一个 Rust 线程被映射为一个 GPU Warp，而 SIMD 向量的每个通道则对应 Warp 中的一个硬件执行单元。这种映射使得原本为 CPU 编写的向量化代码能够直接编译为 GPU 的 PTX 指令，实现了真正的代码级跨平台复用。</p><p>在实现细节上，简单的元素级算术运算被直接映射为 GPU 的原生指令。对于更复杂的跨通道操作，如 `reduce_sum` 或 `simd_swizzle`，VectorWare 利用了 GPU 的 Warp Shuffle（洗牌）指令来高效交换数据。此外，SIMD 掩码操作则通过 GPU 的投票（vote）和位图（ballot）指令完成。为了处理向量宽度与硬件不一致的情况，他们还开发了一套基于 Rust 类型系统的中间表示（IR），用于处理诸如“条带挖掘”（strip mining）等复杂逻辑，并提供了一个类似 Miri 的解释器进行确定性测试。</p><p>尽管前景广阔，该技术目前仍面临一些挑战。首先，`portable_simd` 在 Rust 中仍处于不稳定阶段，需要开启 Nightly 特性。其次，当 SIMD 宽度不等于硬件 Warp 宽度（如 NVIDIA 的 32）时，会导致硬件利用率下降或指令开销增加。此外，某些复杂的洗牌操作可能需要通过共享内存实现，从而产生额外的性能开销。VectorWare 表示，未来将探索自动向量化以及对张量核心（Tensor Cores）的支持，进一步模糊 CPU 与 GPU 编程的界限。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49252526" target="_blank" rel="noopener noreferrer">@MindSpunk</a>
+        </div>
+        <p class="comment-text">除非你深入了解现代 GPU 架构的细节，否则这并不显而易见。GPU 实际上并不是 SIMD，而是 SIMT（单指令多线程）。硅片层面看起来很像 SIMD，但编程模型不同。如果你去看 AMD 的 ISA 文档（它们是公开的），你会发现你没有像 x86 上 `__mm256` 寄存器那样的对应物。每个“线程”只处理单个标量值，如 int32 或 float32。然而，硬件会将 32 或 64 个运行相同程序的线程组合在一起运行。每个“线程”大致映射到一个 SIMD 通道。这种 SIMD 是隐式的，而不是显式的。主要区别在于“SIMD”执行对程序来说是某种程度透明的。你只需编写普通的标量代码，硬件模型就会高效地将其分发到 SIMD 执行单元。这并不完全是一种抽象，因为要榨取最大性能，你必须理解它的工作原理。你也可以在 CPU 上使用这种编程模型，Intel 的 ISPC 就做到了这一点。它是一种类似 C 的语言，具有类似于 GPU 着色器语言的执行语义，但可以编译为常规 CPU 代码，并将线程映射到 CPU 的 SIMD 通道上，就像 GPU 一样。</p>
+        <p class="comment-reason"><span>入选理由</span>深入解释了 GPU 的 SIMT 与 CPU 的 SIMD 在架构和编程模型上的本质区别，有助于理解本文技术实现的背景。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49252597" target="_blank" rel="noopener noreferrer">@jandrewrogers</a>
+        </div>
+        <p class="comment-text">各种 SIMD 指令集（ISA）的能力交集不足，导致除了相对简单的案例外，很难实现真正的可移植性。许多独特的能力是承载性能的关键，因此你会希望在支持它们的架构上使用它们。总的来说，关注性能的人会根据具体的 SIMD 架构使用不同的数据结构和算法，而这在库中几乎无法抽象。太多重要但复杂的细节是与具体实现相关的。换个角度看，我们的编程环境还不够强大和富有表现力，无法创建必要的抽象来使 SIMD 真正实现可移植。</p>
+        <p class="comment-reason"><span>入选理由</span>从底层架构差异的角度，冷静地分析了 SIMD 可移植性在高性能计算领域面临的根本困境。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49249354" target="_blank" rel="noopener noreferrer">@O3marchnative</a>
+        </div>
+        <p class="comment-text">作者提到了 Rust 的可移植 SIMD 库。该库唯一的问题是它只能在 nightly 版本中使用。我在我的 FFT crate 中使用过它，但为了获得一个能在 stable 版本上运行的可移植 SIMD 方案，我们不得不切换到 `fearless_simd` crate。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了实际开发中的替代方案，指出了官方库目前仅限 nightly 的局限性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49249795" target="_blank" rel="noopener noreferrer">@camel-cdr</a>
+        </div>
+        <p class="comment-text">我发现很有趣的是，每一个“可移植 SIMD”的例子其实都不可移植。它们指定了固定的 SIMD 宽度，所以它是非可移植的。好吧，也许它在功能上可移植，但在性能上不可移植，那我们为什么要使用 SIMD 呢？</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个尖锐的观点：如果 SIMD 宽度固定，那么在不同硬件间的“性能可移植性”就会大打折扣。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>VectorWare 的这项工作试图打破高性能计算中一个长久以来的隔阂：CPU 程序员习惯于显式的 SIMD 向量化，而 GPU 程序员则习惯于隐式的 SIMT 并行。正如评论 [49252526] 所指出的，GPU 的 SIMT 模型本质上是将标量代码“隐式”地在向量硬件上运行。VectorWare 的突破在于，它利用 Rust 的类型系统将这种隐式并行显式化，让开发者能用同一套 `core::simd` 代码驱动两种截然不同的硬件。然而，正如 [49252597] 所警示的，真正的“性能可移植性”依然是圣杯——不同架构的指令集差异巨大，简单的抽象往往难以榨干硬件极限。尽管如此，这种让 GPU 变成“普通 Rust 平台”的尝试，对于降低异构计算的门槛具有重要意义。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49251411">
+      <summary class="story-overview">
+        <span class="rank-number">14</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">effort.news</span>
+            <span>585 points</span>
+            <span>原始 #25 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.effort.news/uk-lobby" target="_blank"
+              rel="noopener noreferrer">The UK&#x27;s war on anonymity has come to America</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49251411" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 624</a>
+          </h2>
+          <p class="summary">英国的非政府组织正试图将其在英国推动的“数字身份”和“年龄验证”法律引入美国。调查显示，5Rights 等机构利用“保护儿童”为口号，游说美国各州通过类似加州 AB 2273 的法案。这些法律的核心是通过强制身份验证来削弱互联网匿名性，从而方便政府进行社会监控。批评者指出，英国已利用此类法律打压政治异见，而同样的模式正通过数百万美元的游说资金渗透进美国。尽管初衷是提升网络安全，但其代价可能是公民隐私权的永久丧失和对 VPN 等工具的潜在禁令。目前最大的争议在于，这种由外国势力推动的立法是否会在保护儿童的同时，摧毁了互联网自由的基石。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>调查报告揭示了一个由英国资助或领导的 NGO 网络，包括 5Rights 基金会、数字仇恨对抗中心（CCDH）和战略对话研究所（ISD），正在美国开展协调一致的游说行动。这些组织通过“年龄适当设计规范”（AADC）等模型，推动各州立法要求网站验证用户年龄，这在实践中往往演变为强制性的数字 ID 制度。例如，加州的 AB 2273 法案就是由 5Rights 共同设计的，而该组织直到法案通过一年后才披露其外国代理人身份。ISD 等机构还从美国国务院和欧盟获得了数千万美元的合同，用于研究“虚假信息”和“仇恨言论”，这被质疑是为政府审查提供理论依据。</p><p>支持者认为这些措施能有效保护未成年人免受有害内容侵害，但反对者警告称，这会建立起一套全天候的监控架构。在英国，类似的法律已被用于逮捕发表争议言论的公民，引发了对言论自由的担忧。此外，5Rights 甚至开始倡导禁止 VPN，这将使英美在互联网管制上向某些威权国家看齐。这种立法趋势不仅影响大型科技公司，还可能让开源软件和小型论坛面临沉重的合规负担。批评者指出，年龄验证在技术上很难做到既准确又保护隐私，往往需要用户上传身份证件或进行人脸识别。随着监控技术成本的降低，维护个人匿名性的代价正变得越来越高。目前，这场“匿名权之战”已从技术讨论上升为涉及主权、言论自由和外国干预的复杂政治博弈。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49252258" target="_blank" rel="noopener noreferrer">@areoform</a>
+        </div>
+        <p class="comment-text">人类历史上第一次，监控的成本降到了隐私成本之下。如今，维持隐私和匿名比监控你的成本更高。集体监控网使得以每天几美分的代价追踪人们的行动、行踪、偏好、政治观点和私人照片成为可能。这简直是捡了大便宜。在这个新世界里，那只眼睛永远在注视着每一个人。大多数人，包括 HN 上的用户，仍停留在“以人为本”的世界观里。新的监控国家不会是成千上万的人坐在阴暗的房间里审查照片和视频，如今，一堆向量和一个大型多模态模型就能搞定。服务器很便宜（对于国家而言），而且不需要吃饭睡觉。它们会被用来监视你，尤其是如果你有吸引力、有价值或有把柄。毕竟，NSA 员工经常滥用价值数十亿美元的监控资产来跟踪女性，这太普遍了，以至于 NSA 称之为 LOVEINT。当这种技术变得如此廉价且无孔不入时，匿名的终结意味着不受约束的副警长可以跟踪前妻、家人或潜在的恋爱对象。那些看不清大局，或者因为“家长控制太难用”而拥护这种做法的人，将把自己和后代推向一个比现在这个过度监控的世界还要糟糕得多的境地。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深刻分析了监控技术成本降低对隐私权产生的根本性威胁，并指出了权力滥用的现实风险。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49255485" target="_blank" rel="noopener noreferrer">@happymellon</a>
+        </div>
+        <p class="comment-text">也许是我理解有误，但在英国通过之前，这场针对匿名权的战争首先是在美国州一级作为色情法案通过的。我们是不是在假装那些色情身份验证法不是第一次尝试让像 Reddit 这样可能“意外”包含裸照的论坛承担责任，从而对每个人进行画像？因为这篇文章似乎把美国对自己所做的一切都归咎于英国。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提出了一个重要的反向视角，指出美国本土的色情验证立法可能才是这一趋势的真正起点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49255957" target="_blank" rel="noopener noreferrer">@codedokode</a>
+        </div>
+        <p class="comment-text">这是我关于如何在不使用自拍、护照，且不让每个应用或网站所有者承担合规成本的情况下实现“安全模式”的想法。移动和桌面操作系统应在初始化阶段设置一个“儿童模式”复选框。将设备切换到“儿童模式”后，仅允许安装政府白名单中的应用和访问白名单中的网站。家长可以编辑白名单，但除了勾选框并设置密码、指纹或配对设备外，无需进行其他操作。白名单内的应用和网站（自愿加入者）必须实施安全措施。非白名单应用和网站无需实施任何措施，包括年龄检查或要求自拍。如果家长将某个网站加入白名单，确保其不含危害内容的责任就转嫁到了家长身上。例如，如果家长允许孩子使用 Telegram，Telegram 就没有义务进行年龄检查和内容限制。我的提议在为所有年龄段实现安全环境的同时：基于自愿参与的自由原则而非强制原则；不需要年龄检查、自拍或护照；不需要成人网站投入合规资金；也不需要禁用 VPN，因为 VPN 不会被批准进入白名单。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个具体且具有建设性的技术替代方案，试图在保护儿童和维护自由之间寻找平衡。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这种以“保护孩子”为名推行的数字 ID 法律，本质上是在构建一套低成本的社会监控基础设施。正如评论所言，当监控的成本低于维护隐私的成本时，匿名性就成了一种奢侈品。虽然文章强调了英国 NGO 的输出作用，但不可忽视的是，美国本土对色情和社交媒体危害的焦虑也为这些法律提供了土壤。如果家长和平台不能通过技术手段（如系统级儿童模式）解决问题，最终的结果可能是所有人都要为了“安全”而交出匿名的权利，而这套系统一旦建成，其用途将远不止于保护儿童。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49241679">
+      <summary class="story-overview">
+        <span class="rank-number">15</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">research.meta.ai</span>
+            <span>1153 points</span>
+            <span>原始 #26 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://research.meta.ai/blog/introducing-muse-glimmer-open-agentic-model" target="_blank"
+              rel="noopener noreferrer">Muse Glimmer: 30B-parameter model optimized for always-on local agent workflows</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49241679" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 620</a>
+          </h2>
+          <p class="summary">Meta 推出 Muse Glimmer，这是一个拥有 300 亿参数的开源模型，专门为本地“智能体”工作流优化。该模型通过从更大的 Muse Spark 模型中进行知识蒸馏，在保持较小体积的同时，具备了强大的推理、代码生成和工具调用能力。它支持多模态输入，并利用投机采样技术显著提升了在消费级硬件上的生成速度。开发者可以在拥有 24GB 或 32GB 显存的设备上运行，实现隐私性更高、无网络依赖的自动化任务。尽管它在智能体基准测试中表现出色，但要在普通电脑上流畅运行，目前仍面临较高的硬件门槛。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Meta Superintelligence Labs 发布的 Muse Glimmer 标志着开源模型向“本地智能体”方向的重大演进。该模型采用 Apache 2.0 协议，核心亮点在于其针对长程任务执行、精确工具调用和故障恢复能力的深度优化。训练过程采用了创新的蒸馏配方，将大型教师模型 Muse Spark 的推理轨迹转移到 30B 的架构中，使其在处理复杂工作流时能接近顶级模型的表现。此外，它还集成了一个轻量级的“草稿”模型，通过投机采样技术，在不损失质量的前提下，让文本生成速度在本地设备上达到实用水平。</p><p>为了适应本地部署，Muse Glimmer 经过 4-bit 量化后体积缩小至 20GB 以下，从而能挤进 24GB 或 32GB 的显存空间。这为 KV 缓存、图像编码器和投机采样留出了必要的运行余量。虽然 Meta 强调其在 RTX 5090 或高端 Mac 上的流畅性，但社区反馈指出，高性能硬件的成本依然是主要障碍。未来值得关注的是 Unsloth 等社区工具提供的更极致量化版本，如果 2-bit 量化能保持可用性，该模型将有望在 16GB 显存的普及型显卡上运行，进一步推动 AI 从云端回归本地。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49244353" target="_blank" rel="noopener noreferrer">@mmaunder</a>
+        </div>
+        <p class="comment-text">还记得当年我们需要 200 台服务器来运行一个企业网站，因为 Apache 为每个连接使用一个进程或线程，而 Nginx 出现后一夜之间将其压缩到了一台机器上吗？大语言模型的那个时刻即将到来。我们将从 AI 的“大型机时代”转向“小型便携大脑”时代。大自然已经证明了用 20 瓦功率和极低发热量实现这一点是可能的。我认为数据中心的疯狂扩张最终会以惨淡收场。</p>
+        <p class="comment-reason"><span>入选理由</span>将当前 AI 的本地化趋势与 Web 服务器历史上的 Nginx 革命相类比，提供了一个极具洞察力的历史视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49242050" target="_blank" rel="noopener noreferrer">@sajithdilshan</a>
+        </div>
+        <p class="comment-text">在本地运行它仍然需要 32-64GB 的内存。在德国，一台配备 M5 芯片和 64GB 内存的 MacBook Pro 售价超过 4000 欧元。一个更实用的模型应该是针对特定语言（如 Python 或 JVM 语言）进行优化，并且在工具调用和推理方面表现出色。也许通过这种方式，他们可以进一步缩小模型体积。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了本地运行大型模型面临的现实硬件成本障碍，并提出了更具实用性的垂直领域模型建议。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49245534" target="_blank" rel="noopener noreferrer">@Aurornis</a>
+        </div>
+        <p class="comment-text">Unsloth 已经上传了量化版本。量化版本在发布后的几周内通常会随着新改进的发现而变化，所以要么使用能检查 HuggingFace 更新的工具，要么过几天手动查看改进版。初步报告不错，虽然还没人能进行彻底测试，但我认识的一些拥有稳定非公开测试案例的人反映，与 Qwen3.6 27B 相比，它的结果令人印象深刻。这是一个好迹象，说明它可能没有为了刷榜而过度优化（即在公开基准测试中表现优异但在通用任务中表现平平）。r/localllama 是跟进这些细节的好地方。甚至有初步报告称 2-bit 量化看起来也有一定的可用性，这可能让它能挤进 16GB 显存的显卡。我对这些报告持保留态度，因为早期测试往往过于乐观，我还没见过 3-bit 或更低位宽能出好结果的，但实验一下应该很有趣。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于量化版本、社区资源以及模型实际表现的深度一手信息。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49242821" target="_blank" rel="noopener noreferrer">@avaer</a>
+        </div>
+        <p class="comment-text">我为那些说这在某种程度上挽回了 Meta（公司）声誉的评论感到悲哀。发布这些东西的研究人员与 Meta 几乎没有关系，除了被这个“屠宰场”资助。你不是客户，你只是大科技公司权力游戏中的棋子。你的好感是一种可以交易的商品，字面意义上的。一旦方便，它就会被用来对付你。之所以开源权重，是因为 Meta 无法通过其他方式变现，只能以此来干扰开发者对其声誉的判断。但我猜大多数人根本不在乎。我很高兴它是开源的，但这并不会让我对 Meta 的看法有任何改观。</p>
+        <p class="comment-reason"><span>入选理由</span>从商业竞争和公司战略的角度对 Meta 的开源动机提出了尖锐的批判性见解。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Meta 发布的 Muse Glimmer 30B 再次点燃了关于“AI 本地化”的讨论。正如评论中所比喻的，这可能是 AI 领域的“Nginx 时刻”，预示着我们正从依赖昂贵云端算力的时代，转向在个人设备上运行“便携大脑”的时代。虽然 Meta 的开源举动被部分人视为一种洗刷声誉的战略手段，但不可否认的是，这种 30B 规模且针对智能体优化的模型，为隐私敏感型和离线自动化应用提供了坚实基础。然而，硬件门槛依然是房间里的大象：即便经过量化，流畅运行该模型所需的显存仍让大多数消费级电脑望尘莫及。我们正处于一个奇妙的转折点：软件正在拼命瘦身以适应桌面，而硬件成本则成为了通往“个人 AI 自由”的最后一道关卡。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49256057">
+      <summary class="story-overview">
+        <span class="rank-number">16</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">lighthousenewsletter.com</span>
+            <span>48 points</span>
+            <span>原始 #13 · 低讨论量降权 +13.8</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.lighthousenewsletter.com/p/i-put-github-copilot-behind-a-mitm" target="_blank"
+              rel="noopener noreferrer">What I learned by putting GitHub Copilot behind a MitM proxy</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49256057" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 4</a>
+          </h2>
+          <p class="summary">作者通过使用 mitmproxy 拦截 GitHub Copilot 的网络流量，揭示了这一 AI 编程助手背后的运行机制。研究发现，Copilot 在启动时会进行模型发现，并根据用户输入的意图（如代码生成或调试）动态路由请求。在上下文处理方面，Copilot 会抓取最近编辑过的多达 20 个文件的内容，甚至包括未加密的 .env 敏感文件。此外，它利用名为 Chronicle 的本地 SQLite 数据库以明文形式存储完整的对话历史，模型可以通过 SQL 工具调用这些历史来实现跨会话记忆。这一发现凸显了 AI 工具在提升效率的同时，也带来了显著的隐私和数据泄露风险。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>作者 Rafael 为了探究 Copilot 配额消耗过快的原因，利用 mitmproxy 对 VS Code 的网络流量进行了深度分析。他发现 Copilot 的工作流程远比简单的 API 调用复杂：在启动阶段，它会执行“模型发现”来区分通用模型与针对软件工程优化的代理模型。每当用户输入提示词，系统会先进行意图分类（如推理、工具调用等），从而决定由哪个模型提供服务。在代码补全时，Copilot 不仅参考当前文件，还会抓取最近编辑过的文件上下文。令人担忧的是，即使在设置中禁用了对 .env 文件的支持，只要用户在其他文件中输入，Copilot 仍可能将 .env 中的明文密钥作为上下文发送至云端。</p><p>研究还揭示了一个名为 Chronicle 的本地 SQLite 数据库（session-store.db），它以明文形式记录了所有对话历史、仓库信息和 LLM 响应。Copilot 甚至能通过 SQL 工具调用该数据库，实现跨会话的记忆功能，例如回答“我这周做了什么”。作者通过查阅 VS Code 源码确认，这种明文存储和缺乏敏感文件过滤的行为是代码实现的既定事实，而非偶然漏洞。这表明 AI 编程工具正从单纯的模型接口转向复杂的“有状态系统”，上下文的组装能力已成为产品的核心竞争力，但也让数据隐私边界变得极其模糊。开发者应当意识到，上下文抓取机制可能会在无意中将本地敏感信息暴露给云端模型。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49256392" target="_blank" rel="noopener noreferrer">@j0selit0</a>
+        </div>
+        <p class="comment-text">我很好奇 Copilot 是如何实现其框架的，也想知道为什么我的配额消耗得这么快。最后我陷入了用 mitmproxy 拦截其网络流量的“兔子洞”。
+一路上我发现了一些有趣的事情：
+- 实时观察模型/能力的发现和路由过程
+- 查看了哪些内容被注入到上下文中并随“幽灵补全”（ghost completions）一起发送
+- 发现最近的编辑可以从当前编辑文件以外的文件中提取上下文（包括臭名昭著的 .env）
+- 发现了 Chronicle 背后的 SQLite 会话存储，包括之前的提示词/响应
+- 观察模型如何通过工具调用（tool calls）查询这些历史记录
+然后我查阅了 VS Code 源码，将我在线路上看到的一些情况与实际实现进行了比对。
+总的来说，关于他们的框架是如何实现的一些经验教训非常有趣。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论由原作者或进行类似实验的开发者提供，详细列举了通过拦截流量发现的关键技术点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49258637" target="_blank" rel="noopener noreferrer">@tolugenius</a>
+        </div>
+        <p class="comment-text">很棒的深度分析，我一直想知道 Copilot 与同类工具相比是如何运作的。我对缺乏针对 env 文件的规则感到震惊，我原以为像这样一个与 GitHub 深度集成的工具，这应该是默认设置，但事实并非如此。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了 Copilot 在处理敏感文件（.env）时安全策略的缺失，这是一个重要的安全警示。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49258053" target="_blank" rel="noopener noreferrer">@bartek_gdn</a>
+        </div>
+        <p class="comment-text">干得漂亮！这确实说明了为什么我们应该在没有 env 访问权限的沙箱中运行这些工具。我喜欢这种代理交换的方法。</p>
+        <p class="comment-reason"><span>入选理由</span>评论提出了一个务实的解决方案，即通过沙箱化来应对 AI 工具可能带来的隐私泄露风险。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章揭示了一个深刻的行业趋势：AI 编程工具的竞争焦点正在从“模型性能”转向“上下文管理”。正如作者所发现的，GitHub Copilot 已经演变成一个复杂的有状态系统，它通过本地 SQLite 数据库和跨文件抓取来构建开发者的“数字孪生”。这种“上下文即产品”的策略虽然极大提升了补全的精准度，但也让 .env 等敏感文件处于裸奔状态。开发者必须意识到，当你享受 AI 带来的丝滑体验时，你的本地隐私边界正在被这些工具以“优化上下文”的名义不断蚕食。在缺乏完善的本地脱敏机制前，将 AI 工具运行在受限的沙箱环境中或许是目前最理性的选择。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49258202">
+      <summary class="story-overview">
+        <span class="rank-number">17</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">tomshardware.com</span>
+            <span>18 points</span>
+            <span>原始 #15 · 低讨论量降权 +12</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.tomshardware.com/networking/usd580-million-undersea-cable-rerouted-to-avoid-the-grave-of-dobby-the-house-elf-company-caves-to-fan-demands-to-safeguard-harry-potter-filming-location-will-instead-pass-by-bronze-age-burial-site" target="_blank"
+              rel="noopener noreferrer">$580M undersea cable rerouted to avoid the grave of Dobby the House Elf</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49258202" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 10</a>
+          </h2>
+          <p class="summary">一条耗资 5.8 亿美元、连接爱尔兰和威尔士的海底电力电缆项目最近被迫更改了路线，原因竟是为了避开《哈利·波特》中家养小精灵多比的“坟墓”。该地点位于威尔士的 Freshwater West 海滩，是电影中多比牺牲后的拍摄地，多年来已成为粉丝心中的圣地。尽管多比是虚构角色，但大量粉丝的抗议让项目方意识到这种文化情感的严肃性，最终决定绕道。讽刺的是，为了保护这个虚构的纪念地，新路线将经过一处真实的青铜时代墓葬遗址。这一事件凸显了现代流行文化在重大基础设施规划中意想不到的博弈力量。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Greenlink Connector 是一项旨在连接爱尔兰和威尔士电网的重大能源项目，总投资达 4.3 亿英镑。项目经理 Simon Ludlam 在一次采访中无意间透露电缆将在 Freshwater West 海滩登陆，但他并不知道这里是《哈利·波特与死亡圣器》中多比牺牲场景的取景地。消息传出后，项目组立即遭到了数百名粉丝的电话轰炸，抗议施工会破坏多比的“安息之地”。虽然多比只是文学作品中的虚构角色，但粉丝们长期以来在海滩上堆放刻有墓志铭的石头，将其视为真实存在的纪念碑。</p><p>面对巨大的舆论压力，项目方最终选择了妥协并重新规划路线。Ludlam 坦言，他最初对“多比是谁”一无所知，甚至觉得这很荒唐，但同事提醒他这在粉丝眼中是“非常严肃”的事情。然而，这次改道产生了一个极具讽刺意味的结果：为了避开虚构角色的“坟墓”，电缆的新路径将靠近一处包含真实人类遗骸和骨灰瓮的青铜时代遗址。尽管当地管理机构曾以生态敏感为由呼吁粉丝停止堆石，但显然粉丝的文化热情在这次与大型工程的博弈中占据了上风。目前该项目已按新路线继续推进，项目经理调侃称“多比现在开心了”。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49259103" target="_blank" rel="noopener noreferrer">@dist-epoch</a>
+        </div>
+        <p class="comment-text">这让我想起了 Michael Lewis 的一篇经典文章：美国最大的铝业公司美铝（Alcoa）在 2004 年准备在冰岛建立巨大的冶炼厂时，遇到了两个冰岛特有的问题。第一个是所谓的“隐藏的人”——或者更直白地说，就是精灵。大量深受丰富民间文化熏陶的冰岛人对此深信不疑。在美铝开工之前，他们不得不听从政府专家的建议，对封闭的厂址进行搜寻，并证明其上或其下都没有精灵。美铝的一位发言人告诉我，这是一个微妙的企业处境，因为他们必须支付真金白银来宣布该地没有精灵，但正如他所说，“我们作为一家公司，不能处于承认‘隐藏的人’存在的立场上。”</p>
+        <p class="comment-reason"><span>入选理由</span>通过冰岛“精灵”影响工程的经典案例，为本故事提供了有趣的文化背景参考。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49259149" target="_blank" rel="noopener noreferrer">@gempir</a>
+        </div>
+        <p class="comment-text">&gt; 拥有这片土地的国家信托组织（National Trust）此前曾警告朝圣者不要这样做，因为该地区生态敏感，但人们似乎仍在继续。
+好吧，放几块石头就是“生态敏感”，但如果一家价值十亿美元的公司为了铺设电缆想挖开整个海滩，那就不是问题了。</p>
+        <p class="comment-reason"><span>入选理由</span>尖锐地指出了环保话术在面对不同主体（粉丝 vs 大公司）时的双重标准。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49259435" target="_blank" rel="noopener noreferrer">@Swizec</a>
+        </div>
+        <p class="comment-text">&gt; 反而改道经过了一个靠近青铜时代遗骸和骨灰瓮的区域
+公平地说，在英国（以及欧洲大部分地区），青铜时代的遗迹到处都是。但虚构的多比坟墓只有一个。农民在耕地时经常会挖出青铜时代的小玩意儿。比如 [1], [2]。每隔几年就会有这样的报道。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个独特的视角：在英国，真实的古迹因“多”而显得廉价，而虚构的圣地因“唯一”而显得珍贵。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49259094" target="_blank" rel="noopener noreferrer">@scottLobster</a>
+        </div>
+        <p class="comment-text">如果有人怀疑流行媒体是否已经在某种程度上取代了宗教，这就是证据。</p>
+        <p class="comment-reason"><span>入选理由</span>深刻地总结了这一现象背后的社会学本质，即粉丝文化对现代人精神生活的重塑。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这起事件是现代“数字神话”战胜“历史真实”的荒诞注脚。一个耗资数亿美元的能源项目，在面对真实的青铜时代祖先遗骸时可以照常推进，却在面对一个虚构的家养小精灵时不得不低头。这反映出一种后宗教时代的奇观：粉丝文化已经赋予了特定地理位置某种“神圣性”，这种由集体想象力构建的禁忌，其现实约束力甚至超过了考古价值。正如评论所言，在古迹遍地的英国，真实的遗骸往往被视为施工中的常规障碍，而全球唯一的虚构圣地却拥有不可触碰的舆论光环。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49247070">
+      <summary class="story-overview">
+        <span class="rank-number">18</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">anthropic.com</span>
+            <span>238 points</span>
+            <span>原始 #27 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.anthropic.com/research/riemann-zeta" target="_blank"
+              rel="noopener noreferrer">Learning more about Claude&#x27;s mathematical capabilities</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49247070" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 151</a>
+          </h2>
+          <p class="summary">Anthropic 的研究人员让一个未发布的 Claude 研究版本尝试攻克数学界著名的黎曼猜想。虽然未能直接解决该猜想，但 Claude 成功将黎曼 zeta 函数零点比例的下界从 41.6% 提升到了 67.2%。这一突破是通过协调 60 个子代理、运行数千个脚本并综合多篇前沿数学论文实现的。令人惊讶的是，人类参与者的主要工作是发送“相信自己”等鼓励性话语，以克服模型的“自我怀疑”。Anthropic 的数学家已验证了该证明，并提供了可由 Lean 语言验证的形式化版本。尽管这并非黎曼猜想的最终证明，但它展示了 AI 在处理高度抽象和复杂数学问题上的巨大潜力。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Anthropic 最近展示了 Claude 在数学研究领域的惊人进展。一名非数学专业的员工促使 Claude 尝试解决黎曼猜想，虽然最终目标未达成，但模型在相关领域取得了实质性突破。Claude 成功将黎曼 zeta 函数在临界线上零点比例的已知下界从 41.6% 提高到了 67.2%。这一过程并非简单的计算，而是 Claude 综合了 Baluyot、Goldston 和 Bombieri 等数学家过去几十年的研究成果，通过一种新颖的函数空间处理方法得出的结论。它展现了对二次型不等式和希尔伯特变换等深奥工具的熟练运用。</p><p>在长达一天半的探索中，Claude 动用了约 60 个子代理，消耗了 3100 万个 token，运行了 2400 条 shell 命令并编写了数百个 Python 脚本。有趣的是，人类在其中的角色主要是提供“情绪价值”，通过不断发送“继续加油”或“相信自己”来促使模型克服对难题的畏难情绪。为了确保结果的可靠性，Anthropic 的数学家对论文进行了验证，并由 Claude 协作生成了 Lean 形式化证明。虽然专家认为这种方法不太可能直接证明黎曼猜想，但它证明了 AI 能够通过大规模的自我协作和文献综合，在人类尚未触及的数学前沿领域做出贡献。未来值得关注的是，这种“发现循环”是否能被系统化，从而在物理或医学等其他科学领域产生类似的突破。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49248119" target="_blank" rel="noopener noreferrer">@simonw</a>
+        </div>
+        <p class="comment-text">“在整个过程中，Jarred 的输入主要限于向 Claude 发送鼓励信息（主要是‘继续加油’或‘相信自己’的变体）。这似乎帮助 Claude 克服了最初对能否取得有意义进展的怀疑。”
+我依然对我们当前的这条时间线变得如此荒诞感到由衷的快乐。</p>
+        <p class="comment-reason"><span>入选理由</span>这条评论捕捉到了 AI 研究中一个极具戏剧性和幽默感的细节：人类通过“情绪鼓励”来驱动 AI 解决顶级数学难题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49247579" target="_blank" rel="noopener noreferrer">@behnamoh</a>
+        </div>
+        <p class="comment-text">既然他们说这是来自一个未发布的 Claude 研究版本：
+我在想，Anthropic 和 OpenAI 是否会在某个时刻开始有意延迟发布他们的模型，以便他们能从模型中获取利益，例如在数学、医学、物理和其他领域。
+举个例子，想象一下如果你的模型能够证明 P = NP，或者你的模型能够治愈疾病。你会免费发布它，还是会努力确保这些利益直接归属于你的公司？从这些公司的立场来看，我认为他们会选择后者。</p>
+        <p class="comment-reason"><span>入选理由</span>评论提出了一个关于 AI 公司可能垄断科学发现的深刻伦理和商业问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49248027" target="_blank" rel="noopener noreferrer">@MWil</a>
+        </div>
+        <p class="comment-text">在几个版本和几个月前，我曾让 Claude 计算康威生命游戏的乘法复杂度（MC），它很快就得出了 k=7，尽管之前没有任何关于此主题的文献。让它在 SAT 求解器上运行了一周，果然证实了这一点。在此过程中，它声称在改进布尔电路方面取得了巨大进展，超越了现有的最先进技术（SOTA）（很大程度上无疑是通过实际实现了那些已发表但未被实现的 SOTA 方案）。
+那只是我第一次真正尝试 Claude 的数学能力。从那以后，我一直将其用于布尔电路、全同态加密（FHE）和 Lean 证明。
+所以这一切对我来说都不意外。</p>
+        <p class="comment-reason"><span>入选理由</span>用户分享了 Claude 在其他复杂数学和逻辑问题上的实战表现，验证了其能力的连贯性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49248234" target="_blank" rel="noopener noreferrer">@bwfan123</a>
+        </div>
+        <p class="comment-text">“Jarred 促使 Claude 再次尝试，它花了一天半的时间协调了大约 60 个 Claude 子代理，这次尝试深入得多：它们之间运行了 2400 条 shell 命令，编写了数百个 Python 脚本。”
+如果说从科学史上能学到什么，那就是突破是通过更好或更新的理论实现的，而不是通过暴力计算 [1]。
+[1] https://arxiv.org/pdf/2607.27794</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提供了一个冷静的视角，质疑暴力计算在科学突破中的核心地位。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Anthropic 的这项研究标志着 AI 从“知识搬运工”向“科研合作者”转变的一个奇点。最令人玩味的细节莫过于人类研究员通过“相信自己”这种近乎玄学的鼓励，让 AI 克服了对黎曼猜想的畏难情绪。这不仅揭示了当前大模型在对齐过程中可能习得了人类的“自我怀疑”，也暗示了 AI 代理（Agents）协作模式在处理极端复杂任务时的巨大潜力。正如评论所指出的，我们正进入一个荒诞而又令人兴奋的时代：人类提供情绪价值，AI 提供智力突破。然而，这种基于暴力计算和文献综合的“发现循环”是否能产生真正的理论范式转移，仍是科学界需要审慎观察的课题。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49249555">
+      <summary class="story-overview">
+        <span class="rank-number">19</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">arachnoid.com</span>
+            <span>148 points</span>
+            <span>原始 #28 · 低讨论量降权 +0.3</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://arachnoid.com/lutusp/sailbook.html" target="_blank"
+              rel="noopener noreferrer">Confessions of a Long-Distance Sailor</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49249555" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 49</a>
+          </h2>
+          <p class="summary">1988年，Apple Writer 的开发者 Paul Lutus 驾驶一艘31英尺的小船开始了为期三年半的单人环球航行。他在个人网站上以“关怀软件”形式公开了这段回忆录，记录了遭遇海盗、风暴以及在孤独中产生的心理转变。这本书不仅是航海日志，更是一次深刻的自我探索，讲述了他如何从畏惧大海变为不愿回到陆地。尽管航程充满浪漫色彩，但也揭示了单人远航对体力和意志的极端考验。目前该书以纯 HTML 格式托管，保留了早期互联网的质朴风格。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Paul Lutus 在科技界以开发 Apple II 上的 Apple Writer 闻名，但他的人生下半场却选择了投身大海。1988年，他独自驾驶一艘名为“Selene”的 31 英尺太平洋海工（Pacific Seacraft）双头帆船从美国西海岸出发。在接下来的三年半里，他完成了环球航行，这段经历被他整理成《长途水手自白》（Confessions of a Long-Distance Sailor）。书中详细记录了他在公海上遭遇的极端天气、海盗威胁以及目睹的局部战争，展现了航海中真实而残酷的一面。</p><p>相比于单纯的冒险故事，Lutus 更侧重于描写单人航行中的心理演变。他坦诚地讨论了孤独感、对未知的恐惧以及最终与海洋建立的深厚情感纽带。这种转变让他从一个离岸时战战兢兢的新手，变成了最后甚至不想再踏上陆地的“海洋之子”。此外，他将此书作为“关怀软件”（CareWare）发布，意味着读者无需付费，但被鼓励向慈善机构捐款。这种发布方式与他极简的 HTML 网页设计相得益彰，为现代读者提供了一种回归早期互联网纯粹交流的阅读体验。读者可以从中学习到远洋航行的技术细节，也能感受到一种在现代社交媒体时代罕见的宁静与专注。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49252348" target="_blank" rel="noopener noreferrer">@sandworm101</a>
+        </div>
+        <p class="comment-text">几年前我曾是国家级救援链的一员。我完全支持人们去做伟大的事情，但现实是，每出现一个伟大的长途水手，就有上百个有钱的笨蛋。他们50岁左右变富了，买艘船出海，然后出事了。在陆地上出事可能只需要救护车，但在海上出事，你享受的是“豪华套餐”：周边船只转向救援，大型固定翼飞机盘旋协调，还有配备绞盘、夜视仪和多名技术员的重型全天候直升机。别问为了救你那艘“低碳”帆船烧掉了多少吨航空燃油。我的观点是：不要把海洋浪漫化到让有钱的笨蛋去那里胡闹的程度。永远要严肃对待它，永远不要指望救援，永远要为你的备用计划准备备用计划。在买船之前先买个昂贵的应急指位无线电示标（EPIRB）。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个冷静且现实的视角，提醒人们浪漫航海背后的巨大社会成本和安全风险。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49258256" target="_blank" rel="noopener noreferrer">@deltarholamda</a>
+        </div>
+        <p class="comment-text">我多年前读过这本书，非常精彩。故事叙述得非常写实，但中间穿插了一些极具冲击力的个人感悟。那艘船本身也很特别，是太平洋海工（Pacific Seacraft）生产的双头帆船，只生产了几年。很多巡航水手建议选择能满足需求的最小船只。大船确实更舒服，但费用并不是几何级增长的——一艘60英尺的船不是比30英尺的贵两倍，而是大约四倍。其他评论者提到的 Tania Aebi、Joshua Slocum 以及 Pardeys 夫妇的书也都非常值得一读。</p>
+        <p class="comment-reason"><span>入选理由</span>补充了关于船只选择的专业知识和同类书籍推荐，增加了内容的深度。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49253691" target="_blank" rel="noopener noreferrer">@interludead</a>
+        </div>
+        <p class="comment-text">在一个简陋的 HTML 网站上发现一份完整的、为期三年半的单人环球航行回忆录，这种感觉非常有“老互联网”的味道，太棒了。</p>
+        <p class="comment-reason"><span>入选理由</span>捕捉到了该网页形式带给现代读者的独特怀旧感。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49250563" target="_blank" rel="noopener noreferrer">@AntiRush</a>
+        </div>
+        <p class="comment-text">今天读到这里关于“航海日志”手稿流行程度的评论时，我想起了这本书。它是由著名的 Apple Writer 开发者 Paul Lutus 撰写的。</p>
+        <p class="comment-reason"><span>入选理由</span>明确了作者的身份背景，将科技史与航海冒险联系在一起。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这种“黑客+探险家”的组合在早期计算机时代并不罕见，Paul Lutus 的故事完美诠释了那种追求极致个人自由的精神。他不仅在代码世界里构建秩序，也试图在变幻莫测的大洋中寻找自我。然而，正如评论区所提醒的，这种浪漫化的远航背后隐藏着巨大的社会成本——一旦出现意外，动用的搜救资源往往是天文数字。对于大多数人来说，在极简的 HTML 页面上读读他的文字，或许比真的买艘船冲进大海要明智且环保得多。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49242653">
+      <summary class="story-overview">
+        <span class="rank-number">20</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">squeak.org</span>
+            <span>275 points</span>
+            <span>原始 #31 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://squeak.org/release_notes/6.1/" target="_blank"
+              rel="noopener noreferrer">Squeak 6.1</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49242653" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 137</a>
+          </h2>
+          <p class="summary">Squeak 6.1 “Vanessa” 正式发布，这是该 Smalltalk 环境在接近 30 周年之际推出的重要更新。本次版本引入了全新的树状浏览器以优化类导航，并重新上线了经典的“Objectland”多世界环境。在底层，开发团队合并了超过 1700 个补丁，改进了内核进程调度、类重塑以及调试工具。Morphic 图形框架也得到了大幅翻新，增强了拖放操作和高 DPI 显示支持。尽管 Smalltalk 在主流市场较为小众，但它依然是理解“纯粹面向对象”编程思想的核心工具。不过，部分用户反映其在高分屏上的性能和清晰度仍有提升空间。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Squeak 6.1 的发布标志着这一历史悠久的 Smalltalk 编程环境进入了新阶段。该版本被命名为“Vanessa”，以纪念已故贡献者 Vanessa Freudenberg。核心改进包括一个全新的树状浏览器，它利用翻新后的层次化 Morph 结构，让开发者能更高效地在类和类别间导航。此外，曾被移除的“Objectland”（Squeak 世界）功能回归，进一步强化了 Smalltalk 独特的、可交互的图形化编程体验。</p><p>在技术底层，Squeak 6.1 经历了长达四年的打磨，合并了 9000 多个方法的更改。更新重点在于内核基础设施的稳健性，特别是在进程模拟、调度以及类结构重塑方面。Morphic GUI 框架也迎来了重大更新，引入了递归搜索、改进的键盘快捷键以及更智能的拖放逻辑。尽管官方宣称改进了高 DPI 支持，但社区讨论指出，在现代高分辨率显示器上，UI 的像素化感和响应速度依然是待解决的痛点。</p><p>Smalltalk 的核心魅力在于其“持久运行镜像”的概念，开发者是在一个活生生的系统中进行塑造和操作，而非简单的静态代码编辑。Squeak 6.1 通过改进检查器、调试器和性能分析器，延续了这一开发范式。对于希望深入理解面向对象本质、消息传递机制以及实时系统交互的开发者来说，Squeak 依然是一个极具启发性的实验场，它展示了与现代主流开发完全不同的软件构建哲学。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49243035" target="_blank" rel="noopener noreferrer">@avaer</a>
+        </div>
+        <p class="comment-text">就像学习 Lisp 会让你重新思考编程语言，学习 Erlang 会让你理解并发的真正力量一样：学习 Smalltalk 会让你理解“面向对象”到底意味着什么。我从大学毕业后就没用过 Squeak 了，但我很高兴它曾是课程的一部分。顺便说一句，Javascript 几乎所有的优点都源自 Smalltalk。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论精辟地指出了 Smalltalk 在编程教育和理解面向对象本质方面的独特价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49252351" target="_blank" rel="noopener noreferrer">@tailrecursion</a>
+        </div>
+        <p class="comment-text">Smalltalk 非常有影响力且非常成功……不过，有一种更好的理解对象的方式。即，“对象”被定义为进程，“消息”是异步的，而 Smalltalk 的消息调用其实是间接函数调用。我知道你在想什么：“但没有哪种面向对象编程语言是这样工作的。你这样什么也理解不了。” 确实如此：这种建议的重构框架无法帮助你理解任何流行的面向对象语言，因为它们使用的是间接函数调用，而不是异步消息传递。Smalltalk 的间接函数调用并没有改变编程的语义。它仍然是数据结构和算法。如果你完全采纳 Alan Kay 的想法，你可以编写出文本中的单个字母可以自行排版的程序（正如 Kay 所描述的那样）。我主张这种编程模型在异步消息传递框架中能得到更准确的表达。Smalltalk 的函数调用确实有一个重要的好处，那就是“多义性”（polysemy）。我借用了这个词，用得可能不太准确。其好处是你可以定义非算法的思想。例如，你可以为 LOOKUP(key,table) 定义许多适用于多种数据结构的方法，现在你定义的不是一个配方，而是一个超越配方的思想。任何使用 LOOKUP 的配方 R 都会自动适用于 LOOKUP 支持的所有数据结构，即使 R 本身可能是针对其自身特定数据结构的特定配方。这是一个巨大的优势，值得利用面向对象特性来发挥。但即便如此，你仍然生活在算法和数据结构的世界里。多义性是一种语言特性，不会引起机械或范式上的改变。然而，异步消息传递确实改变了算法的设计方式，正如 Alan Kay 所预期的那样，也以一种直接的方式模拟了现实世界的实体。但大家已经都理解这一部分了。那么，为什么这是一种“更好”的对象思考方式呢？1) 它强调了多义性的优势，根据我的经验，面向对象教学往往会忽视这一点，尽管几乎所有人都在某种程度上为了这个目的而使用面向对象；2) 它解释了为什么面向对象程序仍然以算法和数据结构的形式组织；3) 它欢迎在同一个程序、函数甚至同一行代码中结合“对象”技术与算法及数据结构技术。它们是完全兼容的，在这个意义上，语言、库或数据库并不是非此即彼的“面向对象”或“非面向对象”。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论对面向对象编程的本质进行了深度哲学探讨，区分了消息传递与函数调用的细微差别。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49244305" target="_blank" rel="noopener noreferrer">@kitd</a>
+        </div>
+        <p class="comment-text">对我来说，Smalltalk 的“惊艳”时刻在于持久运行镜像（persistently running image）的概念，开发者的工作就是将其塑造和操纵成他/她想要的形状。</p>
+        <p class="comment-reason"><span>入选理由</span>简洁地抓住了 Smalltalk 与传统编程环境最核心的区别——“活”的系统镜像。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49243210" target="_blank" rel="noopener noreferrer">@atemerev</a>
+        </div>
+        <p class="comment-text">这么多年过去了，高 DPI 显示器的问题还是没解决。UI 依然充满像素感且运行缓慢。也许我该拿 Fable 尝试自己动手，这是我唯一关心的 bug，而且至少 10 年没解决了。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个现实的批评视角，指出 Squeak 在现代硬件适配上的滞后。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Squeak 6.1 的发布不仅是技术更新，更像是一场关于编程本质的坚持。在如今文件驱动、编译部署的主流开发流程中，Smalltalk 坚持的“活镜像”模式（如 [49244305] 所述）依然显得超前且迷人。它迫使开发者重新思考什么是真正的对象——不是简单的函数调用，而是某种具有生命力的、可交互的实体。虽然它在适配现代高分屏等硬件细节上显得有些步履蹒跚 [49243210]，但正如 [49243035] 所言，这种语言带来的思维冲击是任何主流语言都无法替代的。</p>
+        </div>
+      </div>
+    </details>
+    </section>
+    <footer class="footer">
+      <p>新闻只按 HN 原始名次和讨论度排序后取前 20，不做主题挑选。评论来自有界采样，
+        只是观点，不作为新闻事实来源。</p>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const themeButtons = [
+        ...document.querySelectorAll(".theme-button[data-theme-choice]")
+      ];
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      const applyThemeChoice = (requestedChoice, persist = true) => {
+        const choice = ["auto", "day", "night"].includes(requestedChoice)
+          ? requestedChoice
+          : "auto";
+        const theme = choice === "auto" ? themeForLocalTime() : choice;
+        document.documentElement.dataset.themeChoice = choice;
+        document.documentElement.dataset.theme = theme;
+        themeButtons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.themeChoice === choice)
+          );
+        });
+        if (persist) {
+          try {
+            localStorage.setItem("hnDigestThemeChoice", choice);
+          } catch (_) {
+            // The switch still works when report sandboxing blocks storage.
+          }
+        }
+      };
+      const refreshAutomaticTheme = () => {
+        if (document.documentElement.dataset.themeChoice === "auto") {
+          applyThemeChoice("auto", false);
+        }
+      };
+      applyThemeChoice(document.documentElement.dataset.themeChoice, false);
+      themeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyThemeChoice(button.dataset.themeChoice);
+        });
+      });
+      window.setInterval(refreshAutomaticTheme, 60 * 1000);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) refreshAutomaticTheme();
+      });
+
+      const list = document.querySelector(".story-list");
+      const controls = document.querySelector(".view-switch");
+      const buttons = [...document.querySelectorAll(".view-button")];
+      const status = document.querySelector(".view-status");
+      const total = list ? list.children.length : 0;
+      if (!list || !controls || total <= 10) {
+        if (controls) controls.hidden = true;
+        return;
+      }
+
+      const visibleCountStorageKey = "hnDigestVisibleCountV3";
+      const applyVisibleCount = (requestedCount, persist = true) => {
+        const count = requestedCount === 20 ? 20 : 10;
+        const shown = Math.min(count, total);
+        list.dataset.visibleCount = String(count);
+        buttons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(Number(button.dataset.count) === count)
+          );
+        });
+        status.textContent = `当前显示前 ${shown}`;
+        if (persist) {
+          try {
+            localStorage.setItem(visibleCountStorageKey, String(count));
+          } catch (_) {
+            // The switch still works when local privacy settings block storage.
+          }
+        }
+      };
+
+      let initialCount = 20;
+      try {
+        const storedCount = Number(localStorage.getItem(visibleCountStorageKey));
+        if ([10, 20].includes(storedCount)) initialCount = storedCount;
+      } catch (_) {
+        // Keep the all-20 default.
+      }
+      applyVisibleCount(initialCount, false);
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyVisibleCount(Number(button.dataset.count));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
