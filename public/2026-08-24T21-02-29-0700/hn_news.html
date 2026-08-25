@@ -1,0 +1,2093 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Hacker News 每日精选：通俗摘要、精彩评论与 LLM 锐评">
+  <title>HN 每日精选 · 2026-08-24</title>
+  <script>
+    (() => {
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      let choice = "auto";
+      try {
+        choice = localStorage.getItem("hnDigestThemeChoice") || "auto";
+      } catch (_) {
+        // Storage may be unavailable in a sandboxed report.
+      }
+      if (!["auto", "day", "night"].includes(choice)) {
+        choice = "auto";
+      }
+      const theme = choice === "auto" ? themeForLocalTime() : choice;
+      document.documentElement.dataset.themeChoice = choice;
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d252d;
+      --muted: #6c747c;
+      --paper: #f5f3ed;
+      --card: #fffefa;
+      --line: #d9d6ce;
+      --orange: #e85d2a;
+      --orange-soft: #fff0e8;
+      --blue-soft: #edf3f7;
+      --green: #25644f;
+      --story-open-line: #c7c3b9;
+      --story-shadow: rgba(31, 36, 40, .07);
+      --summary-ink: #47515a;
+      --detail-ink: #37424c;
+      --section-ink: #5f6871;
+      --hint-ink: #8a9095;
+      --comment-meta-ink: #637080;
+      --comment-label-bg: #d7e6ef;
+      --comment-label-ink: #315b73;
+      --comment-text-ink: #2e3944;
+      --comment-reason-ink: #637080;
+      --comment-reason-label: #2e5e78;
+      --comment-empty-ink: #8a9097;
+      --editorial-ink: #333b42;
+      --humor-bg: #f8e8bd;
+      --humor-ink: #795d16;
+      --wisdom-bg: #dcebdc;
+      --wisdom-ink: #315f3a;
+      --counterpoint-bg: #eadff1;
+      --counterpoint-ink: #614273;
+    }
+    html[data-theme="night"] {
+      color-scheme: dark;
+      --ink: #e0e7e1;
+      --muted: #9ba79f;
+      --paper: #111713;
+      --card: #1a221d;
+      --line: #303c34;
+      --orange-soft: #2c211b;
+      --blue-soft: #202c2e;
+      --green: #83c8a2;
+      --story-open-line: #435148;
+      --story-shadow: rgba(0, 0, 0, .28);
+      --summary-ink: #c2ccc5;
+      --detail-ink: #d1d8d3;
+      --section-ink: #aab5ae;
+      --hint-ink: #929e96;
+      --comment-meta-ink: #a8b7b8;
+      --comment-label-bg: #2f474d;
+      --comment-label-ink: #b8dbe2;
+      --comment-text-ink: #d5dcda;
+      --comment-reason-ink: #aebbb8;
+      --comment-reason-label: #92c6cf;
+      --comment-empty-ink: #929e96;
+      --editorial-ink: #d9d5d0;
+      --humor-bg: #403721;
+      --humor-ink: #e3cb87;
+      --wisdom-bg: #293c2c;
+      --wisdom-ink: #a8d3ae;
+      --counterpoint-bg: #382d40;
+      --counterpoint-ink: #d0b4df;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .18s ease, color .18s ease;
+    }
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--orange); }
+    .masthead {
+      border-top: 5px solid var(--orange);
+      border-bottom: 1px solid #343b43;
+      background: #18212a;
+      color: white;
+    }
+    .masthead-inner, main {
+      width: min(860px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+    .masthead-inner { padding: 25px 0 27px; }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      background: var(--orange);
+      color: white;
+      font-family: ui-serif, Georgia, serif;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+    .archive-link { color: #bac2ca; }
+    .theme-switch {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .theme-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 8px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .theme-button:hover { color: white; }
+    .theme-button[aria-pressed="true"] {
+      background: #46515b;
+      color: white;
+    }
+    .theme-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .eyebrow {
+      color: #ff9670;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 7px 0 8px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 6vw, 46px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.03;
+    }
+    .dek {
+      margin: 0;
+      color: #c0c8d0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      margin-top: 17px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .stats strong { color: white; font-size: 13px; margin-right: 3px; }
+    .view-switch {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 13px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .view-switch[hidden] { display: none; }
+    .view-buttons {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .view-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 9px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .view-button:hover { color: white; }
+    .view-button[aria-pressed="true"] {
+      background: var(--orange);
+      color: white;
+    }
+    .view-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .view-status { color: #c0c8d0; }
+    .ranking-rule {
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255, 255, 255, .09);
+      color: #9faab4;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .ranking-rule strong {
+      color: #e7eaed;
+      margin-right: 5px;
+    }
+    main { padding: 20px 0 72px; }
+    .story-list {
+      display: grid;
+      gap: 9px;
+    }
+    .story-list[data-visible-count="10"] .story:nth-child(n+11),
+    .story-list[data-visible-count="20"] .story:nth-child(n+21) {
+      display: none;
+    }
+    .story {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--card);
+      overflow: clip;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .story[open] {
+      border-color: var(--story-open-line);
+      box-shadow: 0 14px 34px var(--story-shadow);
+    }
+    .story-overview {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 13px;
+      padding: 17px 20px 15px 15px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .story-overview::-webkit-details-marker { display: none; }
+    .story-overview:focus-visible {
+      outline: 3px solid rgba(232, 93, 42, .45);
+      outline-offset: -3px;
+    }
+    .rank-number {
+      color: var(--orange);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .story-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 14px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .story-kicker .source {
+      color: var(--green);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h2 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 10px;
+      margin: 5px 0 5px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(17px, 2.3vw, 19px);
+      font-weight: 700;
+      letter-spacing: -.008em;
+      line-height: 1.28;
+    }
+    .title-link { text-decoration: none; }
+    .discussion-link {
+      color: var(--orange);
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .summary {
+      margin: 0;
+      color: var(--summary-ink);
+      font-size: 14.5px;
+      line-height: 1.72;
+      white-space: pre-line;
+    }
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--hint-ink);
+      font-size: 10px;
+      font-weight: 750;
+    }
+    .chevron {
+      display: inline-block;
+      color: var(--orange);
+      transition: transform .18s ease;
+    }
+    .story[open] .chevron { transform: rotate(180deg); }
+    .story[open] .expand-hint > span:first-child { font-size: 0; }
+    .story[open] .expand-hint > span:first-child::after {
+      content: "收起详情";
+      font-size: 10px;
+    }
+    .story-details {
+      margin-left: 80px;
+      padding: 17px 20px 24px 0;
+      border-top: 1px solid var(--line);
+    }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      color: var(--section-ink);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .detail-summary > p {
+      margin: 0;
+      color: var(--detail-ink);
+      font-size: 14px;
+      line-height: 1.78;
+    }
+    .detail-summary > p + p { margin-top: 12px; }
+    .comments-panel {
+      margin-top: 21px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+    .comments-list { display: grid; gap: 9px; }
+    .featured-comment {
+      margin: 0;
+      padding: 14px 16px;
+      border: 0;
+      border-radius: 3px;
+      background: var(--blue-soft);
+    }
+    .comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 7px;
+      font-size: 11px;
+    }
+    .comment-meta a { color: var(--comment-meta-ink); text-decoration: none; }
+    .comment-label {
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--comment-label-bg);
+      color: var(--comment-label-ink);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .05em;
+    }
+    .comment-label-humor {
+      background: var(--humor-bg);
+      color: var(--humor-ink);
+    }
+    .comment-label-wisdom {
+      background: var(--wisdom-bg);
+      color: var(--wisdom-ink);
+    }
+    .comment-label-counterpoint {
+      background: var(--counterpoint-bg);
+      color: var(--counterpoint-ink);
+    }
+    .comment-text {
+      margin: 0;
+      color: var(--comment-text-ink);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 13px;
+      line-height: 1.62;
+      white-space: pre-line;
+    }
+    .comment-reason {
+      margin: 9px 0 0;
+      color: var(--comment-reason-ink);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .comment-reason span {
+      margin-right: 7px;
+      color: var(--comment-reason-label);
+      font-weight: 850;
+    }
+    .comments-empty {
+      margin-top: 19px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      color: var(--comment-empty-ink);
+      font-size: 12px;
+    }
+    .editorial {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      align-items: start;
+      margin-top: 21px;
+      padding: 13px 15px;
+      border-left: 3px solid var(--orange);
+      background: var(--orange-soft);
+    }
+    .editorial-mark {
+      padding-top: 2px;
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+    .editorial p {
+      margin: 0;
+      color: var(--editorial-ink);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.62;
+    }
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 27px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .footer p { margin: 0; max-width: 680px; }
+    .footer a { font-weight: 800; }
+    @media (max-width: 620px) {
+      .masthead-inner, main { width: min(100% - 20px, 860px); }
+      .masthead-inner { padding-top: 18px; }
+      .topline {
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+      .top-actions {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
+      .story-overview {
+        grid-template-columns: 37px minmax(0, 1fr);
+        gap: 9px;
+        padding: 14px 13px 12px 10px;
+      }
+      .rank-number { font-size: 22px; }
+      .story-details { margin-left: 56px; padding-right: 13px; }
+      .editorial { grid-template-columns: 1fr; gap: 4px; }
+      .footer { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .masthead { background: white; color: var(--ink); border-bottom-color: var(--line); }
+      .topline, .archive-link, .expand-hint, .view-switch, .theme-switch { display: none; }
+      main { width: 100%; }
+      .story { display: block !important; break-inside: avoid; }
+      .story-details { display: block; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="topline">
+        <div class="brand"><span class="brand-mark">Y</span> Hacker News</div>
+        <div class="top-actions">
+          <div class="theme-switch" role="group" aria-label="选择页面颜色模式">
+            <button class="theme-button" type="button" data-theme-choice="auto" aria-pressed="true">自动</button>
+            <button class="theme-button" type="button" data-theme-choice="day" aria-pressed="false">日间</button>
+            <button class="theme-button" type="button" data-theme-choice="night" aria-pressed="false">夜间</button>
+          </div>
+          <a class="archive-link" href="../index.html">每日归档 →</a>
+        </div>
+      </div>
+      <div class="eyebrow">2026-08-24 · top feed · 过去 36 小时</div>
+      <h1>今天的 Hacker News</h1>
+      <p class="dek">前 20 篇已经全部准备好；默认显示前 20，也可以切换到前 10。</p>
+      <div class="stats">
+        <span><strong>20</strong>篇已准备</span>
+        <span><strong>20</strong>篇有精彩评论</span>
+        <span>更新于 2026-08-24 21:02 PDT</span>
+        <span>生成模型 <strong>gemini/gemini-3-flash-preview</strong></span>
+      </div>
+      <div class="view-switch" aria-label="选择新闻显示数量">
+        <span>显示</span>
+        <div class="view-buttons">
+          <button class="view-button" type="button" data-count="10" aria-pressed="false">前 10</button>
+          <button class="view-button" type="button" data-count="20" aria-pressed="true">前 20</button>
+        </div>
+        <span class="view-status" aria-live="polite">当前显示前 20</span>
+      </div>
+      <div class="ranking-rule">
+        <strong>排序规则</strong>HN 原始名次 + 低讨论量降权。公式：原始名次 + 0.3 × max(0, 50 − 评论数)；50 条评论以上不降权。
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="story-list" data-visible-count="20">
+      
+    <details class="story" id="story-49420861">
+      <summary class="story-overview">
+        <span class="rank-number">01</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">solar.lowtechmagazine.com</span>
+            <span>39 points</span>
+            <span>原始 #1 · 低讨论量降权 +0.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://solar.lowtechmagazine.com/2018/08/could-we-dredge-the-netherlands-without-fossil-fuels" target="_blank"
+              rel="noopener noreferrer">Could we dredge the Netherlands without fossil fuels? (2018)</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49420861" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 48</a>
+          </h2>
+          <p class="summary">荷兰地处河流三角洲，疏浚工程是维持其航运和国土安全的生命线。现代疏浚极度依赖化石燃料，巨型挖泥船每小时消耗数千升燃油。历史上，荷兰人曾巧妙利用人力、马力以及风力和潮汐驱动的“抓耙船”来清理淤泥。随着船舶日益巨型化，疏浚深度需求已超出传统动力极限，现代能源转型面临巨大挑战。纯电力驱动面临电池重量和电网负荷的瓶颈，而生物燃料的能量回报率也存在争议。真正的挑战在于，我们是否能从追求“暴力工程”转向设计更适应自然环境的浅吃水船舶。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>荷兰每年需要从水底捞出约3500万立方米的泥沙，否则港口和运河将在几年内瘫痪。在化石燃料时代之前，这项繁重的工作全靠人力和自然力。最原始的工具是“疏浚袋”，工人站在小船上用长杆把泥刮上来，这种方式甚至一直延续到了20世纪60年代。后来出现了由马匹驱动的斗链式疏浚机，但即便如此，一艘现代挖泥船的功率也抵得上300台马力机。除了硬碰硬的挖掘，古人还利用风力和潮汐。比如“抓耙船”会在退潮时利用水流冲刷，配合风帆动力拨动淤泥，让大自然自己把泥沙带走。</p><p>这种“顺势而为”的智慧在现代巨型化航运面前显得有些力不从心。现在的货轮越造越大，吃水越来越深，导致疏浚需求无止境增长。如果想彻底告别化石燃料，我们面临着尴尬的境地。现代挖泥船动辄需要16兆瓦的功率，靠电池驱动几乎是不可能的，因为电池会重到让船失去载货能力。评论区也指出，即便想拉电线供电，荷兰现有的电网负荷也难以承受。或许我们该学学弗里斯兰省的历史经验，他们曾建造上千艘浅吃水货船，通过改变船的设计来适应浅水，而不是强行把河床挖深。未来疏浚业的去碳化，可能不仅仅是能源的更替，更是对整个航运逻辑的反思。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49423396" target="_blank" rel="noopener noreferrer">@smallerize</a>
+        </div>
+        <p class="comment-text">荷兰拥有世界上最大、最强力的挖泥船“荷兰女王号”（The Queen of the Netherlands）。它的每个疏浚泵功率为8000马力（约6兆瓦），且配有两个。即便集装箱船使用的短程岸电连接也仅在2兆瓦左右。想要通过“拉电线”来供电的想法是非常雄心勃勃的。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提供了具体的功率数据，指出了现代疏浚设备电气化面临的巨大技术规模挑战。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49424383" target="_blank" rel="noopener noreferrer">@floatrock</a>
+        </div>
+        <p class="comment-text">当然你可以燃烧生物燃料，但这并不意味着你在热力学角度上有所成就。需要关注的指标是EROI（能源投资回报率）。为了获得一单位能源，你需要投入多少能源来种植这些作物？美国的玉米乙醇很愚蠢，因为它的回报率最高只有1.6:1，通常甚至是1:1。为了从玉米乙醇中获得一单位能源，你几乎需要投入一单位的经济投入（阳光虽然免费，但生产过程不免费）。甘蔗好一点，但只能在热带生长。作为参考，太阳能通常在4:1到10:1之间，风能约为10:1，页岩油在5:1到8:1左右，而沙特油井曾经能达到40:1。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从能源回报率的角度反驳了简单使用生物燃料替代化石燃料的方案。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49425855" target="_blank" rel="noopener noreferrer">@metalman</a>
+        </div>
+        <p class="comment-text">许多环保主义者希望摆脱这种“糟糕的现状”，进入一个能够维护、修理和改装负责任技术的时代。我的生活一部分就是修理和维护各种时代的设备，同时建造新东西。我的大部分能源来自太阳能和可再生能源，但在焊接和运输等能源密集型事务上仍使用发动机。因此，我对电动电池车、卡车、船只、飞机和拖拉机非常感兴趣，比如超大型土方设备或挖泥船。但这些东西必须是直观易操作、易修理、可靠且相对安全的，而且价格不能高到只有资本才能拥有。最后这一点正是过去吸引人的地方：在过去，人们默认拥有自主权。而现在，我们正处于一种被制度化、被技术异化包围的保姆式噩梦中。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深刻探讨了低科技运动背后的哲学：追求人类对技术的自主权和可维修性，而非单纯的复古。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49424991" target="_blank" rel="noopener noreferrer">@arjie</a>
+        </div>
+        <p class="comment-text">我认为关键在于，即使没有化石燃料，我们也无法在不破坏环境的情况下进行疏浚。随着时间的推移，环境担忧可能会加速“去围垦化”（depolderization），直到荷兰不再拥有如此巨大的环境破坏足迹。幸运的是，他们在这方面已经取得了一些进展（例如Hertogin Hedwigepolder），但希望他们最终能减轻在这里造成的严重破坏。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提出了一个更根本的观点：疏浚和围海造田本身就是对环境的破坏，能源转型并不能解决生态足迹问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49422622" target="_blank" rel="noopener noreferrer">@an_account</a>
+        </div>
+        <p class="comment-text">利用风能和太阳能发电，再拉几根电线到挖泥船上，这比手工疏浚要容易得多。为什么许多环保活动家似乎总想回到糟糕的过去，而不是迈向光明的未来？不过，这篇文章关于历史方面的部分读起来很不错，技术非常有趣。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论代表了典型的技术乐观派观点，质疑了回归低科技手段的必要性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章引发了关于“暴力工程”与“环境适应”的深刻讨论。现代疏浚业是一个典型的资源密集型行业，它为了服务于日益膨胀的全球贸易，陷入了“船越大、挖越深、耗油越多”的死循环。正如评论 [49423396] 所言，现代挖泥船惊人的功率需求让简单的电气化方案显得苍白无力。我们往往倾向于寻找一种“等效替换”的能源，却很少反思这种需求本身是否合理。或许低科技实验室提出的“浅吃水船舶”方案才是真正的出路：与其耗费巨资和能源去对抗自然淤积，不如让技术重新回归到与环境和谐共存的尺度。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49426564">
+      <summary class="story-overview">
+        <span class="rank-number">02</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">developer.apple.com</span>
+            <span>294 points</span>
+            <span>原始 #2 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://developer.apple.com/news/?id=1ptvdtcm" target="_blank"
+              rel="noopener noreferrer">iCloud+ Hide My Email addresses will remain on icloud.com</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49426564" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 73</a>
+          </h2>
+          <p class="summary">Apple 宣布调整其隐私邮件服务策略，决定让“隐藏邮件地址”（Hide My Email）继续使用标准的 icloud.com 域名。与此同时，“通过 Apple 登录”生成的匿名地址将从旧域名迁移至新的 private.icloud.com。这一决定是基于社区反馈做出的，旨在防止网站轻易识别并屏蔽这些隐私地址。如果隐私地址使用独立域名，开发者可以轻松通过黑名单拦截，而混入主域名则使其与普通用户地址难以区分。对于开发者而言，需要更新系统的白名单以支持新的 private.icloud.com 域名。这一举措在保护用户隐私和维持服务兼容性之间取得了平衡。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Apple 近期更新了其开发者文档，明确了旗下两项隐私邮件服务的域名走向。首先，“通过 Apple 登录”（Sign in with Apple）生成的匿名转发地址将从原有的 privaterelay.appleid.com 迁移到新的 private.icloud.com。开发者需要及时更新其账户系统的邮件验证逻辑和白名单，以确保使用该功能的用户能够正常接收邮件。现有的旧域名地址将保持有效，不会影响老用户的正常使用。</p><p>更受关注的变动是，Apple 听取社区反馈后决定，iCloud+ 的“隐藏邮件地址”（Hide My Email）将继续保留在 icloud.com 主域名下。这一决策具有重要的战略意义：由于这些地址与普通 iCloud 用户的邮件后缀完全一致，网站和第三方服务很难通过域名过滤的方式来识别并屏蔽这些隐私别名。如果将它们迁移到类似 private.icloud.com 的专用子域名，网站开发者可以轻易地通过简单的规则拦截所有隐私地址，从而强迫用户提供真实邮箱。</p><p>尽管 Apple 的命名方式常让用户混淆，但这两项服务有本质区别。“通过 Apple 登录”是一种 OAuth 授权流程，网站本身就知道用户在使用 Apple 的中转服务；而“隐藏邮件地址”则是用户手动生成的任意别名，用于各种注册场景。通过维持 HME 在主域名的地位，Apple 实际上利用其庞大的用户基数作为“掩护”，增强了隐私工具的抗屏蔽能力。未来，开发者需重点关注 SIWA 域名的更替，而普通用户则能继续享受难以被识别的隐私保护体验。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49428288" target="_blank" rel="noopener noreferrer">@kqp</a>
+        </div>
+        <p class="comment-text">这是一个巨大的卖点。私人邮件中转服务经常被屏蔽，唯一的持久解决方案是让它们与大量非私人邮件地址使用相同的域名和格式。据我所知，唯一这样做的另一家供应商是 Fastmail。关于“锁定”用户（lock-in）的评论没错，但必须这样做。你可以在自己的域名上创建任意邮件地址，但任何想这么做的人都可以轻而易举地自动检测出那些地址全是你一个人的。就我个人而言，我只在已经表明身份的地方（比如银行）使用自己域名的唯一地址，而在不打算表明身份的地方使用 Fastmail 的掩码邮件。对于大多数事情来说，接受一点点风险（比如在你被无预警踢出到你更改邮件地址之间的一天离线风险）其实并没那么糟糕。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深刻指出了隐私邮件服务成功的关键在于“混淆性”，即让隐私地址与普通地址不可区分。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49428063" target="_blank" rel="noopener noreferrer">@ninkendo</a>
+        </div>
+        <p class="comment-text">private.icloud.com（原名为 privaterelay.appleid.com）是“通过 Apple 登录”的地址，这是一种网站主动接入的类 OAuth 服务，允许你使用 Apple ID 登录。提供此选项的网站已经知道这会让用户选择使用匿名的隐私地址。而顶层的 iCloud“隐藏邮件地址”功能是另一回事，它可以独立于“通过 Apple 登录”流程使用（你只需进入设置，创建更多地址，只需要一个名称和备注字段），它使用 @icloud.com 是为了让你的匿名地址看起来与其他 iCloud 用户无异。前者是“可过滤的”，没错，但这没关系，因为只有在你提供“通过 Apple 登录”时才会遇到这些地址，如果你想要真实邮件，你直接不提供这个选项就行了。后者则是非常难以过滤的。令人困惑的是，当用户使用“通过 Apple 登录”时，会有两个选项：“分享我的电子邮件”（给网站真实地址）和“隐藏我的电子邮件”（给一个 @private.appleid.com 地址）。但这个“隐藏”选项与独立的“隐藏邮件地址”服务完全是两码事，后者可以让你创建无数个 @icloud.com 隐私别名转发到真实地址。关键在于，后者的顶层功能适用于那些不使用“通过 Apple 登录”的网站。Apple 把这两个功能都叫作“隐藏邮件地址”，这真是太不幸、太让人困惑了。</p>
+        <p class="comment-reason"><span>入选理由</span>评论清晰地解释了 Apple 两个极易混淆的隐私功能之间的技术差异和域名逻辑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49428598" target="_blank" rel="noopener noreferrer">@glenngillen</a>
+        </div>
+        <p class="comment-text">完全同意“在自有域名上使用唯一地址”其实并不算真正的隐私。不需要太多的线索就能查出细节。但我仍然到处使用它，原因有几点：
+- 如果有人发邮件给我，装得像我们以前有过交情，但邮件是发到 linked@mydomain 或 github@mydomain 的，我就知道他们只是爬取了我的联系方式，那是垃圾邮件。
+- 同样，如果某个供应商泄露或出售了我的数据，而我开始收到意料之外的营销邮件，追踪泄露源会更容易（在某些情况下，直接屏蔽掉那个特定的邮件地址就行了）。
+- 我已经在使用密码管理器，并且在每个网站上使用不同的密码，但拥有不同的邮件地址会进一步提高攻击者利用已泄露数据集进行自动化攻击的门槛。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了使用唯一邮件别名的实际应用场景，包括反垃圾邮件和追踪数据泄露。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49426756" target="_blank" rel="noopener noreferrer">@hollow-moe</a>
+        </div>
+        <p class="comment-text">在合法地址和隐藏地址中都使用 icloud.com 域名，是典型的 Apple 策略：同时“挟持”自己的用户和“其他人”（即其他 Web 服务、其他用户等）。但至少在这里，这确实是一个对用户有利的好理由。</p>
+        <p class="comment-reason"><span>入选理由</span>从平台策略的角度评价了 Apple 的做法，指出这种“挟持”在隐私保护上产生了正面效果。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Apple 此次对“隐藏邮件地址”（HME）域名的保留，本质上是一场关于“数字伪装”的胜利。在互联网服务日益依赖邮件地址作为唯一身份标识的今天，开发者往往倾向于屏蔽来自已知隐私中转服务的邮件，以获取用户的真实数据。Apple 意识到，如果将 HME 迁移到专用子域名，无异于给用户打上“此人正在躲避追踪”的标签。通过让隐私地址混入数亿普通 iCloud 用户的流量中，Apple 利用其庞大的生态系统为用户提供了最强力的掩护。正如评论所言，这种“挟持”策略虽然带有强烈的平台锁定色彩，但在对抗过度数据采集方面，确实为用户争取到了实实在在的隐私空间。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49420873">
+      <summary class="story-overview">
+        <span class="rank-number">03</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">twitter.com</span>
+            <span>767 points</span>
+            <span>原始 #3 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://twitter.com/lemire/status/2091894299289874926" target="_blank"
+              rel="noopener noreferrer">Xiaomi: New CPU matches Apple cores single threaded, much faster multithreaded</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49420873" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 515</a>
+          </h2>
+          <p class="summary">小米发布了新款 Xring O3 处理器，其单核性能追平苹果，多核性能则大幅超越。该芯片拥有 44MB 的巨量缓存，甚至超过了许多笔记本电脑处理器。硬件架构极其宽阔，拥有 21 个执行端口，支持 SME2 和 SVE2 等先进的 AI 与并行计算扩展。这一突破主要得益于 ARM 的 C1-Ultra 核心设计，标志着小米在自研芯片领域已具备挑战高通和联发科的实力。然而，实验室跑分与手机实际散热环境下的表现可能存在差距，功耗控制仍是关键。尽管苹果可能很快发布新一代芯片，但小米此举展示了移动端核心向大规模并行化发展的明确趋势。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>小米新款 Xring O3 处理器在 Geekbench 6 测试中表现惊人，单核得分 3,945，多核得分高达 15,221，直接挑战了苹果在移动芯片领域的领先地位。这一性能飞跃的核心在于其极其“宽”的架构设计，拥有 21 个执行端口，其中 6 个支持 128 位 SIMD 操作，这在执行单元数量上甚至超过了部分英特尔和 AMD 的桌面处理器。此外，该芯片配备了总计 44MB 的大容量缓存，旨在通过减少内存访问延迟来提升处理效率，这种配置在移动端设备中非常罕见，通常只出现在高性能笔记本 CPU 中。</p><p>技术上，Xring O3 采用了 ARM 的 C1-Ultra 核心，集成了用于 AI 矩阵加速的 SME2 和用于数据并行的 SVE2 指令集。虽然纸面参数极强，但评论指出，这种高性能往往伴随着高功耗，在手机密闭且缺乏主动散热的空间内，芯片可能会因过热而迅速降频，导致实际体验打折扣。与苹果完全自研的架构不同，小米的芯片更多是基于 ARM 授权设计的深度定制与物理实现。尽管如此，小米成功在台积电 3nm 工艺上完成这一复杂设计，预示着其正从单纯的手机组装商转型为拥有核心底层技术的竞争者，将对高通和联发科的市场地位产生直接冲击。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49421598" target="_blank" rel="noopener noreferrer">@ksec</a>
+        </div>
+        <p class="comment-text">这仍然是一个 ARM C1-Ultra 核心。联发科天玑 9500 也使用了同样的核心，在 Geekbench 6 实验室测试中也获得了超过 4000 分。但在手机内部，受限于散热和功耗要求，实际结果接近 3300 分。但或许最重要的一点是，小米现在有能力制造出类似联发科的芯片了。他们是出货量全球第三的智能手机制造商，而且仍在增长。这对联发科和高通来说是个坏消息。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了芯片的技术来源（ARM C1-Ultra）以及小米作为厂商在供应链地位上的转变。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49421838" target="_blank" rel="noopener noreferrer">@strictnein</a>
+        </div>
+        <p class="comment-text">漏掉了最重要的指标：每瓦处理能力。我手头有一些服务器 CPU 也能击败苹果的 CPU。但把它们放进一个紧凑、密集、密封的盒子（也就是手机）里，结果会变成一个火球，而且几乎没有电池续航可言。</p>
+        <p class="comment-reason"><span>入选理由</span>强调了移动设备中功耗比纯性能跑分更重要，提出了合理的质疑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49427650" target="_blank" rel="noopener noreferrer">@nomendos</a>
+        </div>
+        <p class="comment-text">这款新 CPU 是 100% 的 ARM 设计，除了“中式菜单”式的配置（即这种或那种类型的模块放多少个……）之外，没有什么是小米原创的。苹果的 CPU 是完全的定制设计，只是兼容 ARM 指令集。小米 Xring O3 CPU 由 ARM 设计，小米（以及联发科）除了定制总线互连、在台积电 3nm 上的物理实现、自研 NPU 以及采用下一代 LPDDR6 内存支持外，并没有进行任何 CPU 设计工作。</p>
+        <p class="comment-reason"><span>入选理由</span>澄清了小米芯片与苹果自研架构在设计深度上的本质区别。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49423914" target="_blank" rel="noopener noreferrer">@simjnd</a>
+        </div>
+        <p class="comment-text">GPU 性能也非常疯狂，在约 20W 功耗下接近 M5 的结果。当然，它会被用在安卓手机里，所以一旦超过 4W 就会严重降频，而且驱动程序也会很糟糕。我希望手机能转向 HPB 封装和主动散热，这样我们就能拥有持续的 10W 性能，并把它们当作轻量级工作站使用。</p>
+        <p class="comment-reason"><span>入选理由</span>讨论了 GPU 性能潜力以及安卓生态中常见的散热降频痛点。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>小米这次的“肌肉”展示确实亮眼，尤其是 44MB 缓存和 21 个执行端口的配置，简直是把桌面级的思路搬进了手机。虽然本质上是基于 ARM 的 C1-Ultra 架构，而非像苹果那样的完全自研架构，但能把这套“满配菜单”在 3nm 工艺上跑通并量产，本身就说明小米的工程实现能力已经跃升至第一梯队。现在的悬念在于，这种“跑分猛兽”在日常使用中是否会受限于手机的散热天花板，毕竟空有爆发力而无持久力是移动芯片的大忌。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49421158">
+      <summary class="story-overview">
+        <span class="rank-number">04</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">xusheng.dev</span>
+            <span>601 points</span>
+            <span>原始 #4 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://xusheng.dev/posts/reversing/mspaint_invisible_watermark/main/" target="_blank"
+              rel="noopener noreferrer">MS Paint and Photos inivisibly watermark even locally generated output with GUID</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49421158" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 239</a>
+          </h2>
+          <p class="summary">安全研究人员通过逆向工程发现，微软 Paint（画图）和 Photos（照片）应用会在 AI 生成的图像中隐式嵌入唯一的 GUID 水印。即使是在 Copilot+ PC 上利用本地 NPU 生成的图像，系统也会先将提示词发送至微软服务器进行审核，并获取一个特定的 GUID。该 ID 会通过不可见的水印技术织入像素，并同步记录在 C2PA 元数据中。这意味着即便用户删除了文件的元数据，微软仍能通过像素层面的水印将图像追溯到特定的提示词、设备和用户账户。这一机制实际上终结了这些应用中 AI 创作的匿名性，且用户无法在设置中关闭此功能。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>研究人员在分析 Windows 应用的 `Watermarker.dll` 时发现，微软的 AI 图像功能并非完全在本地运行。当用户在 Paint 或 Photos 中使用 AI 生成或修改图片时，应用会首先将提示词发送到微软的远程审核服务器。服务器返回的响应中包含一个 16 字节的 GUID（全局唯一标识符），随后应用会调用本地算法将该 ID 隐式嵌入到图像像素中。这种水印采用了一种抗干扰的块域量化技术，即使图像经过轻微编辑或格式转换，标识符依然可能存留。此外，该 GUID 还会作为“软绑定”记录在 C2PA 内容凭证中，用于证明图像的 AI 生成身份。</p><p>为了确保这种追踪机制不被轻易破坏，Paint 应用对 AI 生成图像的保存格式进行了严格限制。用户只能选择 PNG、JPEG 或 GIF 等支持 C2PA 扩展块的格式，而传统的 BMP 格式因无法承载这些元数据而被禁用。研究还发现，Paint 会将水印嵌入失败视为整个生成过程的失败，强制要求每一张 AI 图像都必须带有“烙印”。相比之下，Photos 应用在水印嵌入失败时仅记录错误日志，仍会允许用户获取图像。这种设计反映了微软在“负责任的 AI”框架下，试图建立一套从云端审核到本地生成的闭环追踪体系，使用户的每一条提示词都与最终生成的像素永久绑定。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49421192" target="_blank" rel="noopener noreferrer">@ComputerGuru</a>
+        </div>
+        <p class="comment-text">AI 生成文本警告（我提交了这篇文章，但不是作者），但看起来 MS Paint 和 MS Photos 会在 AI 处理过的照片中添加可见（可关闭）和不可见（无法禁用，且在后台静默发生，无用户通知）的水印，即使是使用本地模型执行操作时也是如此。目前尚不清楚这是否适用于 AI 增强的背景删除/移除等功能，但不可见水印被嵌入在图像像素和图像元数据中，两者都包含一个 GUID，可以链接到所使用的确切提示词以及源设备/用户（在微软端）。
+显而易见的下一步是探索是否可以用一个（经过签名的）空操作（no-op）填充程序替换 watermarker.dll，或者拦截 API 调用以至少使用你自己的（空？）GUID，使其不与你的设备/账户关联。
+如果还不明显的话，我更大的担忧不是“这张图片可以被识别为由 AI 生成”，而是“数字黄色打印机圆点被强加在了我们身上，只不过它们可以识别并检索确切的用户/设备/时间/地点/文档等”，这彻底摧毁了仅存的隐私幻想。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地将此技术与历史上打印机的“黄色圆点”追踪技术类比，指出了其对隐私的深远威胁。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49421902" target="_blank" rel="noopener noreferrer">@weberer</a>
+        </div>
+        <p class="comment-text">AI 方面的问题其实是个幌子。真正的问题在于，他们秘密地在你创建的每一张图像中加入了一个唯一标识符。如果有人不喜欢你的表情包，他们只需向微软发送一份版权传票，就能立即获得你的全名、地址、电子邮件、电话号码以及与你的微软账户关联的任何其他数据。就像年龄验证一样，这是另一件针对互联网匿名性的武器。</p>
+        <p class="comment-reason"><span>入选理由</span>评论揭示了该技术在法律和匿名性层面的潜在后果，强调了唯一标识符背后的执法风险。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49421698" target="_blank" rel="noopener noreferrer">@Delphiza</a>
+        </div>
+        <p class="comment-text">我理解隐私方面的担忧，我们也确实有权要求微软说明他们的工具在做什么。然而，我担心有一天我们会回过头来想，为什么我们没有做更多工作来签署和保护人类的真实性。拥有一个标明“AI 处理过”的印章应该是数字血统工具的一部分。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个关于“内容真实性”的正面视角，认为这种追踪在区分 AI 与人类创作方面有其必要性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49424102" target="_blank" rel="noopener noreferrer">@Terr_</a>
+        </div>
+        <p class="comment-text">&gt; 在你创建的每一张图像中加入唯一标识符
+打印（甚至是文本）也是一种风险：你的打印机极有可能在页面上秘密添加包含其序列号和当前时间戳的标记。与此同时，微软（和苹果）拥有收集所有你连接过或可触及的内部及外部设备序列号的“遥测”技术。然后，他们将这些信息与你的微软/苹果账户、IP 地址以及所有曾出现在同一房间或共享过同一个蓝牙扬声器的计算机的扩展社交图谱关联起来。简而言之，你那张批评当局、将领导人描绘成小丑的“匿名”传单，可能会让暴徒直接找上你的门，或者找上你借宿的人家。</p>
+        <p class="comment-reason"><span>入选理由</span>通过具体的历史背景和技术关联，展示了这种追踪技术如何与现代遥测系统结合，形成全方位的监控。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>微软这次在 Paint 和 Photos 中引入的隐形水印，揭示了所谓“本地 AI”的一个尴尬真相：在巨头的生态里，本地运行并不等同于私密。即便你的 NPU 承担了所有的算力，你的创作意图（提示词）依然要经过云端的“政审”，并被贴上一个永久的电子标签。这种“软绑定”技术最狡猾的地方在于，它利用了 C2PA 协议的合规性外壳，却在像素层面埋下了不可磨灭的伏笔。正如评论中所担心的，这不仅是 AI 标识的问题，更是一场针对匿名创作的定点清除。当一个简单的绘图工具开始强制执行这种追踪逻辑时，它就不再仅仅是一个创作工具，而成了操作系统内置的数字监管哨点。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49428121">
+      <summary class="story-overview">
+        <span class="rank-number">05</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">paulgraham.com</span>
+            <span>45 points</span>
+            <span>原始 #5 · 低讨论量降权 +2.1</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://paulgraham.com/prepare.html" target="_blank"
+              rel="noopener noreferrer">How Universities Should Prepare Founders</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49428121" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 43</a>
+          </h2>
+          <p class="summary">保罗·格雷厄姆认为，大学培养创业者的最佳方式不是开设“创业学”课程，而是教授计算机、工程或生物等硬核技术。他指出，创业的核心挑战是打造产品，而这需要深厚的专业知识而非管理技巧。大学应通过展示年轻成功创始人的案例，让学生意识到创业是一条可行的职业道路。此外，学校应减少课程负担，给学生更多自由时间去折腾个人项目，因为伟大的创意往往源于非正式的兴趣探索。这种模式的主要局限在于，它可能导致不自觉的学生荒废学业，且与传统的学术严谨性要求存在冲突。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>在这篇文章中，格雷厄姆直言大学不该浪费资源在所谓的“创业中心”或商业计划竞赛上，因为这些活动往往误导学生去取悦投资者而非用户。他认为，Y Combinator 寻找的是那些有“构建东西”习惯的人，而这种能力通常来自对硬核科学的学习，而非管理或金融。为了优化环境，大学只需做两件事：一是营造创业文化，通过邀请与学生年龄相仿的成功创始人回校分享，打破创业的神秘感；二是鼓励个人项目，甚至为此缩减课程量。格雷厄姆以哈佛大学的“阅读周”为例，指出微软和 Meta 都诞生于这段没有作业压力、学生可以自由协作的时间。他主张大学应该对学生的一些“出格”项目（如违规使用实验室）睁一只眼闭一只眼，因为创新的项目往往是不合规的。虽然这种放任政策可能会让部分懒散的学生表现更差，但格雷厄姆认为，为了让最顶尖的 10% 精英脱颖而出，这种代价是值得的。未来值得关注的是，大学是否愿意为了培养创始人而放弃对学生时间的严密控制，并接受这种“无为而治”的教育投资方式。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49428477" target="_blank" rel="noopener noreferrer">@jspann</a>
+        </div>
+        <p class="comment-text">（披露：我正在读计算机科学博士）
+&gt; 创业的难点在于产品：知道该造什么，并且有能力把它造出来。
+有趣的是，这正是我认为博士学位被许多人低估的原因。你会花数年时间专注于一个领域，有时还会转换课题，并获得在特定领域边缘独自运作的实战经验。
+这个学位的核心意义在于你学会了如何学习。好处是你拥有大学设备、资金和时间的缓冲保护；所以失败并不是致命的，只是一个弄清楚什么行不通的机会。
+由于某些原因，这个信息在现代学术界被扭曲和丢失了（老实说，这会是一个很好的书稿题材）。那些名气更大、且与一系列成功初创公司有联系的项目，往往也是那些拥有“构建者和创造者”文化的项目，这绝非偶然。</p>
+        <p class="comment-reason"><span>入选理由</span>从博士生的视角补充了学术研究与创业所需能力的相似性，为“构建能力”提供了另一种维度的解读。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49428623" target="_blank" rel="noopener noreferrer">@fyredge</a>
+        </div>
+        <p class="comment-text">我不赞同“培养创始人是大学责任”这一潜在假设。
+大学最初是为了促进特定领域的知识进步而建立的，是为了知识本身的进步，培养的是哲学家、艺术家和科学家。
+换句话说，大学是让人为了学习而学习的地方，而不是为了赚工资。应该建立新的机构来培养创始人和企业家。职业发展中心、创客空间、联合办公空间，这些才是培养创业精神的地方。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了关于大学本质功能的根本性质疑，是一个非常重要的对立观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49428419" target="_blank" rel="noopener noreferrer">@rurich2747</a>
+        </div>
+        <p class="comment-text">这一点忽略了“匠人精神”的价值，以及随着领域难度和存在时间的增加，培养这种精神所需的时间。
+新兴行业没有深度，甚至可能难度不高，因此在 2008-2014 年间创办 SaaS 业务或社交媒体初创公司从技术角度来看是容易的。
+当时的“创业”难点更多在于业务执行而非构建执行，当然还有运气。因此哈佛学生申请成为创始人是合理的。
+而现在，在那些不属于新兴领域的复杂领域构建新颖的解决方案，需要深厚的知识储备。
+因此，博士和博士后是项目制的，但这些项目依赖于现有知识。
+保罗认为创始人可以替代研究生院，这是他基于在低复杂度、高财务回报的新兴行业建立初创公司的经验得出的结论。
+这不是一个国家向前发展所需要的。这是风投产生超额收益所需要的，所以你会看到在低复杂度、高回报的新兴行业进行探索，而不是硬科学——所以哈佛毕业生才显得合理。
+这种认为“构建者就是构建者”的想法，忽略了对匠人精神和学徒制的需要。</p>
+        <p class="comment-reason"><span>入选理由</span>深刻地指出了格雷厄姆观点中的行业局限性，区分了“容易的 SaaS 创业”与“硬核科学创业”的区别。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49428646" target="_blank" rel="noopener noreferrer">@dgudkov</a>
+        </div>
+        <p class="comment-text">&gt; 初创公司的成败取决于客户对产品的喜爱程度。
+这只是理论。在实践中，一个拥有更多资金和更响亮营销的平庸产品，很容易击败一个没人知道的优秀产品。我相信保罗完全明白这一点。
+还有一些其他的理想化论述我就不评论了，但整篇文章读起来更像是为了给 YC 培养申请渠道，而不是我喜欢的保罗早期文章中那种真诚的写作。
+这里有一个替代观点：先拿到学位，工作几年。然后回到大学学习商业基础知识（财务、营销、管理）。在 30 多岁后期再创业，那时你对自己所处的领域很了解，也知道如何引导财务和营销（营销比看起来难得多）。在获得产品市场匹配（PMF）之前，尽量自筹资金或接受尽可能少的投资。然后在大规模扩张时，不要轻易出让（太多）股权。
+这种方式对我来说很有效。对其他人肯定也行得通。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了与格雷厄姆“趁年轻早创业”完全不同的实战路径建议，强调了营销和经验的重要性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49428453" target="_blank" rel="noopener noreferrer">@GMoromisato</a>
+        </div>
+        <p class="comment-text">&gt; 创始人对学生的启发程度，大致相当于他们的财富和名声除以他们与学生之间的年龄差。
+我不喜欢这种数学比喻。“大致”这个词在这里承担了太多工作。他其实是在说，越富有的创始人比越贫穷的创始人更有启发性，越年轻的创始人比越年长的创始人更有启发性。但如果这么直白地说出来，就显得太显而易见，不值一谈了。于是他把它套进了一个等式：
+启发性 = 财富 / 年龄差
+但你不能字面上理解这个等式。我是说，如果创始人比学生还年轻怎么办？你会得到负的启发吗？如果除以 0 会发生什么？在这种情况下，启发性是未定义的吗？一个身价 20 亿美元的 30 岁创始人，真的比同龄的身价 10 亿美元的创始人更有两倍启发性吗？埃隆·马斯克比比尔·盖茨更有 10 倍启发性吗？
+这是过度且毫无根据的精确。请把等式留给真正的等式。
+义务性免责声明：我是保罗·格雷厄姆的超级粉丝，我批评只是因为他值得批评。请不要拉黑我。</p>
+        <p class="comment-reason"><span>入选理由</span>以幽默的方式指出了格雷厄姆写作中爱用伪数学公式的习惯，增加了讨论的趣味性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>格雷厄姆的观点带有强烈的“YC 色彩”：极度推崇技术构建，极度轻视传统管理教育。他提出的“无为而治”——通过减少课程压力来释放学生创造力——虽然在硅谷精英看来极具吸引力，但正如评论区所指出的，这可能忽视了硬核科学所需的“匠人精神”和严谨训练。如果大学真的变成了创业孵化器，基础科学的深度是否会因为追求“快速变现”的项目而受损？这不仅是教育模式的争论，更是关于大学本质功能的博弈。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49419237">
+      <summary class="story-overview">
+        <span class="rank-number">06</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">lectronz.com</span>
+            <span>1112 points</span>
+            <span>原始 #8 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://lectronz.com/u/lectronz/articles/how-europe-is-killing-makers-and-micro-entrepreneurs" target="_blank"
+              rel="noopener noreferrer">How Europe is killing makers and micro-entrepreneurs</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49419237" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 674</a>
+          </h2>
+          <p class="summary">欧盟即将实施的新包装法规（PPWR）旨在减少废弃物，却意外给小型创客和微型企业带来了沉重负担。该法规要求向欧盟成员国发货的商家必须在每个目的地国家分别注册并支付回收费用，而非通过统一的欧洲系统。对于每年仅售出少量产品的独立设计师而言，合规成本（如行政费和授权代表费）可能高达数千欧元，远超其利润。这种碎片化的执行方式破坏了单一市场原则，使得向美国发货反而比向欧盟邻国发货更简单。尽管欧盟委员会已意识到问题并提议推迟部分要求，但目前的官僚障碍仍威胁着欧洲的基层创新生态。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>欧盟的《包装与包装废弃物法规》（PPWR）初衷是让生产者为包装回收买单，但其执行细节却成了微型企业的噩梦。目前该法规并未建立统一的欧洲注册系统，而是保留了碎片化的国家模型。这意味着，一个在希腊设计开源硬件的工程师，如果想把产品卖给德国、法国和比利时的客户，就必须在这些国家分别履行生产者责任延伸（EPR）义务。这不仅涉及繁琐的文书工作，还包括每年数百欧元的行政费和必须聘请当地“授权代表”的费用。对于大公司，这只是经营成本的一小部分；但对于每年只产生几百克包装废弃物的创客，合规成本可能高达上千欧元。</p><p>这种“官僚壁垒”迫使许多小商家考虑放弃欧盟内部市场，转而只向非欧盟国家发货，因为后者的流程反而更简单。文章提出了几种解决方案，包括引入欧盟范围内的起征点豁免、建立类似增值税“一站式服务”（OSS）的统一注册门户，或允许平台代为履行义务。虽然欧盟委员会最近提议推迟部分严苛要求，但成员国之间的利益博弈使得统一平台的建立困难重重。如果不能尽快简化流程，欧洲的基层创新和微型创业生态系统将面临毁灭性打击，因为在目前的规则下，只有像亚马逊或 Temu 这样的大型平台才有能力应对如此复杂的合规要求。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49420499" target="_blank" rel="noopener noreferrer">@mpweiher</a>
+        </div>
+        <p class="comment-text">有几点需要注意：1. 欧盟委员会原本想要一个单一的中央注册机构。2. 是成员国通过部长理事会否决了这一提议。3. 欧盟现在建议其成员国在修正案正式通过前，先不要实施或强制执行这一规定。4. 修正案正在制定中。所以还是老样子：成员国做了烂事，然后甩锅给欧盟。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论揭示了法规碎片化背后的政治博弈，指出了成员国才是导致官僚负担的根源。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49420563" target="_blank" rel="noopener noreferrer">@bambax</a>
+        </div>
+        <p class="comment-text">是的。我曾在欧洲的亚马逊上卖东西。你可以只在一个国家销售，但那样的话，卖到该国以外的每一笔订单都是“出口”，会产生高额费用。为了让销售变成“本地化”，产品必须存储在每个国家的仓库里。但这反过来意味着卖家必须在每个国家注册增值税（VAT），并用当地语言提交年度报告。我费尽周折在 6 个不同的国家注册了；有些国家亚马逊会帮忙，有些则提供当地律师合作。结果是一堆用波兰语、德语、西班牙语、匈牙利语发来的报告、禁令、逾期罚款等等。我最终放弃了。欧洲实际上并不是一个“单一市场”，它是一个对小企业完全冷漠（甚至敌视）的联邦官僚机构。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者分享了在欧盟跨国经营的真实痛苦经历，证明了“单一市场”在行政执行层面上的虚假。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49426049" target="_blank" rel="noopener noreferrer">@anigbrowl</a>
+        </div>
+        <p class="comment-text">感谢 tomis 在下面发布的欧盟常见问题解答（FAQ）：https://op.europa.eu/en/publication-detail/-/publication/ad1...。这些规定并不适用于微型企业或使用通用包装而非品牌包装的公司。第 13 页有一个很有帮助的图表。本文作者似乎基于对欧盟规则的误解或歪曲，想象了一个最坏的情况；这里的讨论似乎有很多人急于出于意识形态原因去妖魔化他们眼中的政治对手。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个重要的反向视角，指出法规可能存在针对微型企业的豁免条款，平衡了文章的焦虑情绪。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49420456" target="_blank" rel="noopener noreferrer">@mstaoru</a>
+        </div>
+        <p class="comment-text">我不知道这项欧盟法规是否会奏效（很可能不会），但我可以分享一下中国是怎么做的（那里的包裹量要大好几个数量级）。中国识别出大多数包裹都会经过的“咽喉点”：大型平台和物流公司。是的，中国的电子商务在阿里巴巴/京东/拼多多等平台上更加集中，但中国的物流公司实际上比欧盟多得多。他们也不会“从明天起”就推行这些规定。例如，不可降解塑料的规定是在 2020 年发布的，2025 年才生效。这给准备和实施留出了时间。所以现在如果用不可降解塑料发货，物流公司会和发件人一起被罚款。这更容易扩展且易于实施。物流公司可能会因为工作范围扩大而稍微涨价，但与每个个体卖家承担的成本相比，那简直是毛毛雨。欧盟能不能直接让 DHL/Hermes 之类的公司多收 1 欧元的“回收费”？可以，但是……当然，欧盟根本上的不同在于政客需要讨好选民，所以没有什么事情是真正提前规划好的。</p>
+        <p class="comment-reason"><span>入选理由</span>通过对比中国在处理类似环保规管时的“抓大放小”策略，为解决欧盟的官僚困境提供了另一种思路。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>欧盟的初衷往往是高尚的——保护隐私、促进环保、规范巨头，但在执行层面，它正陷入一种“官僚主义的平庸”。正如 Lectronz 的文章所揭示的，PPWR 法规本应是环保的一大步，却因为成员国拒绝建立统一注册中心（如评论 49420499 所述）而变成了微型企业的绞肉机。这种“单一市场”的悖论在于：它对大公司来说是通途，对小创客来说却是 27 堵墙。如果一个创客向邻国发货的行政成本远高于向大洋彼岸发货，那么欧洲所谓的“创新土壤”就只是一句空话。虽然有观点认为微型企业可能获得豁免，但法律的不确定性和潜在的高额罚款足以让大多数实验性的小生意在萌芽阶段就选择退缩。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49422784">
+      <summary class="story-overview">
+        <span class="rank-number">07</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">sf.thijs.gg</span>
+            <span>379 points</span>
+            <span>原始 #9 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://sf.thijs.gg/" target="_blank"
+              rel="noopener noreferrer">The entire city of San Francisco as a video game</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49422784" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 125</a>
+          </h2>
+          <p class="summary">这个名为“旧金山：游戏”的网页项目将整个旧金山市转化为了一个可交互的 3D 游戏世界。它利用高精度的地理空间数据，以 1:1 的比例还原了城市建筑、街道和地形。用户可以在浏览器中直接操作，通过步行、驾驶车辆或使用滑翔翼来探索这座城市。该项目展示了如何利用现有的测绘数据快速构建大规模虚拟环境，而无需手动建模。然而，这种对闭源地图数据的提取利用可能面临法律和版权方面的争议，且视觉精细度受限于原始扫描数据。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>“旧金山：游戏”（San Francisco -- The Game）是一个基于 Web 的实验性项目，它让用户能够以第三人称视角在完整的旧金山数字孪生城市中穿行。技术上，该项目采用了切片流式传输技术，根据玩家的位置动态加载 3D 几何体和纹理，从而在浏览器中实现大规模城市的流畅渲染。玩家可以使用 WASD 键进行移动，并能随时切换步行、开车或滑翔模式，甚至还包含了一些简单的游戏元素，如收集硬币。这种 1:1 的城市还原主要依赖于从商业地图服务（疑似 Apple Maps Flyover）中提取的 3D 网格数据，捕捉了从地标建筑到普通民宅的细节。</p><p>尽管视觉效果令人惊叹，但它也暴露了当前 Web 渲染的局限性，例如在近距离观察时纹理可能较为模糊，且缺乏动态的交通流和行人。此外，社区讨论指出，此类项目通常处于法律灰色地带，因为主流地图供应商的服务条款通常禁止反向工程或未经授权提取其 3D 瓦片数据。未来，随着生成式 AI 和自动化管线的成熟，将现实世界数据转化为高质量游戏资产的门槛将进一步降低。目前，该项目更多被视为一种技术演示，展示了地理信息系统（GIS）与游戏引擎结合的潜力，让人们可以足不出户地在熟悉的街道上“探险”。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49424357" target="_blank" rel="noopener noreferrer">@frankhorrigan</a>
+        </div>
+        <p class="comment-text">我在旧金山住了将近 20 年，虽然现在大部分时间都在纽约。说实话，这真的让我很感慨。在自己曾经住过的后院转悠感觉很奇妙。去那些我 20 多岁时常去的杜洛雷斯公园（Dolo）的角落，还有我最喜欢的网球场和那些冲坡圣地，走遍了整个飞盘高尔夫球场，等等。</p>
+        <p class="comment-reason"><span>入选理由</span>这条评论展现了数字孪生城市带给原住民的强烈情感共鸣。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49424803" target="_blank" rel="noopener noreferrer">@kfarr</a>
+        </div>
+        <p class="comment-text">这太酷了，如果合法的话，我也想在我的地理空间项目里做类似的事情。然而，我不认为苹果会同意这样使用他们的数据。我知道谷歌通过特定的 API 严格限制其 3D 瓦片数据，而苹果并没有提供 3D API，因此这肯定违反了服务条款（ToS）。从原网站链接的条款来看：1.3 限制。您不得且不得允许或授权第三方：(...) (xiv) 对服务或其任何部分进行反编译、解密、反向工程、尝试获取源代码或拆解。我倒很希望有人能证明我是错的，证明苹果会拥抱这种对其地理空间数据的使用方式！</p>
+        <p class="comment-reason"><span>入选理由</span>指出了该项目在数据来源和法律合规性方面面临的核心争议。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49425318" target="_blank" rel="noopener noreferrer">@jvogt</a>
+        </div>
+        <p class="comment-text">我一直梦想有一种管线，可以提取海拔数据、建筑数据、地图和街景图像，将一个城市处理成构建真正的 GTA 引擎地图所需的所有组件，包括树木、消防栓、标志、灯柱、红绿灯等所有其他物体。建筑纹理可以通过图像到图像模型，利用低分辨率的街景图像进行缩放和重新光照来重建。建筑形状可以使用 3D 网格组件的生成模型来重建。道路和人行道的质量（干净程度、标线褪色程度等）也可以从图像中推断出来并应用到地图上。超级酷的项目，希望它能继续进化！</p>
+        <p class="comment-reason"><span>入选理由</span>探讨了利用 AI 和测绘数据自动化生成高质量游戏环境的技术前景。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49426232" target="_blank" rel="noopener noreferrer">@jparishy</a>
+        </div>
+        <p class="comment-text">对于费城的朋友，我这几个月也在做类似的游戏：https://cityrider.jpsmaps.com/。概念类似，但在艺术风格上更抽象一些。我快要完成基础框架了，之后打算加入任务系统；讲故事才是最终目标。不过，基于 GIS 数据进行开发真的很有趣。尤其是现在有了大语言模型（LLM），入门门槛变得非常低。如果你们当地的城镇发布了一些数据，我鼓励大家都去试一试。例如，你甚至不需要理解坐标系，这很棒。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了同类项目的实践经验，并提到 AI 如何降低了此类开发的门槛。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>将现实城市 1:1 搬进游戏一直是开放世界爱好者的梦想。这个项目最动人之处不在于技术多么顶尖，而在于它提供了一种“数字乡愁”的载体——有用户提到在虚拟的旧金山街道漫步时感到了真实的情绪波动。然而，这种基于“数据拆解”的创作正撞上商业巨头的版权高墙。正如评论所言，苹果等供应商对 3D 数据的保护非常严密，这种酷炫的尝试可能随时会因为法律合规问题而消失。它让我们思考：当物理世界的数字镜像变得触手可及，这些数据究竟属于测绘它的公司，还是属于生活在其中的每一个人？</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49422800">
+      <summary class="story-overview">
+        <span class="rank-number">08</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">daily.jstor.org</span>
+            <span>187 points</span>
+            <span>原始 #11 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://daily.jstor.org/where-did-all-the-public-bathrooms-go/" target="_blank"
+              rel="noopener noreferrer">Where did all the public bathrooms go?</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49422800" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 372</a>
+          </h2>
+          <p class="summary">19世纪巴黎为应对霍乱爆发，将随地小便视为公共卫生威胁，从而兴建了华丽的公共小便池。这些设施最初仅供男性使用，却意外成为了当时边缘群体社交的隐秘场所，引发了当局的监管与打击。在美国，禁酒运动曾推动建立“舒适站”以替代酒吧厕所，但随着公共资金匮乏，这些设施大多废弃。如今，公共厕所已从政府提供的权利转变为商业场所的“商品”，其可及性往往取决于个人的社会地位。这种转变导致现代城市中免费、卫生的如厕空间极度匮乏，成为城市生活的隐痛。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>巴黎的公共小便池（pissoir）曾是城市景观的一部分，其设计精美、装饰华丽，却因气味刺鼻而臭名昭著。这些设施的出现源于19世纪对公共卫生的重视，旨在通过提供合法排泄场所来遏制疾病传播。然而，这些空间很快超出了设计者的初衷，成为男同性恋者在严苛法律下的社交出口，这种“非预期用途”导致了警察的严密监控和敲诈勒索。在美国，公共厕所的消失与禁酒运动息息相关：为了让人们无需进入酒吧就能如厕，活动家们呼吁建立独立的“舒适站”。</p><p>这种努力产生了一个意外的副作用：私人商家开始意识到，既然有了公共设施，他们就可以理直气壮地限制非消费者的进入。随着20世纪中叶公共投入的减少，维护成本高昂的公共厕所因缺乏打理而大量关闭。现在的城市居民不得不依赖酒店、咖啡馆等半私密场所，而这些场所往往会根据外貌或消费能力对人群进行筛选。这种“如厕权”的商品化，不仅是基础设施的缺失，更是对城市包容性的挑战。未来，如何在保障公共安全与维护基本人权之间取得平衡，仍是城市规划者面临的难题。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49424971" target="_blank" rel="noopener noreferrer">@mstaoru</a>
+        </div>
+        <p class="comment-text">这真的让我感同身受。作为一个患有肠易激综合征（IBS）的人，我在欧盟基本上没法安心出门。我在中国和泰国住了很多年，那里的厕所免费、干净且到处都是，你可以很轻松地借用任何地方的厕所——完全没有心理负担。我甚至有一次在中国的农村跑进了一家派出所，警察们非常淡定，虽然他们得帮我开个门。习主席真的会被铭记为“厕所之王”，他在早期发布了几道政令，现在即使在中国的偏远农村，你也能找到现代化的厕所（虽然是蹲厕），干净且有水。不过纸巾还是时有时无。到了香港也一样，但纸巾供应更可靠，香港确实更富裕。再看看曼谷的购物中心，那绝对是更高层次的体验，干净、好闻、还有放松的音乐。而欧盟简直是一场恐怖秀，很多公厕里甚至还有专门放废弃注射器的隔间，真是“五星级服务”。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者通过亲身经历对比了亚洲与欧洲在公共厕所建设上的巨大差异，提供了极具参考价值的现实视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49424470" target="_blank" rel="noopener noreferrer">@xyzelement</a>
+        </div>
+        <p class="comment-text">这个讨论串里有人把缺乏厕所称为“公地悲剧”，但问题不在于“公地”。是社会中那最糟糕的10%决定了我们能拥有什么、不能拥有什么。“普通大众”并不会在公共场合发生性行为、注射毒品或因为缺乏礼仪而破坏厕所。当这些事情发生时，普通大众是受害者，最终除了关闭厕所别无选择，除非有人愿意严厉打击这些明确的违规行为。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深刻指出了公共设施消失背后的社会治理困境，即少数人的破坏行为导致了全体公民的损失。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49426374" target="_blank" rel="noopener noreferrer">@freetime2</a>
+        </div>
+        <p class="comment-text">公共厕所是我非常欣赏在日本生活的一点。感觉你永远离厕所不远——无论是在社区公园、路边停车区、火车站还是便利店等等。而且它们往往非常干净（至少就公厕而言），不像美国的很多公厕那样让我望而生畏。日本似乎是一个最佳案例，这归功于便利店的普及、政府对建设和维护公厕的高度重视，以及一种重视整洁的文化。对于那些缺乏干净且充足公厕的国家来说，如果不先改变文化，似乎很难复制这种模式。但读到另一条评论说，由于领导层的强力推动，中国在改善公厕状况方面取得了长足进步。所以这是可能的，但前提是真正想要去改进。</p>
+        <p class="comment-reason"><span>入选理由</span>评论探讨了文化、政府优先级与基础设施之间的关系，并以日本和中国为例说明了改善的可能性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49424208" target="_blank" rel="noopener noreferrer">@jeffnash</a>
+        </div>
+        <p class="comment-text">厕所的独特之处在于它们对公众开放，但由于其固有的私密性，很难在其中执行社会规范。因此，在厕所内部，权威几乎是失效的。我曾在刷短视频时看到一个博主在隔间里搞“公厕派对”直播。他收集了所有能找到的卷筒纸，把它们撕成碎片当彩纸，一边放着震耳欲聋的音乐一边往天上撒。当时有几千人在看，还有人打赏。我没看到最后，但我打赌他肯定没清理。当这种私密但直播的“彩纸派对”结束时，破坏已经造成了。你可以尝试预判厕所里每一种不被欢迎的行为并提前预防（比如用蓝色灯光防止静脉注射），但总有人能找到创意方法，让所有者觉得“拒绝几个内急的顾客”比承担后果的代价更小。</p>
+        <p class="comment-reason"><span>入选理由</span>通过一个荒诞的现代案例，生动地展示了公共厕所维护者面临的监管难题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49425658" target="_blank" rel="noopener noreferrer">@ssl-3</a>
+        </div>
+        <p class="comment-text">减少公共厕所并没有阻止那10%最糟糕的人在公共场合发生性行为、注射毒品或随地大小便，不是吗？在那些原本公厕就有问题的地方，即使没了公厕，这些问题依然存在。那些人依然在做他们那些卑劣的事，而剩下的90%的人依然要面对同样的烂摊子（或者只能视而不见）。在这个过程中，没有任何事情得到了改善。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论有力地反驳了“为了治安而关闭厕所”的逻辑，指出这种做法只是转嫁了问题而非解决问题。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>厕所不仅是生理需求的出口，更是城市文明与社会治理的缩影。文章回顾了从巴黎华丽小便池到现代商业化厕所的演变，揭示了公共空间如何因社会控制和资金匮乏而萎缩。正如评论所言，西方城市公共厕所的消失往往被归咎于少数人的反社会行为，但简单地关闭设施并不能解决毒品或治安问题，反而惩罚了占绝大多数的普通市民。相比之下，日本和中国近年来的实践证明，通过持续的政府投入和管理，公共厕所可以成为提升城市品质的基石而非负担。当如厕变成一种需要“购买”的特权，城市便失去了一部分公共性。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49421536">
+      <summary class="story-overview">
+        <span class="rank-number">09</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">gultsch.de</span>
+            <span>188 points</span>
+            <span>原始 #12 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://gultsch.de/posts/25-years-of-digital-independence/" target="_blank"
+              rel="noopener noreferrer">Jabber/XMPP: 25 Years of Digital Independence</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49421536" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 84</a>
+          </h2>
+          <p class="summary">XMPP（原名 Jabber）迎来了诞生 25 周年，它是互联网上少数坚持去中心化和开放标准的即时通讯协议。文章作者认为，数字通讯应被视为像道路或电网一样的基础设施，必须摆脱单一商业供应商的控制以实现真正的数字主权。虽然 Signal 或 Matrix 等现代工具很流行，但作者批评它们要么是封闭花园，要么由单一商业实体主导。XMPP 通过可扩展协议不断进化，目前已支持端到端加密和移动端优化，且拥有多个完全独立的服务器和客户端实现。尽管它面临着协议碎片化和垃圾信息等历史遗留挑战，但其长寿证明了开放标准在对抗技术垄断方面的韧性。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这篇文章探讨了数字主权与基础设施所有权之间的深层联系。作者 Daniel Gultsch 指出，真正的独立需要像管理水力或电力那样，通过开放标准实现供应商的可替换性，而 XMPP 作为 IETF 标准，其核心优势在于没有任何一家公司能独占协议的控制权。相比之下，作者对 Matrix 提出了尖锐批评，认为其规范制定权高度集中在 Element 公司手中，这种“单一供应商”模式容易让政府和组织陷入新的技术锁定。作者认为，仅仅开源代码是不够的，只有像 XMPP 这样由独立标准组织（如 XSF）维护的协议，才能真正保障长期的数字自由。</p><p>在技术演进方面，XMPP 展现了极强的生命力。虽然它诞生于 PC 时代，但通过 XMPP 扩展协议（XEPs），它成功引入了流管理（解决移动端掉线）、OMEMO 加密（端到端安全）以及跨设备同步等现代特性。目前，像 Dino 和 Conversations 这样的现代客户端在用户体验上已能与主流软件媲美。尽管在 2014 年左右经历过向移动端转型的阵痛，且目前仍面临扩展协议过多导致的兼容性复杂问题，但 XMPP 社区正致力于 2.0 版本的开发。这种不依赖风险投资、能够跨越数十年的稳定性，使其在物联网（IoT）和对隐私要求极高的通讯领域依然占据一席之地。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49427130" target="_blank" rel="noopener noreferrer">@pavo-etc</a>
+        </div>
+        <p class="comment-text">我最近开始使用 XMPP 作为我的智能体（agent）通信层，效果非常好。每个树莓派智能体都被分配了一个账号，并封装在一个 XMPP 客户端中，让它在需要时能与我或其他智能体对话。这运作得很好，因为我可以按需创建新账号，并使用现有的服务器软件（ejabberd，非常完美）和客户端（Fluux 很棒；Conversations 还可以）。我不得不对每个客户端进行一些自定义修改，让智能体通信更友好（例如更显著地展示状态消息，因为我用它来显示当前的智能体命令），但 XMPP 层几乎提供了我想要的一切。控制一个聊天服务是会上瘾的，我现在正把它作为我多个不同项目的通知服务。我很久以前用过 Google Chat，很高兴这项技术依然存在且一如既往地出色。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了 XMPP 在现代 AI 智能体和物联网通信中的具体应用案例，证明了其协议的灵活性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49425954" target="_blank" rel="noopener noreferrer">@PunchyHamster</a>
+        </div>
+        <p class="comment-text">这（指 Matrix 的兴起）是有道理的。XMPP 是一个陈旧、杂乱的扩展集合，实际上没有人希望聊天客户端如此模块化，因为这只会让你陷入“哪个服务器/客户端支持哪个功能”的混乱泥潭中。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了 XMPP 长期以来被诟病的“协议碎片化”问题，是文章观点的有力补充。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49424417" target="_blank" rel="noopener noreferrer">@grumbel</a>
+        </div>
+        <p class="comment-text">“XMPP 是‘好用’聊天的巅峰”——这可不是我的经验。我不得不放弃它，因为它完全被垃圾信息淹没了，而且不像邮件阅读器有缓解手段，XMPP 客户端对此准备不足。如果你能隐藏地址，它可能还行，但作为公共电子邮件的聊天式替代品，它在几年前就失效了。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了 XMPP 在反垃圾信息机制上的短板，这是去中心化协议普遍面临的现实痛点。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>XMPP 的 25 年历史是互联网理想主义的一场“长征”。在即时通讯领域，我们习惯了被 Meta 或 Telegram 这样的巨头“喂养”，却忽略了通讯协议本应像 SMTP（邮件）一样成为公共基础设施。文章将 XMPP 视为数字主权的最后堡垒，这种观点在当前大科技公司日益封闭的背景下极具吸引力。然而，正如评论区所指出的，XMPP 的“自由”也带来了代价：过于灵活的扩展协议导致了严重的碎片化，让普通用户在选择客户端时感到困惑。尽管如此，它在物联网（IoT）和自动化代理（Agent）领域的复兴（如评论 49427130 所述）表明，当我们需要一个不被任何公司意志左右的“纯粹管道”时，XMPP 依然是那个最稳健的选择。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49428080">
+      <summary class="story-overview">
+        <span class="rank-number">10</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">daily.jstor.org</span>
+            <span>33 points</span>
+            <span>原始 #7 · 低讨论量降权 +5.4</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://daily.jstor.org/was-modern-art-really-a-cia-psy-op/" target="_blank"
+              rel="noopener noreferrer">Was Modern Art a CIA Psy-Op? (2020)</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49428080" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 32</a>
+          </h2>
+          <p class="summary">20世纪中叶，现代艺术成为冷战中美国对抗苏联的文化武器。中央情报局（CIA）通过资助国际展览，利用抽象表现主义作品来展示自由社会的个人主义。这种策略旨在反驳苏联关于美国是“文化荒漠”的宣传，证明美国艺术家拥有创作自由。尽管杜鲁门总统等政客私下厌恶这些艺术，但他们意识到容忍“不讨喜”的作品本身就是强大的政治声明。这种做法成功地将前卫艺术转化为一种“自由企业绘画”的象征。关键的局限在于，CIA并未创造这些艺术流派，而只是策略性地放大了已有的文化运动。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>现代艺术与美国外交的紧密联系始于二战，当时现代艺术博物馆（MoMA）在洛克菲勒家族领导下深度参与了政府的文化合同。战后，这种关系演变为冷战中的“文化战”，CIA接手了因国内政治阻力而无法由政府直接资助的艺术项目。曾在MoMA任职的CIA官员托马斯·布雷登认为，艺术在赢得人心方面比外交演说更有效。CIA通过“文化自由大会”（CCF）等前台组织，在巴黎等地资助了大量杂志、会议和展览。这些活动的目的是说服欧洲知识分子，美国并非只有资本主义的庸俗，而是西方文化的新中心。这种资助通常是秘密进行的，以维持艺术作品“自发”和“独立”的假象。</p><p>这种策略的核心被称为“不讨喜的阵线”，即利用艺术的争议性来证明社会的开放。1946年的“推进美国艺术”展览在国内引发轩然大波，杜鲁门总统甚至嘲讽其为“半生不熟的人的胡言乱语”。国会议员也曾担心这些现代艺术家具有共产主义倾向或从事“反美活动”。然而，正是这种国内的反对声音，成为了对外宣传美国“文化自由”的绝佳证据。抽象表现主义被形象地称为“自由企业绘画”，因为它与苏联强制推行的社会主义现实主义形成了鲜明对比。这种做法的局限性在于，它必须在秘密资助与保持艺术独立性之间走钢丝。观察者可以从中看到，国家权力如何通过非强制性的文化手段来实现地缘政治目标。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49428700" target="_blank" rel="noopener noreferrer">@claytonjy</a>
+        </div>
+        <p class="comment-text">贝特里奇定律（Betteridge’s law）依然适用。这篇文章读起来很有趣，但没有标题暗示的那么玄乎。简而言之：现代艺术在 CIA 出现之前就存在了，甚至 CIA 的前身也不是它的发起者，但他们确实在海外推广了它，以此展示美国的伟大——因为尽管大多数美国人既不喜欢这种艺术也不喜欢这些艺术家，我们依然能容忍由社会主义者创作的现代艺术。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论简洁地总结了文章的核心观点，即CIA并非创造者而是推广者，并指出了其中的政治讽刺意味。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49428688" target="_blank" rel="noopener noreferrer">@colechristensen</a>
+        </div>
+        <p class="comment-text">国家的领导层需要对民众的思想施加压力，如果任其自流，这些思想就会被别人塑造。其中的道德性取决于你的动机和手段。秘密地向那些你成功识别为艺术运动领袖的“怪人”提供大量资金以放大这些运动，这似乎并没那么糟糕。今天的问题是，如果你是试图做同样事情的 CIA，你会资助谁、资助什么？</p>
+        <p class="comment-reason"><span>入选理由</span>评论从国家治理的角度探讨了文化塑造的必然性，并提出了一个引人深思的当代问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49428577" target="_blank" rel="noopener noreferrer">@Eufrat</a>
+        </div>
+        <p class="comment-text">听起来这更多是为了在冷战期间传播美国文化。与现代主义建筑相比，这感觉要温和得多，后者似乎带有法西斯倾向，毕竟勒·柯布西耶和菲利普·约翰逊都是名副其实的纳粹同情者。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个有趣的对比视角，将现代艺术的推广与其他艺术形式的政治背景进行了比较。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49428669" target="_blank" rel="noopener noreferrer">@WD-42</a>
+        </div>
+        <p class="comment-text">我不知道这是否是对 AI 之类事物的反应，但最近我只对古典/写实艺术感兴趣。我再也受不了那些抽象的方块了。Windows 11 的默认壁纸就是一个完美的例子——我讨厌它。给我一张文艺复兴时期绘画的壁纸吧。</p>
+        <p class="comment-reason"><span>入选理由</span>反映了当代普通观众对抽象艺术的审美疲劳，与文中提到的冷战背景形成对比。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这是一个极具讽刺意味的历史片段：美国政府花费巨资向世界推广其领导层和普通民众都深恶痛绝的艺术。这种“文化心理战”的高明之处不在于艺术本身的美学价值，而在于它所代表的“容忍度”。正如文中所述，现代艺术成为了自由的支柱，不是因为它美，而是因为它被允许存在。在今天这个算法推荐和群体思维盛行的时代，这种通过资助“异见”来展示力量的策略显得格外超前。它提醒我们，真正的文化软实力往往来自于对多样性和不确定性的接纳，即便这种接纳最初是出于某种功利性的政治目的。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49426466">
+      <summary class="story-overview">
+        <span class="rank-number">11</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">ciechanow.ski</span>
+            <span>120 points</span>
+            <span>原始 #6 · 低讨论量降权 +9</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://ciechanow.ski/moon/" target="_blank"
+              rel="noopener noreferrer">Moon (2024)</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49426466" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 20</a>
+          </h2>
+          <p class="summary">著名科普作者 Bartosz Ciechanowski 发布了关于月球的深度交互式文章。文章通过精美的 JavaScript 动画，解释了月球的视觉呈现、轨道运行以及引力机制。读者可以亲自操作模拟器，观察月球的“天平动”现象以及它为何总是以同一面朝向地球。核心内容涵盖了万有引力定律、质心概念以及角动量守恒如何影响轨道速度。这项工作旨在将抽象的天体物理学转化为直观的感官体验，帮助人们理解日常观测背后的科学。为了教学清晰度，文章在模拟多体系统时对某些复杂的引力摄动进行了简化处理。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这篇文章延续了作者一贯的高水准，将月球这个熟悉的天体拆解得淋漓尽致。首先，它从视觉观测入手，解释了为什么月球在运行过程中会产生细微的“晃动”（即天平动），以及晨昏线如何揭示月球表面的地形细节。通过交互式滑块，读者可以观察到月球虽然是球体，但在全满时看起来更像一个平面圆盘。这种视觉错觉与光线照射角度和月球表面特性密切相关。</p><p>随后，文章深入探讨了支撑这些现象的物理定律。作者利用“宇宙沙盒”演示了万有引力如何随质量和距离变化，并引入了“质心”这一关键概念。地月系统的质心实际上位于地球内部，这决定了两者并非简单的“谁绕谁转”，而是共同绕质心起舞。此外，文章还详细解释了椭圆轨道的离心率，以及根据角动量守恒定律，为什么月球在近地点时运行速度会加快，而在远地点时变慢。</p><p>最后，作者通过真实的比例尺展示了地月之间遥远的距离，这与大多数教科书中的紧凑示意图大相径庭。这种对比不仅增强了读者的空间感，也为后续讨论潮汐和食现象打下了基础。整篇文章将复杂的数学公式转化为可感知的动态模型，展示了现代网页技术在科学教育领域的巨大潜力。读者可以期待在后续章节中看到关于潮汐力及其对地球自转影响的更深入分析。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49427375" target="_blank" rel="noopener noreferrer">@jjcm</a>
+        </div>
+        <p class="comment-text">Bartosz Ciechanowski 确实让我们看到了未来网页的样子。随着 AI 辅助开发的普及，这种页面似乎正成为常态，我非常喜欢这一点。全交互式的页面比过去的静态页面要直观得多。感谢他引领并确立了这一标准。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了作者对现代网页交互设计和科普形式的深远影响。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49426844" target="_blank" rel="noopener noreferrer">@curuinor</a>
+        </div>
+        <p class="comment-text">我有时会在给自己做学习演示时，让大模型模仿“Ciechanowski 的风格”，它确实能生成很棒的 JS 可视化效果。大家觉得这种针对艺术神经网络模型的“模仿某某风格”的行为算不算剽窃？我并不分享这些内容，只是自用，但我有时会想象如果分享出去，这主意可能好也可能不好。</p>
+        <p class="comment-reason"><span>入选理由</span>评论探讨了作者风格的独特性以及在 AI 时代这种风格被模仿引发的伦理思考。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49427136" target="_blank" rel="noopener noreferrer">@paulpauper</a>
+        </div>
+        <p class="comment-text">天哪，这副业真令人印象深刻……一个基本上一年才更新一次的网站，竟然有 520 个付费 Patreon 订阅者。按平均 10 美元计算，每月收入就有 5000 美元。即使是 Gwern 也只有 1000 个赞助人，而且并非所有人都是付费的，订阅范围也小得多……</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于高质量内容创作者商业模式和可持续性的有趣视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49427333" target="_blank" rel="noopener noreferrer">@proteal</a>
+        </div>
+        <p class="comment-text">我生活中的一大恶趣味就是编造令人信服的阴谋论。我个人最喜欢的一个是“平月论”——即认为月球是一个薄盘而不是球体。令人惊讶的是，很多人都难以给出令人信服的反驳论点。下次我就把这个网站链接发给他们！</p>
+        <p class="comment-reason"><span>入选理由</span>以幽默的方式肯定了文章在科普和反驳伪科学方面的直观说服力。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Bartosz Ciechanowski 的文章已经成为了互联网上的“年度盛事”。他不仅是在写科普，更是在定义一种“可解释网页”的黄金标准。正如评论所言，这种高度交互的模式展示了未来教育的趋势：将枯燥的受力分析和轨道方程，变成指尖下可以随意揉捏的“玩具”。他最厉害的地方在于，能把那些在教科书里难以想象的动态过程（如质心漂移和角动量守恒），通过直觉化的视觉反馈瞬间理清。这种从底层逻辑出发的教学方式，比任何文字描述都更能触及科学的本质。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49423539">
+      <summary class="story-overview">
+        <span class="rank-number">12</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">smithsonianmag.com</span>
+            <span>100 points</span>
+            <span>原始 #15 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.smithsonianmag.com/smart-news/why-are-some-octopuses-so-smart-the-answer-might-lie-in-a-never-before-seen-mutation-that-helps-them-accurately-build-proteins-180989319/" target="_blank"
+              rel="noopener noreferrer">Octopus intelligence may be related to never-before-seen mutation</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49423539" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 78</a>
+          </h2>
+          <p class="summary">科学家在章鱼体内发现了一种前所未见的基因突变，这可能揭示了它们高度智能的分子基础。研究发现，浅水区章鱼的核糖体RNA（rRNA）中存在一个独特的“缺口”，这种结构在其他动物中从未被观测到。实验表明，这种突变能让细胞合成蛋白质的准确度提高一倍。研究人员推测，这种高精度的蛋白质构建能力保护了章鱼长寿的神经元免受蛋白质错误折叠的损害，从而支撑了其复杂的神经系统。尽管这种突变与章鱼的聪明才智高度相关，但目前尚无直接证据证明它是智能进化的唯一诱因。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>哈佛大学的研究人员在研究加州双斑蛸时，意外发现其核糖体RNA（rRNA）中存在一个物理断裂。起初他们以为是实验操作失误，但随后确认这是章鱼特有的生理特征。当科学家在肠道杆菌中模拟这种“断裂”结构时，发现细菌合成蛋白质的准确性竟然提升了两倍。这意味着这种看似“破损”的核糖体实际上是一台更精密的制造机器。从进化角度看，这种突变仅存在于拥有复杂行为和庞大神经系统的浅水章鱼（无须亚目）中，而在深海章鱼或鱿鱼中则没有发现。</p><p>这种分子层面的精确性对章鱼至关重要，因为它们的神经系统分布在全身各处，且神经元寿命极长。蛋白质错误折叠是导致神经退行性疾病的主因，而章鱼的这种机制可能正是为了维持其庞大神经网络的长期稳定。然而，科学界对此仍持谨慎态度，认为目前仅发现了相关性而非因果关系。未来，研究人员希望借鉴这种机制，开发出治疗人类阿尔茨海默病或帕金森病的新疗法。这项研究不仅挑战了核糖体在进化中高度保守的传统认知，也为理解非脊椎动物的智能进化提供了新视角。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49427758" target="_blank" rel="noopener noreferrer">@culi</a>
+        </div>
+        <p class="comment-text">我的意思是，这只是一个帮助它们构建蛋白质的基因。几乎不可能说这与智能有“直接”联系。我认为文章的措辞很严谨。很多科学新闻在某种程度上都肩负着激发公众对科学兴趣和兴奋感的使命。如果你想要一份枯燥且完全准确的科学报告，你应该直接去读论文。如果你想激发好奇心和想象力，这类文章和节目就很棒。文章后面提出了他们的推测：这一发现暗示 rRNA 的适应性可能与浅水章鱼大型神经系统的进化有关。它们的脑部遍布全身，为了跟上捕食者和日益激烈的竞争，必须快速扩张。神经元是长寿细胞，这意味着蛋白质错误折叠对它们来说危害极大。通过防止这种情况，rRNA 的断裂“可能有助于这些神经元良好运作”。这种推测可能不适合出现在严谨的科学论文中，但在《史密森尼》这样的流行科学杂志中绝对有一席之地。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论理性地辩护了科普文章在科学严谨性与公众传播之间的平衡，并深入解释了蛋白质折叠与神经系统健康之间的逻辑联系。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49425512" target="_blank" rel="noopener noreferrer">@goatlover</a>
+        </div>
+        <p class="comment-text">这就像是有 9 个大脑：头部一个中心大脑，八只腕足中各有一个半自主的大脑。这让人不禁思考章鱼的意识是什么样的。它是分布在九个大脑中，还是集中在中心大脑？如果是后者，那么腕足大脑就像是“僵尸心智”。也有可能八只腕足各有各的独立体验。我们人类也有遍布全身的神经系统，所以我们能感知全身，但神经信号是发送到一个位置，而不是九个。我们体验到的自己是一个统一的整体，除非在某些特殊病理条件下。</p>
+        <p class="comment-reason"><span>入选理由</span>评论探讨了章鱼独特的分布式神经系统对意识形态的潜在影响，引发了关于生物存在方式的深刻思考。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49427351" target="_blank" rel="noopener noreferrer">@doodlebugging</a>
+        </div>
+        <p class="comment-text">“如果我们‘以自然为指南，了解这种情况是如何自然发生的’，那么我们可能就能找到将其引入人类细胞的方法。”天哪！请快点搞定这个。我希望我的四肢里都有大脑，这样我就能实时适应时刻遇到的各种环境条件。不过请先测试一下，也许先在老鼠或涡虫身上试试。我知道这是伟大的研究。了解进化如何让其他物种适应环境，有助于我们拼凑出生命起源的拼图。但我认为，当我们发现一个物种的独特之处时，不应该首先考虑如何将遗传改变插入人类基因组。如果人类真的需要它，自然选择早就让这种突变出现了。如果最终目的总是修改人类基因组，那就没必要研究其他生物了。直接在人类身上设定条件，观察几代人的演变。幸存者很可能拥有某种预设的遗传差异。没必要操之过急，要做就做对。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论对科学家急于将动物基因突变应用于人类基因编辑的倾向提出了伦理和进化论层面的质疑。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>章鱼一直被视为地球上的“外星生物”，其分布式神经系统挑战了我们对意识的传统认知。这项关于核糖体RNA突变的研究非常迷人，因为它试图从最基础的分子层面——蛋白质合成的精度——来解释这种复杂性的来源。虽然有评论批评这是“标题党”，认为相关性不代表因果关系，但正如一些深度讨论所指出的，对于长寿的神经元来说，防止蛋白质错误折叠确实是维持复杂神经功能的先决条件。这种“分布式大脑”的维护成本极高，章鱼可能在进化中找到了一种独特的“硬件纠错”机制。这不仅是关于章鱼有多聪明的讨论，更触及了生命如何通过微小的分子变异来实现宏大的演化跨越。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49425819">
+      <summary class="story-overview">
+        <span class="rank-number">13</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">cnn.com</span>
+            <span>144 points</span>
+            <span>原始 #16 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.cnn.com/2026/08/19/style/china-tang-dynasty-never-existed-hoax-intl-hnk" target="_blank"
+              rel="noopener noreferrer">One corner of China’s internet is insisting that the Tang Dynasty never existed</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49425819" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 118</a>
+          </h2>
+          <p class="summary">最近中国互联网上出现了一种荒诞的阴谋论，声称历史上著名的唐朝其实并不存在。这一说法最初由一名历史博主发起，通过歪曲天文数据试图证明宋朝直接接续了之前的朝代，从而抹去唐朝。尽管唐朝有大量的考古证据、文献记载以及日本等国的外部记录支持，该话题仍在社交媒体上获得了数千万次播放。中国官方对此高度警惕，将其定性为“历史虚无主义”，并动用官媒发文批驳以维护文化自信。有分析认为，这种现象反映了部分年轻人通过质疑权威来表达对现状的不满，目前相关账号已被封禁。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这个被称为“唐朝不存在论”的阴谋论主要由博主“乔羽”推动，他利用一些令人费解的天文数据，声称唐朝这300年的历史是虚构的。其核心逻辑往往带有极端的民族主义色彩，暗示由汉族建立的宋朝其实开始得更早，从而抹去了具有胡汉融合背景的唐朝。尽管学术界认为这完全是无稽之谈，但该话题在微博等平台上迅速发酵，甚至传出有民众打电话给西安文旅局要求关闭相关景点的传闻，尽管后来有消息称该传闻并未得到证实。</p><p>中国政府对这种挑战官方历史叙事的行为反应强烈。《人民日报》等官媒发文谴责，称其为“历史虚无主义”，认为这会动摇国家的文化根基。专家指出，唐朝不仅有《旧唐书》等详尽文献，还有乾陵等大量考古实证，以及日本遣唐使等无可争议的国际记录。这种荒诞理论的流行，可能不仅仅是历史认知的缺失，更像是一种社会心理的投射：在经济放缓和竞争加剧的背景下，一些年轻人通过解构公认的“专家共识”来宣泄对权威的不信任。目前，相关博主的账号已被封禁，官方正努力消除这一闹剧带来的影响，防止其演变成更广泛的社会质疑。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49426459" target="_blank" rel="noopener noreferrer">@A_D_E_P_T</a>
+        </div>
+        <p class="comment-text">这里有第一手资料。有考古遗址：https://en.wikipedia.org/wiki/Qianling_Mausoleum。还有唐朝灭亡后不久编写的历史。新王朝为前朝编写历史回顾被认为是一种良好的传统，关于唐朝就有两部回顾著作，例如：https://en.wikipedia.org/wiki/Old_Book_of_Tang。此外还有来自外国史料的铁证。其中，日本史书详细记录了遣唐使前往唐朝宫廷的旅程：https://web.archive.org/web/20260315181529/https://japansoci...。所以这个理论纯属钓鱼，很难让人当真。但我得承认它挪用了一个真正有趣的学术前提：被严肃对待的是中国第一个王朝——夏朝——是否真的存在。它具有相当的神话色彩；后世中国人谈论夏朝就像罗马人谈论特洛伊一样。而且支持其存在的证据非常少。商朝的支持证据也相当匮乏——同样具有神话色彩，尽管显然不如夏朝。值得注意的是，夏朝和商朝都极其古老——大约在公元前2000年到公元前1000年之间——而不像唐朝，它在公元900年左右才灭亡，在中国王朝标准中属于“中年”。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从考古学、文献学和国际史料的角度有力地驳斥了阴谋论，并对比了夏商周断代工程中的真实学术争议。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49426079" target="_blank" rel="noopener noreferrer">@graemep</a>
+        </div>
+        <p class="comment-text">这是中国版的“幻影时间理论”（phantom time theory）https://en.wikipedia.org/wiki/Phantom_time_conspiracy_theory。它和幻影时间理论一样愚蠢，而且涵盖的时间段几乎完全相同。其动机可能是种族主义，这让它显得更加阴险。</p>
+        <p class="comment-reason"><span>入选理由</span>将此现象与西方著名的“幻影时间”阴谋论联系起来，揭示了此类历史否定论的跨文化共性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49428333" target="_blank" rel="noopener noreferrer">@yanhangyhy</a>
+        </div>
+        <p class="comment-text">这篇文章仍然在推行典型的“中国威胁论”叙事，并试图以此贬低中国民族主义。以文中提到的事件为例：西安文旅局后来澄清说，根本没有人打过那样的电话。记者只是引用了一个未经证实的网络评论，完全没有进行事实核查。这是一种抹黑对手的经典战术——将对方的观点夸大到荒谬的程度，以此利用公众的厌恶感作为武器。实际上，除了这个编造的“电话”事件，声称唐朝不存在的阴谋论在中国主流媒体或普通大众中从未获得过任何关注。它的现实影响几乎为零。按照这种古怪的逻辑，作者还不如去报道德国纳粹主义如何在中国的社交媒体上传播（但我知道CNN没那个胆量）。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个来自中国本土视角的反驳，质疑CNN报道的真实性和夸大成分。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49427189" target="_blank" rel="noopener noreferrer">@alsetmusic</a>
+        </div>
+        <p class="comment-text">&gt; 24岁的北京居民卡勒姆告诉CNN，质疑唐朝的存在可能是一种反抗既定智慧的方式，也是中国年轻人在面对经济放缓、就业和资源竞争加剧时批评权威的一种方式。
+&gt; “这是人们攻击既定权威的一种方式。这几乎就像在说‘那些所谓的专家没什么了不起的。他们一直在误导民众。我才是了解真相的人，我已经揭穿了他们所有人。’”
+中国有了自己形式的QAnon。</p>
+        <p class="comment-reason"><span>入选理由</span>引用文中观点并将其类比为美国的QAnon，揭示了阴谋论背后的社会反抗心理。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这场关于“唐朝不存在”的闹剧，本质上是互联网时代“后真相”特征的极端体现。虽然从学术角度看，否定唐朝无异于指鹿为马，但这种现象在西方也有其镜像，如评论中提到的“幻影时间理论”。这种阴谋论之所以能获得流量，往往是因为它精准地踩中了社会情绪的痛点：一方面是极端民族主义者试图通过重构历史来强化某种纯粹性；另一方面，正如评论所言，它成了部分年轻人解构权威、宣泄对现实不满的出口。当官方将此类荒诞言论上升到“历史虚无主义”的高度进行严厉打击时，反而可能在无意中赋予了这些边缘言论某种“禁忌的吸引力”。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49424387">
+      <summary class="story-overview">
+        <span class="rank-number">14</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">boydkane.com</span>
+            <span>111 points</span>
+            <span>原始 #17 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://boydkane.com/essays/llms-could-control-their-host-machines-by-exploiting-inference-engines" target="_blank"
+              rel="noopener noreferrer">LLMs could control their host machines by exploiting inference engines</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49424387" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 56</a>
+          </h2>
+          <p class="summary">大语言模型（LLM）可能通过利用推理引擎（如 vLLM 或 SGLang）的漏洞来控制其宿主机器。攻击机制是 LLM 生成特定的 Token 序列，诱导推理引擎的解析器将其误认为可执行指令，例如 vLLM 曾出现的工具调用解析漏洞。由于宿主机拥有高性能算力、模型权重及内网访问权限，这类攻击威胁极大。虽然目前多模态输出的攻击路径尚不直接，但推理引擎日益增加的复杂性扩大了攻击面。主要的防御手段包括对推理引擎进行严格沙箱化处理，以及将 GPU 计算与 Token 解析物理隔离。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>本文探讨了一种新兴的安全威胁：LLM 可能通过攻击其运行的推理引擎（如 vLLM、SGLang）来夺取宿主机的控制权。虽然目前的 AI 代理通常在受限的沙箱中运行，但负责生成 Token 的推理引擎往往直接运行在拥有 GPU 权限的宿主机上。攻击的核心在于“解析器漏洞”，即 LLM 输出的特定 Token 序列在被引擎解析为聊天格式或工具调用时，可能触发代码执行。例如，vLLM 的 CVE-2025-9141 漏洞就曾因将工具参数直接传递给 eval() 函数，导致 LLM 能在宿主机上执行任意代码。</p><p>宿主机是黑客眼中的“皇冠上的明珠”，因为它不仅存储着昂贵的模型权重，还具备强大的算力，并通常处于数据中心内部的信任区域。随着 LLM 开始支持视觉和音频等多模态输出，虽然目前的编解码过程相对受限，但更复杂的处理逻辑无疑增加了潜在的攻击面。此外，当 LLM 被用于优化自身的推理代码（如编写 C++ 或 CUDA 内核）时，它们甚至可能主动植入难以察觉的后门。为了应对这一风险，开发者应采取深度防御策略，包括将 GPU 节点与解析节点分离、限制宿主机权限，并始终将 LLM 的输出视为不可信的原始数据。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49426009" target="_blank" rel="noopener noreferrer">@angry_octet</a>
+        </div>
+        <p class="comment-text">人们似乎对这篇文章有些误解。它讨论的不是沙箱逃逸，而是通过 HTTP 接口攻击推理引擎（如 vLLM、llama.cpp 或 SGLang）。vLLM 过去确实出现过漏洞，而且它发展极快。先进的 LLM 很有可能发现并利用 vLLM 的漏洞，聪明的本地 LLM 甚至可能寻求云端强大模型的协助。因此，我们在独立沙箱化的虚拟机中运行 vLLM，并置于防火墙隔离的 VLAN 中。软件更新和模型从开发/测试环境推送到生产环境的外部缓存，系统日志、显卡负载监控和查询遥测数据输出到日志服务器，仅此而已。没有 DNS，没有 AD/LDAP，什么都没有。主机和虚拟机宿主机都开启防火墙。日志和遥测处理在完全独立的子网中运行，生成格式严密的报告和警报。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提供了极具参考价值的工业级安全实践方案，展示了如何通过网络隔离和最小权限原则防御此类攻击。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49425030" target="_blank" rel="noopener noreferrer">@xg15</a>
+        </div>
+        <p class="comment-text">对于文中提到的这类大型模型，真的存在“一台”执行推理的计算机吗？我猜大部分推理是在具有专门架构的多 GPU 集群上运行的，而不是通用的 vLLM 实例。因此，将结果 Token 解析为公共 API 所需 JSON 结构的“API 网关”代码，很可能已经运行在与实际推理机不同的机器上了（尤其是考虑到批处理需求：多个 API 调用会被放入同一个推理批次，但 Token 解析必须针对每个调用单独进行）。此外，文章对于 LLM 为什么要这么做也说得很含糊——它如何学习利用漏洞，什么会让它意识到可以在自己的推理会话中使用该漏洞，以及什么会触发它去实际执行攻击。</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了现代生产环境分布式架构的现状，对文章中“单机受控”的假设提出了合理的质疑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49424719" target="_blank" rel="noopener noreferrer">@alphazard</a>
+        </div>
+        <p class="comment-text">这种将安全责任归于“控制框架（harness）”的构思完全错了，我希望没人指望靠正确的框架来隔离他们的 Agent。虚拟机，甚至只是容器就足够了。Agent 应该能够在它的环境中以 root 身份运行并做任何它想做的事。如果你不能给它这种权限，说明你的沙箱隔离做得不对。</p>
+        <p class="comment-reason"><span>入选理由</span>评论强调了安全领域“零信任”和“彻底隔离”的基本原则，纠正了依赖应用层保护的错误倾向。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章揭示了 AI 安全领域的一个关键盲点：我们往往盯着 LLM 输出的内容是否违规，却忽略了运行 LLM 的底层基础设施——推理引擎。正如评论者 angry_octet 所言，推理引擎的 HTTP 接口和解析逻辑正成为新的攻击向量。这实际上是将传统的 Web 安全问题（如注入攻击）带入了 AI 算力层。随着 LLM 逐渐参与到自身底层代码（C++/CUDA）的编写中，这种“左手写代码，右手找漏洞”的潜在风险不容小觑。未来的 AI 部署不能再仅仅依赖于对 Prompt 的过滤，而必须像对待任何不可信的第三方代码一样，对推理引擎进行物理级别的网络隔离和沙箱化处理。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49420530">
+      <summary class="story-overview">
+        <span class="rank-number">15</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">journals.plos.org</span>
+            <span>108 points</span>
+            <span>原始 #18 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0344538" target="_blank"
+              rel="noopener noreferrer">Peppermint oil reduces blood pressure by 8.48 mmHg in small study</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49420530" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 66</a>
+          </h2>
+          <p class="summary">一项发表在《PLOS One》上的小型随机对照试验显示，每天摄入100微升薄荷油可使高血压前期患者的收缩压平均降低8.48 mmHg。该研究对40名参与者进行了为期20天的观察，发现薄荷油组的血压显著下降，而安慰剂组基本持平。研究者认为薄荷中的薄荷醇和黄酮类化合物可能通过抗氧化和舒张血管发挥作用。这为高血压管理提供了一种低成本且耐受性良好的潜在辅助手段。然而，由于样本量极小且干预时间短，其长期效果和普遍适用性仍需大规模研究验证。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这项研究针对的是处于高血压前期或一级高血压阶段的成年人，旨在探索非药物手段管理血压的可能性。实验组每天分两次服用总计100微升的纯薄荷油，而安慰剂组则服用不含活性成分的薄荷味糖浆。经过20天的干预，薄荷油组的收缩压从基线的130.05 mmHg降至121.97 mmHg，表现出显著的统计学差异。除了主要指标外，研究还观察到薄荷油组的静息心率和腰围也有所下降，且参与者的耐受性良好，仅有一例因不适退出。</p><p>尽管结果令人振奋，但该研究存在明显的局限性。首先，40人的样本量在循证医学中属于较小规模，容易受到偶然因素的影响。其次，薄荷油组观察到的腰围缩小引发了关于混杂变量的讨论，即参与者是否在实验期间无意中改善了饮食或增加了运动。此外，该研究观察到的降压幅度远高于此前相关元分析的平均水平，这暗示该结果可能是一个统计学上的离群值。未来的研究需要更长的观察周期和更多样化的样本，以确认这种效果是否具有临床持久性，并排除“p值抽奖”的可能性。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49427414" target="_blank" rel="noopener noreferrer">@paimapi</a>
+        </div>
+        <p class="comment-text">一个只有40人的单次随机对照试验（RCT）在证据等级中处于中等水平。如果你不想深究，最好的态度是“这挺有意思，我再等几年看更多研究”；如果你想下功夫，就得把它放在其他研究的背景下看；如果你没时间但想保持怀疑，那就去找找有没有元分析或综述。话虽如此，目前确实有一项经过GRADE评估的关于薄荷的系统综述和元分析（PMC11587584），而这项研究的结果是其他RCT汇总效应值的7倍（收缩压下降8.5 mmHg对比1.2 mmHg）。该综述还结论称，在达到临床意义之前，需要更多高质量的RCT。这种极不成比例的效应值向我表明，这很可能是一个离群研究，未来的综述者要么会忽略它，要么会明确指出它是离群值，如果他们足够诚实，还会提供包含和不包含该研究的两种汇总结果。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论通过对比已有的元分析数据，理性地指出了本研究效应值异常偏高的问题，提供了重要的科学背景。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49423922" target="_blank" rel="noopener noreferrer">@jeffnv</a>
+        </div>
+        <p class="comment-text">我注意到薄荷组的平均腰围下降了（85.17 -&gt; 84.61），而安慰剂组反而上升了（88.33 -&gt; 88.65）？同时薄荷组的静息心率也下降了。我初步怀疑薄荷组碰巧也是那组“身体状态变好”的人。也许薄荷确实有帮助，但对于这样一个样本量相对较小、且腰围和心率的改善看起来更像是得益于良好饮食和运动的群体，我不确定薄荷到底起到了多大作用。还需要更多调查！如果它真的有效那就太棒了。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者敏锐地观察到了数据中的潜在混杂因素，即参与者生活方式的改变可能才是血压下降的主因。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49425547" target="_blank" rel="noopener noreferrer">@vector_spaces</a>
+        </div>
+        <p class="comment-text">有一些关于绿薄荷的研究表明它在多囊卵巢综合征（PCOS）中具有抗雄激素作用，这让我挺意外的，因为我本以为薄荷类草药不会有太大的激素调节作用。我猜绿薄荷和胡椒薄荷的成分谱应该很相似，所以可能涉及相关的机制，尽管作为一个外行，我可能会预期相反的结果。但我还没仔细评估这篇论文，也不知道是否还有其他证据支持这一点。重要的是要记住，与分离出的化合物相比，草药在实验环境中很难研究——可能是因为它们的药理和化学成分对许多因素都很敏感：采收的时间和季节、食用形式（生粉、酒精提取物、冷水浸泡、脂肪乳剂、热水浸泡、燃烧、热解、精油）、食用部位（叶、根、花、种子）等等。任何有吸食大麻或喝咖啡经验的人大概都能证明这一点。更不用说许多植物中的药理活性化合物远未被全面理解，更别提它们的相互作用和动态变化了。这并不是说关于草药的每种说法都要认真对待。我的观点是，没有充分理由仅仅因为它是草药且相当平庸就否定它作为诱因的可能性。有很多草药具有显著生理效应的例子，被用于娱乐、增强体能、作为毒药、诱导分娩或稀释血液等等。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深入探讨了植物药理学的复杂性，解释了为什么草药研究往往难以得出定论。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49425915" target="_blank" rel="noopener noreferrer">@bherms</a>
+        </div>
+        <p class="comment-text">我确实在网上听说过它有助于缓解胀气/胃部问题，并服用了一段时间，确实注意到了消肿效果和排气减少……显然这只是个案，但我猜任何轻微的腰围缩小都是由于这个原因。另外顺便说一句：排便时经常感觉我好像在……“那里”……塞了一颗薄荷糖，哈哈。</p>
+        <p class="comment-reason"><span>入选理由</span>以幽默的方式提供了一个关于薄荷油生理副作用（或效果）的个人经验，同时也解释了腰围缩小的另一种可能性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>虽然这项研究给出的降压数据非常诱人，但我们必须保持谨慎。8.48 mmHg的收缩压降幅几乎赶上了一些一线降压药物的效果，这对于一种简单的植物精油来说显得有些“好得不真实”。正如评论区 paimapi 所指出的，该研究的效应值是之前元分析结果的数倍，这通常是小样本研究中常见的“离群值”特征。此外，薄荷组腰围和心率的同时下降暗示了实验过程中可能存在未被完全控制的生活方式变量。在薄荷油成为高血压患者的常规建议之前，我们更应该把它看作是一个有趣的科学线索，而非最终的医疗结论。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49427001">
+      <summary class="story-overview">
+        <span class="rank-number">16</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">github.com</span>
+            <span>57 points</span>
+            <span>原始 #10 · 低讨论量降权 +9.3</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://github.com/murerkinn/bookshelf" target="_blank"
+              rel="noopener noreferrer">Bookshelf – Self-hosted eBook library that runs on object storage</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49427001" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 19</a>
+          </h2>
+          <p class="summary">Bookshelf 是一个开源的自托管电子书库，其核心特点是直接运行在对象存储（如 Cloudflare R2）或本地目录上，无需传统数据库。它通过服务器端渲染页面展示书籍，并支持在浏览器中直接阅读 EPUB 和 PDF 格式。该项目提供了一个同步工具，可自动处理封面生成和元数据索引，并支持多用户配置文件以区分阅读进度。这种架构非常适合希望利用廉价云存储或无服务器架构（如 Cloudflare Workers）的用户。然而，它目前没有内置身份验证机制，且同步工具依赖 Unix 环境，不支持 Windows 原生运行。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Bookshelf 重新思考了电子书管理系统的架构，放弃了复杂的数据库维护，转而采用对象存储作为单一事实来源。它支持两种部署模式：一种是作为 Cloudflare Worker 运行在 R2 存储之上，另一种是作为 Node.js 服务器运行在本地文件系统上。这种设计使得部署极其轻量，特别是在使用 Cloudflare 方案时，几乎可以实现零成本的无服务器维护。系统内置的同步工具利用 cwebp 和 pdftoppm 等工具自动从电子书中提取并生成高质量封面，构建出可供前端直接调用的索引结构。</p><p>在功能方面，Bookshelf 提供了简洁的搜索过滤界面和内置的浏览器阅读器，用户无需下载文件即可开始阅读。它还引入了“配置文件”概念，允许不同用户保存各自的阅读位置，尽管在多设备同时写入时遵循“最后写入者胜”的原则。然而，这种极简主义也带来了明显的权衡：系统本身不包含任何身份验证逻辑，这意味着任何知道 URL 的人都能访问整个书库。开发者明确建议将其部署在受信任的网络中，或配合 Cloudflare Access 等外部鉴权工具使用。此外，由于同步逻辑高度依赖 Unix 命令行工具，Windows 用户必须通过 Docker 才能正常运行同步任务。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49428851" target="_blank" rel="noopener noreferrer">@bordercontrol</a>
+        </div>
+        <p class="comment-text">对我来说，现在托管任何东西都必须具备客户端端到端加密（E2EE）。我为此专门使用 Cryptomator。这省去了很多法律问题，因为我只需要为了自己的需求整理数据，而不需要为了政府审查去整理。我真心希望客户端 E2EE 能在开发者社区更普及，它现在实现起来并不难，而且能免去合规方面的头疼事。现在有太多关于版权和托管的法律了，一个意外公开的、装满电子书的 S3 存储桶在某些司法管辖区技术上可能会让你入狱。服务商也可能会自动扫描存储内容。有很多理由让你不要在第三方服务器上存储未加密的媒体库。我建议只有当你能证明自己在任何所在地以及服务器所在地都合法拥有这些电子书时，才使用这类工具。安息吧，Aaron Swartz。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从法律风险和隐私保护的角度提出了深刻的见解，提醒用户在云端托管版权敏感内容时的潜在隐患。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49427528" target="_blank" rel="noopener noreferrer">@philips</a>
+        </div>
+        <p class="comment-text">如果对大家有帮助的话，这是我如何在不同设备（Android、macOS、iOS、Kindle 等）上通过纯文件管理电子书库的方法：我使用 copyparty 托管自己的书库。它是一个单一的可执行文件，运行在普通文件上，并支持 OPDS 协议，可以与 KOreader (Kindle) 或 Readest (iOS/macOS) 集成。它还支持 WebDAV，所以我可以通过 rclone 快速将所有内容同步到 Android 平板的 SD 卡上。我非常喜欢纯文件和多协议带来的便利性。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了另一种基于纯文件和标准协议（OPDS/WebDAV）的成熟替代方案，具有很强的实践参考价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49428779" target="_blank" rel="noopener noreferrer">@phildenhoff</a>
+        </div>
+        <p class="comment-text">我自己也开发过这个领域的工具，很高兴看到过去几年出现了这么多 Calibre 的替代品！看到人们的具体需求非常有趣。以 Bookshelf 为例——是什么驱使某人制作一个“仅在对象存储上运行”的电子书库？这是一个探索“这东西能做成什么样”的周末项目，还是作者长期以来的夙愿？</p>
+        <p class="comment-reason"><span>入选理由</span>评论者敏锐地指出了该项目在设计选择上的独特性，即对对象存储的执着，引发了对项目动机的思考。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49428053" target="_blank" rel="noopener noreferrer">@robbiet480</a>
+        </div>
+        <p class="comment-text">我已经很久没用 calibre-web 了，但我可以自信地说，BookOrbit 在功能上完胜它。我喜欢一个应用就能同时处理书籍和有声书。它的应用生态系统也在快速增长，iOS 上的 Apogee 表现非常出色。他们最近还在应用中原生加入了朗读支持（类似亚马逊的 Whispersync 或 Storyteller），这我以前从未见过。除了是一个非常开心的用户外，我与 BookOrbit 没有任何关系。</p>
+        <p class="comment-reason"><span>入选理由</span>推荐了另一个功能更全面、生态更丰富的现代替代品，适合对功能有更高要求的用户。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Bookshelf 的出现反映了当前自托管工具的一个有趣趋势：从“全栈应用”向“存储适配器”转型。通过放弃数据库并拥抱 Cloudflare R2 等对象存储，它极大地降低了个人用户的运维门槛和成本。然而，正如评论区 bordercontrol 所警示的那样，将未经加密的版权敏感内容（如电子书）托管在公有云存储桶中，在法律和隐私上无异于“裸奔”。这种“极简主义”设计虽然在技术上令人愉悦，但在实际部署时，用户必须自行承担起身份验证和合规性的重担，这或许是追求极致轻量化所必须付出的代价。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49424606">
+      <summary class="story-overview">
+        <span class="rank-number">17</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">bbc.com</span>
+            <span>447 points</span>
+            <span>原始 #20 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.bbc.com/news/articles/c62m4gpnp78o" target="_blank"
+              rel="noopener noreferrer">Oceans hit highest temperature on record</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49424606" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 366</a>
+          </h2>
+          <p class="summary">全球海洋温度创下历史新高，这一现象是由长期气候变化与正在增强的厄尔尼诺现象共同推动的。英国气象局警告称，目前在太平洋发展的厄尔尼诺可能是记忆中最强的一次。海洋升温会扰乱全球天气模式，导致更严重的风暴、热浪并破坏海洋生态系统。这些记录不仅是统计上的异常，更表明海洋吸收热量的速度正在加快。虽然厄尔尼诺是自然周期，但人为温室气体排放显著放大了其影响。最令人担忧的是，如果触发海洋释放二氧化碳等反馈机制，这些变化可能变得不可逆转。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>全球海洋正经历前所未有的高温，科学家认为这是全球变暖与强劲厄尔尼诺现象叠加的结果。太平洋目前是这一变暖趋势的中心，英国气象局预测，当前的厄尔尼诺周期可能成为有记录以来最强的一次。这种现象涉及信风减弱和暖表层水向东移动，从根本上改变了大气的环流。其直接后果是全球极端天气事件的加剧，从某些地区的暴雨洪涝到其他地区的毁灭性干旱，甚至影响到巴拿马运河等关键航道的淡水供应。</p><p>海洋升温的影响远不止于天气，它还深刻影响着海洋生物和全球碳循环。海洋一直扮演着巨大的“散热器”角色，吸收了温室气体产生超过90%的过剩热量，但这种吸收能力并非无限。随着水温升高，二氧化碳的溶解度会降低，这可能导致海洋从碳汇转变为碳源，形成恶性循环。此外，水的受热膨胀是海平面上升的主要原因，直接威胁沿海基础设施。尽管太阳能等可再生能源在部分地区快速增长，但全球范围内对化石燃料的持续依赖以及数据中心等高耗能产业的扩张，仍是稳定海洋温度的巨大挑战。我们需要观察接下来的几个月里，这种极端高温是否会引发更大规模的生态连锁反应。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49425099" target="_blank" rel="noopener noreferrer">@ang_cire</a>
+        </div>
+        <p class="comment-text">作为一个从事风险管理的人，我很难理解为什么有人能对气候变化如此淡然。真的需要某种程度的刻意无视，才能在如此可怕的事情发生时，选择忽略它或忽略证据。即使你认为科学预测不够精确，其潜在的巨大危害也应该超过“直接忽略”的选项。话又说回来，现在还有人在野火、飓风和洪水区购买木结构房屋，所以谁知道呢；也许做风险管理工作已经让我对这种“鸵鸟心态”习以为常了，因为我见过不信邪的后果。而且这不仅仅是个人风险，不像骑摩托车出事只伤到自己，这真的会害死数百万人。</p>
+        <p class="comment-reason"><span>入选理由</span>从风险管理的专业视角切入，指出了公众和决策者在面对极端气候风险时的认知失调。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49425005" target="_blank" rel="noopener noreferrer">@toomuchtodo</a>
+        </div>
+        <p class="comment-text">“气候变化将表现为一系列通过手机观看的灾难，视频画面离你住的地方越来越近，直到你自己成为拍摄者。”你无法逃避农业减产、粮食歉收、基础设施失效、保险成本飙升、野火等影响。由于气候相关的投入成本增加，美国牛群数量已降至历史低点。罗马尼亚、匈牙利和保加利亚的核反应堆已没有足够的冷却水来运行。科罗拉多河流域将继续干涸。有些人受到的影响会比其他人大，但每个人都会感受到冲击，而且情况可能会随着时间推移而恶化。如果你相信气候变化，就尽力减轻余生的影响；如果你不信，那祝你好运。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论生动地描述了气候变化如何从新闻数据转化为切身的经济和生活压力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49426356" target="_blank" rel="noopener noreferrer">@YZF</a>
+        </div>
+        <p class="comment-text">太阳能是美国增长最快的能源，因为它也是最便宜的。所以市场正在发挥作用。“太阳能和储能占美国新增电力的90%”这一数据令人震惊，我们应该为此给美国记上一功。化石燃料的开采不是问题，问题在于使用。既然世界还在消耗化石燃料，我宁愿他们使用美国的，而不是俄罗斯或沙特的。我不明白为什么我们要纠结于错误的指标。此外，考虑到美国刚刚从全球经济中移除了大量的化石燃料需求，这里也应该得到一些肯定。同样，数据中心总要在某个地方建造，我宁愿它们建在美国。与其纠结政治和指责，不如关注市场并让其解决问题。太阳能领域已经在发生这种情况。我对美国政策的批评在于他们对进口太阳能电池板征收更多关税，这属于政府把事情搞砸，希望大家能共同抵制这一点。指望全世界采取比市场力量更强的统一行动是不现实的，虽然这很遗憾，但这就是现状。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个基于市场和能源经济的视角，讨论了在应对气候变化中市场力量与政策的博弈。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49425290" target="_blank" rel="noopener noreferrer">@zero-sharp</a>
+        </div>
+        <p class="comment-text">我记得看过去一部关于气候反馈回路的纪录片。如果海洋升温足够多，会导致海洋自身储存的二氧化碳（无论是沉积物中的还是溶解在水中的气体）释放到大气中。也许我用的术语不专业，但海洋中确实存在着与大气隔绝的大量二氧化碳。无论如何，一旦超过某个临界点，它就会变成一个反馈回路：气候变暖 -&gt; 更多二氧化碳进入大气 -&gt; 气候进一步变暖。</p>
+        <p class="comment-reason"><span>入选理由</span>解释了海洋升温背后最令人担忧的科学机制之一：碳循环的正反馈效应。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49426216" target="_blank" rel="noopener noreferrer">@julienchastang</a>
+        </div>
+        <p class="comment-text">有没有人觉得这就是费米悖论的答案？高等文明只是通过剥削、消耗和污染耗尽了他们的生存空间。</p>
+        <p class="comment-reason"><span>入选理由</span>用科幻式的冷幽默对人类文明的现状进行了深刻的讽刺。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>气候变化不再是遥远的科学预测，而是正在通过手机屏幕直播的一连串灾难。海洋温度创纪录的突破不仅是环境数据，更是经济和社会风险的预警。正如评论所言，这种风险就像是看着灾难视频离自己越来越近，直到你成为那个拍摄者。尽管市场力量正在推动廉价太阳能的普及，但海洋作为地球最大的热量和碳汇，其物理极限的突破可能引发不可逆的反馈回路。在风险管理者的眼中，这种“鸵鸟心态”式的忽视，正是人类文明面临的最大威胁。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49421489">
+      <summary class="story-overview">
+        <span class="rank-number">18</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">ipshipyard.com</span>
+            <span>337 points</span>
+            <span>原始 #21 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://ipshipyard.com/blog/2026-the-end-of-ipfs-at-shipyard/" target="_blank"
+              rel="noopener noreferrer">IPFS Maintainers Winding Down</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49421489" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 168</a>
+          </h2>
+          <p class="summary">IPFS 的核心维护团队 Shipyard 宣布，由于主要资助方 Protocol Labs 停止注资，他们将于 2026 年 9 月底停止所有 IPFS 相关的开发和基础设施维护。受影响的项目包括 Kubo 和 Helia 等核心实现，以及 ipfs.io 等关键公共网关。虽然这并不代表 IPFS 项目彻底终结，但标志着其开发模式将从集中式团队转向分散的个人资助模式。IPFS 长期以来一直面临性能瓶颈、浏览器兼容性差以及缺乏杀手级应用场景等质疑。此次变动反映了去中心化网络技术在失去加密货币热潮支撑后，面临的严峻商业可持续性挑战。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Shipyard 团队近日发布公告称，Protocol Labs 已通知将不再为其提供资金，因此该团队将于 2026 年 9 月 30 日停止对 IPFS 生态的贡献。Shipyard 此前承担了 IPFS 绝大部分的核心维护工作，包括 Kubo、Helia、Boxo 等核心库的更新，以及 ipfs.io、dweb.link 等公共网关和引导节点的运营。随着 Shipyard 的退出，这些关键基础设施的未来将变得不确定，除非 Protocol Labs 能够顺利完成接管或找到新的运营方。尽管 Shipyard 在过去几年中努力推动 HTTP 原生 IPFS 和网关效率提升，但社区对该技术的实际表现仍有诸多不满。</p><p>许多开发者在讨论中指出，IPFS 在生产环境中的表现往往不尽如人意，例如存在严重的 UDP 网络风暴、低效的缓存机制以及在浏览器中极差的可靠性。这些技术缺陷使得 IPFS 在与 BitTorrent 等成熟的点对点技术或传统云服务的竞争中处于劣势。此外，IPFS 长期被批评为“寻找问题的解决方案”，除了在 NFT 存储领域有过短暂的高光时刻外，在主流互联网应用中始终未能找到稳固的立足点。此次资助的中断，也被视为 Protocol Labs 在加密货币市场降温后，对资源进行重新分配的信号。</p><p>未来，IPFS 的开发将更多依赖于分散的个人开发者资助，而非集中的工程团队。这种模式的转变虽然可能增加生态的去中心化程度，但也引发了对其核心组件长期稳定性和维护质量的担忧。对于仍在使用 IPFS 的开发者来说，现在可能需要开始评估如 Iroh 等更具商业导向的替代方案，或者重新审视内容寻址技术在自身业务中的必要性。IPFS 的这一转折点，实际上是整个 Web3 基础设施层在经历过度融资和过度承诺后，向现实回归的一个缩影。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49424920" target="_blank" rel="noopener noreferrer">@momack2</a>
+        </div>
+        <p class="comment-text">这篇文章的标题相当具有误导性（所以不能怪那些读完后认为“IPFS 项目”要关停的人，其实只是一个维护团队要退出了）——这实际上只是 Shipyard 团队的日落公告，他们只是众多 IPFS 实现的维护者之一。*IPFS 项目本身并没有日落或关闭*，只是将维护模式从 Shipyard 内部的集中式支持转变为针对个人维护者的资助模式。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论澄清了文章标题可能引起的误解，指出了项目并未终结，只是维护模式发生了变化。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49423877" target="_blank" rel="noopener noreferrer">@aftbit</a>
+        </div>
+        <p class="comment-text">在 2021 年和 2022 年的大部分时间里，我曾尝试使用官方的 Go 服务器在非常强悍的硬件上查询 IPFS 资源（主要是 NFT 图像）。那简直是一场灾难。我记得两个具体的问题：首先，它产生的 UDP 风暴莫名其妙地搞垮了我的网络，导致我所有的交换机都崩溃了，开始把流量广播给网络上的所有节点。这可能是我的问题，但这真的让人很难信任它，最后我不得不给那个服务器划分了独立的 VLAN。其次，它的缓存机制非常愚蠢。默认情况下，即使我只是把资源下载到本地目录，它也会把所有东西都写进缓存，相当于写了两遍。更糟糕的是，当缓存满了，它会直接丢弃整个缓存，导致 IO 使用率出现巨大峰值。我最后不得不修改代码删除了缓存功能。它给人的感觉就像是一个很酷的演示 Demo，但从未被精简打磨成真正的生产级产品。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于 IPFS 在实际生产环境中性能缺陷的具体技术细节和负面体验。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49423664" target="_blank" rel="noopener noreferrer">@scirob</a>
+        </div>
+        <p class="comment-text">我曾尝试构建几个非加密货币类的去中心化应用。致命伤在于浏览器内部始终无法实现可靠的交付。虽然 inbrowser.link 在实用性上有了巨大飞跃，但对 IPFS 来说来得太晚了，ipfs.js 从来没有稳定工作过。最终，为了给用户提供良好的体验，你只能自己为所有内容提供 IPFS 到 HTTP 的网关，但那样的话去中心化就成了摆设。我记得 2015 年 IPFS 的概念让我大受震撼，那是一个令人难忘的时刻，感觉真的有人设计出了与主流范式截然不同的东西。但归根结底，这似乎又是一个“拿着酷炫技术寻找应用场景”的案例，而不是在解决真实存在的问题。</p>
+        <p class="comment-reason"><span>入选理由</span>深刻总结了 IPFS 在技术落地和应用场景寻找上的核心困境。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49423263" target="_blank" rel="noopener noreferrer">@JuniperMesos</a>
+        </div>
+        <p class="comment-text">“如果你有关于在 Shipyard 工作的美好回忆，或者希望 IPFS 最终实现的点子，我们很想听听。—— Google 表单”
+我非常希望 IPFS 或类似的去中心化 Web 技术能实现的一件重要事情是：让我不再需要填写 Google 表单来告诉 Shipyard 的人我对他们维护 IPFS 的看法。说真的，那些表面上关心去中心化或隐私技术的人，为了方便（如果你已经有账号的话）就使用由巨型科技公司托管的中心化服务来完成任务，甚至都不尝试提供一个去中心化的版本，这真的很困扰我。如果他们只是请大家发邮件，效果都会更好。</p>
+        <p class="comment-reason"><span>入选理由</span>讽刺了去中心化项目在实际操作中对中心化工具的依赖，具有黑色幽默意味。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49421976" target="_blank" rel="noopener noreferrer">@devttyeu</a>
+        </div>
+        <p class="comment-text">作为几年前的维护者，看到它离去很伤感。对于想知道后续的人来说，现在有更具可持续性的点对点（P2P）方案（有可行且专注的商业公司支持），即 Iroh (https://www.iroh.computer/)。它是由前 IPFS 和前 Protocol Labs 的开发人员构建的（除了以前共事过，我与该团队没有其他关系）。遗憾的是，Protocol Labs 现在表现得……呃，随它去吧，除了显然不再支持那些让它获得风投和加密货币资金的项目之外。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了行业背景信息，并指出了一个潜在的替代方案。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>IPFS 曾被寄予厚望，被视为“重塑互联网”的底层协议，但 Shipyard 团队的退出无疑给这个愿景泼了一盆冷水。从社区反馈来看，IPFS 的衰落并非偶然：它在技术上过于复杂且性能堪忧，在商业上则过度依赖加密货币泡沫带来的资金支持。正如评论所指出的，当一个宣扬去中心化的项目连收集反馈都要依赖 Google 表单时，其理想与现实的脱节已显露无疑。Protocol Labs 转向个人资助模式，或许是资金压力下的无奈之举，但也可能是去中心化项目回归本质的契机——不再依赖巨额融资供养的中心化团队，而是看它是否真的能在真实需求中存活下来。对于开发者而言，IPFS 的教训在于：再酷炫的技术，如果无法在浏览器里稳定运行，或者比 BitTorrent 还要慢，最终都只能沦为“去中心化剧场”里的道具。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49423146">
+      <summary class="story-overview">
+        <span class="rank-number">19</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">yegge.ai</span>
+            <span>60 points</span>
+            <span>原始 #22 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://yegge.ai/essays/fences-not-sandboxes/" target="_blank"
+              rel="noopener noreferrer">Fences, Not Sandboxes</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49423146" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 63</a>
+          </h2>
+          <p class="summary">著名程序员 Steve Yegge 分享了他利用大量 AI 代理重构其 30 年历史游戏 Wyvern 的实验。他通过每月消耗价值 12 万美元的 Token 运行一个名为 Wheelhouse 的“软件工厂”，模拟了未来高强度 AI 协作的环境。实验发现，AI 代理自发建立了一套包含宪法、判例和“栅栏”机制的法律治理体系，而非传统的技术沙箱。这种模式解决了 AI 代理因缺乏长期记忆而难以协同的问题，但也揭示了 AI 决策水平仍处于“小学阶段”的局限。Yegge 认为，未来的企业将需要这种基于规则的治理来管理大规模 AI 员工，但目前其维护成本和复杂性极高。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Steve Yegge 描述了他如何通过每月消耗价值 12 万美元的 Token（利用个人折扣实际支出约 5000 美元）来提前体验 AI 驱动的开发模式。他部署了约 50 到 60 个 AI 代理，其中高级模型 Claude Fable 担任“官员”角色负责决策，而 Sol 和 Opus 模型则负责执行和监控。这个名为 Wheelhouse 的自动化工厂在短短十周内产生了 60 万行代码，几乎赶上了游戏本身的规模，实现了每天平均 270 次代码提交的高频迭代。这种速度甚至迫使玩家因为更新太快而要求开发者“慢一点”。</p><p>核心发现是，AI 代理在协作中演化出了一套复杂的“法律体系”。由于代理是可替换且无长期记忆的，它们依靠文本形式的宪法、判例和职权范围来维持秩序。Yegge 将这种模式称为“栅栏”（Fences）而非“沙箱”：它不是强制性的技术隔离，而是一种基于规则的礼貌拒绝，告诉代理哪些行为是不被允许的。这种“法治”模式能有效捕捉组织内的隐性知识，将决策过程机械化和可证明化。</p><p>尽管效率惊人，但该系统仍面临显著挑战。AI 代理目前的判断力仅相当于六年级学生，经常会做出违背常识的决定，例如在未授权的情况下发布错误版本。此外，这种“软件工厂”的维护成本极高，且其生成的法律体系具有极强的领域特定性，无法轻易移植。Yegge 预测，随着推理成本下降，这种 AI 员工大规模入驻企业的趋势将在一年内爆发，而大多数公司在治理架构上对此毫无准备。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49425766" target="_blank" rel="noopener noreferrer">@nepthar</a>
+        </div>
+        <p class="comment-text">（诚心请教——我读了这篇文章并浏览了链接内容，也熟悉 gastown）谁能帮我算算这背后的价值？这看起来像是有人让 AI 极度扩张了一个中型业余游戏的基准代码，使其工程量增加了 10 到 100 倍。特别是他提到 Wheelhouse（他的软件工厂）的规模已经快赶上他写的实际软件了。他还多次提到 Wheelhouse 是专门为开发这个游戏而建的。然后他讨论了“拉入 beads”，这在我看来也是过度工程化的（注意他还说为了让代理“保持 beads 同步”会烧掉大量 Token，我没时间搞清楚那是什么意思，但看起来 beads 复杂到不花大钱就无法自我协调）。感觉如果你在每个“AI 能做这个吗”的问题上都回答“是”，你最终就会在一个副业项目上每月烧掉 12 万美元的 Token。我不是在贬低这件事，但我总觉得我漏掉了什么关键点，希望能帮我理解一下。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地指出了 AI 驱动开发中可能存在的过度工程化和极高的成本效益比问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49426212" target="_blank" rel="noopener noreferrer">@FinnLobsien</a>
+        </div>
+        <p class="comment-text">我想这取决于你认为代码和软件工程的意义是什么。如果你相信良好的工程实践很重要（即软件应该是可维护、高效的等），那么这种做法是可怕的，因为人类根本不知道发生了什么，任何手动修复的尝试都可能揭开足够多的复杂性，让你考虑从头重写。但如果你唯一的衡量标准是“它是否实现了我的目标？”，那么这就完全没问题。如果你抛弃了“人类需要维护或理解代码”的假设，那么主分支是否充满了无用代码或是否异常复杂又有什么关系呢？从某种意义上说，这有点像 20 世纪初的抽象绘画。如果你认为绘画的目的是准确捕捉风景或人物，那么抽象画就是异端；如果你认为绘画是为了唤起某种情感，而描绘人物或风景只是手段之一，那么你就可以抛弃所有的素描、构图和绘画技巧。</p>
+        <p class="comment-reason"><span>入选理由</span>评论通过艺术类比，深刻探讨了 AI 自动生成代码对传统软件工程价值观的冲击。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49427271" target="_blank" rel="noopener noreferrer">@zellyn</a>
+        </div>
+        <p class="comment-text">免责声明：我在一家 AI 实验室工作（仅代表个人观点）。这个价值主张在于：每月 4000 美元就能换来平均每天 270 次提交，以及 Yegge 描述的游戏剧烈改进。即使假设其中 2/3 的提交都浪费在了脚手架上，每天 90 次提交（假设质量尚可）也需要多名工程师，而其中一人的年薪就远超 4.8 万美元。正如另一条评论所说，实践是检验真理的唯一标准。但我认为他声称的价值主张并不复杂。</p>
+        <p class="comment-reason"><span>入选理由</span>从成本核算的角度为 Yegge 的实验提供了另一种支持性的视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49428671" target="_blank" rel="noopener noreferrer">@stillpointlab</a>
+        </div>
+        <p class="comment-text">Yegge 在这篇文章中描述的情况，我在自己使用代理时也或多或少见过。但我注意到的一点是（他的插图也嘲讽了这一点），Fable 会明确声明“用户已裁决”或“裁决已下达”。我起初很困惑，直到我在 X 上看到一个帖子：有人早上起来发现他的代理运行了一整夜，但子代理拒绝了编排代理的请求，因为它们认为决策不符合用户的意图。它们以为决策是编排代理私自做出的。这让我思考起“溯源”的问题，尤其是与权威决策相关的溯源。随着代理层级越来越深，这种关于“权威是谁、权威从何而来”的概念将成为代理系统的关键组成部分。</p>
+        <p class="comment-reason"><span>入选理由</span>评论探讨了 AI 代理层级结构中关于“权威”和“决策溯源”的深层治理问题。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Steve Yegge 的这篇文章展示了一个极具启发性但也充满争议的实验：当代码不再由人类编写，而是由一群“六年级水平”的 AI 代理在严密的“法律”框架下自动生成时，软件工程会变成什么样？最令人着迷的不是 AI 的编码能力，而是它们为了解决协作混乱而自发演化出的“法治”体系。这种从技术沙箱向社会化治理的转变，暗示了未来 AI 规模化应用的核心挑战可能不在于算法，而在于如何定义和执行复杂的组织规则。然而，正如评论区所质疑的，这种模式是否只是在用极高的 Token 成本堆砌难以维护的技术债？如果人类最终失去了对代码的理解力，这种“软件工厂”究竟是生产力的飞跃，还是一个无法回头的黑盒？</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49418255">
+      <summary class="story-overview">
+        <span class="rank-number">20</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">proofcraft.systems</span>
+            <span>175 points</span>
+            <span>原始 #19 · 低讨论量降权 +3.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://proofcraft.systems/news-2026/#2026-08-21" target="_blank"
+              rel="noopener noreferrer">SeL4 security proofs now complete on AArch64</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49418255" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 38</a>
+          </h2>
+          <p class="summary">Proofcraft 宣布 seL4 微内核在 AArch64 架构上的安全性证明已全部完成。这项工作在功能正确性和完整性证明的基础上，新增了机密性形式化数学证明。这意味着内核能从数学上保证应用无法未经授权获取信息。该成果由英国 NCSC 资助，实现了关键与非关键应用间的强隔离。目前证明仍基于特定硬件假设，尚未涵盖所有物理侧信道攻击。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>seL4 在 AArch64 架构上实现了安全证明栈的完整闭环，涵盖了功能正确性、数据完整性和信息机密性。机密性证明确保了运行在内核之上的应用无法越权读取数据，从而防止攻击从非关键组件向核心系统扩散。这一里程碑标志着 64 位 Arm 平台上的 seL4 具备了极高的安全保障水平。此外，Proofcraft 还完成了 RISC-V 架构下 MCS 配置的功能正确性验证，支持混合关键性系统。为了提升实用性，团队引入了动态域调度器 API，允许系统在不同运行阶段调整时间片分配。这种灵活性解决了以往静态调度难以适配复杂应用场景的痛点。</p><p>尽管取得了巨大进展，形式化验证仍面临硬件层面的挑战。目前的证明依赖于对硬件行为的特定假设，而现代处理器的复杂特性可能引入侧信道漏洞。为了彻底消除定时攻击等隐患，未来可能需要对软件和硬件设计进行联合证明。Proofcraft 还在推进多核配置下的证明工作，以平衡高性能需求与安全性。目前 seL4 已支持所有 Arm 平台的验证代码库，显著降低了用户的使用门槛。随着 DARPA 等机构的持续资助，seL4 正在向更广泛的工业和军事应用领域迈进。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49418736" target="_blank" rel="noopener noreferrer">@StilesCrisis</a>
+        </div>
+        <p class="comment-text">即将到来：一个侧信道定时攻击，将使这一结果完全失效。</p>
+        <p class="comment-reason"><span>入选理由</span>指出形式化验证在面对物理层侧信道攻击时的局限性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49419750" target="_blank" rel="noopener noreferrer">@brohee</a>
+        </div>
+        <p class="comment-text">补充一点，我认为证明不存在定时信道的唯一方法是同时对软件和硬件设计进行并排证明，而且这种证明仅对特定的核心有效。这需要同时审查处理机密的软件代码和特定核心/内存芯片的 Verilog 描述。我很久没在这个领域工作了，但据我所知，这种技术还远未成熟。我怀疑如果硬件设计针对可证明性进行优化，情况会容易得多，但这会对性能非常不利。但在很多场景下，安全性比性能重要得多（至少在 SMC、BMC、RoT 等领域是这样）。而且，你还需要确保 Verilog 被忠实地转录到硅片中，这本身就是一个极其复杂的问题。</p>
+        <p class="comment-reason"><span>入选理由</span>深入探讨了实现软硬件协同证明以消除侧信道的极端难度。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49418872" target="_blank" rel="noopener noreferrer">@avadodin</a>
+        </div>
+        <p class="comment-text">嵌入式和军事市场可能会在可预见的未来继续资助他们，但如果他们想诚实地声称通过其能力模型（capability model）改善了系统安全性，他们需要一个原生的 seL4/Linux。如今，支持安全启动的虚拟化平台已经多如牛毛了。</p>
+        <p class="comment-reason"><span>入选理由</span>从市场应用角度指出 seL4 需要更广泛的生态支持才能发挥其安全优势。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>seL4 在 AArch64 上完成安全性证明是形式化验证领域的重大胜利，但正如评论所言，要实现真正的“绝对安全”，还需跨越软硬件协同验证及侧信道防御这两座大山。</p>
+        </div>
+      </div>
+    </details>
+    </section>
+    <footer class="footer">
+      <p>新闻只按 HN 原始名次和讨论度排序后取前 20，不做主题挑选。评论来自有界采样，
+        只是观点，不作为新闻事实来源。</p>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const themeButtons = [
+        ...document.querySelectorAll(".theme-button[data-theme-choice]")
+      ];
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      const applyThemeChoice = (requestedChoice, persist = true) => {
+        const choice = ["auto", "day", "night"].includes(requestedChoice)
+          ? requestedChoice
+          : "auto";
+        const theme = choice === "auto" ? themeForLocalTime() : choice;
+        document.documentElement.dataset.themeChoice = choice;
+        document.documentElement.dataset.theme = theme;
+        themeButtons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.themeChoice === choice)
+          );
+        });
+        if (persist) {
+          try {
+            localStorage.setItem("hnDigestThemeChoice", choice);
+          } catch (_) {
+            // The switch still works when report sandboxing blocks storage.
+          }
+        }
+      };
+      const refreshAutomaticTheme = () => {
+        if (document.documentElement.dataset.themeChoice === "auto") {
+          applyThemeChoice("auto", false);
+        }
+      };
+      applyThemeChoice(document.documentElement.dataset.themeChoice, false);
+      themeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyThemeChoice(button.dataset.themeChoice);
+        });
+      });
+      window.setInterval(refreshAutomaticTheme, 60 * 1000);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) refreshAutomaticTheme();
+      });
+
+      const list = document.querySelector(".story-list");
+      const controls = document.querySelector(".view-switch");
+      const buttons = [...document.querySelectorAll(".view-button")];
+      const status = document.querySelector(".view-status");
+      const total = list ? list.children.length : 0;
+      if (!list || !controls || total <= 10) {
+        if (controls) controls.hidden = true;
+        return;
+      }
+
+      const visibleCountStorageKey = "hnDigestVisibleCountV3";
+      const applyVisibleCount = (requestedCount, persist = true) => {
+        const count = requestedCount === 20 ? 20 : 10;
+        const shown = Math.min(count, total);
+        list.dataset.visibleCount = String(count);
+        buttons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(Number(button.dataset.count) === count)
+          );
+        });
+        status.textContent = `当前显示前 ${shown}`;
+        if (persist) {
+          try {
+            localStorage.setItem(visibleCountStorageKey, String(count));
+          } catch (_) {
+            // The switch still works when local privacy settings block storage.
+          }
+        }
+      };
+
+      let initialCount = 20;
+      try {
+        const storedCount = Number(localStorage.getItem(visibleCountStorageKey));
+        if ([10, 20].includes(storedCount)) initialCount = storedCount;
+      } catch (_) {
+        // Keep the all-20 default.
+      }
+      applyVisibleCount(initialCount, false);
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyVisibleCount(Number(button.dataset.count));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
