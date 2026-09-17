@@ -1,0 +1,2084 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Hacker News 每日精选：通俗摘要、精彩评论与 LLM 锐评">
+  <title>HN 每日精选 · 2026-09-16</title>
+  <script>
+    (() => {
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      let choice = "auto";
+      try {
+        choice = localStorage.getItem("hnDigestThemeChoice") || "auto";
+      } catch (_) {
+        // Storage may be unavailable in a sandboxed report.
+      }
+      if (!["auto", "day", "night"].includes(choice)) {
+        choice = "auto";
+      }
+      const theme = choice === "auto" ? themeForLocalTime() : choice;
+      document.documentElement.dataset.themeChoice = choice;
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d252d;
+      --muted: #6c747c;
+      --paper: #f5f3ed;
+      --card: #fffefa;
+      --line: #d9d6ce;
+      --orange: #e85d2a;
+      --orange-soft: #fff0e8;
+      --blue-soft: #edf3f7;
+      --green: #25644f;
+      --story-open-line: #c7c3b9;
+      --story-shadow: rgba(31, 36, 40, .07);
+      --summary-ink: #47515a;
+      --detail-ink: #37424c;
+      --section-ink: #5f6871;
+      --hint-ink: #8a9095;
+      --comment-meta-ink: #637080;
+      --comment-label-bg: #d7e6ef;
+      --comment-label-ink: #315b73;
+      --comment-text-ink: #2e3944;
+      --comment-reason-ink: #637080;
+      --comment-reason-label: #2e5e78;
+      --comment-empty-ink: #8a9097;
+      --editorial-ink: #333b42;
+      --humor-bg: #f8e8bd;
+      --humor-ink: #795d16;
+      --wisdom-bg: #dcebdc;
+      --wisdom-ink: #315f3a;
+      --counterpoint-bg: #eadff1;
+      --counterpoint-ink: #614273;
+    }
+    html[data-theme="night"] {
+      color-scheme: dark;
+      --ink: #e0e7e1;
+      --muted: #9ba79f;
+      --paper: #111713;
+      --card: #1a221d;
+      --line: #303c34;
+      --orange-soft: #2c211b;
+      --blue-soft: #202c2e;
+      --green: #83c8a2;
+      --story-open-line: #435148;
+      --story-shadow: rgba(0, 0, 0, .28);
+      --summary-ink: #c2ccc5;
+      --detail-ink: #d1d8d3;
+      --section-ink: #aab5ae;
+      --hint-ink: #929e96;
+      --comment-meta-ink: #a8b7b8;
+      --comment-label-bg: #2f474d;
+      --comment-label-ink: #b8dbe2;
+      --comment-text-ink: #d5dcda;
+      --comment-reason-ink: #aebbb8;
+      --comment-reason-label: #92c6cf;
+      --comment-empty-ink: #929e96;
+      --editorial-ink: #d9d5d0;
+      --humor-bg: #403721;
+      --humor-ink: #e3cb87;
+      --wisdom-bg: #293c2c;
+      --wisdom-ink: #a8d3ae;
+      --counterpoint-bg: #382d40;
+      --counterpoint-ink: #d0b4df;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .18s ease, color .18s ease;
+    }
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--orange); }
+    .masthead {
+      border-top: 5px solid var(--orange);
+      border-bottom: 1px solid #343b43;
+      background: #18212a;
+      color: white;
+    }
+    .masthead-inner, main {
+      width: min(860px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+    .masthead-inner { padding: 25px 0 27px; }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      background: var(--orange);
+      color: white;
+      font-family: ui-serif, Georgia, serif;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+    .archive-link { color: #bac2ca; }
+    .theme-switch {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .theme-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 8px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .theme-button:hover { color: white; }
+    .theme-button[aria-pressed="true"] {
+      background: #46515b;
+      color: white;
+    }
+    .theme-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .eyebrow {
+      color: #ff9670;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 7px 0 8px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 6vw, 46px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.03;
+    }
+    .dek {
+      margin: 0;
+      color: #c0c8d0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      margin-top: 17px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .stats strong { color: white; font-size: 13px; margin-right: 3px; }
+    .view-switch {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 13px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .view-switch[hidden] { display: none; }
+    .view-buttons {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .view-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 9px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .view-button:hover { color: white; }
+    .view-button[aria-pressed="true"] {
+      background: var(--orange);
+      color: white;
+    }
+    .view-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .view-status { color: #c0c8d0; }
+    .ranking-rule {
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255, 255, 255, .09);
+      color: #9faab4;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .ranking-rule strong {
+      color: #e7eaed;
+      margin-right: 5px;
+    }
+    main { padding: 20px 0 72px; }
+    .story-list {
+      display: grid;
+      gap: 9px;
+    }
+    .story-list[data-visible-count="10"] .story:nth-child(n+11),
+    .story-list[data-visible-count="20"] .story:nth-child(n+21) {
+      display: none;
+    }
+    .story {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--card);
+      overflow: clip;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .story[open] {
+      border-color: var(--story-open-line);
+      box-shadow: 0 14px 34px var(--story-shadow);
+    }
+    .story-overview {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 13px;
+      padding: 17px 20px 15px 15px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .story-overview::-webkit-details-marker { display: none; }
+    .story-overview:focus-visible {
+      outline: 3px solid rgba(232, 93, 42, .45);
+      outline-offset: -3px;
+    }
+    .rank-number {
+      color: var(--orange);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .story-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 14px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .story-kicker .source {
+      color: var(--green);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h2 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 10px;
+      margin: 5px 0 5px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(17px, 2.3vw, 19px);
+      font-weight: 700;
+      letter-spacing: -.008em;
+      line-height: 1.28;
+    }
+    .title-link { text-decoration: none; }
+    .discussion-link {
+      color: var(--orange);
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .summary {
+      margin: 0;
+      color: var(--summary-ink);
+      font-size: 14.5px;
+      line-height: 1.72;
+      white-space: pre-line;
+    }
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--hint-ink);
+      font-size: 10px;
+      font-weight: 750;
+    }
+    .chevron {
+      display: inline-block;
+      color: var(--orange);
+      transition: transform .18s ease;
+    }
+    .story[open] .chevron { transform: rotate(180deg); }
+    .story[open] .expand-hint > span:first-child { font-size: 0; }
+    .story[open] .expand-hint > span:first-child::after {
+      content: "收起详情";
+      font-size: 10px;
+    }
+    .story-details {
+      margin-left: 80px;
+      padding: 17px 20px 24px 0;
+      border-top: 1px solid var(--line);
+    }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      color: var(--section-ink);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .detail-summary > p {
+      margin: 0;
+      color: var(--detail-ink);
+      font-size: 14px;
+      line-height: 1.78;
+    }
+    .detail-summary > p + p { margin-top: 12px; }
+    .comments-panel {
+      margin-top: 21px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+    .comments-list { display: grid; gap: 9px; }
+    .featured-comment {
+      margin: 0;
+      padding: 14px 16px;
+      border: 0;
+      border-radius: 3px;
+      background: var(--blue-soft);
+    }
+    .comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 7px;
+      font-size: 11px;
+    }
+    .comment-meta a { color: var(--comment-meta-ink); text-decoration: none; }
+    .comment-label {
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--comment-label-bg);
+      color: var(--comment-label-ink);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .05em;
+    }
+    .comment-label-humor {
+      background: var(--humor-bg);
+      color: var(--humor-ink);
+    }
+    .comment-label-wisdom {
+      background: var(--wisdom-bg);
+      color: var(--wisdom-ink);
+    }
+    .comment-label-counterpoint {
+      background: var(--counterpoint-bg);
+      color: var(--counterpoint-ink);
+    }
+    .comment-text {
+      margin: 0;
+      color: var(--comment-text-ink);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 13px;
+      line-height: 1.62;
+      white-space: pre-line;
+    }
+    .comment-reason {
+      margin: 9px 0 0;
+      color: var(--comment-reason-ink);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .comment-reason span {
+      margin-right: 7px;
+      color: var(--comment-reason-label);
+      font-weight: 850;
+    }
+    .comments-empty {
+      margin-top: 19px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      color: var(--comment-empty-ink);
+      font-size: 12px;
+    }
+    .editorial {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      align-items: start;
+      margin-top: 21px;
+      padding: 13px 15px;
+      border-left: 3px solid var(--orange);
+      background: var(--orange-soft);
+    }
+    .editorial-mark {
+      padding-top: 2px;
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+    .editorial p {
+      margin: 0;
+      color: var(--editorial-ink);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.62;
+    }
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 27px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .footer p { margin: 0; max-width: 680px; }
+    .footer a { font-weight: 800; }
+    @media (max-width: 620px) {
+      .masthead-inner, main { width: min(100% - 20px, 860px); }
+      .masthead-inner { padding-top: 18px; }
+      .topline {
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+      .top-actions {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
+      .story-overview {
+        grid-template-columns: 37px minmax(0, 1fr);
+        gap: 9px;
+        padding: 14px 13px 12px 10px;
+      }
+      .rank-number { font-size: 22px; }
+      .story-details { margin-left: 56px; padding-right: 13px; }
+      .editorial { grid-template-columns: 1fr; gap: 4px; }
+      .footer { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .masthead { background: white; color: var(--ink); border-bottom-color: var(--line); }
+      .topline, .archive-link, .expand-hint, .view-switch, .theme-switch { display: none; }
+      main { width: 100%; }
+      .story { display: block !important; break-inside: avoid; }
+      .story-details { display: block; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="topline">
+        <div class="brand"><span class="brand-mark">Y</span> Hacker News</div>
+        <div class="top-actions">
+          <div class="theme-switch" role="group" aria-label="选择页面颜色模式">
+            <button class="theme-button" type="button" data-theme-choice="auto" aria-pressed="true">自动</button>
+            <button class="theme-button" type="button" data-theme-choice="day" aria-pressed="false">日间</button>
+            <button class="theme-button" type="button" data-theme-choice="night" aria-pressed="false">夜间</button>
+          </div>
+          <a class="archive-link" href="../index.html">每日归档 →</a>
+        </div>
+      </div>
+      <div class="eyebrow">2026-09-16 · top feed · 过去 36 小时</div>
+      <h1>今天的 Hacker News</h1>
+      <p class="dek">前 20 篇已经全部准备好；默认显示前 20，也可以切换到前 10。</p>
+      <div class="stats">
+        <span><strong>20</strong>篇已准备</span>
+        <span><strong>19</strong>篇有精彩评论</span>
+        <span>更新于 2026-09-16 21:02 PDT</span>
+        <span>生成模型 <strong>gemini/gemini-3-flash-preview</strong></span>
+      </div>
+      <div class="view-switch" aria-label="选择新闻显示数量">
+        <span>显示</span>
+        <div class="view-buttons">
+          <button class="view-button" type="button" data-count="10" aria-pressed="false">前 10</button>
+          <button class="view-button" type="button" data-count="20" aria-pressed="true">前 20</button>
+        </div>
+        <span class="view-status" aria-live="polite">当前显示前 20</span>
+      </div>
+      <div class="ranking-rule">
+        <strong>排序规则</strong>HN 原始名次 + 低讨论量降权。公式：原始名次 + 0.3 × max(0, 50 − 评论数)；50 条评论以上不降权。
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="story-list" data-visible-count="20">
+      
+    <details class="story" id="story-49724881">
+      <summary class="story-overview">
+        <span class="rank-number">01</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">developer.nvidia.com</span>
+            <span>414 points</span>
+            <span>原始 #1 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://developer.nvidia.com/blog/introducing-cuda-rust-two-tracks-for-writing-gpu-kernels/" target="_blank"
+              rel="noopener noreferrer">Nvidia announces native GPU programming in Rust</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49724881" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 153</a>
+          </h2>
+          <p class="summary">英伟达（NVIDIA）宣布为 Rust 语言提供原生 GPU 编程支持，推出了 SIMT 和 Tile 两个开发方向。SIMT 模式（cuda-oxide）提供类似 CUDA C++ 的底层控制，通过自定义编译器后端将 Rust 代码直接编译为 PTX。Tile 模式（cutile-rs）则提供更高层的抽象，由编译器自动处理线程映射和共享内存管理。这两项技术的核心优势在于利用 Rust 的所有权模型，在编译阶段就能拦截 GPU 编程中常见的内存竞态和别名错误。目前这些项目仍处于早期实验阶段，主要面向 Linux 平台，且部分功能依赖 Rust 每夜版（nightly）工具链。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>英伟达此次推出的 CUDA Rust 旨在解决 AI 系统层中主机端代码（通常已使用 Rust）与 GPU 内核代码（传统上需使用 C++ 或 Python）之间的语言断层。SIMT 轨道通过 `cuda-oxide` 实现，它引入了 `DisjointSlice` 等特殊类型，确保每个 GPU 线程只能访问其专属的内存区域，从而在编译时强制执行内存安全。这种方式虽然提供了极高的控制力，但目前需要特定的 Rust 每夜版编译器和复杂的环境配置。相比之下，Tile 轨道（`cutile-rs`）则更加现代化，它让开发者以“瓦片”（Tile）为单位进行逻辑运算，由编译器决定如何将其映射到物理线程，从而规避了手动管理共享内存的风险。</p><p>尽管 Rust 带来的安全性极具吸引力，但开发者仍需面对不少权衡。例如，SIMT 模式下的共享内存管理目前仍需使用 `unsafe` 代码，而 Tile 模式虽然更安全且支持稳定版 Rust，但在硬件控制的灵活性上有所牺牲。此外，这些工具链目前高度依赖英伟达的闭源 CUDA 环境，且处于 Alpha 测试阶段，API 尚不稳定。英伟达表示，未来将致力于实现跨语言互操作性，并逐步减少对每夜版工具链的依赖。对于开发者而言，这意味着未来编写高性能 GPU 内核时，有望获得与编写普通 Rust 应用一致的类型安全和错误检查体验。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49734146" target="_blank" rel="noopener noreferrer">@jacobgorm</a>
+        </div>
+        <p class="comment-text">我非常讨厌 CUDA。一旦你让这种专有垃圾进入你的 C++ 代码库，就很难摆脱它，最终你的代码要么被绑定到单一供应商，要么陷入 #ifdef 的地狱，或者两者兼而有之。编写 GPU 程序最好的方式是正视它们与 CPU 并非同一台机器的现实，将内核写在独立的文件中并手动启动，就像在 Metal、OpenCL 和 D3D12 中那样。如今我们甚至有了像 Triton 这样的 DSL，它编写内核的体验比你在 Rust 中能期望的任何东西都要好得多。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提出了关于供应商锁定和编程范式的有力反面观点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49733954" target="_blank" rel="noopener noreferrer">@rvz</a>
+        </div>
+        <p class="comment-text">首先，这是一个 1.0 之前的版本，需要 Rust 每夜版编译器（如果你选择 cuda-oxide 的 SIMT 轨道），所以它会是不稳定的软件。其次，当内核出现问题或你想用 Rust 编写自定义内核时，我们现在需要诊断问题是来自 cuda-oxide、Rust 端、CUDA 还是 Tile。这又增加了一个依赖项，而且除了 CUDA 本身，所有东西都是开源的。因此，任何发生在 CUDA 层面的问题，你都只能被迫等待他们去修复。</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了引入新抽象层带来的调试复杂性和对闭源底层依赖的风险。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49733856" target="_blank" rel="noopener noreferrer">@the__alchemist</a>
+        </div>
+        <p class="comment-text">我期待在这些项目稳定后尝试它们！我目前在图形方面使用 WGPU，在 CUDA 方面使用 cudarc。注意：Cuda-oxide 与 Cudarc 的主机组件类似，但使用了 Rust 风格的内核方言。优点：可以在主机和设备之间共享结构体。缺点：需要用一种全新的、开发中的方言来替换标准的 CUDA 内核。我还没试过 Tile API，很期待。上次我查看时，Cuda Oxide 仅限 Linux 且需要 Async，这也是我还没尝试的原因。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了现有 Rust GPU 生态工具的对比经验。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49733918" target="_blank" rel="noopener noreferrer">@claiir</a>
+        </div>
+        <p class="comment-text">“启动是经过检查的，而非被信任的（The launch is checked rather than trusted）。” 见鬼，连英伟达都在发布完全由 Claude 撰写的文章了。</p>
+        <p class="comment-reason"><span>入选理由</span>幽默地吐槽了官方博文中明显的 AI 写作痕迹。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49733875" target="_blank" rel="noopener noreferrer">@dllu</a>
+        </div>
+        <p class="comment-text">既然英伟达现在拥有 HuggingFace，而 HuggingFace 又拥有出色的 Rust 推理库 Candle，这似乎是迈向原生 Rust 内核的良好一步。</p>
+        <p class="comment-reason"><span>入选理由</span>揭示了英伟达此举与现有 Rust AI 生态（如 Candle）的潜在协同关系。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>英伟达对 Rust 的“原生”支持标志着 GPU 编程进入了一个新阶段：从单纯追求性能转向追求“安全的性能”。长期以来，GPU 内核调试一直是开发者的噩梦，内存越界和数据竞态往往在运行时才随机爆发。Rust 的介入试图将这些错误消灭在编译阶段。然而，正如评论区所指出的，这种进步伴随着代价——更深的供应商锁定和更复杂的依赖链。尽管 Tile 模式试图简化抽象，但对于追求极致控制的开发者来说，CUDA 的专有属性依然是挥之不去的阴影。这不仅是技术的演进，更是开发效率与平台开放性之间的一次博弈。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49731285">
+      <summary class="story-overview">
+        <span class="rank-number">02</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">rohanbansal.com</span>
+            <span>444 points</span>
+            <span>原始 #3 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://rohanbansal.com/qorl" target="_blank"
+              rel="noopener noreferrer">Training a 4B model to produce 81% faster query plans than Postgres</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49731285" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 91</a>
+          </h2>
+          <p class="summary">开发者 Rohan Bansal 成功训练了一个 40 亿参数的小型语言模型，使其生成的数据库查询计划在执行速度上比 Postgres 默认优化器快了 81%。该实验针对复杂的连接（Join）查询，通过监督微调（SFT）和基于代理的强化学习（RL）对模型进行后训练。实验利用了 GPT-4 生成的轨迹进行知识蒸馏，并采用自定义的 GRPO 算法在噪声环境下进行评分。虽然在特定数据集上取得了显著的延迟缩减，但该方法目前面临训练成本高昂、未计入模型推理耗时以及在数据变化时需频繁重训等局限性。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>数据库查询优化中的连接排序（Join Ordering）是一个已知的 NP 困难问题，传统优化器如 Postgres 依赖启发式算法和动态规划来寻找最优路径。Rohan Bansal 的实验展示了利用语言模型（LLM）解决这一难题的新思路。他使用了一个 4B 参数的小模型，通过从 GPT-4（Astra 代理）生成的执行轨迹中进行“离策蒸馏”（off-policy distillation），并结合强化学习，使模型学会了如何避开 Postgres 默认优化器的陷阱。在硬件配置上，他租用了 H100 节点进行训练，并搭建了专门的 Postgres 测量环境以减少 Linux 页面缓存带来的噪声干扰。</p><p>实验结果显示，在包含 113 个重度连接查询的工作负载中，该模型实现了 1.81 倍的几何平均加速，总延迟降低了 44.7%。然而，这种方法存在明显的权衡：首先，实验是在一个 8GB、完全可以装入内存的 IMDb 数据集上进行的，且查询经过了预热，这可能导致模型对特定数据分布过度拟合。其次，文章主要关注查询的执行时间，而忽略了 LLM 生成计划本身的推理开销，这在实时数据库场景中可能是致命的。未来值得关注的是，这种“学习型优化器”能否在数据频繁变动的生产环境中保持鲁棒性，以及它是否能像 AlphaGo 那样演化出更纯粹的神经启发式算法。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49732105" target="_blank" rel="noopener noreferrer">@Someone</a>
+        </div>
+        <p class="comment-text">我注意到作者花费了约 800 美元租用 Lambda 的 H100 节点运行了 95 小时，还花了 400 美元的 OpenAI API 费用来生成轨迹演示。我怀疑他们在基准测试数据中并没有计入这 95 小时的开销。我认为所有数据库厂商都知道，如果他们愿意花大量时间去推导查询计划，优化器肯定能做得更好。虽然这在某些工作负载下可能有用，但问题是：你能负担得起每隔一段时间就花几个小时更新你的 4B 模型，以确保它依然能选出好的查询计划吗？</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了实验中被忽略的巨大训练成本和维护成本，对实际应用价值提出了质疑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49733010" target="_blank" rel="noopener noreferrer">@refibrillator</a>
+        </div>
+        <p class="comment-text">“比 Postgres 快 81%”……这是在一个完全可以装入内存的 8GB 数据集上得出的，而且 shared_buffers 被限制在很小比例，查询在测量前经过了预热，且全是只读的 SELECT。我会对过拟合保持警惕，很难说这些查询计划在更大规模、更真实的 OLTP 工作负载下是否真的优于 Postgres 的启发式算法。无论如何，这就是剖析驱动优化（PGO）的现状。我们很多人都明白，数据库工作负载会随着规模和时间而发生漂移。不过，还是要为作者亲自动手实验并写出来点赞。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者从数据库工程的角度分析了实验环境的局限性，指出了内存限制和只读场景对结果的影响。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49734568" target="_blank" rel="noopener noreferrer">@perrygeo</a>
+        </div>
+        <p class="comment-text">这是一篇关于如何训练/微调语言模型的好文章。然而，它忽略了数据库查询规划的核心点：你不能直接忽略规划时间本身，就好像数据库查询是一个可以悠闲优化的静态实体一样。实时查询优化器的真实约束完全不同：它们必须根据实时数据库统计信息，优化“规划时间 + 执行时间”的总和。虽然你可以通过预处理语句（prepared statements）来分摊规划开销，但这也很麻烦，因为最优计划会随输入参数频繁变化。“实时性”和“规划速度快于查询本身”是成为可行数据库优化器的硬性要求，而这个项目两者都没做到。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论揭示了数据库优化器在工程实践中的核心矛盾：规划开销与执行收益的平衡。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49733800" target="_blank" rel="noopener noreferrer">@2001zhaozhao</a>
+        </div>
+        <p class="comment-text">工程师：“救命！我们的生产数据库在这个以前运行良好的查询上卡死了！”
+基建运维：“嗯，让我查查……噢，你看，你的 LLM 查询规划器通常工作得很好，生成的查询也很快。但这次你改了一个变量名触发了查询重建，它刚好产生了幻觉，漏掉了一个索引。你介不介意多运行几次 LLM，直到它吐出一个更快的查询？”</p>
+        <p class="comment-reason"><span>入选理由</span>以幽默的方式指出了 LLM 固有的不确定性和幻觉问题在严谨的数据库系统中的潜在风险。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>将 LLM 引入数据库内核是一个极具诱惑力的方向，因为它试图用“学习”来攻克 NP 困难的优化问题。Rohan Bansal 的实验证明了在受控环境下，小模型确实能通过模仿顶级模型的逻辑来超越传统启发式算法。然而，正如社区讨论所指出的，数据库优化器的战场不仅在于执行速度，更在于“规划开销”与“确定性”。在生产环境中，一个快 80% 但偶尔会因为“幻觉”导致全表扫描的优化器，其风险远高于一个虽然保守但行为可预测的传统优化器。目前的成果更像是一种昂贵的“离线优化”，而非通用的数据库组件。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49732270">
+      <summary class="story-overview">
+        <span class="rank-number">03</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">mimo.xiaomi.com</span>
+            <span>313 points</span>
+            <span>原始 #4 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://mimo.xiaomi.com/rl/" target="_blank"
+              rel="noopener noreferrer">Xiaomi Mimo 2.6 live post-training dashboard</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49732270" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 83</a>
+          </h2>
+          <p class="summary">小米上线了 Mimo 2.6 大模型的实时强化学习（RL）训练仪表盘，向公众展示其后训练阶段的动态指标。该页面实时更新模型在各项基准测试中的得分、奖励曲线和训练进度，这种透明度在主流 AI 实验室中非常罕见。用户反馈显示，前代 Mimo 2.5 以极高的性价比著称，在编程任务中的表现被认为可比肩早期的 Claude 模型。新版本 2.6 旨在提升多任务处理能力，并尝试在设计和代码实现上更加主动。不过，这种“直播”训练的方式也引发了关于基准测试数据污染的质疑。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>小米最近公开了其 Mimo 2.6 模型的实时后训练（Post-training）仪表盘，允许外界直接观察大模型在强化学习阶段的演进过程。通过该界面，开发者可以追踪模型在不同评估维度下的奖励函数波动、基准测试得分以及整体训练进度。这种做法打破了 AI 行业通常将训练细节视为核心机密的传统，为研究者提供了观察模型如何通过 RL 逐步提升能力的窗口。仪表盘显示，Mimo 2.6 Pro 版本在 2026 年 9 月中旬启动训练后进展迅速，引发了社区对其迭代效率的讨论。</p><p>在实际应用层面，Mimo 系列因其极高的投资回报率（ROI）受到软件工程师的青睐。许多用户表示，尽管 Mimo 2.5 偶尔会出现幻觉，但其极低的调用成本和稳健的代码生成能力使其在日常开发中极具竞争力。用户期待 2.6 版本能改善前代在多任务处理上的局限性，并提供更具前瞻性的设计方案。然而，这种透明度也带来了技术争议：有评论指出，在训练过程中同步运行基准测试可能导致模型无意中针对测试集进行优化，从而产生“数据污染”问题，影响最终评估的客观性。目前，Mimo 2.6 正处于冲刺阶段，其最终在 DeepSWE 等高难度测试中的表现将决定它能否真正跻身第一梯队。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49732870" target="_blank" rel="noopener noreferrer">@joelwallis</a>
+        </div>
+        <p class="comment-text">我一直用 MiMo-V2.5 处理我作为软件工程师的大部分工作，在多个项目上的投资回报率（ROI）让我非常满意。这个模型非常强大！虽然不完美——我遇到过一两次幻觉循环，但停止后再继续就能解决。它的成本低得令人难以置信，而我获得的智能质量与我去年底或今年初主要使用 Anthropic 模型时相当。我完全投入到了 MiMo 的怀抱，并且非常开心。另外，我几乎每天都会检查其他模型的能力，比如 DS4F 和 DS41 也很出色，GLM 5.3 Flash 也能胜任，但一旦把每百万 token 的成本算进 ROI 里，天哪！MiMo 要好上一个数量级。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提供了用户对 Mimo 前代模型在实际工程场景中性价比的真实反馈。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49732837" target="_blank" rel="noopener noreferrer">@liuliu</a>
+        </div>
+        <p class="comment-text">在训练的同时运行基准测试，这不就是“数据污染”的定义吗？我不太确定现在的大型实验室是否都把这当成正常操作，所以想请教一下。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了关于实时训练展示中可能存在的数据科学严谨性问题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49734095" target="_blank" rel="noopener noreferrer">@passive</a>
+        </div>
+        <p class="comment-text">太棒了！过去一周我一直在试用他们的下一个模型（我猜就是这个版本的某个变体），体验非常好。我曾用 2.5-pro 完成了大量的开发工作，感觉它就像一个有点健忘的高级工程师，虽然很能干，但对我的项目还不熟悉。它通常能选出合理的方案，但不一定是最佳方案，且不擅长多任务处理。总的来说，它让我敢于不逐行检查代码，但项目规模变大后仍需要引导。而下一个模型在多任务能力上有明显提升，我很少需要去引导一个定义明确的问题实现。在代码风格上，2.5-pro 非常保守，只给最小化方案；而新模型更有野心，能对缺失环节或后续步骤做出很好的预测。它在设计方面也进步了不少，能很好地将我的概念转化为屏幕上的实际元素。</p>
+        <p class="comment-reason"><span>入选理由</span>详细对比了新旧版本在多任务处理和代码风格上的具体差异。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49735559" target="_blank" rel="noopener noreferrer">@rao-v</a>
+        </div>
+        <p class="comment-text">我太喜欢有人这么做了！为什么 IBM 的 Granite 或者 Google 的 Gemini 不这样做呢？如果你打算开发一个接近前沿水平的模型，而且你并不觉得自己有什么不可告人的“独家秘方”，为什么不把训练过程和 RL 环境得分向全世界公开呢？光是从这个仪表盘上我就学到了很多东西。</p>
+        <p class="comment-reason"><span>入选理由</span>探讨了这种公开透明的训练方式对行业和学习者的积极意义。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>小米通过 Mimo 2.6 的实时训练仪表盘，在 AI 领域玩了一把“透明度营销”。在 OpenAI 和 Google 越来越像黑盒的今天，这种将强化学习（RL）过程完全公开的做法，不仅是技术自信的表现，更是一种精明的社区建设策略。正如评论所指出的，Mimo 的核心竞争力在于其极高的性价比，它在软件工程任务中展现出的“实用主义”风格，让它在开发者群体中积累了口碑。然而，这种“边练边考”的模式也引发了关于数据污染的合理质疑。如果基准测试在训练循环中被反复触碰，最终的高分是否还能代表真实的泛化能力？这不仅是小米需要回答的问题，也是整个 AI 行业在追求更高分数时必须面对的伦理边界。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49732513">
+      <summary class="story-overview">
+        <span class="rank-number">04</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">filipovski.net</span>
+            <span>123 points</span>
+            <span>原始 #6 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://filipovski.net/2026/09/16/backups-arent-simple.html" target="_blank"
+              rel="noopener noreferrer">Backups Aren&#x27;t Simple</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49732513" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 58</a>
+          </h2>
+          <p class="summary">备份并非简单的文件拷贝，而是一项涉及多重风险管理的复杂工程。数据面临硬件故障、比特腐烂、勒索软件及人为误删等威胁，简单的镜像同步无法应对所有场景。有效的方案通常遵循 3-2-1 原则，即保留三份拷贝、使用两种介质并确保一份异地存储。此外，还需要通过 GFS 轮转和去重技术来平衡存储成本与恢复粒度。最核心的教训是：备份的价值不在于存储过程，而在于灾难发生时能否成功恢复。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>文章深入探讨了构建可靠备份系统时被忽视的重重困难。作者指出，从简单的外部硬盘备份到复杂的增量去重系统，每一步都伴随着新的技术挑战。例如，为了应对勒索软件，备份必须具备快照功能以实现“回溯”，而非简单的实时同步。在处理数据库时，必须解决内存数据刷新到磁盘的一致性问题，否则备份文件可能因损坏而无法使用。此外，将数据迁移至 S3 等云存储时，大量小文件会导致高昂的请求费用，且文件权限等元数据容易丢失，这通常需要将数据切分为固定大小的块进行处理。</p><p>作者强调，自研备份脚本往往会忽略这些细节，导致在关键时刻失效。相比之下，使用 Restic 或 Borg 等成熟的开源工具是更明智的选择，因为它们已经抽象并解决了加密、块级去重和完整性校验等复杂问题。文章最后提醒，备份系统必须包含定期的恢复演练。如果从未测试过从备份中还原数据，那么这个备份系统在逻辑上是不存在的。 watch next 应该是关注如何将恢复测试自动化，以确保在真正的硬件故障或人为失误面前万无一失。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49734889" target="_blank" rel="noopener noreferrer">@publlus_enigma</a>
+        </div>
+        <p class="comment-text">我这辈子经历过四次令人遗憾的数据丢失事件。第一次是家门口的电线杆被雷直接击中，电流顺着电话线烧毁了传真调制解调器及其周围的一切，当时我 10 岁，虽然有软盘备份但没覆盖全部。第二次是把数据存在 OneDrive 上，他们更改了关于“永久”存储的条款，加上客户端下载速度极慢且有取回期限，导致我丢失了大部分文件。第三次是度假时数码相机的 SD 卡故障，控制芯片彻底损坏，卡完全无法识别；那是索尼全新的 128GB 卡（东芝代工），似乎是个普遍问题，现在我都会同时往两张卡里写数据。第四次竟然是在……执行备份时。一个错误的脚本删除了源内容，而我为了给新备份腾空间已经删掉了旧备份。由于这次教训，我很长一段时间都不敢用可擦写介质了，我觉得备份本身就是高风险活动。</p>
+        <p class="comment-reason"><span>入选理由</span>通过四个真实的惨痛教训，生动地展示了硬件故障、服务条款变更以及备份操作本身可能带来的风险。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49735152" target="_blank" rel="noopener noreferrer">@AdieuToLogic</a>
+        </div>
+        <p class="comment-text">我的一个朋友曾在 Veritas 工作，负责开发企业级数据保留解决方案。当我把他们的产品称为“做备份”时，他纠正我说：我们不是在做备份生意，我们是在做“恢复”生意。</p>
+        <p class="comment-reason"><span>入选理由</span>这句行业名言一针见血地指出了备份工作的核心目标：恢复能力而非存储行为。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49735302" target="_blank" rel="noopener noreferrer">@snizovtsev</a>
+        </div>
+        <p class="comment-text">我正在完善我的备份系统，发现 `tar | zstd | gpg` 加上一个简单的包装脚本就足够了。GNU tar 通过 `--listed-incremental=FILE` 有自己的增量索引。不像 Borg 或 Restic 有复杂的仓库格式，这只会在一个通用的、可移植的全盘 tar 归档旁多出一个 `.snar` 文件。妙处在于，tar 仅靠这个微小的 `.snar` 文件就能计算增量，而主备份文件可以一直埋在只写的 Glacier 存储中。这非常契合 Glacier 的“写一次”模型和 180 天的最低保留期。我目前的计划是每周向外接硬盘和 Glacier 上传一次全盘 tar，每天上传基于 `.snar` 的增量包。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一种基于标准工具的、针对冷存储优化的极简备份思路，具有很强的实操参考价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49734242" target="_blank" rel="noopener noreferrer">@PunchyHamster</a>
+        </div>
+        <p class="comment-text">像 restic.net 这样的软件做得很好。它支持多种后端，也接受管道输入，所以你可以直接把 mysqldump 或 pg_dumpall 的结果传进去，不需要中间文件。它有非常棒的仓库完整性检查选项，我个人（在公司也是，我们在几百台机器上用它）还增加了一个“掷骰子”测试脚本，随机抽取备份并尝试恢复，以确保它真的有效。它的去重功能也很出色，一旦排除了缓存等无用文件，“存储一整年的每周快照”就成了非常合理的策略。在好用的操作系统上，你甚至可以用 FUSE 挂载整个备份目录。kopia.io 也能做同样的事且带 GUI，但在命令行方面稍逊一筹。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了专业工具 Restic 的使用经验，特别是“随机抽取恢复测试”这一关键实践。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49735650" target="_blank" rel="noopener noreferrer">@smallerfish</a>
+        </div>
+        <p class="comment-text">在我的家用电脑上，我使用 restic，而且（令人惊讶地）我是通过脚本手动运行它的。我有一个终端横幅，如果备份超过 24 小时没运行就会唠叨我，如果运行了就会显示西班牙语动词表（这样如果横幅没出现我就会注意到）。我以前被失效的 cron 任务坑过，而 Dead Man&#x27;s Snitch 对我来说又有点大材小用。而且我还曾忘记过旧系统上装的是哪套备份方案，导致需要恢复时花了很久才搞清楚是怎么配置的。显然对于生产系统，自动化和监控才是正道，但我挺喜欢在自己机器上用这种方案。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个有趣的观点：在个人场景下，适度的“手动”参与反而能避免自动化失效带来的盲目自信。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>备份这件事最吊诡的地方在于，你可能投入了 99% 的精力在“存”上，但它的全部价值却体现在那 1% 的“取”上。正如评论中所言，我们不应自认为是做备份的，而应自认为是做“恢复”的。很多人在折腾复杂的自动化脚本时，往往忽略了最原始的风险：脚本本身可能就是删库的元凶。与其追求完美的自动化，不如保持一点“手动”的警觉，并把“随机抽取备份进行恢复测试”列为必修课。毕竟，在灾难发生时，你需要的不是一份过期的成功日志，而是一个真正能跑起来的系统。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49729000">
+      <summary class="story-overview">
+        <span class="rank-number">05</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">will-keleher.com</span>
+            <span>431 points</span>
+            <span>原始 #8 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://will-keleher.com/posts/small-programming-tricks-matter/" target="_blank"
+              rel="noopener noreferrer">Small programming tricks</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49729000" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 196</a>
+          </h2>
+          <p class="summary">编程生产力很大程度上取决于对细小知识点的积累，如 shell 模糊搜索、Git 高级指令以及数据库性能分析等。这些技巧通常门槛较低，却能在日常工作中产生极高的杠杆效应，减少操作摩擦。除了通用技术，公司内部的隐性知识（如调试特定问题的文档或联系人）也至关重要。作者建议通过在团队中分享“每日一技”来传播这些高价值信息。掌握这些技巧的主要挑战在于如何打破旧有的操作习惯并将其内化为肌肉记忆。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>文章强调，日常工程效率往往源于一些看似微不足道但极具价值的知识点。例如，使用 fzf 或 atuin 替代传统的终端历史搜索，可以极大地提升命令行操作速度；在 Git 方面，git log -S（又称 git pickaxe）能帮助开发者在庞大的代码库中精准定位字符串的增删历史。数据库操作中，explain analyze 则能提供比单纯解释计划更详尽的性能数据。此外，现代 JavaScript 的新特性如 Array.flatMap 和 Node.js 的 https.Agent 也是提升代码质量和性能的利器。</p><p>作者建议在团队内部通过 Slack 等工具每天分享一个小技巧，以促进隐性知识的传播，这不仅涵盖技术细节，还包括公司特定的流程和资源。然而，评论区对此有不同看法：有人认为这种每日推送可能会造成社交干扰。同时，随着 AI 辅助编程的兴起，一些开发者开始质疑手动掌握这些底层技巧是否依然必要。另一种观点则认为，应该将这些技巧固化到 Makefile 或自动化脚本中，而不是依赖个人的记忆。无论如何，建立一个易于检索的个人知识库（如 scratch.txt）被认为是保持这些技能不随时间流逝而遗忘的有效手段。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49730584" target="_blank" rel="noopener noreferrer">@phforms</a>
+        </div>
+        <p class="comment-text">这些技巧的问题在于你必须养成使用它们的习惯。自从我了解命令行以来，我就知道 `Ctrl+r` 可以查看历史记录。我甚至还有一个很棒的 fzf shell 集成。但多年来我仍然习惯使用上/下方向键或向上滚动来寻找之前的命令，因为我从来记不住快捷键，总是选择阻力最小的路径。通常我会把这些技巧写进一个易于访问的文档中，放在我知道记不住时会去查看的地方。我有一个按语言/工具分类的文档目录，这样我可以快速查阅而无需搜索网络。但我也必须在遇到问题时主动提醒自己这些东西的存在，阻止自己去做那些低效的事情。</p>
+        <p class="comment-reason"><span>入选理由</span>强调了将知识转化为习惯的难度以及建立个人文档库的重要性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49729206" target="_blank" rel="noopener noreferrer">@behnamoh</a>
+        </div>
+        <p class="comment-text">这让我想问：现在大家还在多大程度上亲手写代码？在我的职业（学术界），几乎没有人再写代码了。一方面，这很糟糕，因为编程的乐趣被不断的 Agent 编排任务取代了；但另一方面，也很难回到过去，因为生产力的提升太显著了。我记得多年来学到了很多编程技巧，它们曾带给我快乐：学习 nvim 的新知识、Fish shell 的新快捷键、Vim 宏，或者 Bash 脚本中单括号和双括号的区别等等。但现在看来，所有这些似乎都变得无关紧要了，我想看看其他人对这种情况的看法。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了在 AI 时代，这些手动操作的小技巧是否已经过时的深刻疑问。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49729790" target="_blank" rel="noopener noreferrer">@kccqzy</a>
+        </div>
+        <p class="comment-text">通过观察 AI 的工作过程可以学到更多技巧。不要让 AI 自主工作，而是回到过去那种手动批准 AI 运行的每一条命令的模式。最近在做性能优化工作时，我发现 Opus 使用 `perf` 命令的方式是我以前不知道的。只需给 AI 一个真实的任务，并仔细阅读它解决问题时使用的命令；AI 很可能会用到一两个你以前不知道的技巧。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个新颖的观点：通过观察 AI 解决问题的过程来学习人类未曾察觉的技巧。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49731240" target="_blank" rel="noopener noreferrer">@titzer</a>
+        </div>
+        <p class="comment-text">我保留了一个 ~/scratch.txt 文件和一个名为 &quot;scratch&quot; 的 bash 别名，它只会对该文件进行 grep。然后我会把很多相对少用但经常忘记的命令配方放进去，这样我只需执行 &quot;scratch keygen&quot; 之类的命令就能找到它。它的持久性比 bash 历史记录更长。如果说有什么遗憾的话，我希望在早期能更多地关注这一点，并建立一个充满自己实用程序的 shell 环境，因为我觉得随着每次迁移，我的技能多年来都在慢慢流失。为自己筑一个舒适的巢穴，并将这些工具作为你自己的（文本）UI 来维护。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了一个简单实用的“草稿文件”方法，用于持久化存储那些不常用但易忘的命令。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49729495" target="_blank" rel="noopener noreferrer">@NegativeLatency</a>
+        </div>
+        <p class="comment-text">&gt; 在之前的一家公司，我每天都会在 Slack 上与工程团队分享一个技巧，包括技术方面的和公司特定的，大家觉得非常有用。
+我会觉得那很烦人，不过为了不被看作是混蛋，我什么都不会说。</p>
+        <p class="comment-reason"><span>入选理由</span>为作者提倡的“每日分享一个小技巧”提供了必要的社交负面反馈视角。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>编程中的“小技巧”本质上是开发者与工具之间的深度磨合，它们能消除心流中的微小中断。虽然 AI 正在重塑开发流程，但对底层工具（如 Shell、Git、SQL）的熟练掌控依然是高效开发者的基石。这种知识的价值不在于其深度，而在于它能积少成多地提升整体产出。不过，在团队中分享这些技巧时需注意频率，以免像某些评论者担心的那样，让原本的好意变成同事眼中的信息噪音。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49719596">
+      <summary class="story-overview">
+        <span class="rank-number">06</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">johnjwang.com</span>
+            <span>142 points</span>
+            <span>原始 #10 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://johnjwang.com/post/2026/09/15/engineering-behind-us-strategic-petroleum-reserve" target="_blank"
+              rel="noopener noreferrer">The engineering behind the US Strategic Petroleum Reserve</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49719596" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 53</a>
+          </h2>
+          <p class="summary">美国战略石油储备（SPR）利用地下盐穴存储数亿桶原油，这是一种既经济又安全的工程方案。工程师通过向盐层注入淡水溶解盐分，创造出巨大的地下空间，每个盐穴可容纳约1000万桶石油。盐岩具有极低的渗透性且不与石油反应，其在高压下的塑性变形还能自动修复微小裂缝。提取石油时，通过向底部注入水利用密度差将石油顶出。这种方式的成本仅为地面储罐的五分之一，且能有效抵御空中攻击。然而，频繁提取会导致盐穴因淡水冲刷而不断扩大，限制了其使用寿命和循环次数。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>美国战略石油储备（SPR）的设计目标是安全存储数亿桶原油，并能在供应中断时快速投放市场。传统的地面浮顶罐方案不仅占地巨大（存储7亿桶需约4.5万英亩），且极易受到攻击或雷击引发火灾。相比之下，位于德克萨斯州和路易斯安那州沿海的地下盐穴提供了更优的解法。这些盐穴通过“水溶开采”技术建成：向盐丘钻孔并注入淡水溶解盐分，再将盐水泵出。这种地下存储方式的资本成本约为每桶3.5美元，远低于地面储罐的15-18美元，且深埋地下能有效防御空中打击。</p><p>盐穴之所以成为理想容器，源于盐岩独特的物理特性。它几乎不透水，且在地下高压下会像塑料一样缓慢变形，从而自动愈合可能产生的微小裂缝，确保了极高的密封性。操作上，由于石油比水轻，工程师只需向盐穴底部注入水，就能将石油向上推入输送系统。这种设计的局限性在于，每次注入淡水提取石油都会进一步溶解盐壁，导致盐穴体积扩大并可能影响结构稳定性。因此，SPR的维护重点在于监控盐穴形状和压力，平衡战略调用需求与设施的长期完整性。未来，这种盐穴技术还可能被用于天然气或氢气的存储。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49734518" target="_blank" rel="noopener noreferrer">@anigbrowl</a>
+        </div>
+        <p class="comment-text">盐能容纳石油并有助于密封微小裂缝。SPR盐穴周围的岩盐渗透率极低，这意味着流体几乎无法穿过它。它也不会与石油发生反应。在地下巨大的压力下，盐还会缓慢变形，这有助于闭合微小的裂缝。因此，盐本身就可以容纳石油，而不需要在洞穴内衬钢筋混凝土罐。石油漂浮在水面上，这意味着向洞穴底部泵入水会将石油挤出。随着淡水被泵入洞穴底部，石油被向上置换到输送系统中。泵入的水越多，泵出的石油质量就越低；我们基本上是在借钱给炼油商，让他们购买他们并不真正想要的SPR石油。此外，泵入的水越多，溶解到水中的盐就越多，洞穴底部变形就越严重，从而在上部墙壁产生剪切力，降低其整体结构完整性。我之前发过这个；这是一份关于SPR设施状态和维护的最新报告，写得非常清晰，如果你想更好地了解这个话题，非常值得一读：https://www.gao.gov/products/gao-26-106918</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深入解释了盐穴的物理特性，并补充了关于石油质量和结构完整性的重要技术细节。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49735585" target="_blank" rel="noopener noreferrer">@nostrademons</a>
+        </div>
+        <p class="comment-text">在 r/oil 频道曾有一位参与过 SPR 工程的人发过一条很好的评论。不幸的是，它已经从首页掉下去了，我现在找不到了，但是：
+&gt; 此外，泵入的水越多，溶解到水中的盐就越多，洞穴底部变形就越严重，从而在上部墙壁产生剪切力，降低其整体结构完整性。
+事实证明，防止水溶解盐是非常容易的。他们会用盐预先使水饱和，使其已经含有在给定温度下可以溶解的最大盐量。当他们泵出盐水时，它会进入地面上的盐水池，在卫星图像上很容易看到。这种盐水的盐度可以很容易地控制：如果你想扩大洞穴，就把它和淡水混合，让盐水溶解更多的边缘；如果你不想扩大，就把它作为饱和盐水泵回去。
+编辑：这里找到了一些 SPR 站点的卫星图像：
+https://maps.app.goo.gl/B8XJ9TVhQfcdErky5
+你可以清楚地看到盐水池，它和 SPR 本身的地面部分一样大。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论对文章提到的“淡水冲刷导致盐穴扩大”提出了重要的工程修正，解释了如何通过饱和盐水来维持结构。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49734968" target="_blank" rel="noopener noreferrer">@LPisGood</a>
+        </div>
+        <p class="comment-text">我听过一个有趣的细节，战略石油储备需要大约1亿到1.5亿桶石油来维持运行压力，甚至才能保持功能正常。这意味着我们不能把它抽干到零；甚至连接近零都做不到。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了一个关于SPR运行限制的冷知识，即必须保留“底油”以维持压力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49735331" target="_blank" rel="noopener noreferrer">@cyberax</a>
+        </div>
+        <p class="comment-text">关于盐丘的一点：从定义上讲，它们几乎肯定被渗透性极低的干燥土壤包围。因为否则它们早就溶解了！与此相关的一种利用盐丘的方法是用于天然气储存。</p>
+        <p class="comment-reason"><span>入选理由</span>从地质学角度解释了盐丘存在的必然条件，增加了背景深度。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这是一个典型的“顺应自然”而非“对抗自然”的工程案例。利用盐岩的自愈合特性和流体密度差，美国以极低的成本构建了庞大的能源防线。然而，评论区揭示了一个有趣的工程博弈：虽然文章提到注入淡水会侵蚀盐穴，但实际操作中可以通过精确控制盐水饱和度来保护结构。此外，这种设施并非简单的“油桶”，它存在必须维持的最低运行压力，这意味着战略储备在物理上是无法完全耗尽的。这种宏大的物理基础设施提醒我们，即便在数字化时代，国家安全的基础依然深深扎根于对地质力学和基础物理规律的巧妙运用之中。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49734264">
+      <summary class="story-overview">
+        <span class="rank-number">07</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">openspec.dev</span>
+            <span>94 points</span>
+            <span>原始 #11 · 低讨论量降权 +3.9</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://openspec.dev/" target="_blank"
+              rel="noopener noreferrer">OpenSpec – A lightweight and configurable AI spec framework</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49734264" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 37</a>
+          </h2>
+          <p class="summary">OpenSpec 是一个轻量级且可配置的 AI 规范（Spec）框架，旨在通过“规范驱动开发”（SDD）提升 AI 编程的准确性。它利用 Markdown 文档作为 AI 代理的“真理来源”，通过明确的架构指令引导模型处理复杂任务。这种方法能有效缓解 AI 在长对话中容易出现的“功能漂移”或忽略架构约束的问题。用户可以与 AI 共同迭代规范，并在实现后将其存入规范库作为长期文档。然而，批评者担心这会导致项目中充斥着大量 AI 生成的冗余文档，且规范与代码的同步维护也是一大挑战。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>OpenSpec 的核心理念是将软件需求转化为结构化的 Markdown 文档，让 AI 代理在编写代码前先明确架构和逻辑。在实际操作中，开发者先与 AI 协作完善规范，再由 AI 根据该规范执行具体的代码编写。这种方式特别适合处理大型功能，因为它为 AI 提供了一个可以反复参考的契约，减少了模型在处理长任务时逐渐偏离初衷的情况。支持者认为，这不仅提高了代码质量，还顺便生成了可跨语言使用的项目文档。</p><p>尽管如此，这种流程也引入了额外的复杂性。一些用户反馈，OpenSpec 可能会导致项目中产生大量由 AI 生成的、缺乏人类洞察力的“废话”文档，增加审核负担。如果规范不能与代码同步更新，它们很快就会过时并失去参考价值。此外，随着 Claude Code 等新一代模型在长上下文规划方面表现日益出色，一些开发者开始质疑是否还需要专门的框架来管理这些规范，还是直接依赖模型的原生规划能力即可。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49735497" target="_blank" rel="noopener noreferrer">@alexjplant</a>
+        </div>
+        <p class="comment-text">我之所以费劲用这个，是因为 Claude Code 除非我使用 OpenSpec（或类似工具）来明确研究、界定范围、持久化，然后在全新的上下文中实施，否则它会做出一些离谱的荒唐事。即使是 Opus 模型，在被要求启动 Docker 容器时也会束手无策，或者忽略明确的架构指令，写出充满错误且冗长的无用文档。使用 OpenSpec 可以尽可能地约束它，并顺便记录下系统的运作方式。根据我的经验，OpenCode 和各种开源模型这种倾向没那么严重。我最近使用 GPT-5.6 的体验也非常正面。可惜由于监管原因，这套技术栈在我的日常工作中行不通，所以我只能设法绕过 Anthropic 的那些容量优化花招。</p>
+        <p class="comment-reason"><span>入选理由</span>解释了在实际生产环境中，为什么需要这类框架来约束 AI 的“胡作非为”。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49736016" target="_blank" rel="noopener noreferrer">@open-paren</a>
+        </div>
+        <p class="comment-text">我所在的组织采用了 OpenSpec，但我非常不喜欢它。每一次中等规模以上的改动都会变成一大堆需要评审的 Markdown 文档。而且这些文档从来不是手写的——全是 AI 生成的废话（slop），充满了 AI 写作的所有特征，我个人觉得非常刺耳。我发现一份简短的人写规范比这些庞大的规范文档有效得多。这个想法是让你和代理协作编写规范，然后实现，最后将规范合并到描述仓库所有行为的“规范库”中。但我不认为散文式的描述能枚举代码所需的所有行为，也不应该这样做。规范几乎立刻就会过时。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个非常有力的反面观点，指出了 AI 生成文档可能带来的冗余和维护难题。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49734964" target="_blank" rel="noopener noreferrer">@honkycat</a>
+        </div>
+        <p class="comment-text">太爱 OpenSpec 了。它是我最喜欢的规范驱动开发框架。它在我们内部评估中表现非常好。我认为它的流程最合理，模型非常符合我的思维模式。我一直在研究一个 TUI，它可以自动生成“阶段”，每个阶段都是一个 OpenSpec 规范。我强烈建议尝试规范驱动开发。我发现这是与 LLM 协作处理大型任务最高效的方式，它确实提升了性能。对我来说，这就是 LLM 的发展方向：在共享文档上协作，将其作为契约，然后在实现后进行评估。这还解决了设计决策和工件存储的问题，如果它存在于规范中，以后就可以引用并记录变更。而且如果规范写得好，它可以是语言无关的。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了规范驱动开发（SDD）在处理复杂任务时的优势和长远价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49735141" target="_blank" rel="noopener noreferrer">@sheepscreek</a>
+        </div>
+        <p class="comment-text">我们还没跨过这个阶段吗？大多数最近的 LLM 都经过了足够的长上下文任务训练，在规划方面已经变得相当出色了。也许测试框架（harness）也有贡献。无论哪种情况，如果我使用的是 Codex 或 Claude Code，我根本不会费心去用这些东西。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个关键的质疑：随着模型能力的提升，这类外部框架是否已经过时。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>OpenSpec 的出现反映了当前 AI 辅助编程的一个核心矛盾：我们是应该信任模型日益增强的自主规划能力，还是应该通过结构化的“规范”来强行约束它？正如评论中所提到的，虽然像 Claude Code 这样的工具在长文本处理上有了长足进步，但在处理复杂架构时仍可能出现“胡作非为”的情况，这时 OpenSpec 就像是给 AI 戴上的“紧箍咒”。然而，这种方法也面临着“AI 废话”泛滥和文档维护成本高昂的风险。最终，这类框架的价值可能不在于文档本身，而在于它强制人类和 AI 在动笔写代码前达成一种更高密度的逻辑共识。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49732931">
+      <summary class="story-overview">
+        <span class="rank-number">08</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">arxiv.org</span>
+            <span>156 points</span>
+            <span>原始 #7 · 低讨论量降权 +8.7</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://arxiv.org/abs/2609.16338" target="_blank"
+              rel="noopener noreferrer">Breaking the 1.58-bit Barrier for Ternary LLMs</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49732931" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 21</a>
+          </h2>
+          <p class="summary">三进制大模型（Ternary LLMs）通常将权重限制在-1、0、1三个值，理论上每个权重需要约1.58位存储空间，但这项研究通过BITCOS编码打破了这一极限。研究人员发现，在实际模型中，权重为0的比例高达51%，这种分布的不均匀性提供了进一步压缩的空间。通过利用这种稀疏性，他们成功将平均位宽降低至1.48位。这意味着大模型可以更高效地运行在内存受限的嵌入式设备或手机上。然而，这种极低精度的模型目前仍面临准确率下降的挑战，且需要专门的训练技术来维持性能。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>三进制大模型因其极高的计算效率而成为研究热点，其核心在于将权重简化为-1、0和1。从信息论角度看，存储三个状态需要 log2(3) ≈ 1.58 位，这曾被视为该类模型的物理极限。然而，这项名为 BITCOS 的研究指出，实际训练出的模型中权重分布并非均匀，其中“0”状态占据了约 51% 的比例。通过针对这种稀疏性进行优化编码，研究者将平均位宽压低到了 1.48 位，进一步缩减了模型的内存占用。</p><p>这种技术的实际价值在于它改变了 AI 推理的底层逻辑。在三进制运算中，复杂的浮点乘法被简单的加法、减法或“无操作”（针对 0 值）取代，这能显著降低数据传输带来的能耗，并让 CPU 或定制 ASIC 芯片在没有高端 GPU 的情况下也能快速运行模型。不过，这种极致压缩也存在权衡：极低比特量化往往会导致模型在基准测试中的准确率受损。为了弥补这一点，通常需要采用量化感知训练（QAT）或通过增大模型规模来抵消单参数精度的损失。未来值得关注的是，这种亚 1.58 位的格式是否能获得硬件层面的原生支持，从而真正实现端侧 AI 的普及。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49734352" target="_blank" rel="noopener noreferrer">@infogulch</a>
+        </div>
+        <p class="comment-text">所以他们利用了实际权重中 0 占比高达 51% 这一事实，将位宽从 1.58 降低到了 1.48 位。真妙。如果三进制大模型能行得通并被固化到定制硅片硬件中，我敢打赌它们的效率会高得惊人。</p>
+        <p class="comment-reason"><span>入选理由</span>简洁地总结了该研究的核心技术突破点及其在硬件领域的潜力。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49734308" target="_blank" rel="noopener noreferrer">@janalsncm</a>
+        </div>
+        <p class="comment-text">后训练量化（PTQ）和向量量化之所以不用于此类场景，是因为三进制大模型的部分意义在于提升速度。在三进制模型中，每个权重要么是加法、减法，要么是无操作（no-op），因此在 CPU 上运行非常快。如果你只是用码本（code book）来重建一个 fp16 模型，那么你获得的唯一好处就只是传输带宽的节省。</p>
+        <p class="comment-reason"><span>入选理由</span>澄清了三进制模型在计算效率（而非仅仅是压缩）方面的核心优势。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49735664" target="_blank" rel="noopener noreferrer">@kadushka</a>
+        </div>
+        <p class="comment-text">问题在于，4比特块量化并不能保证每个参数保留4比特的有效信息——甚至平均下来也做不到。它只是简单地为每个权重分配16个量化层级。这16个层级能多有效地保留模型信息，取决于权重分布、块大小、离群值以及哪些权重真正重要。我们已知的一点是：增加模型规模通常会使其对量化的鲁棒性更强。如果从8比特降到2比特能提速4倍，那么即使我们将模型规模扩大一倍，最终可能仍然能获得整体提速。寻找这种平衡可能会成为研究的热点领域。</p>
+        <p class="comment-reason"><span>入选理由</span>深入探讨了量化精度与模型信息量之间的复杂关系，并提出了模型规模与量化平衡的深刻见解。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49734920" target="_blank" rel="noopener noreferrer">@Vetch</a>
+        </div>
+        <p class="comment-text">量化感知训练（QAT，BitNet 训练也属于此类）在如此低的位宽下对保持准确性非常有帮助。还有一些更好的量化方法试图保留最敏感的权重，但计算成本很高，所以通常不被采用。另一个互补的选择是，如果模型足够快，我们应该能够通过在 T=1 附近进行自我一致性投票来提高正确率。像最近的 Jev 这样智能/快速的零样本分类器也可以帮助聚合答案，从而扩展适用性。注：我读过的每篇论文都估计 Transformer 模型的平均信息含量约为每个参数 3-4 比特。有趣的是，生物突触的信息量估计也在 4-5 比特左右，可能还会更低一点。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于如何提升量化模型准确率的实战建议，并给出了有趣的生物学类比。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>1.58位曾被认为是三进制模型的“物理极限”，但BITCOS的研究告诉我们，只要数据分布不均匀，极限就是用来打破的。这种对权重稀疏性的极致压榨，本质上是在用更聪明的编码换取更小的内存足迹。虽然社区对极低比特下的准确率损失仍有疑虑，但正如评论中所指出的，三进制模型的真正魅力在于将复杂的乘法简化为加减法，这在端侧硬件上意味着巨大的能效比提升。如果能通过增加少量参数规模来抵消精度下降，这种“以大博小”的策略可能会彻底改变移动设备运行AI的方式。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49735930">
+      <summary class="story-overview">
+        <span class="rank-number">09</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">ryan.science</span>
+            <span>31 points</span>
+            <span>原始 #2 · 低讨论量降权 +13.8</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://ryan.science/blog/keys-not-included" target="_blank"
+              rel="noopener noreferrer">Keys Not Included: recovering the signing keys for US driver&#x27;s license barcodes</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49735930" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 4</a>
+          </h2>
+          <p class="summary">美国许多州的驾照条形码包含数字签名，但政府通常不公开验证这些签名所需的公钥。安全研究员 Ryan Fahey 演示了如何通过分析条形码数据来“恢复”这些公钥。该技术利用了 ECDSA 签名算法的数学特性，即可以从签名和原始消息中推导出公钥。这一发现允许第三方开发者在不依赖政府授权的情况下，编写能够验证驾照真伪的软件。这对于识别高仿假证非常有帮助，因为伪造者很难生成有效的官方签名。必须明确的是，这种方法只能获取验证用的公钥，无法获取用于伪造的私钥。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>在美国，驾照背面的 PDF417 条形码不仅包含个人信息，还包含由签发机构生成的数字签名。理论上，任何人都可以通过公钥验证这些签名，以确保数据未被篡改，但各州政府通常将这些公钥视为机密，不予公开。Ryan Fahey 的研究利用了 ECDSA（椭圆曲线数字签名算法）的一个已知特性：给定消息和签名，可以计算出可能的公钥点。通过对比同一签发机构的多个样本，可以轻松确定正确的公钥。</p><p>这一过程首先需要解析 AAMVA（美国机动车管理人员协会）定义的复杂数据结构。研究者发现，虽然各州在实现细节上有所不同，但核心的加密逻辑是通用的。这种公钥恢复技术对于提升证件验证的透明度至关重要，因为它让普通开发者也能编写工具来检测条形码是否被篡改。不过，这种方法的局限性在于它只能验证数据的真实性，无法防止“合法数据被克隆到非法载体”的情况。此外，如果未来政府更换了签名算法，该恢复过程也需要随之调整。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49736178" target="_blank" rel="noopener noreferrer">@simoncion</a>
+        </div>
+        <p class="comment-text">在写这条评论时，HN 上的提交标题是“恢复美国驾照条形码的签名密钥（signing keys）”。值得注意的是，这个副标题并没有出现在博客原文中。总之，我只看到文中声称可以从驾照条形码中确定公钥，而不是确定签名密钥（私钥）。是我漏掉了什么还是理解错了？为了防止有人反驳：虽然确实可以用公钥为拥有私钥的接收者加密数据，或者验证数据是否由私钥持有者签名，但我几乎 100% 确定，不可能利用公钥去签署那些能被他人验证为由私钥签署的数据。我已经十多年没思考过这些东西了，但公钥加密的全部意义不就在于公钥可以分发给你最坏的敌人而不会给你带来任何麻烦吗？</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地指出了文章标题中关于“签名密钥”与“公钥”概念的混淆，这是理解该技术边界的关键。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49736217" target="_blank" rel="noopener noreferrer">@piratejon</a>
+        </div>
+        <p class="comment-text">这真的太酷了！似乎可以推广到纸币上——对纸币序列号进行可验证的 QR 码数字签名，将为伪造货币制造一个密码学上的巨大障碍！</p>
+        <p class="comment-reason"><span>入选理由</span>评论提出了该技术在防伪领域的潜在扩展应用，具有启发性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49736191" target="_blank" rel="noopener noreferrer">@trollbridge</a>
+        </div>
+        <p class="comment-text">是的。副标题是错误的。由于 EDCSA 签名工作方式的原因，他恢复的是公钥。</p>
+        <p class="comment-reason"><span>入选理由</span>简洁地确认了技术细节，即恢复的是公钥而非私钥。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇文章揭示了一个有趣的现象：政府有时会试图通过隐藏“公钥”来维持系统的封闭性，但在数学特性面前，这种“通过隐晦实现安全”的策略往往是徒劳的。虽然 HN 的标题误导性地使用了“恢复签名密钥”，但正如评论区所指出的，研究者恢复的是用于验证的公钥。公钥加密的核心价值就在于公钥可以安全地公开。这种技术手段让原本封闭的验证过程变得民主化，同时也提醒我们，真正的安全性不应建立在“假设没人能找到公钥”这种脆弱的前提之上。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49735410">
+      <summary class="story-overview">
+        <span class="rank-number">10</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">zartbot.github.io</span>
+            <span>47 points</span>
+            <span>原始 #5 · 低讨论量降权 +13.5</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://zartbot.github.io/blog/model_arch/dsv41flash_arch/en.html" target="_blank"
+              rel="noopener noreferrer">DeepSeek-v4.1 Flash: Pushing the Limits of KV Cache Compression</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49735410" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 5</a>
+          </h2>
+          <p class="summary">DeepSeek-v4.1 Flash 是一款旨在解决长上下文智能体工作流中 KV Cache 瓶颈的混合专家模型。它采用了创新的因果编解码器（CED）架构，在预填充阶段仅激活 8B 参数，而解码阶段激活 16B 参数，显著降低了计算开销。通过 CSA2 技术，该模型在通道、序列和层级三个维度对 KV Cache 进行了深度压缩。结合 FP4 量化，其运行时 KV Cache 存储需求仅为前代产品的四分之一，持久化存储仅为八分之一。这使得模型在支持百万级上下文的同时，推理速度可达每秒 420 个 token。然而，这种高度压缩的架构对工程实现和部署策略提出了更高的要求。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>DeepSeek-v4.1 Flash 的核心突破在于其对推理效率的极致优化，特别是针对长文本场景下的存储和计算瓶颈。该模型采用了 Causal Encoder-Decoder (CED) 架构，灵感源自 YoCo，通过让后半部分层（解码器）复用前半部分层（编码器）生成的 KV Cache，实现了预填充阶段的计算减半。在 552B 的总参数量下，预填充仅需激活 8B 参数，而解码阶段为 16B，这对于输入量巨大的智能体应用场景极其经济。</p><p>在 KV Cache 压缩方面，模型引入了 CSA2 机制，从三个维度发力：通道维度使用 512 维潜变量共享表示；序列维度在编码器中将相邻位置合并；层级维度则实现了多层共享全局 KV。此外，模型还采用了 FP4 数值精度优化，使得每 token 的存储开销降至约 890 字节。为了进一步提升性能，DeepSeek-v4.1 Flash 还集成了 Engram 条件记忆和 DSpark 投机采样技术。</p><p>多模态能力也是其亮点之一，视觉分支通过 ViT 处理高分辨率图像，并利用空间重排和下采样技术将图像 token 数量控制在 1024 以内。为了解决图文分布差异导致的负载不均，模型为不同模态维护了独立的专家路由偏置。尽管架构复杂，但其在长上下文中的计算量增长近乎线性，为大规模智能体部署提供了可行的技术路径。未来值得关注的是这种多维度压缩对模型在极长序列下语义保持能力的细微影响。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>2 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49735982" target="_blank" rel="noopener noreferrer">@arikrahman</a>
+        </div>
+        <p class="comment-text">我对 KV Cache 压缩工作以及前缀缓存（prefix caching）印象非常深刻，这让查询收敛几乎变得“免费”。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论点出了模型在工程实践中最具吸引力的两个技术点：压缩和缓存效率。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49736201" target="_blank" rel="noopener noreferrer">@girvo</a>
+        </div>
+        <p class="comment-text">网站设计绝对是 AI 生成的，但我不确定内容是不是？这读起来很有“人味”，而且非常有趣！</p>
+        <p class="comment-reason"><span>入选理由</span>反映了社区对技术博客内容质量的认可，即便其外观可能使用了自动化工具。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>DeepSeek 这次的技术迭代展示了模型竞争正从“参数规模”转向“推理效率”。DeepSeek-v4.1 Flash 实际上更像是一个“v5 预览版”，它通过 CED 这种不对称的架构设计，精准打击了长文本预填充成本高昂的痛点。这种将编码器和解码器深度解耦并复用 KV Cache 的做法，配合多维度的压缩技术，本质上是在挑战 Transformer 架构的固有成本。正如评论所言，这种优化让长文本处理在经济上变得更加可行，也预示着未来大模型的竞争核心将在于谁能以更低的 HBM 占用提供更长的上下文服务。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49719249">
+      <summary class="story-overview">
+        <span class="rank-number">11</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">wsj.com</span>
+            <span>271 points</span>
+            <span>原始 #21 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.wsj.com/world/middle-east/aws-says-it-cant-restore-some-data-from-mideast-facilities-struck-by-iran-ddcb7e5d" target="_blank"
+              rel="noopener noreferrer">AWS says it can&#x27;t restore some data from mideast facilities struck by Iran</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49719249" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 234</a>
+          </h2>
+          <p class="summary">亚马逊云服务（AWS）承认，受伊朗袭击影响，其位于中东地区（巴林）的部分数据中心设施受损，导致部分客户数据永久丢失无法恢复。尽管 AWS 通常承诺极高的数据可靠性，但此次袭击同时瘫痪了该区域的所有三个可用区（AZ）。这暴露了云服务在面对协调一致的军事打击时的脆弱性，尤其是当所有冗余设施都集中在同一地理区域时。此次事件凸显了“数据本地化”政策的风险：法律强制数据必须留在境内，却在战争爆发时切断了跨境备份的生路。这标志着云服务“不可摧毁”神话的破灭，迫使企业重新评估极端情况下的灾备策略。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>AWS 近期证实，由于伊朗对中东地区基础设施的打击，其位于巴林（me-south-1 区域）的数据中心遭受严重破坏，部分存储数据已确认无法找回。虽然 AWS 的 S3 存储服务宣称拥有“11个9”的数据持久性，但这一指标通常基于硬件故障或单点事故的概率统计，并未充分考虑到针对整个地理区域的协同军事打击。在本次事件中，该区域的所有三个可用区均受到波及，导致原本设计的本地冗余机制失效。</p><p>导致数据彻底丢失的关键因素之一是严格的“数据本地化”法律。许多中东国家要求敏感数据必须存储在国境之内，这使得客户无法利用 AWS 的跨区域复制功能将数据备份到欧洲或美国等更安全的地区。当战争摧毁了境内所有的物理基础设施时，这些为了“数据主权”而设立的规定反而成了数据灭失的推手。此外，这也反映了工程设计中常见的局限性：在进行失效模式影响及危害性分析（FMECA）时，战争和地缘政治冲突往往被视为极低概率的“排除项”，未被纳入常规的灾难恢复计划。</p><p>此次事件为全球云用户敲响了警钟。企业必须意识到，所谓的“云”本质上仍是位于特定物理位置的服务器，无法脱离地缘政治风险而存在。未来，企业在选择云服务商和配置架构时，可能需要更加关注行政访问权和加密密钥的管控，而非单纯依赖物理位置的本地化，以平衡合规性与生存能力。同时，监管机构也可能被迫重新审视数据驻留政策，以允许在极端威胁下进行紧急的跨境数据保护。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49733786" target="_blank" rel="noopener noreferrer">@cmiles8</a>
+        </div>
+        <p class="comment-text">AWS 领导层接受《CBS 周日早晨》采访时的这段话现在看来真是经不起时间的考验：
+Pogue 问：“我不是想给谁出主意，但假设我发现其中一栋没有标记的建筑是 AWS 数据中心，然后我把它炸了。你是说由于备份和冗余非常充分，大家可能根本察觉不到吗？”
+Wood 回答：“是的，你不会察觉到的。我的意思是，我们可能会有点难过，但你绝对不会察觉到！”</p>
+        <p class="comment-reason"><span>入选理由</span>这段讽刺性的引用生动地展示了云服务商过去对物理安全和冗余能力的过度自信。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49733505" target="_blank" rel="noopener noreferrer">@rishikeshs</a>
+        </div>
+        <p class="comment-text">我认为这是由于阿联酋的数据驻留要求造成的。我正为一个医疗领域的客户工作，政府要求我只能将数据存储在阿联酋境内！我曾尝试使用 AWS，但他们当时不允许创建新实例，所以我不得不选择了 Azure。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者分享了实际业务中受限于数据驻留政策的经历，解释了为何数据无法进行跨国备份。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49724182" target="_blank" rel="noopener noreferrer">@dhx</a>
+        </div>
+        <p class="comment-text">对于巴林区域（me-south-1），提供冗余的所有三个数据中心都被伊朗炸毁了。这种冗余被局限在一个狭小的地理区域和单一政府管辖下——希望 AWS 的客户在托付数据时已经意识到了这一点。对于任何关于可用性的声明，买家都必须自负风险。工程师在完成 FMECA（失效模式、影响及危害性分析）时，通常会预先声明他们故意排除了哪些失效模式（如陨石撞击），否则分析报告将充斥着从未被测量过、也不值得浪费时间担心的模式。这些排除项因应用场景而异——时间胶囊或种子库的设计目标是熬过战争和帝国崩溃，但通常数据中心的设计并不包含抵御此类失败。不过，我认为在计算数据中心/云服务的可用性时，将战争前景纳入考虑是合理的。特别是在巴林这种地方，国家显然非常担心战争，以至于建造了非常永久且昂贵的防空和导弹防御基地。</p>
+        <p class="comment-reason"><span>入选理由</span>从工程设计的角度深入分析了为何战争风险常被排除在可靠性计算之外，并指出了地理局限性冗余的弊端。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49733167" target="_blank" rel="noopener noreferrer">@carefree-bob</a>
+        </div>
+        <p class="comment-text">这就是各国现在开始要求的数据驻留政策的另一面。如果欧盟想把数据留在欧盟，那很好，但当战争来临、能源和基础设施遭到打击时，人们就会后悔没有在北美、亚洲和中东建立备份了。</p>
+        <p class="comment-reason"><span>入选理由</span>精辟地指出了数据主权政策在极端安全局势下的负面后果。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49719935" target="_blank" rel="noopener noreferrer">@curuinor</a>
+        </div>
+        <p class="comment-text">他们不是保证了 11 个 9 的持久性吗？
+补充：没错，确实保证了。
+https://aws.amazon.com/s3/storage-classes/</p>
+        <p class="comment-reason"><span>入选理由</span>通过引用 AWS 官方的持久性承诺，反衬出此次数据丢失事件对云服务信誉的巨大冲击。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这次 AWS 数据丢失事件彻底击碎了云服务“永不宕机、永不丢失”的幻觉。长期以来，云厂商利用概率论上的“11个9”持久性来安抚客户，但这种统计学上的安全在现实政治的导弹面前显得苍白无力。正如评论所指出的，当一个区域的所有可用区被同时针对时，所谓的本地冗余就成了摆设。更具讽刺意味的是，那些旨在保护“数据主权”的本地化法律，在战争中反而成了数据的枷锁，让跨境灾备变得非法。这不仅是 AWS 的技术挫败，更是全球数据治理政策的一次惨痛教训：如果数据不能在物理上逃离战火，那么它在法律上的“安全”便毫无意义。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49734929">
+      <summary class="story-overview">
+        <span class="rank-number">12</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">gcaptain.com</span>
+            <span>35 points</span>
+            <span>原始 #12 · 低讨论量降权 +10.5</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://gcaptain.com/the-return-of-sail-power-cargo-ships-are-turning-back-to-the-wind/" target="_blank"
+              rel="noopener noreferrer">The Return of Sail Power: Cargo Ships Are Turning Back to the Wind</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49734929" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 15</a>
+          </h2>
+          <p class="summary">全球航运业在告别风帆一个多世纪后，正通过安装现代化的风力辅助推进系统来降低燃油消耗。这些系统包括利用马格努斯效应的旋转筒（旋筒帆）、硬质翼帆和通过吸气增加升力的吸力帆，旨在与传统发动机协同工作。目前已有超过100艘大型商船采用了此类技术，包括马士基的集装箱船和淡水河谷的巨型矿砂船。尽管风能是免费的且支持旧船改装，但其节省的燃料比例通常仅在个位数到低两位数之间。主要挑战在于风力的不可预测性、甲板空间的占用以及对港口装卸作业的潜在干扰。随着减排压力增大和低碳燃料成本高昂，风力正从实验阶段转向主流航运的补充能源。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>航运业正经历一场“风能回归”，但现代货轮不再依赖传统的布质风帆，而是采用高科技的自动化装置。旋筒帆看起来像巨大的垂直圆柱体，通过旋转产生推力；吸力帆则类似飞机机翼，利用内置压缩机吸入空气以控制边界层并产生升力。这些装置高度自动化，能根据风向和航速自动调整，并配合气象导航软件优化航线以捕捉更多风能。马士基计划在2027年为其8700标准箱的集装箱船安装35米高的旋筒帆，而淡水河谷的巨型矿砂船已经配备了此类系统。这种转变的核心动力是经济与环保的双重压力：全球减排法规日益严苛，而绿色替代燃料依然昂贵且供应不足。</p><p>虽然风能是免费的，但它在现阶段更多是作为推进系统的补充而非主力。对于现有船舶的改装，通常能节省5%到15%的燃料，但在每年消耗数千吨燃油的大型船舶上，这笔节省非常可观。然而，风力推进也面临现实限制，例如巨大的帆柱会占用宝贵的甲板空间，可能阻挡视线或干扰港口起重机作业。此外，风力的不稳定性意味着发动机仍是维持航行计划的核心。未来的趋势是将风力推进与发动机、电池及电力管理系统进行深度集成，而不仅仅是作为一种“外挂”设备。随着更多运营数据的积累，风力辅助推进正逐渐从利基实验走向商业化应用的主流视野。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49736228" target="_blank" rel="noopener noreferrer">@stackghost</a>
+        </div>
+        <p class="comment-text">有两种视觉上相似的帆。一些是旋转管，通过马格努斯效应产生升力，严格来说那些不是“吸力帆”。吸力帆是一个或多或少常规的翼型，内部装有轴流压缩机，基本上是吸入空气，使边界层保持附着，从而通过与飞机机翼相同的机制产生升力。从远处看，对于普通观察者来说，它们非常相似。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论清晰地解释了文章中提到的两种不同风力推进技术的物理原理差异。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49735547" target="_blank" rel="noopener noreferrer">@fsckboy</a>
+        </div>
+        <p class="comment-text">我在一个古老的航海小镇长大，离亚哈船长的出航港口很近，我热爱海洋的浪漫，而且只听海上的劳动号子。对于低价值和散装货物，船舶是有意义的，现代计算机控制的帆修整和风能采集可能会提供很好的理由。但高价值货物如今大部分通过空运。英伟达希望尽快拿到芯片的钱，这些芯片太值钱了，不能在蒸汽船上无所事事地待着。也许利用多余的风能，他们可以在航行途中挖掘比特币？一个有点相关的话题，大约20年前，在“从农场到餐桌”和“购买本地产品”最流行的时候，《纽约时报》指出，从新西兰（那在地图哪里？我找不到）运往纽约市的羊肉，其碳足迹比从纽约州北部农场用卡车运送的羊肉还要低，这就是航运规模经济的体现。但现在，伙计们，我期待着品尝由命运之风送到我门口的新西兰羊肉！</p>
+        <p class="comment-reason"><span>入选理由</span>评论者结合个人背景和航运经济学，指出了航运在碳足迹上的优势以及高价值货物对速度的需求。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49736001" target="_blank" rel="noopener noreferrer">@sien</a>
+        </div>
+        <p class="comment-text">没错。他们每隔十年就和“飞艇回归货运”那帮人轮换一次。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论对“风帆回归”这一周期性话题表达了幽默的怀疑态度，提醒读者这并非新鲜事。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49736029" target="_blank" rel="noopener noreferrer">@dylan604</a>
+        </div>
+        <p class="comment-text">马士基货轮的渲染图真的让这个概念显得很牵强。如果集装箱堆得那么高，难道不会挡住吹向那根孤零零帆柱的风吗？</p>
+        <p class="comment-reason"><span>入选理由</span>评论者提出了一个非常务实的工程问题，即集装箱堆叠高度与风帆效率之间的矛盾。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>航运业重拾风帆听起来像是一种复古的浪漫，但实际上它是极其现实的经济计算。正如评论区所指出的，这种“回归”的话题每隔二十年就会出现一次，往往伴随着油价波动或技术突破。然而，这次的不同之处在于全球碳税和减排法规的硬性约束，使得那5%到15%的燃料节省不再是可有可无的锦上添花。虽然像马士基渲染图中那样高耸的集装箱确实可能干扰气流，但现代流体力学和自动化控制正在努力让这些“大管子”在复杂的甲板环境中发挥最大效用。风能或许无法让芯片运输变快，但对于那些对时间不那么敏感的散装货物，利用免费的自然力显然比昂贵的绿色燃料更具吸引力。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49726955">
+      <summary class="story-overview">
+        <span class="rank-number">13</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">arxiv.org</span>
+            <span>187 points</span>
+            <span>原始 #26 · 低讨论量降权 +0.3</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://arxiv.org/abs/2609.14858" target="_blank"
+              rel="noopener noreferrer">Dream-RSI: Recursive Self-Improvement through Evolving Worlds</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49726955" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 49</a>
+          </h2>
+          <p class="summary">研究人员提出了一种名为 Dream-RSI 的新框架，旨在通过“进化世界”实现 AI 的递归自我改进。该系统的核心是一个搜索控制器，它能动态监控多个 AI 智能体在解决问题时的进步轨迹。与传统的固定计算分配不同，它会将更多资源倾斜给那些表现出持续改进潜力的路径，而放弃已经陷入瓶颈的尝试。这种方法旨在减少人工干预，让 AI 在模拟环境中自主进化。然而，批评者指出，这可能更像是一种高效的训练优化手段，而非真正意义上能无限进化的“自我改进”。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Dream-RSI 框架引入了一种通过模拟环境（即“世界”）的演变来驱动 AI 进步的机制。在这一体系中，多个 AI 智能体并行工作，而一个顶层的搜索控制器负责评估它们的表现。该控制器的关键创新在于它不仅看最终结果，还分析改进的斜率：如果一个智能体在早期就达到了准确率上限，控制器会减少其后续的计算配额；相反，如果一个智能体虽然目前得分不高但仍在稳步攀升，则会获得更多步数的支持。这种递归性体现在系统利用自身的运行数据来不断优化资源分配策略。</p><p>这种方法的优势在于极大地提高了计算效率，避免了在无效路径上的资源浪费。论文作者还公开了完整的提示词（Prompt），允许其他研究者在不同的大模型上复现这一过程。然而，这种模式也面临挑战，即搜索控制器在面对全新领域的问题时，其学到的分配逻辑是否依然有效。此外，学术界对于这是否构成了真正的“递归自我改进（RSI）”存在争议，因为目前的改进仍局限于预设的搜索空间和算法框架内，而非模型架构本身的根本性突破。未来值得关注的是，这种“实验自动化”的思路能否真正演化出超越人类设计水平的算法。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49729522" target="_blank" rel="noopener noreferrer">@eggbrain</a>
+        </div>
+        <p class="comment-text">也许我理解得不对，但我对这篇论文的看法是这样的：想象你有一个想要解决的问题（比如识别 MNIST 数据集中的手写字符）。你告诉 3 个智能体：“嘿，你们每个人都尝试去精通识别这个数据集。你们可以进行 10 步优化来持续改进。”你当然不能给每个智能体无限的步数，因为计算资源是有限的。于是每个智能体都去尝试了，最后，智能体 1 达到了 90% 的准确率，智能体 2 达到了 80%，智能体 3 达到了 89%。智能体 1 显然赢了。但当你查看优化步骤时，发现智能体 1 在 2 步之后就已经达到 90% 了，接下来的 8 步基本没动。而智能体 3 在每一步都在持续提升准确率，但到了第 10 步不得不停止。现在，因为你记录了每个智能体的每一步，你就知道下次该怎么做了——你不会给智能体 1 分配那么多步数，而是给智能体 3 更多步数，因为这可能会让智能体 3 得到更好的答案。根据我的理解，这就是他们构建的“搜索”控制器——一种在应用于新问题时，自动评估并重新应用如何更有效地分配资源的方法。但我困惑的是，这种搜索控制器在应用于新问题时的适用性如何——仅仅因为一条路径在一个问题上早期停滞了，并不意味着它在另一个问题上也会如此？</p>
+        <p class="comment-reason"><span>入选理由</span>该评论通过生动的例子准确地解释了论文中“搜索控制器”和资源分配的核心机制。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49727821" target="_blank" rel="noopener noreferrer">@rybosworld</a>
+        </div>
+        <p class="comment-text">除非我理解错了，否则把这称为 RSI（递归自我改进）似乎有误导性？这看起来像是对当前训练方法的一种优化，而且是很棒的优化，但并不是那种可以永远自我提升的系统意义上的“RSI”。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个关键的定义争议，即该研究是真正的自我改进还是仅仅是训练优化。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49727753" target="_blank" rel="noopener noreferrer">@cmrdporcupine</a>
+        </div>
+        <p class="comment-text">我很确定目前所有的实验室都在做这件事（RSI）。这只是一个他们公开声明的程度以及公关定位的问题。甚至今天的轻量级模型都知道如何编写内核并优化它们。我曾让 DeepSeek 4.1 Flash 对我自己的代码库中的自定义 CUDA 内核进行了疯狂的调优，它完全胜任，而且很便宜。创新的部分将在于支持这一点的“脚手架（harnesses）”。我想这正是这里正在发生的一部分事情。</p>
+        <p class="comment-reason"><span>入选理由</span>从工程实践角度指出，行业内已经在广泛应用类似技术，真正的创新在于支撑这些流程的基础设施。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49728577" target="_blank" rel="noopener noreferrer">@EthanHeilman</a>
+        </div>
+        <p class="comment-text">RSI 现在还有什么具体的含义吗？RSI、AGI，在这一点上似乎都成了流行语。当然，AGI 有可以衡量的定义，比如“在 95% 的智力任务上优于 95% 的人类”，但如果我们使用那个定义，我们已经拥有 AGI 了，而几乎没有人认为我们已经实现了 AGI。我们使用 AI 来训练 AI，再用它来训练 AI，为什么那不是 RSI？需要多少人工干预才意味着它不是 RSI？</p>
+        <p class="comment-reason"><span>入选理由</span>反思了 AI 领域术语定义的模糊性，以及人类干预在自我改进定义中的角色。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这篇关于 Dream-RSI 的论文反映了当前 AI 研究的一个重要趋势：从单纯提升模型参数转向构建能够自主进化的“实验脚手架”。正如评论中所指出的，各大实验室可能已经在内部运行类似的系统，利用 AI 来优化 AI 的训练路径。这种“搜索控制器”本质上是在解决计算资源的边际效用问题，通过识别哪些尝试更有潜力来压榨出更多的性能。然而，我们必须警惕术语的通胀——正如社区所质疑的，如果这只是更聪明的超参数搜索或资源调度，将其冠以“递归自我改进”之名是否言过其实？真正的 RSI 应当涉及模型架构或学习范式的根本性自我重构，而不仅仅是在既定框架内的效率优化。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49733726">
+      <summary class="story-overview">
+        <span class="rank-number">14</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">harnesstax.github.io</span>
+            <span>64 points</span>
+            <span>原始 #17 · 低讨论量降权 +9.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://harnesstax.github.io/" target="_blank"
+              rel="noopener noreferrer">HarnessTax: How Much Does the Harness Matter for Coding Agents?</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49733726" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 18</a>
+          </h2>
+          <p class="summary">HarnessTax 研究揭示了 AI 编程智能体中“框架”（Harness）对成本和性能的巨大影响。框架包含系统提示词、工具定义和交互逻辑，官方框架（如 Claude Code）通常比极简框架更臃肿。研究发现，官方框架会产生显著的“框架税”，即由于提示词冗长导致的额外 Token 成本和响应延迟。这意味着开发者不应盲目迷信官方配套，因为针对特定模型优化的框架并不总能带来最佳性价比。然而，这种“税收”往往源于安全和对齐指令，精简框架虽然高效，但可能在安全性上有所妥协。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>HarnessTax 项目通过对 Claude Code、GPT Codex 和 Pi-Agent 等编程智能体框架的对比，探讨了“框架”如何影响 AI 的实际表现。研究指出，所谓的“框架”是指包裹在底层大模型之外的系统提示词、工具调用接口和任务编排逻辑。官方工具为了确保输出的安全性和遵循特定指令，往往内置了极其复杂的系统提示词，这在每次对话中都会产生高昂的 Token 开销和延迟。实验数据显示，使用官方框架的成本有时是极简框架的数倍，这种现象被形象地称为“框架税”。</p><p>更有趣的发现是，模型与框架的“跨界配对”往往能产生意想不到的效果。例如，Claude 3.5 Sonnet 在某些第三方极简框架下的表现甚至优于在其官方框架下的表现，这挑战了“原厂优化即最优”的传统认知。然而，这种效率的提升并非没有代价。官方框架的“臃肿”很大程度上是为了实现安全对齐和防止恶意代码生成，而极简框架往往去除了这些护栏。开发者在选择工具时，必须在追求极致响应速度的“轻量化”与保障企业级安全的“重型化”之间进行权衡。未来，如何优化框架的 Token 利用率同时不牺牲安全性，将是编程智能体领域的重要课题。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49734986" target="_blank" rel="noopener noreferrer">@jswelker</a>
+        </div>
+        <p class="comment-text">Claude Code 和 Codex 框架中多出来的“重量”很大程度上（表面上？）是为了安全和对齐目的。它们是否有效还是个悬而未决的问题，但如果撇开这些维度并称之为“税收”是不诚实的，这只是把不安全性转化为了负外部性。“为什么要交垃圾处理税？直接倒进大海是免费的！”Pi 框架为了速度和简洁主动省略了任何形式的护栏和沙箱，所以它更快更简单并不令人惊讶。为了模糊的安全名义而让成本翻倍是大企业的标准操作程序，甚至可能还算挺便宜的。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提出了一个关键的对立观点，即所谓的“框架税”实际上可能是为了安全而付出的必要成本。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49735038" target="_blank" rel="noopener noreferrer">@Supermancho</a>
+        </div>
+        <p class="comment-text">这里的“框架”（harness）一词被过度借用来指代“智能体”（agent），这令人担忧。撇开这一点不谈，有很多因素都很重要：框架的上下文、执行模式（并行 vs 串行）、委派给其他模型的能力等。最优的框架会使用并发执行和子智能体，而不是困在单一模型上。无论原生智能体的上下文（指令）如何，这些策略都会极大地影响成本和性能。这种单一框架的分析是浅薄且具有误导性的，尽管“供应商特定的优化并不保证最佳配对”这一发现可能是正确的，这取决于你如何衡量。这只是一个起点。</p>
+        <p class="comment-reason"><span>入选理由</span>评论从架构设计和术语定义的角度对研究进行了深度反思，指出了研究的局限性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49735592" target="_blank" rel="noopener noreferrer">@corv</a>
+        </div>
+        <p class="comment-text">我自己的发现与这项研究一致：拥有一个编程框架至关重要，但它们之间的差异被夸大了。就我个人而言，我已经用 Pydantic-AI 的薄封装替换了 OpenCode，作为 Pi-Agent 的 Python 化模拟，通过 Hermes 进行无头使用。它们都能完成工作——我只是更喜欢为了访问控制而进行模块化。保持框架的表面积微小还有一个额外的好处，那就是能保持我的理解力，并能毫不费力地将其调整到我喜欢的流程中。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了开发者在实际工作中如何通过简化框架来提升可控性和效率的经验。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49735638" target="_blank" rel="noopener noreferrer">@x312</a>
+        </div>
+        <p class="comment-text">Claude Code/Codex 让用户为他们极其臃肿的“一刀切”系统提示词买单（包括安全指令和用户不想要的其他东西）。根据我的经验，如果你正在使用 OpenAI/Claude 模型并支付 API 成本，几乎任何其他框架在成本上都能击败 Claude Code/Codex。</p>
+        <p class="comment-reason"><span>入选理由</span>直白地指出了官方框架在商业成本上的劣势，反映了许多 API 用户的真实痛点。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>HarnessTax 的研究揭示了 AI 编程领域一个尴尬的现实：我们可能正在为那些我们并不完全需要的“安全提示词”支付巨额账单。正如评论中所指出的，官方框架的臃肿往往源于企业对安全和对齐的刚需，这就像是一场“垃圾处理税”与“向大海倾倒垃圾”的博弈。虽然极简框架在性能和成本上极具诱惑力，但对于企业级应用而言，这种“裸奔”带来的风险可能远超节省下来的 Token 费用。开发者面临的真正挑战在于，如何在不牺牲安全性的前提下，通过更精妙的架构（如并发执行或子智能体委派）来规避这种低效的“框架税”。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49735367">
+      <summary class="story-overview">
+        <span class="rank-number">15</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">bbc.com</span>
+            <span>9 points</span>
+            <span>原始 #16 · 低讨论量降权 +12.9</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.bbc.com/news/articles/c60m3k28j81mo" target="_blank"
+              rel="noopener noreferrer">Part-human part-mouse brain developed in science breakthrough</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49735367" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 7</a>
+          </h2>
+          <p class="summary">科学家在神经科学领域取得突破，成功培育出含有部分人类细胞的小鼠大脑。这项发表在《自然》杂志上的研究，旨在为研究人类精神疾病和脑部疾病提供更准确的模型。通过将人类神经元整合到活体小鼠大脑中，研究人员可以在复杂的生理环境下观察这些细胞的功能。科学家强调，这些小鼠并不具备人类的思维或意识，其认知能力仍属于小鼠范畴。尽管该研究通过了独立伦理审查，但这种跨物种嵌合体的实验依然引发了公众对生物伦理边界的讨论。该技术的主要局限在于，目前尚不清楚人类细胞在异种环境下的表现是否能完全代表人类大脑的真实病理。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这项研究的核心在于解决传统实验室培养皿无法模拟复杂脑部环境的问题。研究人员将人类干细胞衍生的神经元植入发育中的小鼠大脑，使这些人类细胞能够与小鼠自身的神经系统建立连接并共同生长。这种“人鼠嵌合脑”为观察人类神经元在真实生物体内的发育、信号传递以及对药物的反应提供了前所未有的窗口。科学家希望借此深入了解自闭症、精神分裂症等难以在纯动物模型中复现的精神障碍。通过这种方式，研究者可以观察特定基因突变如何影响人类神经元的物理结构和电信号。</p><p>尽管技术上令人振奋，但研究面临着巨大的伦理和科学挑战。科学界长期面临“在小鼠身上有效但在人类身上失败”的药物研发困境，引入人类细胞正是为了提高实验的临床相关性。然而，如何界定这些嵌合体的“人性”程度是一个极其敏感的话题。为此，研究团队明确表示，人类细胞的比例和分布受到严格控制，不会改变小鼠的基本行为模式。他们强调，这些实验动物并没有产生类人智慧，依然保持着小鼠的本能。未来的研究将观察这些人类神经元在长期发育中是否会表现出更复杂的病理特征，以及这种模型在筛选新药方面的实际转化效率。这种跨物种的生物尝试，无疑将持续引发关于科学进步与伦理底线之间权衡的激烈辩论。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49736063" target="_blank" rel="noopener noreferrer">@theseamusjames</a>
+        </div>
+        <p class="comment-text">好消息：我们非常擅长治愈小鼠的疾病。一直以来，我们都试图寻找在人类身上能产生与小鼠相同效果的药物，但直到现在，还没有人有这种洞察力或勇气去问这样一个问题：“如果我们直接让人类变得更像小鼠呢？” 真是令人兴奋的东西。</p>
+        <p class="comment-reason"><span>入选理由</span>以幽默讽刺的方式指出了医学研究中动物模型与人类临床效果之间长期存在的巨大鸿沟。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49736112" target="_blank" rel="noopener noreferrer">@LoganDark</a>
+        </div>
+        <p class="comment-text">我觉得即使你把人类细胞放进去，也很难描述精神疾病是如何转化为小鼠表现的。（“精神障碍” = 心理疾病）</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个关键的科学质疑：即使拥有人类细胞，小鼠的行为表现是否真的能对应人类复杂的精神病理。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49736232" target="_blank" rel="noopener noreferrer">@yieldcrv</a>
+        </div>
+        <p class="comment-text">&gt; 科学家们表示，虽然大脑中带有部分人类细胞的小鼠听起来像是一场卡夫卡式的实验，但这些并不是“像人类一样思考的小鼠”。
+哦，谢天谢地。</p>
+        <p class="comment-reason"><span>入选理由</span>引用了文章中关于伦理边界的重要免责声明，反映了公众对该类实验最直观的恐惧。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49736069" target="_blank" rel="noopener noreferrer">@bygosh</a>
+        </div>
+        <p class="comment-text">&gt; 科学家们表示，他们发表在《自然》杂志上的这项工作是在独立的伦理审查下进行的。
+哦，我猜那就没什么好担心的了。</p>
+        <p class="comment-reason"><span>入选理由</span>对所谓的“独立伦理审查”表达了怀疑态度，反映了公众对生物技术监管透明度的不信任。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这种“人鼠合体”的实验听起来像是科幻小说里的情节，但它反映了现代医学的一个无奈现实：我们太擅长治愈小鼠，却在人类脑部疾病面前束手无策。虽然研究者极力保证这些小鼠不会“像人一样思考”，但这种生物边界的模糊依然让人感到不安。正如评论区提到的，这种实验让人联想到《献给阿尔吉侬的花束》或《尼姆鼠》，科学在追求治愈疾病的同时，也在不断挑战我们对生命定义的认知。需要注意的是，由于原始链接文本与标题存在偏差（正文提及果蝇研究），本分析主要基于标题及相关学术背景。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49727659">
+      <summary class="story-overview">
+        <span class="rank-number">16</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">institute.deepmind.com</span>
+            <span>156 points</span>
+            <span>原始 #29 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://institute.deepmind.com/" target="_blank"
+              rel="noopener noreferrer">The DeepMind Institute</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49727659" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 52</a>
+          </h2>
+          <p class="summary">Google DeepMind 成立了 DeepMind Institute (DMI)，这是一个旨在探讨通用人工智能 (AGI) 对社会和政策影响的平台。该机构通过发布研究论文，讨论如何应对 AI 达到人类认知水平后的世界，涵盖经济政策和 AI 治理等议题。DMI 并非独立的非营利组织，而是 Google 内部的研究论坛，其观点不代表公司官方立场。其核心目标是为 AGI 时代的挑战提供前瞻性思考，并试图引导全球 AI 政策的讨论方向。然而，批评者认为这可能是 Google 试图通过倡导“谨慎”来制约竞争对手，且 AGI 是否真的近在咫尺仍存巨大争议。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>DeepMind Institute (DMI) 的定位是一个汇集 Google 内部及外部研究者的思想平台，专注于 AGI 时代的“大胆思考”。它首批发布的文章深入探讨了经济韧性，提出了从轻微波动到重大变革的三种情景，并建议通过 AI 评估器来辅助政策制定。这种做法试图将 AI 从单纯的技术工具提升为社会治理的参与者，例如利用 AI 来衡量政策的有效性。在机制上，DMI 强调其研究的独立性，明确声明文章仅代表作者个人观点而非 Google 官方立场。这种灵活的架构允许研究人员探讨更具争议的话题，如 AI 利润共享或激进的失业保险改革，而无需公司承担直接的政治责任。</p><p>目前，外界对 DMI 的反应两极分化。支持者认为其研究比一般的公关稿更具深度和学术价值，尤其是对经济影响的量化分析。怀疑者则指出，在 Google 追赶 OpenAI 的背景下，这种强调“谨慎”和“政策引导”的姿态可能带有竞争策略的考量，旨在通过监管手段限制那些“跑得太快”的对手。此外，关于 AGI 定义的争论依然激烈，虽然 DMI 认为 AGI 正在逼近，但许多人认为当前的 AI 在长期记忆、物理灵活性和真正的跨领域通用性方面仍有本质缺陷，目前的成就更多是基于海量数据的模式匹配而非真正的认知突破。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49731831" target="_blank" rel="noopener noreferrer">@spyckie2</a>
+        </div>
+        <p class="comment-text">他们的经济政策文章相当不错：
+- 需要对我们关心的事物进行更快、更好、更准确的衡量
+- 提出了从轻微到重大颠覆的 3 种影响情景
+- 轻微影响下的政策都很合理，比如扩大失业保险和劳动所得税抵免
+- 重大颠覆下的政策也非常逻辑化，强调分享 AI 的利润份额
+- 使用 AI 评估器来对政策的有效性进行排序和权衡
+在我看来，这篇文章投入了大量的思考、研究和工作。我知道人们会抱怨使用 AI 评估器来对政策有效性进行评分和权衡，但如果你读过任何研究论文，就会发现它们通常采用研究者评估评分，这翻译过来就是：“我，一个 26 岁、还没工作过的博士生，和我那个陪我熬通宵的室友，告诉我他对这个课题的感觉”。我认为把这些文章贬低为和 Dario 或 Sam 的博客文章/演讲/号召书同等水平是不对且懒惰的，这些是真正的研究论文。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论对 DMI 发布的研究内容给出了正面评价，并对比了其与普通公关稿件在学术深度上的差异。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49730459" target="_blank" rel="noopener noreferrer">@nsagent</a>
+        </div>
+        <p class="comment-text">他们只是想引导 AI 政策讨论。这基本上就是一个内部智库。它具备了智库的所有特征，尤其是那些不祥的预言，比如：
+“今天的 AI 系统拥有令人印象深刻的能力，快速的创新步伐表明我们正接近通用人工智能 (AGI)，即一种展现出人类大脑所有认知能力的系统。”
+我不确定我们是否接近人类大脑的所有认知能力……甚至连严重受损的大脑水平都还没达到。</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了 DMI 作为企业内部智库的本质，并对 AGI 即将到来的前提表示怀疑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49731688" target="_blank" rel="noopener noreferrer">@credit_guy</a>
+        </div>
+        <p class="comment-text">这是我对“领先优势”问题的看法。递归式自我改进可以极大地加速 AI 的进步。谁先搞定它，谁就拥有巨大的先发优势。但 OpenAI 采取的是“快速行动，打破常规”的态度。这让 Anthropic 的日子非常难过：当你坚持“三思而后行”时，你的竞争对手却在到处横冲直撞，你该如何保持优势？
+Google 反正已经稍微落后了，所以他们非常乐意加入呼吁对 AI 开发采取更谨慎态度的行列。因此才有了 DeepMind Institute。Sam Altman 别无选择，只能假装同意所有这些想法。不然他还能说什么呢？</p>
+        <p class="comment-reason"><span>入选理由</span>从行业竞争的角度分析了 Google 成立该机构并倡导谨慎态度的潜在战略动机。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49734182" target="_blank" rel="noopener noreferrer">@talon8635</a>
+        </div>
+        <p class="comment-text">目标似乎每周都在变：
+它甚至不能玩基础视频游戏！
+现在它可以了。
+它永远赢不了人类顶尖围棋选手！
+现在它可以了。
+它甚至拍不出威尔·史密斯吃东西的视频！
+现在它可以了。
+它做不了基础数学！
+现在它可以了。
+它的编程能力不如初级程序员？
+现在它可以了。
+它通过不了律师资格证或其他证书考试！
+现在它可以了。
+它永远见不到高级程序员的水平！
+现在 Linus 说它编程比他还厉害。
+它做不了高等数学！
+现在它可以了。
+它解决不了人类解决不了的数学问题！
+现在它可以了。
+它做不了递归自我改进 (RSI)
+……</p>
+        <p class="comment-reason"><span>入选理由</span>通过列举 AI 突破的历史，反驳了那些认为 AGI 遥不可及的观点，展示了技术进步的动态性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>DeepMind Institute (DMI) 的成立标志着 AI 巨头们正从“技术竞赛”转向“规则竞赛”。通过建立这样一个看似学术的智库，Google 实际上是在尝试定义 AGI 时代的议程。虽然其发布的经济政策研究确实比普通的 CEO 博客更具深度，但我们不能忽视其背后的商业逻辑：当技术领先优势不稳固时，通过政策讨论来“减速”或“规范”行业，往往是巨头们制约激进对手的标准动作。正如评论所言，这更像是一个旨在引导政策走向的内部智库，而非纯粹的科学研究机构。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49721291">
+      <summary class="story-overview">
+        <span class="rank-number">17</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">labs.watchtowr.com</span>
+            <span>6 points</span>
+            <span>原始 #15 · 低讨论量降权 +15</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://labs.watchtowr.com/a-32-year-old-bug-walks-into-a-telnet-server-gnu-inetutils-telnetd-cve-2026-32746/" target="_blank"
+              rel="noopener noreferrer">A 32-Year-Old Bug Walks into a Telnet Server</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49721291" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 0</a>
+          </h2>
+          <p class="summary">安全研究人员在 GNU inetutils 的 Telnet 服务中发现了一个潜伏 32 年之久的严重漏洞（CVE-2026-32746）。该漏洞源于 1994 年的代码，存在于处理行模式字符协商的逻辑中，属于预身份验证的缓冲区溢出。攻击者可以通过发送特制的协议协商数据包，溢出全局变量并覆盖相邻内存，理论上可实现远程代码执行。尽管 Telnet 已逐渐被 SSH 取代，但它在工业控制、嵌入式设备和旧版 Linux 系统中仍广泛存在。漏洞利用面临协议字节处理和内存对齐等技术挑战，但其广泛的影响范围不容忽视。目前主流发行版已发布补丁，建议相关管理员立即更新。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>CVE-2026-32746 是一个存在于 GNU inetutils `telnetd` 中的 BSS 段缓冲区溢出漏洞，其历史可追溯至 1994 年。该漏洞发生在 Telnet 协议的 LINEMODE 特性协商过程中，具体是 SLC（设置行模式字符）处理函数在存储客户端发送的三元组数据时，未进行边界检查。由于许多厂商的 Telnet 实现都基于这段古老的代码，该漏洞的影响范围涵盖了几乎所有主流 Linux 发行版以及大量嵌入式系统。</p><p>在技术实现上，攻击者通过发送特定的 SLC 三元组来触发溢出，但实际利用过程非常复杂。协议会将 0xFF 字节翻倍处理，且对功能码有严格限制，这使得在 64 位系统上构造精确的内存覆盖（例如覆盖包含多个零字节的指针）变得极其困难。研究人员在 32 位 Debian 系统上演示了一种利用思路：通过巧妙安排协商顺序，诱导程序对攻击者受控的地址调用 `free()` 函数，从而获得强大的内存操作原语。这种“释放任意地址”的能力在特定 libc 环境下可转化为完全的系统控制权。</p><p>尽管 Telnet 在现代互联网中已不常见，但在对实时性要求高或硬件资源极度受限的工业环境（如 CNC 机床）中，它依然是不可或缺的工具。这次发现提醒人们，即使是运行了数十年的“稳定”代码也可能隐藏着致命缺陷。目前，GNU inetutils 已发布修复补丁，建议所有仍在运行 Telnet 服务的管理员立即更新，或尽可能迁移到更安全的 SSH 协议，以规避此类遗留代码带来的风险。</p></div>
+        
+        <div class="comments-empty">
+          这条讨论暂未选出真正值得占用你注意力的评论。
+        </div>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这是一个典型的“僵尸漏洞”案例：一段写于 30 多年前的代码，在没有任何人怀疑的情况下运行至今，直到被安全研究员重新审视。它揭示了软件供应链中一个残酷的现实——古老的代码片段通过复制粘贴和分叉，悄无声息地渗透到了现代系统的每一个角落。虽然在开启了现代保护机制的 64 位系统上利用该漏洞极具挑战，但在那些无法轻易升级、缺乏内存保护的嵌入式和工业遗留系统中，它依然是一颗随时可能被引爆的定时炸弹。这也再次证明，‘老旧’并不等同于‘可靠’，有时仅仅意味着它还没被足够聪明的人盯上。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49726586">
+      <summary class="story-overview">
+        <span class="rank-number">18</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">wired.com</span>
+            <span>492 points</span>
+            <span>原始 #31 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.wired.com/story/hackers-flock-camera-data-shows-how-system-works/" target="_blank"
+              rel="noopener noreferrer">Hackers Got Inside a Flock Camera</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49726586" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 229</a>
+          </h2>
+          <p class="summary">黑客组织 stegan0gram 物理拆除了一台 Flock Safety 监控摄像头，并成功提取了其内部存储数据。分析显示，该系统不仅追踪车牌，还能利用计算机视觉识别行人、自行车以及车贴等微小细节。尽管公司宣称数据经过加密，但黑客在未加密分区中找到了密钥，从而解锁了数千段监控视频。在短短三周内，单台设备就生成了超过 160 万张图像，暴露出极高的监控强度。此事再次引发了公众对大规模监控滥用以及此类设备物理安全脆弱性的严重担忧。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>黑客组织 stegan0gram 通过物理拆除路边摄像头的方式，获取了 Flock Safety 监控系统的底层数据。虽然 Flock 官方一直强调其设备具备“在机加密”功能，但黑客发现该设备的 Android 系统中存在未加密的“vendor”和“media”分区，并在其中找到了用于解锁视频和图像的加密密钥。通过对提取数据的分析，研究人员发现该摄像头的监控范围远超车牌识别：它能主动检测行人、骑行者，甚至能清晰捕捉到摩托车侧包上的美国国旗贴纸等细节。在 21 天的记录期内，这台设备拍摄了约 5 万辆车，产生了惊人的 160 万张图像。</p><p>技术细节显示，该系统的软件实现相当粗糙。日志记录了超过 2.7 万次“设备空间不足”的错误，导致系统频繁崩溃和重启，而代码中竟然还包含“谁是好孩子？！”这种不专业的调试信息。更严重的是，设备中存在硬编码的 API 密钥，可能允许攻击者进一步渗透 Flock 的服务器。目前，Flock 的全国性网络允许数千个机构共享数据，此前已被曝出用于追踪跨州堕胎等敏感行为。这次泄露不仅证明了物理接触即可瓦解其安全防线，也揭示了这种全方位监控系统在缺乏监管下的运作现状，未来此类设备的物理防破坏设计和数据合规性将面临更严苛的审查。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49729194" target="_blank" rel="noopener noreferrer">@vayup</a>
+        </div>
+        <p class="comment-text">如果你想知道一个“漏洞披露政策”（VDP）如果主要目的是为了宣称自己有 VDP 并营造一种负责任的安全姿态，而不是真的想了解漏洞，那它长什么样——去读读 Flock 的 VDP 吧。他们“诚挚欢迎”你披露漏洞，除非你必须与设备/服务进行“交互”或下载其数据。除了这个“微小”的排除条款外，一切都没问题。噢，如果漏洞是关于 SSL/TLS 等配置和加固“偏好”的——抱歉，不感兴趣。还有像 DNS 配置这样的基础设施漏洞——不不不，再接再厉吧。我知道你在想什么……哈哈……但我们是好人。你仍然可以报告上述类别的漏洞，但责任在你，你得说服我们为什么要关心这些漏洞。这很公平。https://www.flocksafety.com/legal/vulnerability-disclosure-policy</p>
+        <p class="comment-reason"><span>入选理由</span>该评论尖锐地指出了 Flock 公司在安全政策上的虚伪性，揭示了其漏洞披露政策实际上是在规避真正的安全审查。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49734178" target="_blank" rel="noopener noreferrer">@autoexec</a>
+        </div>
+        <p class="comment-text">使用硬编码凭据是完全不称职的表现。在这个案例中，虽然它不是密码，但却是一个可以用来请求凭据（以明文存储）的 API 密钥，这些凭据看起来能让你访问 Flock 的服务器。虽然不像硬编码管理员密码那么糟糕，而且目前还不清楚如果你以摄像头的身份成功认证后能做些什么，但这已经足够令人担忧了。Flock 的系统中已经发现了足够多的漏洞，很明显他们并不关心自己的安全性，而且显而易见，他们根本不在乎我们的隐私或安全。即使我们认为这种对美国公众的大规模监控是可以接受的，Flock Safety/Flock Group 也已经证明了他们不能、也不应该被信任去实施这种监控。</p>
+        <p class="comment-reason"><span>入选理由</span>评论从技术角度分析了硬编码密钥的严重性，并对该公司的信任度提出了根本性质疑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49727184" target="_blank" rel="noopener noreferrer">@iamnothere</a>
+        </div>
+        <p class="comment-text">我想我应该开始在 Flock 的讨论帖里发个提醒：Axon 是 Flock 的竞争对手，同样在从事大规模监控，甚至可能更糟，但很少有人提到它。记者们需要深挖一下那里。这不应该只是 Flock 的新闻，否则 Flock 可能只是被收购掉，然后大家就各忙各的了。（以上内容不应被解读为支持 Flock 或阻碍进一步调查。）
+&gt; 摄像头的日志还显示它在存储方面挣扎。日志记录了超过 27,000 条在尝试保存全分辨率图像时的“设备空间不足”错误，以及数万条相关的错误、崩溃和重启。与此同时，大约每两分钟，代码就会检查摄像头是否仍在运行，并记录一条消息：“谁是好孩子？！”恢复的日志中出现了超过 12,000 条此类消息。
+笑死我了。</p>
+        <p class="comment-reason"><span>入选理由</span>评论揭示了代码中荒诞的调试信息，并提醒公众关注监控行业的其他巨头。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49727757" target="_blank" rel="noopener noreferrer">@petcat</a>
+        </div>
+        <p class="comment-text">&gt; 根据我们的分析，摄像头的日志记录了几个时间段内约 21 天的活动。在这些窗口期内，该设备拍摄了大约 50,200 辆车，并生成了约 160 万张图像。在典型的一天里，它记录了大约 3,300 辆车，最高峰达到 4,454 辆。
+有没有关于这台摄像头是在哪个州被找回的报告？新罕布什尔州对非命中车牌数据有严格的 3 分钟删除规定 [1]。
+[1] (N.H. Rev. Stat. § 261:75-b) 要求 ALPR 系统在 3 分钟内删除非命中车牌数据。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论引入了法律合规性的视角，指出该设备的数据留存行为可能违反了某些地区的法律。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Flock Safety 的这次翻车再次证明了“安全通过隐匿实现”的彻底失败。一个旨在通过监控提升公共安全的系统，其自身的物理和逻辑安全却如此不堪一击：未加密分区存放密钥、硬编码 API 凭据，甚至在日志中用“谁是好孩子？！”这种戏谑的语言来掩盖系统频繁崩溃的窘境。正如评论所指出的，这种技术上的不专业与该公司在隐私政策上的傲慢（如其近乎摆设的漏洞披露政策）形成了鲜明对比。当一个能够追踪行人细节、识别车贴并建立全国性数据库的系统掌握在这样一家公司手中时，它所带来的安全隐患可能远超其宣称解决的犯罪问题。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49732087">
+      <summary class="story-overview">
+        <span class="rank-number">19</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">cosmicave.org</span>
+            <span>45 points</span>
+            <span>原始 #25 · 低讨论量降权 +6.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://cosmicave.org/2026/09/15/why-does-the-universe-expand/" target="_blank"
+              rel="noopener noreferrer">Why Does the Universe Expand?</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49732087" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 28</a>
+          </h2>
+          <p class="summary">本文作者挑战了现代宇宙学的标准模型（ΛCDM），认为它像“弗兰肯斯坦的怪物”一样充满了为了匹配观测数据而添加的补丁。作者指出，标准模型无法从物理机制上解释宇宙为何膨胀，只能将其归结为大爆炸初期的某种初始动量。通过打破“物质在宇宙中平均处于静止”的传统假设，作者提出了一种新的几何框架，将物质视为沿着类似光线的路径运动。在这种模型下，宇宙的膨胀变成了几何上的必然结果，且计算出的膨胀率与观测数据高度吻合。然而，这一理论目前仅属于作者的个人研究，尚未获得物理学界的广泛共识。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>文章作者以哥白尼推翻地心说为类比，批评当前的宇宙学标准模型过于依赖暴胀和暗能量等“人为拨盘”来解释现象。在标准模型中，物质和辐射实际上是在减缓膨胀，而宇宙之所以还在膨胀，仅仅是因为它在 $t=0$ 时刻以无限大的速率开始。作者认为，这种“描述即解释”的现状并不能令人满意。他在博士研究期间尝试打破宇宙学中“共动坐标系”的对称性假设，即不再假设物质在大尺度上是静止的。</p><p>作者构建了一个类似于黑洞内部的相对论时空模型，其中物质沿着通常分配给光子的世界线运动。通过这种重新分配，他发现时空几何本身会强制产生一个膨胀率，且该速率在数学上与目前观测到的 ΛCDM 膨胀率完全一致，而无需引入暗能量。这种模型试图将宇宙膨胀从一种“偶然的初始状态”转变为一种“几何的必然属性”。尽管这种视角在逻辑上具有吸引力，但它面临着巨大的挑战：它必须证明自己不仅能解释膨胀率，还能在不破坏广义相对论其他成功预测的前提下，解决早期宇宙的微波背景辐射等复杂观测数据。目前，这仍是一个非主流的个人理论，在学术界引发了关于“科学解释”与“数学凑数”之间界限的讨论。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49734745" target="_blank" rel="noopener noreferrer">@snarkconjecture</a>
+        </div>
+        <p class="comment-text">“标准宇宙学模型没有提供此类解释”——爱因斯坦广义相对论 → 弗里德曼方程 → 宇宙可以是膨胀的也可以是收缩的。剩下的内容无非是在说“初始条件怎么办？在 t→0 时事物会变得发散”。是的，这被称为大爆炸奇点，广义相对论在那里失效了。你不是第一个注意到这一点的人，这被认为是该领域最大的开放性问题之一。关于加速膨胀的那部分内容逻辑混乱（像是 AI 生成的废话），最后绕了一大圈才承认在 t&gt;0 时没有问题，而在 t=0 时现有的问题也没有改变，所以我不知道你为什么不直接把它删掉。这种内容简直就是那种“寄给物理系的骚扰信”级别的，即使是在 HN 上，看到它出现在首页也挺让人尴尬的。我猜是因为硅谷的每个码农都梦想着出于某种原因推翻死板的物理学权威吧。</p>
+        <p class="comment-reason"><span>入选理由</span>这篇评论代表了物理学界对非主流理论的典型严厉批评，指出了文章在基础物理理解上的潜在偏差。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49736053" target="_blank" rel="noopener noreferrer">@mellosouls</a>
+        </div>
+        <p class="comment-text">请注意，这个网站似乎是围绕一位科学家的个人理论建立的，而不是对该领域共识的陈述。在这方面，可能类似于哈拉雷（Harari）那样更出名的人物。作者似乎确实有合法的科学背景，但他反复暗示其工作的革命性，这有点像“民科”行为；这是一个个人博客，所以可能他只是需要一个好的编辑（他说他在其他地方发表过文章）。阅读时请记住这一点——并不是说从中得不到任何收获，但稳固的理论与投机性的哲学信念之间的界限可能并不清晰——公平地说，这在某种程度上也是这个领域的常态。</p>
+        <p class="comment-reason"><span>入选理由</span>提醒读者注意信息来源的性质，即这并非主流科学共识，而是带有个人色彩的理论探索。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49735525" target="_blank" rel="noopener noreferrer">@daishi55</a>
+        </div>
+        <p class="comment-text">哇，真是篇精彩的文章！
+&gt; “在物理学中，描述即解释”（作者引用他博士导师的话）
+是的，我一直很讨厌物理学的这一点。它似乎是唯一一个觉得没有责任解释“为什么”，而认为决定“是什么”就足够了的科学领域。我祝愿作者取得成功，这样我总有一天能读到一个关于物理学中某些“为什么”的令人满意的答案。</p>
+        <p class="comment-reason"><span>入选理由</span>反映了普通读者对物理学哲学层面的共鸣，即对底层逻辑解释的渴望。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49735483" target="_blank" rel="noopener noreferrer">@pdonis</a>
+        </div>
+        <p class="comment-text">维基百科文章中所谓的“证据”实际上并不是证据。它们并不是我们实际观察到的、由该模型预测的事物。它们只是在假设该模型正确的前提下，听起来似乎合理的东西。而且还有一个巨大的理由让人怀疑这类模型是否可行，维基百科的文章直接略过了它：
+“根据此类情景，我们可观测的宇宙诞生于一个存在于更大宇宙中的黑洞，而这个黑洞在某些时刻可能会表现为白洞。”
+问题在于，白洞有一个“过去视界”。换句话说，它是一个带有视界的孤立系统，视界之外是无限的真空。我们没有任何证据表明存在这样的东西，而且这怎么可能呢？过去视界必须从一开始就“内置”在宇宙中。它不像黑洞及其“未来视界”那样，可以通过引力坍缩等物理过程产生。</p>
+        <p class="comment-reason"><span>入选理由</span>针对文中提到的“宇宙黑洞模型”提供了具体的技术性反驳，增加了讨论的深度。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>物理学界长期存在一种张力：一方满足于用精确的数学公式“描述”宇宙（如 ΛCDM 模型），另一方则执着于追问“为什么”会这样。本文作者显然属于后者，他试图通过挑战宇宙学中最基础的“共动”假设，用几何必然性来取代暗能量这种被他视为“补丁”的概念。虽然这种“宇宙即黑洞”的个人理论在严谨的同行眼中往往带有“民科”色彩（如评论 49734745 所言），但它确实触及了标准模型中那些令人不安的逻辑断层。正如评论区所指出的，物理学对“为什么”的追求往往在奇点面前碰壁，而任何试图推翻现有大厦的尝试，都必须在解释力上远超那些虽然丑陋但极其精准的旧模型。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49734171">
+      <summary class="story-overview">
+        <span class="rank-number">20</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">independent.co.uk</span>
+            <span>187 points</span>
+            <span>原始 #32 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.independent.co.uk/news/world/australasia/canda-eu-membership-australia-us-trade-b3050227.html" target="_blank"
+              rel="noopener noreferrer">Australia says it could follow Canada in forging deeper ties with EU</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49734171" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 148</a>
+          </h2>
+          <p class="summary">澳大利亚政府表示，正密切关注加拿大寻求与欧盟建立“准成员”或“独特联盟”关系的动向，并可能效仿。此举背景是澳大利亚在面临美国关税压力后，急于实现贸易多元化，以应对日益抬头的保护主义。尽管澳美拥有长期的安全和贸易协议，但堪培拉方面希望通过深化与欧盟的关系来保障经济繁荣。目前，加拿大正与欧盟讨论在AI、能源和关键矿产等领域的自由流动，澳大利亚对此表现出浓厚兴趣。然而，地理距离是双方在基础设施互联方面的主要障碍。这种外交转向反映了传统盟友关系在当前全球政治波动下的微妙重组。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>澳大利亚贸易部长唐·法雷尔（Don Farrell）近期明确表示，澳大利亚与加拿大在寻求与欧盟建立更深层联系方面“步调一致”。此前有报道称，加拿大总理马克·卡尼正在探索一种“准成员”身份，旨在让加拿大在不完全加入欧盟的情况下，实现商品、服务及关键领域劳动力（如AI、能源和国防）的自由流动。澳大利亚在今年3月刚与欧盟签署了自由贸易协定，但面对美国不断升级的贸易保护主义和关税威胁，堪培拉显然希望更进一步。法雷尔强调，世界正分裂为保护主义者和自由贸易者，而澳大利亚过去50年的繁荣完全依赖于全球参与。</p><p>尽管意图明确，但澳大利亚的这一转型面临现实挑战。与加拿大紧邻欧洲不同，澳大利亚与欧洲的巨大地理跨度使得光纤电缆等物理基础设施的深度整合变得不切实际。此外，澳大利亚长期以来作为大宗商品出口国，缺乏高端制造业，这使其在与欧盟进行高科技和工业整合时处于不同的议价地位。评论界认为，这种动向不仅是经济上的避险，也反映了自二战以来澳大利亚从紧跟英国到紧跟美国的战略重心可能再次发生偏移。未来，澳大利亚将视加拿大与欧盟谈判的具体成果，来决定其“独特联盟”的具体形式和深度。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49734681" target="_blank" rel="noopener noreferrer">@bhaak</a>
+        </div>
+        <p class="comment-text">这是冯德莱恩和马克·卡尼（我猜他也参与其中了）的一记妙招。目前欧盟条约中并没有定义所谓的“准成员”身份，尽管关于非全额成员特殊地位的想法已经流传了一段时间。如果仅仅称之为“独特联盟”或“深化关系”，可能不会产生如此大的公众效应。现在，X平台上一半的右翼大V都快疯了，因为当美国“提议”加拿大加入时，加拿大坚决说了“不”，但面对欧盟，他们却敞开了大门。特朗普甚至表示，如果加拿大作为准成员加入欧盟，可能被视为敌对行为。这一切都源于一个没人知道具体包含什么的身份——肯定比简单的贸易协定要多，但也远少于正式的成员国身份。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地指出了“准成员”这一术语在政治修辞上的巧妙之处及其引发的国际反应。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49734709" target="_blank" rel="noopener noreferrer">@mindwok</a>
+        </div>
+        <p class="comment-text">作为一名澳大利亚人，我个人察觉到一种转变：与10年前相比，我现在觉得自己在文化上更认同“欧洲”。那时我觉得我们就像美国的第51个州，感觉和美国非常亲近。其他人似乎也有同感。我记得读过一份调查，询问澳大利亚人谁是他们最亲密的国际朋友。十多年来，美国一直占据榜首（大概是在90年代末从英国手中夺走的）。但最近，这个位置变成了新西兰。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了澳大利亚民众在文化认同感上从美国转向欧洲/大洋洲邻国的感性视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49735026" target="_blank" rel="noopener noreferrer">@bigger_cheese</a>
+        </div>
+        <p class="comment-text">澳大利亚与美国的结盟主要是二战及其后续影响的结果。二战前，我们基本上与英国步调一致。然而，在新加坡沦陷于日军之后，英国显然无法再依靠来保卫澳大利亚。当时澳大利亚的大部分精锐部队正在北非作战，而澳大利亚本土面临着真实的入侵威胁。当时属于澳大利亚领土的巴布亚新几内亚被入侵，日军对达尔文的轰炸加剧了这种危机感。几乎在一夜之间，我们的外交政策转向了美国。二战后，这促成了《澳美新安全条约》（ANZUS）等协议。这就是为什么澳大利亚有美国军事基地，也是为什么我们跟随美国参加了所有那些按理说与我们无关的战争（越南、伊拉克等）。就我个人而言，我觉得美国最近的行动一点也不符合澳大利亚的利益。特朗普已经挥霍了大量积累的好感，即使美国选出了另一届政府，很多伤害也已经造成了。</p>
+        <p class="comment-reason"><span>入选理由</span>从历史维度解释了澳大利亚外交政策的演变逻辑，为当前的转向提供了深度背景。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49734585" target="_blank" rel="noopener noreferrer">@nl</a>
+        </div>
+        <p class="comment-text">需要明确的一点是——澳大利亚主要感兴趣的是减少贸易壁垒的方法，而不是任何形式的政治联盟。澳大利亚在经济上受益于自由贸易：其大部分产出是低成本、高质量的基础产业，如矿产品和农产品（谷物、羊毛和肉类），只要价格和质量是主要筛选标准，澳大利亚就能胜出。这种模式的缺点是澳大利亚并没有任何显著的制造业或先进技术产业。但这确实让澳大利亚成为了过去25年里表现最好的经济体之一。</p>
+        <p class="comment-reason"><span>入选理由</span>提醒读者澳大利亚的动机核心是经济实用主义，而非政治上的完全融合。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49735558" target="_blank" rel="noopener noreferrer">@jmyeet</a>
+        </div>
+        <p class="comment-text">这和加拿大一样，都只是针对特朗普政府混乱局面的下意识反应。虽然这合情合理，但我预测短期内不会有太大起色。从长远来看，历史书会将这几年描述为对1945年以来建立的世界秩序的重新定义。至于加拿大，没人真正知道准成员身份意味着什么。鉴于欧盟的自由权利是相互的，我看不出这能走多远。此外，一份与欧盟的自由贸易协定已经摆在桌面上十年了，至今还没被批准。至于重新定义世界秩序，这就是这场伊朗战争的后果。中短期内，它将重新定义海湾地区的安全架构。拒绝约束以色列可能意味着俄罗斯将吞并他们占领的乌克兰东部地区。当然，这一切的大赢家是中方，他们什么都不用做。帝国不会一夜之间消亡，而且消亡过程是暴力的。情况会很糟糕，但我真的看不出美国有任何办法恢复其全球霸主地位。其影响力已经见顶，我不相信有什么能扭转这一趋势。所以我不知道这对澳大利亚意味着什么。自冷战以来，它基本上一直是美国的殖民哨所。地理位置曾因覆盖卫星通信的天空而显得更为重要。卖原材料最终对一个经济体来说是不可持续的，但澳大利亚走上了将整个经济变成巨大的房地产庞氏骗局的道路，就像几乎所有其他发达国家一样。当住房成为唯一逻辑上的投资时，它主导了资本和贷款，生产产出就会跌落悬崖，而这正是已经发生的事情。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个宏大的地缘政治视角，并将贸易政策与澳大利亚国内的经济结构问题联系起来。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>澳大利亚对欧盟抛出的橄榄枝，与其说是对欧洲文化的向往，不如说是对美国不可预测性的战略避险。长期以来，澳大利亚在安全上依赖美国，在经济上依赖亚洲，这种“走钢丝”的平衡在保护主义抬头的今天变得愈发艰难。正如评论所指出的，澳大利亚正经历从“美国第51个州”到寻求多元化身份的心理转变。然而，作为一个高度依赖原材料出口、国内产业结构单一（甚至被戏称为房地产庞氏骗局）的国家，澳大利亚在追求与欧盟这种高度整合的经济体建立“独特联盟”时，必然面临巨大的结构性挑战。这不仅是一场贸易谈判，更是二战以来全球秩序重组的一个缩影：当旧的保护伞变得阴晴不定，远方的盟友似乎也变得亲切起来。</p>
+        </div>
+      </div>
+    </details>
+    </section>
+    <footer class="footer">
+      <p>新闻只按 HN 原始名次和讨论度排序后取前 20，不做主题挑选。评论来自有界采样，
+        只是观点，不作为新闻事实来源。</p>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const themeButtons = [
+        ...document.querySelectorAll(".theme-button[data-theme-choice]")
+      ];
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      const applyThemeChoice = (requestedChoice, persist = true) => {
+        const choice = ["auto", "day", "night"].includes(requestedChoice)
+          ? requestedChoice
+          : "auto";
+        const theme = choice === "auto" ? themeForLocalTime() : choice;
+        document.documentElement.dataset.themeChoice = choice;
+        document.documentElement.dataset.theme = theme;
+        themeButtons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.themeChoice === choice)
+          );
+        });
+        if (persist) {
+          try {
+            localStorage.setItem("hnDigestThemeChoice", choice);
+          } catch (_) {
+            // The switch still works when report sandboxing blocks storage.
+          }
+        }
+      };
+      const refreshAutomaticTheme = () => {
+        if (document.documentElement.dataset.themeChoice === "auto") {
+          applyThemeChoice("auto", false);
+        }
+      };
+      applyThemeChoice(document.documentElement.dataset.themeChoice, false);
+      themeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyThemeChoice(button.dataset.themeChoice);
+        });
+      });
+      window.setInterval(refreshAutomaticTheme, 60 * 1000);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) refreshAutomaticTheme();
+      });
+
+      const list = document.querySelector(".story-list");
+      const controls = document.querySelector(".view-switch");
+      const buttons = [...document.querySelectorAll(".view-button")];
+      const status = document.querySelector(".view-status");
+      const total = list ? list.children.length : 0;
+      if (!list || !controls || total <= 10) {
+        if (controls) controls.hidden = true;
+        return;
+      }
+
+      const visibleCountStorageKey = "hnDigestVisibleCountV3";
+      const applyVisibleCount = (requestedCount, persist = true) => {
+        const count = requestedCount === 20 ? 20 : 10;
+        const shown = Math.min(count, total);
+        list.dataset.visibleCount = String(count);
+        buttons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(Number(button.dataset.count) === count)
+          );
+        });
+        status.textContent = `当前显示前 ${shown}`;
+        if (persist) {
+          try {
+            localStorage.setItem(visibleCountStorageKey, String(count));
+          } catch (_) {
+            // The switch still works when local privacy settings block storage.
+          }
+        }
+      };
+
+      let initialCount = 20;
+      try {
+        const storedCount = Number(localStorage.getItem(visibleCountStorageKey));
+        if ([10, 20].includes(storedCount)) initialCount = storedCount;
+      } catch (_) {
+        // Keep the all-20 default.
+      }
+      applyVisibleCount(initialCount, false);
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyVisibleCount(Number(button.dataset.count));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
